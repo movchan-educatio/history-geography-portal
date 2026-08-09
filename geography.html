@@ -729,7 +729,100 @@
   </footer>
 
   <!-- JavaScript для акордеона та тестів -->
-  <script>
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+    authDomain: "movchan-portal.firebaseapp.com",
+    databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "movchan-portal",
+    storageBucket: "movchan-portal.firebasestorage.app",
+    messagingSenderId: "535915495927",
+    appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
+    measurementId: "G-8XBVKRZRS1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+
+  window.quizFirebaseUser = null;
+  window.quizFirebaseReady = false;
+
+  onAuthStateChanged(auth, (user) => {
+    window.quizFirebaseUser = user;
+    window.quizFirebaseReady = true;
+
+    if (user) {
+      if (window.pendingHistoryQuizScore !== undefined && window.syncHistoryQuizToFirebase) {
+        window.syncHistoryQuizToFirebase(window.pendingHistoryQuizScore);
+      }
+      if (window.pendingGeographyQuizScore !== undefined && window.syncGeographyQuizToFirebase) {
+        window.syncGeographyQuizToFirebase(window.pendingGeographyQuizScore);
+      }
+    }
+  });
+
+  window.syncHistoryQuizToFirebase = async function(totalHistoryPoints) {
+    window.pendingHistoryQuizScore = totalHistoryPoints;
+    const user = window.quizFirebaseUser;
+    if (!user) return;
+
+    const userRef = ref(database, 'users/' + user.uid);
+    const snapshot = await get(userRef);
+    const data = snapshot.exists() ? snapshot.val() : {};
+    const oldTotal = Number(data.total_history_points || 0);
+    const oldScore = Number(data.score || 0);
+    const currentGeo = Number(localStorage.getItem('total_geography_points') || 0);
+
+    if (!snapshot.exists()) {
+      await set(userRef, {
+        name: user.displayName || 'Учень',
+        score: 5 + totalHistoryPoints + currentGeo,
+        total_history_points: totalHistoryPoints,
+        total_geography_points: currentGeo
+      });
+    } else if (totalHistoryPoints > oldTotal) {
+      await update(userRef, {
+        score: oldScore + (totalHistoryPoints - oldTotal),
+        total_history_points: totalHistoryPoints
+      });
+    }
+  };
+
+  window.syncGeographyQuizToFirebase = async function(totalGeoPoints) {
+    window.pendingGeographyQuizScore = totalGeoPoints;
+    const user = window.quizFirebaseUser;
+    if (!user) return;
+
+    const userRef = ref(database, 'users/' + user.uid);
+    const snapshot = await get(userRef);
+    const data = snapshot.exists() ? snapshot.val() : {};
+    const oldTotal = Number(data.total_geography_points || 0);
+    const oldScore = Number(data.score || 0);
+    const currentHistory = Number(localStorage.getItem('total_history_points') || 0);
+
+    if (!snapshot.exists()) {
+      await set(userRef, {
+        name: user.displayName || 'Учень',
+        score: 5 + currentHistory + totalGeoPoints,
+        total_history_points: currentHistory,
+        total_geography_points: totalGeoPoints
+      });
+    } else if (totalGeoPoints > oldTotal) {
+      await update(userRef, {
+        score: oldScore + (totalGeoPoints - oldTotal),
+        total_geography_points: totalGeoPoints
+      });
+    }
+  };
+</script>
+
+<script>
     function toggleAccordion(header) {
       const card = header.parentElement;
       card.classList.toggle('active');
@@ -1127,25 +1220,13 @@
       geoScores[themeId] = score;
       localStorage.setItem('geography_quiz_scores', JSON.stringify(geoScores));
 
-      // Обчислення загальних балів з географії
-      let totalGeoPoints = Object.values(geoScores).reduce((a, b) => a + b, 0);
+      const totalGeoPoints = Object.values(geoScores).reduce((a, b) => a + b, 0);
       localStorage.setItem('total_geography_points', totalGeoPoints);
 
-      // Якщо підключено Firebase на сайті (auth та db)
-      if (window.firebaseApp || window.db || window.auth) {
-        try {
-          const user = firebase.auth().currentUser;
-          if (user) {
-            firebase.firestore().collection('users').doc(user.uid).set({
-              geographyPoints: totalGeoPoints,
-              lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true }).then(() => {
-              console.log('Бали з географії успішно оновлено в Firebase!');
-            });
-          }
-        } catch (e) {
-          console.log('Синхронізація з Firebase відбудеться після авторизації користувача.');
-        }
+      if (window.syncGeographyQuizToFirebase) {
+        window.syncGeographyQuizToFirebase(totalGeoPoints);
+      } else {
+        window.pendingGeographyQuizScore = totalGeoPoints;
       }
     }
 
