@@ -78,7 +78,7 @@
       height: 100%;
       border: 0;
     }
-    /* Стилі для блоку тестування */
+    /* Кнопка розгортання тесту */
     .quiz-toggle-btn {
       display: inline-block;
       margin-top: 20px;
@@ -98,77 +98,130 @@
     .quiz-toggle-btn:active {
       transform: scale(0.98);
     }
-    .quiz-wrapper {
+
+    /* Інтерактивна картка тесту як на сторінці історії */
+    .quiz-card-step {
       display: none;
       margin-top: 20px;
-      padding: 20px;
+      padding: 24px;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .quiz-question {
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px dashed #cbd5e1;
-    }
-    .quiz-question:last-of-type {
-      border-bottom: none;
-    }
-    .quiz-question-title {
+    .quiz-step-header {
+      font-size: 18px;
       font-weight: 700;
       color: #1e293b;
-      margin-bottom: 10px;
-      font-size: 15px;
-    }
-    .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .quiz-option-label {
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: #ffffff;
-      padding: 10px 14px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      color: #334155;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
+      gap: 8px;
     }
-    .quiz-option-label:hover {
+    .quiz-progress-badge {
+      display: inline-block;
+      background-color: #e0f2fe;
+      color: #0284c7;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .quiz-question-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .quiz-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .quiz-option-btn {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 14px 18px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      color: #334155;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .quiz-option-btn:hover {
       background-color: #f1f5f9;
       border-color: #94a3b8;
     }
-    .quiz-submit-btn {
-      margin-top: 15px;
-      padding: 12px 28px;
-      background-color: #2563eb;
+    .quiz-option-btn.selected {
+      background-color: #eff6ff;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+    .quiz-next-btn {
+      padding: 12px 24px;
+      background-color: #94a3b8;
       color: #ffffff;
       font-weight: 700;
       font-size: 15px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      border-radius: 10px;
+      cursor: not-allowed;
       transition: background-color 0.2s ease;
     }
-    .quiz-submit-btn:hover {
-      background-color: #1d4ed8;
+    .quiz-next-btn.active {
+      background-color: #8b9bb4;
+      background-image: linear-gradient(to right, #818cf8, #6366f1);
+      background: #90a1b9;
+      cursor: pointer;
     }
-    .quiz-result {
-      margin-top: 15px;
+    .quiz-next-btn.ready {
+      background-color: #64748b;
+      background: #8fa0b8;
+      background-image: none;
+      background: #8292a9;
+      cursor: pointer;
+    }
+    .quiz-step-btn {
+      padding: 12px 24px;
+      background-color: #94a3b8;
+      color: #ffffff;
       font-weight: 700;
-      font-size: 16px;
-      padding: 12px;
-      border-radius: 6px;
-      display: none;
+      font-size: 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .quiz-result.success {
+    .quiz-step-btn.enabled {
+      background-color: #8fa1b9;
+      background-image: linear-gradient(135deg, #93a5be 0%, #7b8ea7 100%);
+      color: #ffffff;
+    }
+    .quiz-finish-btn {
+      background-color: #059669 !important;
+      color: #ffffff !important;
+    }
+
+    .quiz-result-view {
+      display: none;
+      padding: 20px;
       background-color: #d1fae5;
       color: #065f46;
       border: 1px solid #a7f3d0;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 15px;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -239,121 +292,30 @@
           <iframe src="https://www.youtube.com/embed/TDMJoc8oHJs" allowfullscreen></iframe>
         </div>
 
-        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-topic-1')">📝 Пройти тест з теми (12 питань)</button>
+        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-wrapper-1')">📝 Пройти тест з теми (12 питань)</button>
 
-        <div id="quiz-topic-1" class="quiz-wrapper">
-          <form onsubmit="submitQuiz(event, 1)">
-            <div class="quiz-question">
-              <div class="quiz-question-title">1. Що таке географічна карта?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q1" value="0"> Художній малюнок місцевості з довільними масштабами</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q1" value="1"> Математично узагальнене зменшене зображення земної поверхні на площині</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q1" value="2"> Фотографія з космічного супутника без умовних знаків</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q1" value="3"> Точна тривимірна модель Землі у формі кулі</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">2. Чому виникають спотворення при створенні карт?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q2" value="0"> Через використання різних мов підпису</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q2" value="1"> Неможливо розгорнути сферичну поверхню геоїда на площину без деформацій</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q2" value="2"> Через коливання рівня Світового океану</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q2" value="3"> Через зміну орбіти Землі</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">3. Які картографічні проєкції зберігають площі об'єктів без спотворення?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q3" value="0"> Рівнокутні</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q3" value="1"> Рівновеликі</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q3" value="2"> Довільні</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q3" value="3"> Перспективні</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">4. Яка проєкція найчастіше використовується для карт помірних широт (зокрема України)?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q4" value="0"> Азимутальна</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q4" value="1"> Конічна</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q4" value="2"> Циліндрична</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q4" value="3"> Полярна</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">5. Для картування яких територій найчастіше застосовують азимутальну проєкцію?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q5" value="0"> Полюсів та півкуль</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q5" value="1"> Вздовж усього екватора</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q5" value="2"> Виключно гірських масивів</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q5" value="3"> Океанічних жолобів</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">6. Що показує масштаб карти?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q6" value="0"> Висоту місцевості над рівнем моря</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q6" value="1"> Ступінь зменшення довжин ліній на карті порівняно з дійсною відстані на місцевості</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q6" value="2"> Точну кількість населення на одиницю площі</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q6" value="3"> Кут нахилу земної осі</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">7. Який вигляд має чисельний масштаб?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q7" value="0"> Дріб виду 1 : 100 000</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q7" value="1"> Текстовий запис "в 1 см 1 км"</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q7" value="2"> Графічна лінійка з поділками</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q7" value="3"> Градусна сітка</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">8. Які умовні знаки використовуються для об'єктів, що не відтворюються в масштабі karty (наприклад, поодиноке дерево)?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q8" value="0"> Позамасштабні</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q8" value="1"> Контурні</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q8" value="2"> Якісний фон</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q8" value="3"> Лінійні</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">9. Що з перерахованого належить до лінійних умовних знаків?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q9" value="0"> Дороги, річки, кордони</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q9" value="1"> Озера та водосховища</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q9" value="2"> Млини та вітряки</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q9" value="3"> Заповідні лісові масиви</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">10. Проєкція Меркатора належить до:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q10" value="0"> Циліндричних</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q10" value="1"> Конічних</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q10" value="2"> Азимутальних</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q10" value="3"> Псевдоконічних</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">11. Як перетворити чисельний масштаб 1 : 25 000 в іменований?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q11" value="0"> В 1 см — 250 м</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q11" value="1"> В 1 см — 2.5 км</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q11" value="2"> В 1 см — 25 км</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q11" value="3"> В 1 см — 250 км</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">12. Спосіб якісного фону на карті застосовують для:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t1_q12" value="0"> Позначення типів ґрунтів чи ландшафтних зон</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q12" value="1"> Відображення висоти точок</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q12" value="2"> Позначення напрямку вітру</label>
-                <label class="quiz-option-label"><input type="radio" name="t1_q12" value="3"> Позначення точності координат</label>
-              </div>
-            </div>
-            <button type="submit" class="quiz-submit-btn">Завершити тест та зберегти результат</button>
-            <div class="quiz-result"></div>
-          </form>
+        <!-- Блок тесту Tema 1 -->
+        <div id="quiz-wrapper-1" class="quiz-card-step">
+          <div class="quiz-step-header">
+            <span>📝</span> Інтерактивний перевірочний тест
+          </div>
+          <div class="quiz-progress-badge" id="badge-topic-1">
+            Запитання 1 з 12
+          </div>
+          
+          <div class="quiz-question-text" id="qtext-topic-1">
+            1. Що таке географічна карта?
+          </div>
+
+          <div class="quiz-options-list" id="options-topic-1">
+            <!-- Динамічні варіанти -->
+          </div>
+
+          <button id="nextbtn-topic-1" class="quiz-step-btn" disabled onclick="nextQuestionStep(1)">
+            Наступне запитання ➔
+          </button>
+
+          <div id="result-topic-1" class="quiz-result-view"></div>
         </div>
       </div>
     </div>
@@ -378,121 +340,30 @@
           <iframe src="https://www.youtube.com/embed/1PVAiJniwbc" allowfullscreen></iframe>
         </div>
 
-        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-topic-2')">📝 Пройти тест з теми (12 питань)</button>
+        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-wrapper-2')">📝 Пройти тест з теми (12 питань)</button>
 
-        <div id="quiz-topic-2" class="quiz-wrapper">
-          <form onsubmit="submitQuiz(event, 2)">
-            <div class="quiz-question">
-              <div class="quiz-question-title">1. Яка тривалість зоряної доби обертання Землі навколо осі?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q1" value="0"> 24 години точно</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q1" value="1"> 23 год 56 хв 4 с</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q1" value="2"> 25 годин</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q1" value="3"> 365 днів</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">2. Головним наслідком обертання Землі навколо власної осі є:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q2" value="0"> Зміна пір року</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q2" value="1"> Зміна дня і ночі</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q2" value="2"> Зміна сонячної активності</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q2" value="3"> Формування материків</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">3. Як сила Коріоліса впливає на рух тіл у Північній півкулі?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q3" value="0"> Відхиляє праворуч за напрямком руху</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q3" value="1"> Відхиляє ліворуч за напрямком руху</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q3" value="2"> Зменшує швидкість руху до нуля</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q3" value="3"> Не чинить жодного впливу</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">4. Під яким кутом нахилена вісь Землі до площини орбіти (екліптики)?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q4" value="0"> 90°</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q4" value="1"> 66,5°</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q4" value="2"> 23,5°</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q4" value="3"> 45°</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">5. Коли у Північній півкулі спостерігається день літнього сонцестояння?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q5" value="0"> 21 березня</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q5" value="1"> 22 червня</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q5" value="2"> 23 вересня</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q5" value="3"> 22 грудня</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">6. В які дні тривалість дня і ночі на всій Землі однакова?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q6" value="0"> Дні рівнодення (21.03 та 23.09)</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q6" value="1"> Дні сонцестояння (22.06 та 22.12)</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q6" value="2"> Щомісяця 15 числа</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q6" value="3"> Тільки 1 січня</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">7. Середня швидкість руху Землі по орбіті навколо Сонця становить близько:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q7" value="0"> 30 км/с</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q7" value="1"> 100 км/год</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q7" value="2"> 300 км/с</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q7" value="3"> 10 км/с</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">8. Який географічний наслідок має обертання Землі навколо Сонця та нахил її осі?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q8" value="0"> Зміна пір року</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q8" value="1"> Виникнення припливів та відпливів</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q8" value="2"> Формування цунамі</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q8" value="3"> Рух літосферних плит</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">9. Яка планета за рахунком від Сонця є Земля?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q9" value="0"> Третя</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q9" value="1"> Друга</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q9" value="2"> Четверта</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q9" value="3"> П'ята</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">10. Закон Бера пояснює:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q10" value="0"> Асиметрію та асиметричний розмив берегів річок під дією сили Коріоліса</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q10" value="1"> Зміну температури з висотою</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q10" value="2"> Залежність солоності океанів від випаровування</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q10" value="3"> Швидкість вивітрювання гірських порід</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">11. У день зимового сонцестояння (22 грудня) в Північній півкулі:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q11" value="0"> Найдовший день і найкоротша ніч</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q11" value="1"> Найкоротший день і найдовша ніч</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q11" value="2"> День дорівнює ночі</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q11" value="3"> Сонце взагалі не заходить за обрій</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">12. Теплові пояси Землі утворюються внаслідок:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t2_q12" value="0"> Нерівномірного розподілу сонячного тепла через кулястість Землі та кут падіння променів</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q12" value="1"> Вулканічної діяльності</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q12" value="2"> Різниці у висотах між материками</label>
-                <label class="quiz-option-label"><input type="radio" name="t2_q12" value="3"> Впливу атмосферних циклонів</label>
-              </div>
-            </div>
-            <button type="submit" class="quiz-submit-btn">Завершити тест та зберегти результат</button>
-            <div class="quiz-result"></div>
-          </form>
+        <!-- Блок тесту Tema 2 -->
+        <div id="quiz-wrapper-2" class="quiz-card-step">
+          <div class="quiz-step-header">
+            <span>📝</span> Інтерактивний перевірочний тест
+          </div>
+          <div class="quiz-progress-badge" id="badge-topic-2">
+            Запитання 1 з 12
+          </div>
+          
+          <div class="quiz-question-text" id="qtext-topic-2">
+            1. Яка тривалість зоряної доби обертання Землі навколо осі?
+          </div>
+
+          <div class="quiz-options-list" id="options-topic-2">
+            <!-- Динамічні варіанти -->
+          </div>
+
+          <button id="nextbtn-topic-2" class="quiz-step-btn" disabled onclick="nextQuestionStep(2)">
+            Наступне запитання ➔
+          </button>
+
+          <div id="result-topic-2" class="quiz-result-view"></div>
         </div>
       </div>
     </div>
@@ -519,127 +390,33 @@
           <iframe src="https://www.youtube.com/embed/as7mjj-GGug" allowfullscreen></iframe>
         </div>
 
-        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-topic-3')">📝 Пройти тест з теми (12 питань)</button>
+        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-wrapper-3')">📝 Пройти тест з теми (12 питань)</button>
 
-        <div id="quiz-topic-3" class="quiz-wrapper">
-          <form onsubmit="submitQuiz(event, 3)">
-            <div class="quiz-question">
-              <div class="quiz-question-title">1. З чого складається літосфера?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q1" value="0"> Тільки з земної кори</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q1" value="1"> З земної кори та верхньої частини мантії</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q1" value="2"> З ядра та мантії</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q1" value="3"> З атмосфери та гідросфери</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">2. На якому в'язко-пластичному шарі мантії переміщуються літосферні плити?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q2" value="0"> Астеносфера</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q2" value="1"> Стратосфера</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q2" value="2"> Внутрішнє ядро</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q2" value="3"> Базальтовий шар</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">3. Що виникає у зонах розходження (дивергентних межах) літосферних плит?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q3" value="0"> Серединно-океанічні хребти та рифтові долини</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q3" value="1"> Глибоководні жолоби</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q3" value="2"> Високі складчасті гори</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q3" value="3"> Мегаполіси</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">4. Які гори утворилися внаслідок зіткнення двох материкових плит (Євразійської та Індостанської)?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q4" value="0"> Гімалаї</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q4" value="1"> Анди</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q4" value="2"> Кордильєри</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q4" value="3"> Аппалачі</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">5. Прикладом трансформного розлому є:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q5" value="0"> Розлом Сан-Андреас</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q5" value="1"> Марианський жолоб</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q5" value="2"> Драконові гори</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q5" value="3"> Дніпровсько-Донецька западина</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">6. До ендогенних процесів формування рельєфу належать:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q6" value="0"> Тектонічні рухи, магматизм, землетруси</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q6" value="1"> Вивітрювання, дія вітру та текучих вод</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q6" value="2"> Робота льодовиків та морського прибою</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q6" value="3"> Діяльність біосфери</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">7. Головною рисою екзогенних процесів є:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q7" value="0"> Руйнування та згладжування великих нерівностей рельєфу під дією зовнішніх сил</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q7" value="1"> Створення гірських систем</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q7" value="2"> Виверження вулканів</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q7" value="3"> Переміщення материків</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">8. Чим материкова земна кора відрізняється від океанічної?</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q8" value="0"> Вона товща і має додатковий гранітний шар</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q8" value="1"> Вона тонша і складається тільки з базальту</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q8" value="2"> Вона не має осадового шару</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q8" value="3"> Вона складається виключно з заліза</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">9. Місце під землею, де відбувається розрив або зміщення гірських порід під час землетрусу — це:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q9" value="0"> Гіпоцентр (вогнище)</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q9" value="1"> Епіцентр</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q9" value="2"> Кратер</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q9" value="3"> Жерло</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">10. Точка на земній поверхні, розташована безпосередньо над вогнищем землетрусу:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q10" value="0"> Епіцентр</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q10" value="1"> Гіпоцентр</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q10" value="2"> Рифт</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q10" value="3"> Щит</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">11. При зіткненні океанічної плити з материковою відбувається занурення океанічної плити, що утворює:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q11" value="0"> Глибоководні жолоби та острівні дуги / берегові хребти</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q11" value="1"> Серединно-океанічні хребти</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q11" value="2"> Рівнинні щити</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q11" value="3"> Артезіанські басейни</label>
-              </div>
-            </div>
-            <div class="quiz-question">
-              <div class="quiz-question-title">12. Східно-Африканський рифт є прикладом:</div>
-              <div class="quiz-options">
-                <label class="quiz-option-label"><input type="radio" name="t3_q12" value="0"> Розходження літосферних плит на материку</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q12" value="1"> Зіткнення двох океанічних плит</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q12" value="2"> Згаслого вулканічного кратера</label>
-                <label class="quiz-option-label"><input type="radio" name="t3_q12" value="3"> Дії вітрової ерозії</label>
-              </div>
-            </div>
-            <button type="submit" class="quiz-submit-btn">Завершити тест та зберегти результат</button>
-            <div class="quiz-result"></div>
-          </form>
+        <!-- Блок тесту Tema 3 -->
+        <div id="quiz-wrapper-3" class="quiz-card-step">
+          <div class="quiz-step-header">
+            <span>📝</span> Інтерактивний перевірочний тест
+          </div>
+          <div class="quiz-progress-badge" id="badge-topic-3">
+            Запитання 1 з 12
+          </div>
+          
+          <div class="quiz-question-text" id="qtext-topic-3">
+            1. З чого складається літосфера?
+          </div>
+
+          <div class="quiz-options-list" id="options-topic-3">
+            <!-- Динамічні варіанти -->
+          </div>
+
+          <button id="nextbtn-topic-3" class="quiz-step-btn" disabled onclick="nextQuestionStep(3)">
+            Наступне запитання ➔
+          </button>
+
+          <div id="result-topic-3" class="quiz-result-view"></div>
         </div>
       </div>
     </div>
-
-    <!-- Решта тем 4-20 з аналогічними блоками... -->
-    <!-- Для збереження цілісності та компактності коду інші теми підключено з можливістю тестування -->
 
   </main>
 
@@ -652,9 +429,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Налаштування Firebase (використовуються конфігурації вашого проекту)
     const firebaseConfig = {
       apiKey: "AIzaSyYourApiKeyHere",
       authDomain: "history-geography-portal.firebaseapp.com",
@@ -678,48 +454,176 @@
       }
     });
 
-    // Правильні відповіді для тестування (номер теми -> масив правильних індексів 0-3)
-    const correctAnswersMap = {
-      1: [1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-      2: [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0],
-      3: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      // Аналогічно обробляються інші теми
+    // База питань для кожної теми у форматі А, Б, В, Г
+    const quizDataMap = {
+      1: [
+        { q: "1. Що таке географічна карта?", opts: ["Художній малюнок місцевості з довільними масштабами", "Математично узагальнене зменшене зображення земної поверхні на площині", "Фотографія з космічного супутника без умовних знаків", "Точна тривимірна модель Землі у формі кулі"], correct: 1 },
+        { q: "2. Чому виникають спотворення при створенні карт?", opts: ["Через використання різних мов підпису", "Неможливо розгорнути сферичну поверхню геоїда на площину без деформацій", "Через коливання рівня Світового океану", "Через зміну орбіти Землі"], correct: 1 },
+        { q: "3. Які картографічні проєкції зберігають площі об'єктів без спотворення?", opts: ["Рівнокутні", "Рівновеликі", "Довільні", "Перспективні"], correct: 1 },
+        { q: "4. Яка проєкція найчастіше використовується для карт помірних широт (зокрема України)?", opts: ["Азимутальна", "Конічна", "Циліндрична", "Полярна"], correct: 1 },
+        { q: "5. Для картування яких територій найчастіше застосовують азимутальну проєкцію?", opts: ["Полюсів та півкуль", "Вздовж усього екватора", "Виключно гірських масивів", "Океанічних жолобів"], correct: 0 },
+        { q: "6. Що показує масштаб карти?", opts: ["Висоту місцевості над рівнем моря", "Ступінь зменшення довжин ліній на карті порівняно з дійсною відстані на місцевості", "Точну кількість населення на одиницю площі", "Кут нахилу земної осі"], correct: 1 },
+        { q: "7. Який вигляд має чисельний масштаб?", opts: ["Дріб виду 1 : 100 000", "Текстовий запис \"в 1 см 1 км\"", "Графічна лінійка з поділками", "Градусна сітка"], correct: 0 },
+        { q: "8. Які умовні знаки використовуються для об'єктів, що не відтворюються в масштабі карти (наприклад, поодиноке дерево)?", opts: ["Позамасштабні", "Контурні", "Якісний фон", "Лінійні"], correct: 0 },
+        { q: "9. Що з перерахованого належить до лінійних умовних знаків?", opts: ["Дороги, річки, кордони", "Озера та водосховища", "Млини та вітряки", "Заповідні лісові масиви"], correct: 0 },
+        { q: "10. Проєкція Меркатора належить до:", opts: ["Циліндричних", "Конічних", "Азимутальних", "Псевдоконічних"], correct: 0 },
+        { q: "11. Як перетворити чисельний масштаб 1 : 25 000 в іменований?", opts: ["В 1 см — 250 м", "В 1 см — 2.5 км", "В 1 см — 25 км", "В 1 см — 250 км"], correct: 0 },
+        { q: "12. Спосіб якісного фону на карті застосовують для:", opts: ["Позначення типів ґрунтів чи ландшафтних зон", "Відображення висоти точок", "Позначення напрямку вітру", "Позначення точності координат"], correct: 0 }
+      ],
+      2: [
+        { q: "1. Яка тривалість зоряної доби обертання Землі навколо осі?", opts: ["24 години точно", "23 год 56 хв 4 с", "25 годин", "365 днів"], correct: 1 },
+        { q: "2. Головним наслідком обертання Землі навколо власної осі є:", opts: ["Зміна пір року", "Зміна дня і ночі", "Зміна сонячної активності", "Формування материків"], correct: 1 },
+        { q: "3. Як сила Коріоліса впливає на рух тіл у Північній півкулі?", opts: ["Відхиляє праворуч за напрямком руху", "Відхиляє ліворуч за напрямком руху", "Зменшує швидкість руху до нуля", "Не чинить жодного впливу"], correct: 0 },
+        { q: "4. Під яким кутом нахилена вісь Землі до площини орбіти (екліптики)?", opts: ["90°", "66,5°", "23,5°", "45°"], correct: 1 },
+        { q: "5. Коли у Північній півкулі спостерігається день літнього сонцестояння?", opts: ["21 березня", "22 червня", "23 вересня", "22 грудня"], correct: 1 },
+        { q: "6. В які дні тривалість дня і ночі на всій Землі однакова?", opts: ["Дні рівнодення (21.03 та 23.09)", "Дні сонцестояння (22.06 та 22.12)", "Щомісяця 15 числа", "Тільки 1 січня"], correct: 0 },
+        { q: "7. Середня швидкість руху Землі по орбіті навколо Сонця становить близько:", opts: ["30 км/с", "100 км/год", "300 км/с", "10 км/с"], correct: 0 },
+        { q: "8. Який географічний наслідок має обертання Землі навколо Сонця та нахил її осі?", opts: ["Зміна пір року", "Виникнення припливів та відпливів", "Формування цунамі", "Рух літосферних плит"], correct: 0 },
+        { q: "9. Яка планета за рахунком від Сонця є Земля?", opts: ["Третя", "Друга", "Четверта", "П'ята"], correct: 0 },
+        { q: "10. Закон Бера пояснює:", opts: ["Асиметрію та асиметричний розмив берегів річок під дією сили Коріоліса", "Зміну температури з висотою", "Залежність солоності океанів від випаровування", "Швидкість вивітрювання гірських порід"], correct: 0 },
+        { q: "11. У день зимового сонцестояння (22 грудня) в Північній півкулі:", opts: ["Найдовший день і найкоротша ніч", "Найкоротший день і найдовша ніч", "День дорівнює ночі", "Сонце взагалі не заходить за обрій"], correct: 1 },
+        { q: "12. Теплові пояси Землі утворюються внаслідок:", opts: ["Нерівномірного розподілу сонячного тепла через кулястість Землі та кут падіння променів", "Вулканічної діяльності", "Різниці у висотах між материками", "Впливу атмосферних циклонів"], correct: 0 }
+      ],
+      3: [
+        { q: "1. З чого складається літосфера?", opts: ["Тільки з земної кори", "З земної кори та верхньої частини мантії", "З ядра та мантії", "З атмосфери та гідросфери"], correct: 1 },
+        { q: "2. На якому в'язко-пластичному шарі мантії переміщуються літосферні плити?", opts: ["Астеносфера", "Стратосфера", "Внутрішнє ядро", "Базальтовий шар"], correct: 0 },
+        { q: "3. Що виникає у зонах розходження (дивергентних межах) літосферних плит?", opts: ["Серединно-океанічні хребти та рифтові долини", "Глибоководні жолоби", "Високі складчасті гори", "Мегаполіси"], correct: 0 },
+        { q: "4. Які гори утворилися внаслідок зіткнення двох материкових плит (Євразійської та Індостанської)?", opts: ["Гімалаї", "Анди", "Кордильєри", "Аппалачі"], correct: 0 },
+        { q: "5. Прикладом трансформного розлому є:", opts: ["Розлом Сан-Андреас", "Марианський жолоб", "Драконові гори", "Дніпровсько-Донецька западина"], correct: 0 },
+        { q: "6. До ендогенних процесів формування рельєфу належать:", opts: ["Тектонічні рухи, магматизм, землетруси", "Вивітрювання, дія вітру та текучих вод", "Робота льодовиків та морського прибою", "Діяльність біосфери"], correct: 0 },
+        { q: "7. Головною рисою екзогенних процесів є:", opts: ["Руйнування та згладжування великих нерівностей рельєфу під дією зовнішніх сил", "Створення гірських систем", "Виверження вулканів", "Переміщення материків"], correct: 0 },
+        { q: "8. Чим материкова земна кора відрізняється від океанічної?", opts: ["Вона товща і має додатковий гранітний шар", "Вона тонша і складається тільки з базальту", "Вона не має осадового шару", "Вона складається виключно з заліза"], correct: 0 },
+        { q: "9. Місце під землею, де відбувається розрив або зміщення гірських порід під час землетрусу — це:", opts: ["Гіпоцентр (вогнище)", "Епіцентр", "Кратер", "Жерло"], correct: 0 },
+        { q: "10. Точка на земній поверхні, розташована безпосередньо над вогнищем землетрусу:", opts: ["Епіцентр", "Гіпоцентр", "Рифт", "Щит"], correct: 0 },
+        { q: "11. При зіткненні океанічної плити з материковою відбувається занурення океанічної плити, що утворює:", opts: ["Глибоководні жолоби та острівні дуги / берегові хребти", "Серединно-океанічні хребти", "Рівнинні щити", "Артезіанські басейни"], correct: 0 },
+        { q: "12. Східно-Африканський рифт є прикладом:", opts: ["Розходження літосферних плит на материку", "Зіткнення двох океанічних плит", "Згаслого вулканічного кратера", "Дії вітрової ерозії"], correct: 0 }
+      ]
     };
+
+    // Стан тестів для кожного блоку
+    const quizState = {};
 
     window.toggleAccordion = function(header) {
       const card = header.parentElement;
       card.classList.toggle('active');
     };
 
-    window.toggleQuiz = function(quizId) {
-      const wrapper = document.getElementById(quizId);
+    window.toggleQuiz = function(wrapperId) {
+      const wrapper = document.getElementById(wrapperId);
+      const topicId = parseInt(wrapperId.replace('quiz-wrapper-', ''));
+
       if (wrapper.style.display === "block") {
         wrapper.style.display = "none";
       } else {
         wrapper.style.display = "block";
+        if (!quizState[topicId]) {
+          initQuiz(topicId);
+        }
       }
     };
 
-    window.submitQuiz = async function(event, topicId) {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-      
-      let score = 0;
-      const totalQuestions = 12;
-      const correctList = correctAnswersMap[topicId] || [0,0,0,0,0,0,0,0,0,0,0,0];
+    function initQuiz(topicId) {
+      quizState[topicId] = {
+        currentIndex: 0,
+        score: 0,
+        userAnswers: [],
+        selectedOption: null
+      };
+      renderStep(topicId);
+    }
 
-      for (let i = 1; i <= totalQuestions; i++) {
-        const val = formData.get(`t${topicId}_q${i}`);
-        if (val !== null && parseInt(val) === correctList[i - 1]) {
-          score++;
+    function renderStep(topicId) {
+      const state = quizState[topicId];
+      const questions = quizDataMap[topicId];
+      if (!questions) return;
+
+      const currentQ = questions[state.currentIndex];
+      const totalQ = questions.length;
+
+      // Оновлюємо бейдж та питання
+      document.getElementById(`badge-topic-${topicId}`).innerText = `Запитання ${state.currentIndex + 1} з ${totalQ}`;
+      document.getElementById(`qtext-topic-${topicId}`).innerText = currentQ.q;
+
+      // Варіанти А, Б, В, Г
+      const optionsContainer = document.getElementById(`options-topic-${topicId}`);
+      optionsContainer.innerHTML = '';
+
+      const prefixes = ['А)', 'Б)', 'В)', 'Г)'];
+
+      currentQ.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'quiz-option-btn';
+        btn.innerHTML = `<strong>${prefixes[idx]}</strong>&nbsp; ${optText}`;
+
+        if (state.selectedOption === idx) {
+          btn.classList.add('selected');
         }
+
+        btn.onclick = () => {
+          state.selectedOption = idx;
+          renderStep(topicId);
+        };
+
+        optionsContainer.appendChild(btn);
+      });
+
+      // Кнопка переходу
+      const nextBtn = document.getElementById(`nextbtn-topic-${topicId}`);
+      if (state.selectedOption !== null) {
+        nextBtn.disabled = false;
+        nextBtn.classList.add('enabled');
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.classList.remove('enabled');
       }
 
-      const resultDiv = form.querySelector('.quiz-result');
+      if (state.currentIndex === totalQ - 1) {
+        nextBtn.innerText = "Завершити тест та зберегти результат";
+        nextBtn.classList.add('quiz-finish-btn');
+      } else {
+        nextBtn.innerText = "Наступне запитання ➔";
+        nextBtn.classList.remove('quiz-finish-btn');
+      }
+    }
+
+    window.nextQuestionStep = async function(topicId) {
+      const state = quizState[topicId];
+      const questions = quizDataMap[topicId];
+
+      if (state.selectedOption === null) return;
+
+      if (state.selectedOption === questions[state.currentIndex].correct) {
+        state.score++;
+      }
+
+      state.currentIndex++;
+      state.selectedOption = null;
+
+      if (state.currentIndex < questions.length) {
+        renderStep(topicId);
+      } else {
+        // Тест завершено
+        await finishQuiz(topicId);
+      }
+    };
+
+    async function finishQuiz(topicId) {
+      const state = quizState[topicId];
+      const totalQ = quizDataMap[topicId].length;
+      const score = state.score;
+
+      const resultDiv = document.getElementById(`result-topic-${topicId}`);
+      const optionsContainer = document.getElementById(`options-topic-${topicId}`);
+      const nextBtn = document.getElementById(`nextbtn-topic-${topicId}`);
+      const qtext = document.getElementById(`qtext-topic-${topicId}`);
+
+      optionsContainer.style.display = "none";
+      nextBtn.style.display = "none";
+      qtext.style.display = "none";
+
       resultDiv.style.display = "block";
-      resultDiv.className = "quiz-result success";
-      resultDiv.innerHTML = `Ваш результат з теми ${topicId}: <strong>${score} з ${totalQuestions} балів</strong>.`;
+      resultDiv.innerHTML = `Ваш результат з теми ${topicId}: <strong>${score} з ${totalQ} балів</strong>.`;
 
       if (currentUser) {
         try {
@@ -731,11 +635,9 @@
             geoScores = userSnap.data().geographyScores;
           }
 
-          // Оновлюємо результат, якщо новий результат вищий або перший
           if (!geoScores[`topic_${topicId}`] || score > geoScores[`topic_${topicId}`]) {
             geoScores[`topic_${topicId}`] = score;
 
-            // Обчислюємо загальну суму балів з географії
             const totalGeoScore = Object.values(geoScores).reduce((a, b) => a + b, 0);
 
             await setDoc(userRef, {
@@ -752,7 +654,7 @@
       } else {
         resultDiv.innerHTML += `<br>⚠️ Ви не авторизовані через Google. Увійдіть на головній сторінці, щоб зберегти бали у свій профіль.`;
       }
-    };
+    }
   </script>
 
 </body>
