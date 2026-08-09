@@ -1,3 +1,40 @@
+Встав цей код, щоб відбувалася синхронізація балів з тестів з сторінки НМТ до головного коду. 
+
+// 1. Зчитуємо результати тестів з урахуванням нових ключів з localStorage
+const historyScore = parseInt(localStorage.getItem('nmt_history_score')) || 0;
+const historyTotal = parseInt(localStorage.getItem('nmt_history_total')) || 0;
+
+const geographyScore = parseInt(localStorage.getItem('nmt_geography_score')) || 0;
+const geographyTotal = parseInt(localStorage.getItem('nmt_geography_total')) || 0;
+
+const totalTestPoints = historyScore + geographyScore;
+
+// 2. Інтеграція з Firebase для збереження загального рейтингу користувача
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const currentUserUid = localStorage.getItem('current_user_uid'); // або ваш ключ збереження сесії користувача
+
+if (currentUserUid) {
+  const db = getDatabase();
+  const userRef = ref(db, 'users/' + currentUserUid);
+  
+  get(userRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      const currentDbScore = userData.score || 0;
+      
+      // Можете оновити загальну суму балів у базі даних
+      update(userRef, {
+        score: totalTestPoints,
+        history_score: historyScore,
+        geography_score: geographyScore
+      });
+    }
+  });
+}
+
+Нічого більше не змінюй і не загуби, бо це головна сторінка мого сайту.
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
