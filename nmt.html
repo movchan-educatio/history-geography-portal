@@ -406,9 +406,10 @@
         const totalCount = state.shuffled.length;
         const score = state.score;
         
-        // Зберігаємо бали для головної сторінки (Firebase/localStorage інтеграція)
+        // Зберігаємо результат локально та передаємо його у Firebase.
         localStorage.setItem(`nmt_${type}_score`, score);
         localStorage.setItem(`nmt_${type}_total`, totalCount);
+        syncNmtResult(type, score, totalCount);
 
         const percentage = Math.round((score / totalCount) * 100);
         let msg = "";
@@ -481,99 +482,21 @@
     window.onload = renderTests;
   </script>
 
-
-<script type="module">
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB9N8oVqJ4x9rQ2m8Kc7dF6eG5hT4sP3",
-  authDomain: "movchan-portal.firebaseapp.com",
-  databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "movchan-portal",
-  storageBucket: "movchan-portal.firebasestorage.app",
-  messagingSenderId: "102938475610",
-  appId: "1:102938475610:web:abc123def4567890"
-};
-
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-
-async function syncPortalScores(user) {
-  if (!user) return;
-  const uid = user.uid;
-  const userRef = ref(db, `users/${uid}`);
-  const snap = await get(userRef);
-  const saved = snap.exists() ? snap.val() : {};
-  const updates = {};
-
-  // --- Історія: кожен тест зберігається окремо ---
-  const history = JSON.parse(localStorage.getItem('history_quiz_scores') || '{}');
-  const savedHistory = saved.history_quiz_scores || {};
-  let historyTotal = Number(saved.total_history_points || 0);
-  for (const [themeId, raw] of Object.entries(history)) {
-    const score = Number(raw) || 0;
-    const old = Number(savedHistory[themeId] || 0);
-    if (score > old) {
-      updates[`history_quiz_scores/${themeId}`] = score;
-      historyTotal += score - old;
-    }
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  const firebaseConfig = {apiKey:"AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",authDomain:"movchan-portal.firebaseapp.com",databaseURL:"https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",projectId:"movchan-portal",storageBucket:"movchan-portal.firebasestorage.app",messagingSenderId:"535915495927",appId:"1:535915495927:web:71f899ea2876ee129c2ef2"};
+  const app=initializeApp(firebaseConfig), auth=getAuth(app), database=getDatabase(app); let currentUser=null;
+  async function syncNmtResult(type,score,total){
+    if(!currentUser)return; score=Math.max(0,Number(score)||0); total=Math.max(0,Number(total)||0); if(!total)return;
+    try{await runTransaction(ref(database,'users/'+currentUser.uid),data=>{
+      data=data||{}; const key='nmt_'+type+'_score', totalKey='nmt_'+type+'_total'; const old=Number(data[key]||0); const best=Math.max(old,score); const delta=best-old;
+      data.name=data.name||currentUser.displayName||'Учень'; data[key]=best; data[totalKey]=total; data.nmt_total_score=Number(data.nmt_history_score||0)+Number(data.nmt_geography_score||0); data.score=Number(data.score||0)+delta; return data;
+    });}catch(e){console.error('НМТ Firebase:',e)}
   }
-  if (Object.keys(history).length) updates.total_history_points = historyTotal;
-
-  // --- Географія: кожен тест зберігається окремо ---
-  const geography = JSON.parse(localStorage.getItem('geography_quiz_scores') || '{}');
-  const savedGeography = saved.geography_quiz_scores || {};
-  let geographyTotal = Number(saved.total_geography_points || 0);
-  for (const [themeId, raw] of Object.entries(geography)) {
-    const score = Number(raw) || 0;
-    const old = Number(savedGeography[themeId] || 0);
-    if (score > old) {
-      updates[`geography_quiz_scores/${themeId}`] = score;
-      geographyTotal += score - old;
-    }
-  }
-  if (Object.keys(geography).length) updates.total_geography_points = geographyTotal;
-
-  // --- НМТ: Історія та Географія ---
-  const nmtHistory = Number(localStorage.getItem('nmt_history_score') || 0);
-  const nmtGeo = Number(localStorage.getItem('nmt_geography_score') || 0);
-  const oldNmtHistory = Number(saved.nmt_history_score || 0);
-  const oldNmtGeo = Number(saved.nmt_geography_score || 0);
-
-  let score = Number(saved.score || 0);
-  if (nmtHistory > oldNmtHistory) {
-    score += nmtHistory - oldNmtHistory;
-    updates.nmt_history_score = nmtHistory;
-  }
-  if (nmtGeo > oldNmtGeo) {
-    score += nmtGeo - oldNmtGeo;
-    updates.nmt_geography_score = nmtGeo;
-  }
-
-  if (localStorage.getItem('nmt_history_total') !== null) updates.nmt_history_total = Number(localStorage.getItem('nmt_history_total')) || 0;
-  if (localStorage.getItem('nmt_geography_total') !== null) updates.nmt_geography_total = Number(localStorage.getItem('nmt_geography_total')) || 0;
-  updates.nmt_total_score = Number(updates.nmt_history_score ?? oldNmtHistory) + Number(updates.nmt_geography_score ?? oldNmtGeo);
-
-  if (score !== Number(saved.score || 0)) updates.score = score;
-  updates.name = user.displayName || saved.name || '';
-  if (Object.keys(updates).length) await update(userRef, updates);
-}
-
-onAuthStateChanged(auth, user => {
-  if (!user) return;
-  syncPortalScores(user).catch(err => console.error('Помилка синхронізації балів:', err));
-});
-
-window.addEventListener('storage', () => {
-  if (auth.currentUser) syncPortalScores(auth.currentUser).catch(console.error);
-});
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && auth.currentUser) syncPortalScores(auth.currentUser).catch(console.error);
-});
-window.portalSyncScores = () => auth.currentUser ? syncPortalScores(auth.currentUser) : Promise.resolve();
+  window.syncNmtResult=syncNmtResult;
+  onAuthStateChanged(auth,u=>{currentUser=u;window.currentUserUid=u?u.uid:null;if(!u)return;const hs=Number(localStorage.getItem('nmt_history_score')||0),ht=Number(localStorage.getItem('nmt_history_total')||0),gs=Number(localStorage.getItem('nmt_geography_score')||0),gt=Number(localStorage.getItem('nmt_geography_total')||0);if(ht)syncNmtResult('history',hs,ht);if(gt)syncNmtResult('geography',gs,gt)});
 </script>
 
 </body>
