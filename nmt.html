@@ -11,11 +11,8 @@
   <style>
     .quiz-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     .quiz-question { font-weight: 600; font-size: 15px; color: #1e293b; margin-bottom: 12px; }
-    .quiz-options label { display: block; background: #ffffff; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-size: 14px; color: #334155; transition: all 0.2s; }
+    .quiz-options label { display: block; background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
     .quiz-options label:hover { background: #f1f5f9; border-color: #94a3b8; }
-    .quiz-options label.selected { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; font-weight: 600; }
-    .quiz-next-btn { background: #2563eb; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; }
-    .quiz-next-btn:disabled { background: #94a3b8; cursor: not-allowed; }
     .quiz-options input { margin-right: 10px; }
     .btn-check { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: background 0.2s; }
     .btn-check:hover { background: #1d4ed8; }
@@ -379,8 +376,8 @@
 
     // Зберігаємо поточний стан тестів в пам'яті сесії
     let quizState = {
-      history: { shuffled: [], currentIndex: 0, score: 0, selected: null },
-      geography: { shuffled: [], currentIndex: 0, score: 0, selected: null }
+      history: { shuffled: [], currentIndex: 0, score: 0 },
+      geography: { shuffled: [], currentIndex: 0, score: 0 }
     };
 
     function renderTests() {
@@ -388,12 +385,10 @@
       quizState.history.shuffled = shuffleArray(historyData);
       quizState.history.currentIndex = 0;
       quizState.history.score = 0;
-      quizState.history.selected = null;
 
       quizState.geography.shuffled = shuffleArray(geographyData);
       quizState.geography.currentIndex = 0;
       quizState.geography.score = 0;
-      quizState.geography.selected = null;
 
       renderQuestion('history');
       renderQuestion('geography');
@@ -403,16 +398,40 @@
       const container = document.getElementById(`${type}-questions-container`);
       const state = quizState[type];
       const resDiv = document.getElementById(`${type}-result`);
+
       resDiv.textContent = '';
 
       if (state.currentIndex >= state.shuffled.length) {
+        // Тест завершено
         const totalCount = state.shuffled.length;
         const score = state.score;
-        localStorage.setItem(`nmt_${type}_score`, score);
-        localStorage.setItem(`nmt_${type}_total`, totalCount);
+        
+        // Зберігаємо результат локально та передаємо його у Firebase.
+        const bestKey = `nmt_${type}_best_score`;
+        const oldBest = Number(localStorage.getItem(bestKey)) || 0;
+        const bestScore = Math.max(oldBest, score);
+        localStorage.setItem(bestKey, String(bestScore));
+        localStorage.setItem(`nmt_${type}_score`, String(bestScore));
+        localStorage.setItem(`nmt_${type}_total`, String(totalCount));
+        if (window.syncNmtPoints) window.syncNmtPoints();
+        syncNmtResult(type, score, totalCount);
+
         const percentage = Math.round((score / totalCount) * 100);
-        resDiv.style.color = score >= 22 ? '#2563eb' : (score >= 15 ? '#d97706' : '#16a34a');
-        const msg = `🎉 Тест завершено! Ваш результат: ${score} з ${totalCount} балів (${percentage}%).`;
+        let msg = "";
+        if (score === totalCount) {
+          resDiv.style.color = "#16a34a";
+          msg = `🎉 Фантастично! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'})!`;
+        } else if (score >= 22) {
+          resDiv.style.color = "#2563eb";
+          msg = `👍 Чудовий результат! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'})!`;
+        } else if (score >= 15) {
+          resDiv.style.color = "#d97706";
+          msg = `⚠️ Задовільно. Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'}).`;
+        } else {
+          resDiv.style.color = "#dc2626";
+          msg = `📚 Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'}).`;
+        }
+
         container.innerHTML = `<div class="quiz-card" style="text-align: center;"><h3 style="margin-bottom: 15px;">Тест завершено!</h3><p style="font-size: 16px; font-weight: 600;">${msg}</p><button class="btn-check" style="margin-top: 15px;" onclick="renderTests()">Пройти знову</button></div>`;
         return;
       }
@@ -420,42 +439,31 @@
       const item = state.shuffled[state.currentIndex];
       let optionsWithMeta = item.opts.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.ans }));
       optionsWithMeta = shuffleArray(optionsWithMeta);
+
       let html = `<div class="quiz-card"><div class="quiz-question">Питання ${state.currentIndex + 1} з ${state.shuffled.length}: ${item.q.replace(/^\d+\.\s*/, '')}</div><div class="quiz-options">`;
+      
       optionsWithMeta.forEach((optObj, oIndex) => {
         const val = optObj.isCorrect ? 'correct' : 'wrong';
-        const checked = state.selected === val ? ' checked' : '';
-        const selected = state.selected === val ? ' selected' : '';
-        html += `<label class="${selected}"><input type="radio" name="${type}_current" value="${val}"${checked} onclick="handleAnswer('${type}', this)"> ${optObj.text}</label>`;
+        html += `<label><input type="radio" name="${type}_current" value="${val}" onclick="handleAnswer('${type}', this)"> ${optObj.text}</label>`;
       });
-      html += `</div><button class="quiz-next-btn" ${state.selected === null ? 'disabled' : ''} onclick="nextNmtQuestion('${type}')">${state.currentIndex === state.shuffled.length - 1 ? 'Завершити тест' : 'Наступне запитання ➔'}</button></div>`;
+      html += `</div></div>`;
+
       container.innerHTML = html;
     }
 
     function handleAnswer(type, inputElement) {
-      quizState[type].selected = inputElement.value;
-      renderQuestion(type);
-    }
-
-    function nextNmtQuestion(type) {
       const state = quizState[type];
-      if (state.selected === null) return;
-      if (state.selected === 'correct') {
+      const isCorrect = inputElement.value === 'correct';
+
+      if (isCorrect) {
         state.score++;
-        const bestKey = `nmt_${type}_best_score`;
-        const oldBest = Number(localStorage.getItem(bestKey) || 0);
-        if (state.score > oldBest) {
-          localStorage.setItem(bestKey, state.score);
-          if (typeof window.syncQuizPoint === 'function') window.syncQuizPoint(1);
-          else {
-            const pending = JSON.parse(localStorage.getItem('quiz_pending_points') || '{}');
-            pending.total = (pending.total || 0) + 1;
-            localStorage.setItem('quiz_pending_points', JSON.stringify(pending));
-          }
-        }
       }
-      state.selected = null;
-      state.currentIndex++;
-      renderQuestion(type);
+
+      // Невелика затримка перед переходом до наступного питання для зручності
+      setTimeout(() => {
+        state.currentIndex++;
+        renderQuestion(type);
+      }, 300);
     }
 
     function downloadFullPage() {
@@ -479,14 +487,12 @@
     window.onload = renderTests;
   </script>
 
-
-  <!-- Єдина синхронізація балів з Firebase Realtime Database -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, runTransaction, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    const firebaseConfig = {
+  const firebaseConfig = {
       apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
       authDomain: "movchan-portal.firebaseapp.com",
       databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
@@ -495,54 +501,29 @@
       messagingSenderId: "535915495927",
       appId: "1:535915495927:web:71f899ea2876ee129c2ef2"
     };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const database = getDatabase(app);
-    window.quizFirebaseUid = null;
-
-    function readPending() {
-      try { return JSON.parse(localStorage.getItem('quiz_pending_points') || '{}'); } catch { return {}; }
-    }
-    function writePending(data) {
-      localStorage.setItem('quiz_pending_points', JSON.stringify(data));
-    }
-
-    async function addPoints(points) {
-      if (!points) return;
-      const uid = window.quizFirebaseUid;
-      if (!uid) {
-        const pending = readPending();
-        pending.total = (pending.total || 0) + points;
-        writePending(pending);
-        return;
-      }
-      const userRef = ref(database, 'users/' + uid);
-      await runTransaction(userRef, data => {
-        data = data || {};
-        data.score = (Number(data.score) || 0) + points;
-        return data;
+  async function syncNmtPoints() {
+    if (!currentUser) return;
+    const h = Number(localStorage.getItem('nmt_history_best_score')) || 0;
+    const g = Number(localStorage.getItem('nmt_geography_best_score')) || 0;
+    const userRef = ref(database, 'users/' + currentUser.uid);
+    try {
+      await runTransaction(userRef, current => {
+        const data = current || {};
+        const hist = Number(data.history_test_points ?? data.total_history_points ?? 0) || 0;
+        const geo = Number(data.geography_test_points ?? data.total_geography_points ?? 0) || 0;
+        return { ...data, name: currentUser.displayName || data.name || 'Учень', history_test_points: hist, total_history_points: hist, geography_test_points: geo, total_geography_points: geo, nmt_history_points: h, nmt_history_score: h, nmt_geography_points: g, nmt_geography_score: g, nmt_total_score: h + g, score: hist + geo + h + g };
       });
-    }
-
-    async function flushPending() {
-      const pending = readPending();
-      const points = Number(pending.total) || 0;
-      if (!points || !window.quizFirebaseUid) return;
-      try {
-        await addPoints(points);
-        writePending({});
-      } catch (e) {
-        console.error('Firebase sync error:', e);
-      }
-    }
-
-    window.syncQuizPoint = addPoints;
-    onAuthStateChanged(auth, user => {
-      window.quizFirebaseUid = user ? user.uid : null;
-      if (user) flushPending();
-    });
-  </script>
+    } catch (e) { console.error('NMT SYNC ERROR', e); }
+  }
+  window.syncNmtPoints = syncNmtPoints;
+  onAuthStateChanged(auth, user => { currentUser = user; if (user) syncNmtPoints(); });
+  window.addEventListener('storage', syncNmtPoints);
+</script>
 
 </body>
 </html>

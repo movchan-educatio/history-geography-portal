@@ -1102,18 +1102,6 @@
       const q = state.questions[state.currentIndex];
       if (state.selectedOption === q.correctIndex) {
         state.score += 1;
-        let bestScores = JSON.parse(localStorage.getItem('geography_quiz_scores') || '{}');
-        const oldBest = Number(bestScores[themeId] || 0);
-        if (state.score > oldBest) {
-          bestScores[themeId] = state.score;
-          localStorage.setItem('geography_quiz_scores', JSON.stringify(bestScores));
-          if (typeof window.syncQuizPoint === 'function') window.syncQuizPoint(1);
-          else {
-            const pending = JSON.parse(localStorage.getItem('quiz_pending_points') || '{}');
-            pending.total = (pending.total || 0) + 1;
-            localStorage.setItem('quiz_pending_points', JSON.stringify(pending));
-          }
-        }
       }
 
       state.selectedOption = null;
@@ -1133,13 +1121,16 @@
       renderQuiz(themeId);
     }
 
+    // Зберігаємо найкращий результат кожної теми. 1 правильна відповідь = 1 бал.
     function saveGeographyQuizScore(themeId, score) {
-      let geoScores = JSON.parse(localStorage.getItem('geography_quiz_scores') || '{}');
-      const oldBest = Number(geoScores[themeId] || 0);
-      geoScores[themeId] = Math.max(oldBest, Number(score) || 0);
-      localStorage.setItem('geography_quiz_scores', JSON.stringify(geoScores));
-      const totalGeoPoints = Object.values(geoScores).reduce((a, b) => a + Number(b || 0), 0);
-      localStorage.setItem('total_geography_points', totalGeoPoints);
+      const scores = JSON.parse(localStorage.getItem('geography_quiz_scores') || '{}');
+      const oldBest = Number(scores[themeId]) || 0;
+      const best = Math.max(oldBest, Number(score) || 0);
+      scores[themeId] = best;
+      localStorage.setItem('geography_quiz_scores', JSON.stringify(scores));
+      const total = Object.values(scores).reduce((sum, value) => sum + (Number(value) || 0), 0);
+      localStorage.setItem('total_geography_points', String(total));
+      if (window.syncGeographyPoints) window.syncGeographyPoints();
     }
 
     // Автоматична ініціалізація всіх тестів під час завантаження сторінки
@@ -1153,13 +1144,13 @@
   </script>
 
 
-  <!-- Єдина синхронізація балів з Firebase Realtime Database -->
+  <!-- Firebase: синхронізація балів географії -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, runTransaction, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    const firebaseConfig = {
+  const firebaseConfig = {
       apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
       authDomain: "movchan-portal.firebaseapp.com",
       databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
@@ -1168,54 +1159,29 @@
       messagingSenderId: "535915495927",
       appId: "1:535915495927:web:71f899ea2876ee129c2ef2"
     };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const database = getDatabase(app);
-    window.quizFirebaseUid = null;
-
-    function readPending() {
-      try { return JSON.parse(localStorage.getItem('quiz_pending_points') || '{}'); } catch { return {}; }
-    }
-    function writePending(data) {
-      localStorage.setItem('quiz_pending_points', JSON.stringify(data));
-    }
-
-    async function addPoints(points) {
-      if (!points) return;
-      const uid = window.quizFirebaseUid;
-      if (!uid) {
-        const pending = readPending();
-        pending.total = (pending.total || 0) + points;
-        writePending(pending);
-        return;
-      }
-      const userRef = ref(database, 'users/' + uid);
-      await runTransaction(userRef, data => {
-        data = data || {};
-        data.score = (Number(data.score) || 0) + points;
-        return data;
+  async function syncGeographyPoints() {
+    if (!currentUser) return;
+    const local = Number(localStorage.getItem('total_geography_points')) || 0;
+    const userRef = ref(database, 'users/' + currentUser.uid);
+    try {
+      await runTransaction(userRef, current => {
+        const data = current || {};
+        const hist = Number(data.history_test_points ?? data.total_history_points ?? 0) || 0;
+        const nmtH = Number(data.nmt_history_points ?? data.nmt_history_score ?? 0) || 0;
+        const nmtG = Number(data.nmt_geography_points ?? data.nmt_geography_score ?? 0) || 0;
+        return { ...data, name: currentUser.displayName || data.name || 'Учень', history_test_points: hist, total_history_points: hist, geography_test_points: local, total_geography_points: local, nmt_history_points: nmtH, nmt_history_score: nmtH, nmt_geography_points: nmtG, nmt_geography_score: nmtG, score: hist + local + nmtH + nmtG };
       });
-    }
-
-    async function flushPending() {
-      const pending = readPending();
-      const points = Number(pending.total) || 0;
-      if (!points || !window.quizFirebaseUid) return;
-      try {
-        await addPoints(points);
-        writePending({});
-      } catch (e) {
-        console.error('Firebase sync error:', e);
-      }
-    }
-
-    window.syncQuizPoint = addPoints;
-    onAuthStateChanged(auth, user => {
-      window.quizFirebaseUid = user ? user.uid : null;
-      if (user) flushPending();
-    });
-  </script>
+    } catch (e) { console.error('GEOGRAPHY SYNC ERROR', e); }
+  }
+  window.syncGeographyPoints = syncGeographyPoints;
+  onAuthStateChanged(auth, user => { currentUser = user; if (user) syncGeographyPoints(); });
+  window.addEventListener('storage', syncGeographyPoints);
+</script>
 
 </body>
 </html>

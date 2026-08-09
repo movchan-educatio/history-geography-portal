@@ -605,13 +605,13 @@
       <div class="info-card">
         <h4>📜 Історичний факт</h4>
         <p id="event-content">Завантаження...</p>
-        <button onclick="openModal('event'); addPoints(5);" class="btn-link">Детальніше → (+5 балів)</button>
+        <button onclick="openModal('event')" class="btn-link">Детальніше →</button>
       </div>
 
       <div class="info-card">
         <h4>🌍 Цікаво про географію</h4>
         <p id="geo-content">Завантаження...</p>
-        <button onclick="openModal('geo'); addPoints(5);" class="btn-link">Читати більше → (+5 балів)</button>
+        <button onclick="openModal('geo')" class="btn-link">Читати більше →</button>
       </div>
 
       <div class="info-card" style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -631,15 +631,15 @@
 
     <div class="section-title">Віртуальні екскурсії та медіа</div>
     <div class="grid-3-tours">
-      <a href="tours.html" target="_blank" class="virtual-tour-card" onclick="addPoints(5)">
+      <a href="tours.html" target="_blank" class="virtual-tour-card">
         <div class="icon">🗺️</div>
         <span>AUDIO & 3D Тури</span>
       </a>
-      <a href="https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" target="_blank" class="virtual-tour-card" onclick="addPoints(5)">
+      <a href="https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" target="_blank" class="virtual-tour-card">
         <div class="icon" style="color: #ff0000;"><i class="fa-brands fa-youtube"></i></div>
         <span>Реальна історія</span>
       </a>
-      <a href="artifacts.html" target="_blank" class="virtual-tour-card" onclick="addPoints(5)">
+      <a href="artifacts.html" target="_blank" class="virtual-tour-card">
         <div class="icon">🏺</div>
         <span>3D Артефакти</span>
       </a>
@@ -746,43 +746,32 @@
       if (user) {
         window.currentStudent = user.displayName;
         window.currentUserUid = user.uid;
-        
+
         const userRef = ref(database, 'users/' + user.uid);
         get(userRef).then((snapshot) => {
-          const historyTestPoints = parseInt(localStorage.getItem('total_history_points')) || 0;
-          const geographyTestPoints = parseInt(localStorage.getItem('total_geography_points')) || 0;
-          const totalTestPoints = historyTestPoints + geographyTestPoints;
+          const data = snapshot.exists() ? snapshot.val() : {};
 
-          if (!snapshot.exists()) {
-            set(userRef, {
-              name: user.displayName,
-              score: 5 + totalTestPoints,
-              total_history_points: historyTestPoints,
-              total_geography_points: geographyTestPoints
-            });
-          } else {
-            const currentData = snapshot.val();
-            const currentScore = currentData.score || 0;
-            const savedHistPoints = currentData.total_history_points || 0;
-            const savedGeoPoints = currentData.total_geography_points || 0;
-            
-            let diff = 0;
-            let updates = {};
+          // Єдине джерело балів рейтингу — результати тестів.
+          // Старі бонуси за факти, тури, YouTube тощо більше не враховуються.
+          const historyPoints = Number(data.history_test_points ?? data.total_history_points ?? 0) || 0;
+          const geographyPoints = Number(data.geography_test_points ?? data.total_geography_points ?? 0) || 0;
+          const nmtHistoryPoints = Number(data.nmt_history_points ?? data.nmt_history_score ?? 0) || 0;
+          const nmtGeographyPoints = Number(data.nmt_geography_points ?? data.nmt_geography_score ?? 0) || 0;
+          const testScore = historyPoints + geographyPoints + nmtHistoryPoints + nmtGeographyPoints;
 
-            if (historyTestPoints > savedHistPoints) {
-              diff += (historyTestPoints - savedHistPoints);
-              updates.total_history_points = historyTestPoints;
-            }
-            if (geographyTestPoints > savedGeoPoints) {
-              diff += (geographyTestPoints - savedGeoPoints);
-              updates.total_geography_points = geographyTestPoints;
-            }
-
-            if (diff > 0) {
-              updates.score = currentScore + diff;
-              update(userRef, updates);
-            }
-          }
+          const updates = {
+            name: user.displayName || 'Учень',
+            score: testScore,
+            history_test_points: historyPoints,
+            geography_test_points: geographyPoints,
+            nmt_history_points: nmtHistoryPoints,
+            nmt_geography_points: nmtGeographyPoints,
+            total_history_points: historyPoints,
+            total_geography_points: geographyPoints,
+            nmt_history_score: nmtHistoryPoints,
+            nmt_geography_score: nmtGeographyPoints
+          };
+          update(userRef, updates).catch(err => console.error('Помилка оновлення рейтингу:', err));
         });
 
         authBox.innerHTML = `
@@ -874,22 +863,6 @@
         text: text
       });
       input.value = '';
-    };
-
-    window.addPointsToFirebase = function(points) {
-      if (!window.currentUserUid) return alert('Увійдіть у систему за допомогою Google, щоб зберігати бали!');
-      
-      const userRef = ref(database, 'users/' + window.currentUserUid);
-      get(userRef).then((snapshot) => {
-        let currentScore = 0;
-        if (snapshot.exists()) {
-          currentScore = snapshot.val().score || 0;
-        }
-        update(userRef, {
-          name: window.currentStudent,
-          score: currentScore + points
-        });
-      });
     };
   </script>
 
@@ -1134,13 +1107,6 @@
       });
     }
 
-    function addPoints(points) {
-      if (typeof window.addPointsToFirebase === 'function') {
-        window.addPointsToFirebase(points);
-      }
-      unlockDinoGame();
-    }
-
     const keyEvents = [
       { title: "Бій під Крутами (1918)", short: "Студенти стримали наступ більшовицьких військ на Київ.", full: "29 січня 1918 року біля залізничної станції Крути близько 500 українських студентів і курсантів прийняли нерівний бій з багатотисячною армією." },
       { title: "Проголошення Незалежності (1991)", short: "Верховна Рада ухвалила Акт проголошення незалежності України.", full: "24 серпня 1991 року позачергова сесія Верховної Ради УРСР урочисто ухвалила історичний документ — Акт проголошення незалежності України." },
@@ -1370,8 +1336,7 @@
       if (userAnswer === gameItem.isTrue) {
         resultElem.style.background = '#dcfce7';
         resultElem.style.color = '#15803d';
-        resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +5 балів!';
-        addPoints(5);
+        resultElem.innerHTML = '🎉 Правильно!';
       } else {
         resultElem.style.background = '#fee2e2';
         resultElem.style.color = '#b91c1c';
