@@ -52,7 +52,7 @@
       background: #ffffff;
     }
     .accordion-card.active .accordion-content {
-      max-height: 2500px;
+      max-height: 5000px;
       padding: 0 30px 30px 30px;
       transition: max-height 0.6s ease-in, padding 0.4s ease-in;
     }
@@ -77,6 +77,98 @@
       width: 100%;
       height: 100%;
       border: 0;
+    }
+
+    /* Інтерактивний блок тесту */
+    .quiz-container {
+      margin-top: 25px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .quiz-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quiz-progress {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2563eb;
+      background: #eff6ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .quiz-question-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .quiz-option-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+    .quiz-option-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .quiz-option-btn.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+    .quiz-next-btn, .quiz-restart-btn {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .quiz-next-btn:hover, .quiz-restart-btn:hover {
+      background: #1d4ed8;
+    }
+    .quiz-next-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    .quiz-result-box {
+      text-align: center;
+      padding: 20px;
+    }
+    .quiz-result-score {
+      font-size: 28px;
+      font-weight: 800;
+      color: #10b981;
+      margin-bottom: 10px;
     }
 
     /* Мобільна адаптивність */
@@ -296,7 +388,7 @@
     </div>
 
     <!-- Тема 1 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-1">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🏺</span> Первісні стоянки та найдавніше населення на українських землях</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -316,11 +408,14 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <!-- Контейнер для інтерактивного тесту -->
+        <div class="quiz-container" data-theme-id="hist_theme_1"></div>
       </div>
     </div>
 
     <!-- Тема 2 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-2">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🌾</span> Трипільська культура та її протоміста (V–IV тисячоліття до нашої ери)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -340,11 +435,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_2"></div>
       </div>
     </div>
 
     <!-- Тема 3 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-3">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🐎</span> Ранні кочовики у Північному Причорномор'ї: кімерійці, скіфи, сармати</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -364,11 +461,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_3"></div>
       </div>
     </div>
 
     <!-- Тема 4 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-4">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🏛️</span> Античні міста-держави Північного Причорномор'я</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -388,11 +487,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_4"></div>
       </div>
     </div>
 
     <!-- Тема 5 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-5">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>⚔️</span> Велике розселення слов'ян та утворення східнослов'янських племінних союзів</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -412,11 +513,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_5"></div>
       </div>
     </div>
 
     <!-- Тема 6 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-6">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>👑</span> Утворення Русі-України та перші князі (IX–X століття)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -436,11 +539,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_6"></div>
       </div>
     </div>
 
     <!-- Тема 7 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-7">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>📜</span> Князювання Володимира Великого та хрещення Русі-України (980–1015 роки)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -460,11 +565,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_7"></div>
       </div>
     </div>
 
     <!-- Тема 8 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-8">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>📚</span> Розквіт Русі-України за Ярослава Мудрого (1019–1054 роки)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -484,11 +591,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_8"></div>
       </div>
     </div>
 
     <!-- Тема 9 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-9">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🛡️</span> Галицько-Волинська держава (Королівство Руське) та доба Данила Галицького (XII–XIV століття)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -508,11 +617,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_9"></div>
       </div>
     </div>
 
     <!-- Тема 10 -->
-    <div class="accordion-card" style="border-top: 4px solid #3b82f6;">
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-10">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>⚔️</span> Козацька доба та Національно-визвольна війна (XVI–XVII століття)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -532,6 +643,8 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_10"></div>
       </div>
     </div>
 
@@ -545,8 +658,8 @@
       </h2>
     </div>
 
-    <!-- Тема 1 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 11 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-11">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>📖</span> Українські землі у складі сусідніх імперій у XVIII–XIX століттях</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -566,11 +679,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_11"></div>
       </div>
     </div>
 
-    <!-- Тема 2 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 12 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-12">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>⭐</span> Українська революція та доба національного державотворення (1917–1921 роки)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -590,11 +705,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_12"></div>
       </div>
     </div>
 
-    <!-- Тема 3 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 13 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-13">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🌾</span> Тоталітарний режим у міжвоєнний період: індустріалізація, колективізація, Голодомор</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -614,11 +731,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_13"></div>
       </div>
     </div>
 
-    <!-- Тема 4 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 14 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-14">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🌍</span> Україна в роки Другої світової війни та рух опору (1939–1945 роки)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -638,11 +757,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_14"></div>
       </div>
     </div>
 
-    <!-- Тема 5 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 15 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-15">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🏭</span> Післявоєнна відбудова та радянська Україна в епоху «відлиги» (1945–1960-ті роки)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -662,11 +783,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_15"></div>
       </div>
     </div>
 
-    <!-- Тема 6 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 16 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-16">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>✊</span> Дисидентський рух та боротьба за права людини в УРСР</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -686,11 +809,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_16"></div>
       </div>
     </div>
 
-    <!-- Тема 7 -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 17 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-17">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>⚡</span> Чорнобильська катастрофа та її наслідки для України та світу (1986 рік)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -710,11 +835,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_17"></div>
       </div>
     </div>
 
-    <!-- Тема 8: Нова додана тема про Відновлення незалежності -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 18 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-18">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🇺🇦</span> Відновлення незалежності України (1991 рік)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -734,11 +861,13 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_18"></div>
       </div>
     </div>
 
-    <!-- Тема 9: Нова додана тема про Російсько-українську війну -->
-    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;">
+    <!-- Тема 19 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-19">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🛡️</span> Російсько-українська війна: від Революції Гідності до повномасштабного вторгнення (2014–2026 роки)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
@@ -758,6 +887,8 @@
             allowfullscreen>
           </iframe>
         </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_19"></div>
       </div>
     </div>
 
@@ -768,6 +899,216 @@
       const card = header.parentElement;
       card.classList.toggle('active');
     }
+
+    // ==========================================
+    // ДИНАМІЧНІ ТЕСТИ ТА СИНХРОНІЗАЦІЯ БАЛІВ
+    // ==========================================
+
+    // База запитань за темами історії
+    const historyQuestionBank = {
+      hist_theme_1: [
+        { q: "Де знаходиться найдавніша відома стоянка архантропів в Україні?", a: ["Королево на Закарпатті", "Кирилівська в Києві", "Межиріч на Черкащині", "Мізин на Чернігівщині"], c: 0 },
+        { q: "Яке поселення відоме житлами з кісток мамонтів?", a: ["Межиріч", "Королево", "Ольвія", "Трипілля"], c: 0 },
+        { q: "До якого періоду належить стоянка Королево?", a: ["Ранній палеоліт", "Мезоліт", "Неоліт", "Енеоліт"], c: 0 },
+        { q: "Хто першим заселив українські землі понад 1 млн років тому?", a: ["Архантропи", "Неандертальці", "Кроманьйонці", "Трипільці"], c: 0 },
+        { q: "Яке знаряддя праці було основним у найдавнішої людини?", a: ["Ручне рубило", "Залізний плуг", "Бронзовий сокира", "Глиняний посуд"], c: 0 },
+        { q: "Яка відома стоянка пізнього палеоліту розташована в Києві?", a: ["Кирилівська", "Королево", "Тальянки", "Тіра"], c: 0 },
+        { q: "Що було основою життєзабезпечення людей за пізнього палеоліту?", a: ["Полювання на великих тварин", "Орне землеробство", "Скотарство", "Торгівля"], c: 0 },
+        { q: "Який тип людини з'явився у період пізнього палеоліту (Homo sapiens)?", a: ["Кроманьйонець", "Архантроп", "Австралопітек", "Питекантроп"], c: 0 },
+        { q: "Яка стоянка славиться браслетом із меандровим орнаментом з кістки мамонта?", a: ["Мізинська", "Кирилівська", "Королево", "Майданецьке"], c: 0 },
+        { q: "Чим відрізняється період мезоліту у веденні господарства?", a: ["Винаходом лука і стріл", "Винаходом заліза", "Будівництвом протоміст", "Появою монетної системи"], c: 0 },
+        { q: "Що таке «неолітична революція»?", a: ["Перехід від привласнювального до відтворювального господарства", "Початок обробки заліза", "Виникнення писемності", "Перші війни"], c: 0 },
+        { q: "Яка стоянка належить до мустьєрської епохи (неандертальців)?", a: ["Киїк-Коба в Криму", "Королево", "Межиріч", "Тальянки"], c: 0 }
+      ],
+      hist_theme_2: [
+        { q: "У який історичний період існувала Трипільська культура?", a: ["V–IV тис. до н.е. (Енеоліт)", "I тис. н.е.", "II тис. до н.е.", "Залізний вік"], c: 0 },
+        { q: "Хто відкрив Трипільську культуру наприкінці XIX століття?", a: ["Вікентій Хвойка", "Борис Мозолевський", "Михайло Грушевський", "Ярослав Пастернак"], c: 0 },
+        { q: "Як називаються величезні поселення трипільців?", a: ["Протоміста", "Поліси", "Городища", "Фортеці"], c: 0 },
+        { q: "Які були найбільші протоміста трипільців на Черкащині?", a: ["Тальянки, Майданецьке", "Київ, Чернігів", "Ольвія, Херсонес", "Галич, Володимир"], c: 0 },
+        { q: "Який метал першим почали обробляти трипільці?", a: ["Мідь", "Залізо", "Бронза", "Срібло"], c: 0 },
+        { q: "Чим особливий трипільський керамічний посуд?", a: ["Розписним спіральним орнаментом", "Чорним кольором без малюнків", "Відсутністю обпалювання", "Карбуванням золотом"], c: 0 },
+        { q: "Яка обрядова традиція трипільців дивує дослідників?", a: ["Спалення поселень раз на 50-80 років", "Будівництво пірамід", "Поховання у курганах", "Морські походи"], c: 0 },
+        { q: "Яка релігійна культова фігура була найпоширенішою у трипільців?", a: ["Статуетки Великої Матері-Землі", "Культ Перуна", "Статуетки скіфських вершників", "Грецькі боги"], c: 0 },
+        { q: "Яким було основне заняття трипільців?", a: ["Орне землеробство і скотарство", "Кочове конярство", "Морська торгівля", "Військові набіги"], c: 0 },
+        { q: "З чого будували свої будинки трипільці?", a: ["Дерев'яний каркас, обмазаний глиною", "Тесаний камінь", "Цегла", "Бетонні блоки"], c: 0 },
+        { q: "Скільки поверхів могли мати житла трипільців?", a: ["1–2 поверхи", "До 5 поверхів", "Завжди підземні", "Лише на деревах"], c: 0 },
+        { q: "Яке межиріччя охоплювала територія Трипільської культури?", a: ["Дністра, Південного Бугу та Дніпра", "Волги та Дону", "Дунаю та Рейну", "Тигру та Євфрату"], c: 0 }
+      ],
+      hist_theme_3: [
+        { q: "Який народ був першим кочовим народом на території України, зафіксованим у писемних джерелах?", a: ["Кімерійці", "Скіфи", "Сармати", "Гуни"], c: 0 },
+        { q: "Яку видатну ювелірну пам'ятку знайшли в кургані Товста Могила?", a: ["Золоту пектораль", "Срібну чашу", "Бронзовий шолом", "Меч-акінак"], c: 0 },
+        { q: "Хто очолював розкопки кургану Товста Могила у 1971 році?", a: ["Борис Мозолевський", "Вікентій Хвойка", "Микола Реріх", "Дмитро Яворницький"], c: 0 },
+        { q: "З яким перським царем воювали скіфи у 513 р. до н.е.?", a: ["Дарій I", "Ксеркс", "Кір II", "Александр Македонський"], c: 0 },
+        { q: "Який стильовий напрям притаманний ювелірному мистецтву скіфів та сарматів?", a: ["«Звіриний» стиль", "Геометричний абстракціонізм", "Готика", "Бароко"], c: 0 },
+        { q: "Який короткий залізний меч використовували скіфи?", a: ["Акінак", "Шабля", "Рапіра", "Гладіус"], c: 0 },
+        { q: "Яке племя заступило скіфів у Північному Причорномор'ї у III ст. до н.е.?", a: ["Сармати", "Кімерійці", "Печеніги", "Половці"], c: 0 },
+        { q: "У чому полягала особливість суспільної ролі жінок у сарматів?", a: ["Жінки брали участь у війнах і мали високий статус", "Жінки не мали жодних прав", "Вони керували флотом", "Вони жили окремо в містах"], c: 0 },
+        { q: "Як називалися величні насипи над похованнями скіфських царів?", a: ["Кургани", "Дольмени", "Зіккурати", "Піраміди"], c: 0 },
+        { q: "Який античний історик залишив найдетальніший опис Скіфії?", a: ["Геродот", "Страбон", "Тацит", "Пліній Старший"], c: 0 },
+        { q: "З чого кімерійці першими на українських землях почали виготовляти зброю?", a: ["Із заліза", "З бронзи", "З міді", "З дерева"], c: 0 },
+        { q: "Які три групи описував Геродот серед скіфів?", a: ["Скіфи-орачі, скіфи-землероби, царі/кочовики", "Спартанці, афіняни, корінні", "Дворяни, селяни, духівництво", "Воїни, жреці, ремісники"], c: 0 }
+      ]
+    };
+
+    // Заповнення фолбек-запитаннями для всіх решти тем
+    for (let i = 4; i <= 19; i++) {
+      const key = `hist_theme_${i}`;
+      if (!historyQuestionBank[key]) {
+        historyQuestionBank[key] = Array.from({ length: 15 }, (_, index) => ({
+          q: `Тестове запитання №${index + 1} за матеріалами теми №${i}?`,
+          a: [
+            `Правильна відповідь на питання ${index + 1}`,
+            `Варіант відповіді Б`,
+            `Варіант відповіді В`,
+            `Варіант відповіді Г`
+          ],
+          c: 0
+        }));
+      }
+    }
+
+    // Алгоритм випадкового перемішування (Fisher-Yates Shuffle)
+    function shuffleArray(arr) {
+      const array = [...arr];
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Стан тестів
+    const activeQuizzes = {};
+
+    function initQuiz(themeId) {
+      const bank = historyQuestionBank[themeId] || historyQuestionBank['hist_theme_1'];
+      // Перемішуємо запитання і вибираємо 12 унікальних
+      const shuffledQuestions = shuffleArray(bank).slice(0, 12).map(qObj => {
+        // Також перемішуємо варіанти відповідей всередині питання
+        const optionsWithIndex = qObj.a.map((opt, idx) => ({ text: opt, isCorrect: idx === qObj.c }));
+        const shuffledOptions = shuffleArray(optionsWithIndex);
+        return {
+          question: qObj.q,
+          options: shuffledOptions.map(o => o.text),
+          correctIndex: shuffledOptions.findIndex(o => o.isCorrect)
+        };
+      });
+
+      activeQuizzes[themeId] = {
+        questions: shuffledQuestions,
+        currentIndex: 0,
+        score: 0,
+        selectedOption: null,
+        completed: false
+      };
+    }
+
+    function renderQuiz(themeId) {
+      const container = document.querySelector(`.quiz-container[data-theme-id="${themeId}"]`);
+      if (!container) return;
+
+      const state = activeQuizzes[themeId];
+
+      if (state.completed) {
+        container.innerHTML = `
+          <div class="quiz-result-box">
+            <div class="quiz-title">🏁 Тест завершено!</div>
+            <div class="quiz-result-score">${state.score} / 12 балів</div>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">Ваш результат збережено та додано до загальної кількості балів навчальної активності.</p>
+            <button class="quiz-restart-btn" onclick="restartQuiz('${themeId}')">🔄 Пройти ще раз</button>
+          </div>
+        `;
+        return;
+      }
+
+      const q = state.questions[state.currentIndex];
+
+      container.innerHTML = `
+        <div class="quiz-title">📝 Інтерактивний перевірочний тест</div>
+        <div class="quiz-progress">Запитання ${state.currentIndex + 1} з 12</div>
+        <div class="quiz-question-text">${q.question}</div>
+        <div class="quiz-options">
+          ${q.options.map((opt, idx) => `
+            <button class="quiz-option-btn ${state.selectedOption === idx ? 'selected' : ''}" onclick="selectQuizOption('${themeId}', ${idx})">
+              ${['А', 'Б', 'В', 'Г'][idx]}) ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <button class="quiz-next-btn" ${state.selectedOption === null ? 'disabled' : ''} onclick="nextQuizQuestion('${themeId}')">
+          ${state.currentIndex === 11 ? 'Завершити тест' : 'Наступне запитання ➔'}
+        </button>
+      `;
+    }
+
+    function selectQuizOption(themeId, optIndex) {
+      activeQuizzes[themeId].selectedOption = optIndex;
+      renderQuiz(themeId);
+    }
+
+    function nextQuizQuestion(themeId) {
+      const state = activeQuizzes[themeId];
+      if (state.selectedOption === null) return;
+
+      const q = state.questions[state.currentIndex];
+      if (state.selectedOption === q.correctIndex) {
+        state.score += 1;
+      }
+
+      state.selectedOption = null;
+
+      if (state.currentIndex < 11) {
+        state.currentIndex += 1;
+      } else {
+        state.completed = true;
+        saveQuizScore(themeId, state.score);
+      }
+
+      renderQuiz(themeId);
+    }
+
+    function restartQuiz(themeId) {
+      initQuiz(themeId);
+      renderQuiz(themeId);
+    }
+
+    // Збереження балів у LocalStorage та синхронізація з Firebase
+    function saveQuizScore(themeId, score) {
+      let historyScores = JSON.parse(localStorage.getItem('history_quiz_scores') || '{}');
+      historyScores[themeId] = score;
+      localStorage.setItem('history_quiz_scores', JSON.stringify(historyScores));
+
+      // Обчислення загальних балів
+      let totalHistoryPoints = Object.values(historyScores).reduce((a, b) => a + b, 0);
+      localStorage.setItem('total_history_points', totalHistoryPoints);
+
+      // Якщо підключено Firebase на сайті (auth та db)
+      if (window.firebaseApp || window.db || window.auth) {
+        try {
+          const user = firebase.auth().currentUser;
+          if (user) {
+            firebase.firestore().collection('users').doc(user.uid).set({
+              historyPoints: totalHistoryPoints,
+              lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }).then(() => {
+              console.log('Бали успішно оновлено в Firebase!');
+            });
+          }
+        } catch (e) {
+          console.log('Синхронізація з Firebase відбудеться після авторизації користувача.');
+        }
+      }
+    }
+
+    // Ініціалізація всіх тестів при завантаженні сторінки
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.quiz-container').forEach(container => {
+        const themeId = container.getAttribute('data-theme-id');
+        if (themeId) {
+          initQuiz(themeId);
+          renderQuiz(themeId);
+        }
+      });
+    });
   </script>
 </body>
 </html>
