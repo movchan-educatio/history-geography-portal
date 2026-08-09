@@ -9,12 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css?v=7">
-
-  <!-- Firebase SDKs (Compat версія для простого підключення) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
   <style>
     .accordion-card {
       background: #ffffff;
@@ -57,9 +51,9 @@
       background: #ffffff;
     }
     .accordion-card.active .accordion-content {
-      max-height: 7000px;
+      max-height: 9000px;
       padding: 0 30px 30px 30px;
-      transition: max-height 0.6s ease-in, padding 0.4s ease-in;
+      transition: max-height 0.8s ease-in, padding 0.4s ease-in;
     }
     .accordion-card.active .accordion-icon {
       transform: rotate(180deg);
@@ -75,6 +69,7 @@
       background: #000;
       border-radius: 8px;
       margin-top: 15px;
+      margin-bottom: 20px;
     }
     .video-container iframe {
       position: absolute;
@@ -84,125 +79,79 @@
       height: 100%;
       border: 0;
     }
-
     /* Стилі для інтерактивних тестів */
     .quiz-box {
-      margin-top: 25px;
       background: #f8fafc;
       border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 24px;
-    }
-    .quiz-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      border-bottom: 1px solid #cbd5e1;
-      padding-bottom: 12px;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 25px;
     }
     .quiz-title {
-      font-weight: 700;
       font-size: 18px;
-      color: #0f172a;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .quiz-progress {
-      font-size: 14px;
-      font-weight: 600;
-      color: #059669;
-      background: #d1fae5;
-      padding: 4px 12px;
-      border-radius: 20px;
+    .quiz-question-container {
+      margin-bottom: 15px;
     }
     .quiz-question-text {
       font-size: 16px;
       font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 18px;
-      line-height: 1.5;
+      color: #334155;
+      margin-bottom: 12px;
     }
     .quiz-options {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     .quiz-option-btn {
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 12px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 15px;
       text-align: left;
       font-size: 15px;
-      color: #334155;
+      color: #1e293b;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-family: inherit;
     }
     .quiz-option-btn:hover:not(:disabled) {
+      background: #f1f5f9;
       border-color: #059669;
-      background: #f0fdf4;
-      color: #065f46;
     }
     .quiz-option-btn.correct {
       background: #d1fae5 !important;
-      border-color: #10b981 !important;
+      border-color: #059669 !important;
       color: #065f46 !important;
       font-weight: 600;
     }
     .quiz-option-btn.incorrect {
       background: #fee2e2 !important;
-      border-color: #f87171 !important;
+      border-color: #dc2626 !important;
       color: #991b1b !important;
-    }
-    .quiz-next-btn {
-      margin-top: 18px;
-      background: #059669;
-      color: #ffffff;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 8px;
       font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      display: none;
     }
-    .quiz-next-btn:hover {
-      background: #047857;
-    }
-    .quiz-result-box {
-      text-align: center;
-      padding: 20px;
-    }
-    .quiz-result-score {
-      font-size: 28px;
-      font-weight: 800;
-      color: #059669;
+    .quiz-progress {
+      font-size: 13px;
+      color: #64748b;
       margin-bottom: 8px;
+      font-weight: 500;
     }
-    .quiz-start-btn {
-      background: #059669;
-      color: #ffffff;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .quiz-start-btn:hover {
-      background: #047857;
-    }
-    .user-auth-badge {
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      margin-bottom: 25px;
+    .quiz-result {
       text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #059669;
+      padding: 15px;
+      background: #ecfdf5;
+      border-radius: 8px;
+      border: 1px solid #a7f3d0;
     }
   </style>
 </head>
@@ -231,14 +180,9 @@
     <h1 style="text-align: center; font-size: 36px; font-weight: 800; color: #1e293b; margin-bottom: 10px;">
       🌍 Географія
     </h1>
-    <p style="color: #64748b; text-align: center; font-size: 16px; margin-bottom: 25px;">
-      Наука про Землю, її природу, населення та господарство. Розгортайте блоки нижче, щоб поринути в системне вивчення фундаментальних тем та складайте тести для накопичення балів!
+    <p style="color: #64748b; text-align: center; font-size: 16px; margin-bottom: 40px;">
+      Наука про Землю, її природу, населення та господарство. Розгортайте блоки нижче, щоб поринути в системне вивчення фундаментальних тем та перевірити свої знання.
     </p>
-
-    <!-- Індикатор входу користувача -->
-    <div id="user-status-bar" class="user-auth-badge">
-      <i class="fa-solid fa-circle-notch fa-spin"></i> Перевірка авторизації через Google...
-    </div>
 
     <!-- ВСТУПНИЙ БЛОК -->
     <div class="info-card" style="border-top: 5px solid #059669; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 40px;">
@@ -277,7 +221,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/TDMJoc8oHJs" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-1" class="quiz-box"></div>
+        
+        <div class="quiz-box" data-quiz-id="1">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 1</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -300,7 +248,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/1PVAiJniwbc" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-2" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="2">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 2</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -325,7 +277,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/as7mjj-GGug" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-3" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="3">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 3</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -353,7 +309,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/JeQvRKH2528" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-4" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="4">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 4</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -371,12 +331,16 @@
           <strong>Світовий океан</strong> є головним регулятором клімату Землі. У ньому виділяють поверхневі й глибинні течії (наприклад, тепла Гольфстрим чи холодна Перуанська), які переносять величезні маси тепла з низьких широт у високі.
         </p>
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          <strong>Глобальний кругообіг води (влагообіг)</strong> пов'язує всі компоненти гідросфери. Під дією сонячної енергії вода випаровується з поверхні океанів і суші, переноситься вітрами в атмосфері, випадає у вигляді опадів та повертається до океану через поверхневий і підземний стік річок.
+          <strong>Глобальний кругообіг води (влагообіг)</strong> пов'язує всі компоненти гідросфери. Під дією сонячної енергії вода випаровується з поверхні океанів і суші, переноситься вітрами в атмосферу, випадає у вигляді опадів та повертається до океану через поверхневий і підземний стік річок.
         </p>
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/X_nTUpPpp7c" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-5" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="5">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 5</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -405,7 +369,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/qqSckCQaCFQ" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-6" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="6">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 6</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -428,7 +396,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/dQtOr3kHf-Y" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-7" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="7">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 7</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -451,7 +423,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/CXOp5abwKiI" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-8" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="8">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 8</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -477,7 +453,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/Kjd9UfDqdxs" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-9" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="9">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 9</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -493,7 +473,7 @@
         </p>
         <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
           <li><strong>Зона мішаних і широколистих лісів (Українське Полісся):</strong> дерново-підзолисті ґрунти, соснові та дубово-соснові ліси, значні площі заболочувань.</li>
-          <li><strong>Лісостепова зона:</strong> перехідна зона з сірими лісовими ґрунтами під лісами та потужними <strong>чорноземами</strong> під трав'яною рослинністю. Це наиболее освоєна аграрна територія.</li>
+          <li><strong>Лісостепова зона:</strong> перехідна зона з сірими лісовими ґрунтами під лісами та потужними <strong>чорноземами</strong> під трав'яною рослинністю. Це найбільш освоєна аграрна територія.</li>
           <li><strong>Степова зона:</strong> простягається на півдні та сході, характеризується чорноземами звичайними й південними, а також каштановими ґрунтами на сухому півдні. Природна степова рослинність здебільшого розорана.</li>
         </ul>
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
@@ -502,7 +482,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/8RrMvtxB9BA" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-10" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="10">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 10</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -525,7 +509,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/myqQP2mcuNA" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-11" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="11">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 11</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -553,7 +541,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/7MJz0UXEwuM" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-12" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="12">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 12</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -582,7 +574,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/eEaziYTJMEY" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-13" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="13">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 13</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -608,7 +604,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/CHR7c0cGYBc" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-14" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="14">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 14</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -637,7 +637,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/nOgMA1QcYlM" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-15" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="15">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 15</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -664,7 +668,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/21MLy6o5oPk" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-16" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="16">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 16</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -687,7 +695,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/LqPP_KmS5po" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-17" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="17">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 17</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -713,7 +725,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/Ac95M5jUNpI" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-18" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="18">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 18</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -733,7 +749,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/jSu8O7O4q9M" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-19" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="19">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 19</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -753,7 +773,11 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/sxR2sD7puB0" allowfullscreen></iframe>
         </div>
-        <div id="quiz-topic-20" class="quiz-box"></div>
+
+        <div class="quiz-box" data-quiz-id="20">
+          <div class="quiz-title"><i class="fa-solid fa-pen-to-square"></i> Тест до Теми 20</div>
+          <div class="quiz-content"></div>
+        </div>
       </div>
     </div>
 
@@ -764,500 +788,402 @@
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній портал «Історія і географія БЕЗ МЕЖ»</p>
   </footer>
 
-  <!-- JavaScript для акордеона та тестової системи -->
+  <!-- JavaScript для акордеона та тестів -->
   <script>
     function toggleAccordion(header) {
       const card = header.parentElement;
       card.classList.toggle('active');
     }
 
-    // ==========================================
-    // 1. ІНІЦІАЛІЗАЦІЯ FIREBASE
-    // (Замініть конфігурацію за потреби під ваші ключі Firebase Console)
-    // ==========================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyYourApiKeyHere...",
-      authDomain: "your-app.firebaseapp.com",
-      projectId: "your-app-id",
-      storageBucket: "your-app.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
-    };
-
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    let currentUser = null;
-
-    auth.onAuthStateChanged((user) => {
-      const statusBar = document.getElementById('user-status-bar');
-      if (user) {
-        currentUser = user;
-        statusBar.innerHTML = `<i class="fa-solid fa-circle-user"></i> Учень: <strong>${user.displayName || user.email}</strong> | Синхронізація з Firebase активна`;
-        statusBar.style.background = "#ecfdf5";
-        statusBar.style.color = "#065f46";
-      } else {
-        currentUser = null;
-        statusBar.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Ви не увійшли в акаунт Google. Пройдіть авторизацію на головній сторінці для збереження результатів у залік!`;
-        statusBar.style.background = "#fffbebf";
-        statusBar.style.color = "#92400e";
-      }
-    });
-
-    // ==========================================
-    // 2. БАЗА ДАНИХ ТЕСТІВ (20 тем x 12 питань)
-    // ==========================================
-    const quizData = {
+    // База даних питань (20 тем по 12 питань)
+    const geographyQuizzes = {
       1: [
-        { q: "Що таке географічна карта?", options: ["Малюнок місцевості від руки", "Зменшене узагальнене зображення поверхні Землі на площині", "Схема розташування супутників", "Глобус великого розміру"], correct: 1 },
-        { q: "Яка проєкція найчастіше використовується для карт України?", options: ["Циліндрична", "Конічна", "Азимутальна", "Полярна"], correct: 1 },
-        { q: "Які проєкції зберігають без спотворень площі об'єктів?", options: ["Рівнокутні", "Рівновеликі", "Довільні", "Азимутальні"], correct: 1 },
-        { q: "Що показує масштаб карти?", options: ["Кут нахилу земної осі", "Ступінь зменшення довжин ліній на карті порівняно з дійсістю", "Кількість населених пунктів", "Висоту гір над рівнем моря"], correct: 1 },
-        { q: "Який масштаб є найбільшим серед наведених?", options: ["1 : 10 000", "1 : 100 000", "1 : 1 000 000", "1 : 10 000 000"], correct: 0 },
-        { q: "Якими умовними знаками зображують річки та дороги?", options: ["Позамасштабними", "Лінійними", "Площинними", "Якісним фоном"], correct: 1 },
-        { q: "Форма Землі найбільш точно описується терміном:", options: ["Куля", "Еліпс", "Геоїд", "Піраміда"], correct: 2 },
-        { q: "Проєкція Меркатора належить до класу:", options: ["Конічних", "Циліндричних", "Азимутальних", "Перспективних"], correct: 1 },
-        { q: "Умовні знаки, що показують об'єкти, які не можна виразити в масштабі карти:", options: ["Контурні", "Позамасштабні", "Лінійні", "Ізолінії"], correct: 1 },
-        { q: "Лінії, що з'єднують точки з однаковою висотою над рівнем моря:", options: ["Ізобари", "Ізотерми", "Горизонталі (ізогіпси)", "Ізогієти"], correct: 2 },
-        { q: "Кут між напрямком на північ і напрямком на певний об'єкт на місцевості називається:", options: ["Широтою", "Довготою", "Азимутом", "Паралеллю"], correct: 2 },
-        { q: "Яка карта матиме найменший масштаб?", options: ["Карта шкільного подвір'я", "Карта області", "Карта України", "Карта світу"], correct: 3 }
+        { q: "Що таке географічна карта?", options: ["Зменшене зображення Землі на площині", "Зліпок земної кулі", "Фотографія з космосу", "Опис місцевості словами"], answer: 0 },
+        { q: "Який характер спотворень мають рівнокутні проєкції?", options: ["Зберігають площі", "Зберігають кути і форми малих об'єктів", "Не мають спотворень взагалі", "Спотворюють все однаково"], answer: 1 },
+        { q: "Для яких територій найчастіше використовують конічні проєкції?", options: ["Для екваторіальних зон", "Для полюсів", "Для помірних широт", "Для всієї планети одразу"], answer: 2 },
+        { q: "Який масштаб є найбільшим?", options: ["1:10 000", "1:100 000", "1:1 000 000", "1:10 000 000"], answer: 0 },
+        { q: "Що визначає іменований масштаб?", options: ["Відстань на карті в сантиметрах", "Скільки метрів або кілометрів на місцевості відповідає 1 см на карті", "Площу території", "Висоту над рівнем моря"], answer: 1 },
+        { q: "Які умовні знаки застосовують для об'єктів, що не в масштаб карти?", options: ["Позамасштабні", "Лінійні", "Площинні", "Якісні фонові"], answer: 0 },
+        { q: "Форма Землі — це...", options: ["Ідеальна куля", "Геоїд (сфероїд)", "Диск", "Еліпсоїд обертання без нерівностей"], answer: 1 },
+        { q: "Які проєкції використовують переважно для карт світу?", options: ["Циліндричні", "Конічні", "Азимутальні", "Прямокутні"], answer: 0 },
+        { q: "Що показують лінії градусної сітки на карті?", options: ["Паралелі та меридіани", "Річки та дороги", "Кордони держав", "Глибини океанів"], answer: 0 },
+        { q: "Який вид умовних знаків використовують для зображення кордонів та доріг?", options: ["Позамасштабні", "Лінійні", "Площинні", "Точкові"], answer: 1 },
+        { q: "Що таке картографічна сітка?", options: ["Сітка координат з паралелей і меридіанів", "Сітка квадратів кілометрової карти", "Мережа доріг", "План міста"], answer: 0 },
+        { q: "Чому неможливо створити карту без спотворень?", options: ["Через кулясту форму Землі", "Через погані інструменти", "Через рух літосферних плит", "Через атмосферний тиск"], answer: 0 }
       ],
       2: [
-        { q: "Скільки триває зоряна доба (обертання Землі навколо осі)?", options: ["24 години", "23 год 56 хв 4 с", "365 днів", "12 годин"], correct: 1 },
-        { q: "Головним наслідком осьового обертання Землі є:", options: ["Зміна пір року", "Зміна дня і ночі", "Утворення теплових поясів", "Сонячні затемнення"], correct: 1 },
-        { q: "Сила Коріоліса спричиняє:", options: ["Відхилення руху тіл, вітрів і течій у Північній півкулі праворуч", "Прискорення річного руху", "Виверження вулканів", "Зміну фаз Місяця"], correct: 0 },
-        { q: "Під яким кутом вісь Землі нахилена до площини орбіти?", options: ["23,5°", "66,5°", "90°", "45°"], correct: 1 },
-        { q: "У які дні на всій Землі (крім полюсів) день дорівнює ночі?", options: ["22 червня та 22 грудня", "21 березня та 23 вересня", "1 січня та 1 липня", "15 травня та 15 листопада"], correct: 1 },
-        { q: "22 червня у Північній півкулі спостерігається день:", options: ["Зимового сонцестояння", "Літнього сонцестояння", "Весняного рівнодення", "Осіннього рівнодення"], correct: 1 },
-        { q: "Найвіддаленіша точка орбіти Землі від Сонця називається:", options: ["Перигелій", "Афелій", "Апогей", "Перигей"], correct: 1 },
-        { q: "Яка швидкість руху Землі по орбіті навколо Сонця?", options: ["Близько 30 км/с", "100 км/год", "11 км/с", "1000 км/с"], correct: 0 },
-        { q: "У якій півкулі знаходиться Земля в перигелії (найближче до Сонця) у січні?", options: ["У Північній літо", "У Південній літо", "У Північній весна", "На всій Землі зима"], correct: 1 },
-        { q: "Скільки теплових поясів традиційно виділяють на Землі?", options: ["3", "5", "7", "12"], correct: 1 },
-        { q: "Полярне коло розташоване на широті:", options: ["23,5°", "66,5°", "0°", "90°"], correct: 1 },
-        { q: "Тропіки (північний і південний) розташовані на широті:", options: ["23,5°", "66,5°", "45°", "10°"], correct: 0 }
+        { q: "Якою за рахунком від Сонця є планета Земля?", options: ["Другою", "Третьою", "Четвертою", "П'ятою"], answer: 1 },
+        { q: "Скільки часу триває повний оберт Землі навколо своєї осі (зоряна доба)?", options: ["24 години рівно", "23 год 56 хв 4 с", "365 днів", "27 днів"], answer: 1 },
+        { q: "Який головний наслідок добового руху Землі?", options: ["Зміна пір року", "Зміна дня і ночі", "Зміна кліматичних поясів", "Зміна висоти Сонця над горизонтом протягом року"], answer: 1 },
+        { q: "Під яким кутом нахилена вісь Землі до площини її орбіти?", options: ["0°", "23,5°", "66,5°", "90°"], answer: 2 },
+        { q: "Що таке сила Коріоліса?", options: ["Сила тяжіння", "Відхиляюча сила обертання Землі", "Центробіжна сила Сонця", "Сила тертя повітря"], answer: 1 },
+        { q: "Коли спостерігається день зимового сонцестояння у Північній півкулі?", options: ["21 березня", "22 червня", "23 вересня", "22 грудня"], answer: 3 },
+        { q: "Що є наслідком річного руху Землі та нахилу її осі?", options: ["Зміна дня і ночі", "Зміна пір року", "Обертання Місяця", "Припливи і відпливи"], answer: 1 },
+        { q: "У які дні тривалість дня дорівнює ночі на всій Землі?", options: ["У дні сонцестояння", "У дні рівнодення", "У дні повного місяця", "Щодня"], answer: 1 },
+        { q: "Яка довжина земної орбіти навколо Сонця?", options: ["Близько 150 млн км", "Близько 940 млн км", "Близько 40 тис. км", "Близько 10 млрд км"], answer: 1 },
+        { q: "З якою швидкістю Земля рухається навколо Сонця?", options: ["Близько 30 км/с", "Близько 3 км/с", "Близько 300 км/с", "Близько 30 км/год"], answer: 0 },
+        { q: "Що утворюється внаслідок нахилу земної осі та річного руху?", options: ["Теплові пояси Землі", "Вітри планети", "Магнітне поле", "Озоновий шар"], answer: 0 },
+        { q: "Коли Сонце перебуває в зеніті над Південним тропіком?", options: ["22 червня", "22 грудня", "21 березня", "23 вересня"], answer: 1 }
       ],
       3: [
-        { q: "З яких частин складається літосфера?", options: ["Тільки з материкової кори", "З земної кори та верхньої частини мантії", "З ядра і мантії", "З гідросфери та атмосфери"], correct: 1 },
-        { q: "Пластичний шар у верхній мантії, по якому рухаються літосферні плити:", options: ["Стратосфера", "Астеносфера", "Базальтовий шар", "Ядро"], correct: 1 },
-        { q: "Як називаються межі плит, де вони розходяться?", options: ["Конвергентні", "Дивергентні", "Трансформні", "Колізійні"], correct: 1 },
-        { q: "Що утворюється при зіткненні двох материкових літосферних плит?", options: ["Глибоководний жолоб", "Складчасті гори", "Серединно-океанічний хребет", "Острівна дуга"], correct: 1 },
-        { q: "Прикладом трансформного розлому є:", options: ["Східно-Африканський рифт", "Розлом Сан-Андреас", "Маріанський жолоб", "Складові Гімалаїв"], correct: 1 },
-        { q: "Внутрішні сили Землі називаються:", options: ["Екзогенними", "Ендогенними", "Атмосферними", "Гідрологічними"], correct: 1 },
-        { q: "Джерелом ендогенних процесів є:", options: ["Сонячна енергія", "Внутрішнє тепло Землі та радіоактивний розпад", "Сила вітру", "Припливні сили Місяця"], correct: 1 },
-        { q: "Руйнування гірських порід під дією температури, води та організмів — це:", options: ["Тектоніка", "Вивітрювання", "Вулканізм", "Метаморфізм"], correct: 1 },
-        { q: "Прикладом океанічно-материкової конвергенції (субдукції) є формування:", options: ["Гімалаїв", "Анд та Перуанського жолоба", "Скандинавських гір", "Уральських гір"], correct: 1 },
-        { q: "Прилад для реєстрації сейсмічних коливань Землі:", options: ["Барометр", "Сейсмограф", "Гігрометр", "Анемометр"], correct: 1 },
-        { q: "Найглибша океанічна западина у світі:", options: ["Зондський жолоб", "Маріанський жолоб", "Пуерто-Рико", "Гренландська заглибина"], correct: 1 },
-        { q: "Чим відрізняється океанічна земна кора від материкової?", options: ["Вона товстіша", "У ній відсутній гранітний шар", "У ній відсутній базальтовий шар", "Вона складається лише з піску"], correct: 1 }
+        { q: "Що таке літосфера?", options: ["Тверда оболонка, що включає земну кори і верхню мантію", "Тільки мантія", "Тільки ядра Землі", "Водна оболонка планети"], answer: 0 },
+        { q: "Як називаються гігантські рухомі блоки літосфери?", options: ["Платформи", "Літосферні плити", "Сектори", "Блоки рельєфу"], answer: 1 },
+        { q: "Які процеси утворюють великі форми рельєфу (гори, западини)?", options: ["Екзогенні", "Ендогенні", "Біогенні", "Антропогенні"], answer: 1 },
+        { q: "Що утворюється в зонах розходження (дивергентних межах) літосферних плит?", options: ["Серединно-океанічні хребти", "Складчасті гори", "Глибоководні жолоби", "Платформи"], answer: 0 },
+        { q: "При зіткненні двох материкових плит утворюються...", options: ["Океанічні жолоби", "Складчасті гори (наприклад, Гімалаї)", "Серединно-океанічні хребти", "Рівнини"], answer: 1 },
+        { q: "Прикладом трансформного розлому є...", options: ["Розлом Сан-Андреас", "Східно-Африканський рифт", "Маріанський жолоб", "Альпи"], answer: 0 },
+        { q: "Які процеси вирівнюють і руйнують рельєф (вивітрювання, дія вод)?", options: ["Ендогенні", "Екзогенні", "Тектонічні", "Магматичні"], answer: 1 },
+        { q: "Що таке астеносфера?", options: ["Твердий шар ядра", "Пластичний шар у верхній мантії", "Верхній шар атмосфери", "Дно океану"], answer: 1 },
+        { q: "Як називається місце розриву і підземного поштовху під час землетрусу?", options: ["Епицентр", "Вогнище (гіпоцентр)", "Кратер", "Рифт"], answer: 1 },
+        { q: "Який півострів є класичним прикладом діючого вулканізму та гейзерів?", options: ["Камчатка або Ісландія", "Скандинавський", "Індостан", "Аравійський"], answer: 0 },
+        { q: "Які гори утворилися в результаті зіткнення Індійської та Євразійської плит?", options: ["Альпи", "Анди", "Гімалаї", "Апалачі"], answer: 2 },
+        { q: "Що таке платформи у геоморфології?", options: ["Рухомі зони плит", "Відносно стійкі вирівняні ділянки земної кори", "Вулканічні конуси", "Глибокі розломи"], answer: 1 }
       ],
       4: [
-        { q: "В якому шарі атмосфери зосереджено понад 80% її маси та формується погода?", options: ["Стратосфера", "Тропосфера", "Мезосфера", "Термосфера"], correct: 1 },
-        { q: "Який газ становить найбільшу частку в сухому повітрі тропосфери?", options: ["Кисень", "Азот", "Вуглекислий газ", "Аргон"], correct: 1 },
-        { q: "Постійні вітри, що дмуть від тропічних широт високого тиску до екватора:", options: ["Мусони", "Пасати", "Західні вітри", "Бризи"], correct: 1 },
-        { q: "Як змінюється температура повітря з підняттям угору в тропосфері?", options: ["Збільшується на 10°C на 1 км", "Знижується приблизно на 6°C на 1 км", "Не змінюється", "Спочатку росте, потім падає"], correct: 1 },
-        { q: "Вітри, що змінюють свій напрямок двічі на рік (влітку з океану, взимку з суші):", options: ["Бризи", "Мусони", "Пасати", "Фени"], correct: 1 },
-        { q: "Атмосферний тиск вимірюють за допомогою:", options: ["Термометра", "Барометра", "Гігрометра", "Опадоміра"], correct: 1 },
-        { q: "Шар атмосфери, який затримує губильне ультрафіолетове випромінювання Сонця:", options: ["Тропосфера", "Озоновий шар у стратосфері", "Мезосфера", "Екзосфера"], correct: 1 },
-        { q: "Загальний багаторічний режим погоди в певній місцевості — це:", options: ["Погода", "Клімат", "Кліматичний пояс", "Циклон"], correct: 1 },
-        { q: "Вихор зі зниженим тиском у центрі та рухом повітря проти годинникової стрілки (Пн. півкуля):", options: ["Антициклон", "Циклон", "Пасат", "Бриз"], correct: 1 },
-        { q: "Для антициклону характерна погода:", options: ["Пасмурна з дощами", "Ясна, безопадна, зі стабільним тиском", "Штормова з вітром", "Мрячна"], correct: 1 },
-        { q: "Кліматотвірний чинник, що визначає кількість сонячної радіації:", options: ["Географічна широта", "Рельєф", "Напрямок вітру", "Віддаленість від океану"], correct: 0 },
-        { q: "Лінії на карті, що з'єднують точки з однаковою температурою повітря:", options: ["Ізобари", "Ізотерми", "Ізогіпси", "Ізобати"], correct: 1 }
+        { q: "Який нижній шар атмосфери містить понад 80% маси повітря?", options: ["Стратосфера", "Тропосфера", "Мезосфера", "Термосфера"], answer: 1 },
+        { q: "Від чого головним чином залежить тепловий режим планети?", options: ["Від кількості сонячної радіації", "Від глибини океану", "Від кількості вивітрювання", "Від магнітного поля"], answer: 0 },
+        { q: "Що спричиняє утворення вітрів у тропосфері?", options: ["Перепади атмосферного тиску", "Обертання Місяця", "Зміна рівня океану", "Океанічні течії"], answer: 0 },
+        { q: "Як називаються постійні вітри, що дмуть від тропіків до екватора?", options: ["Західні вітри", "Пасати", "Мусони", "Бризи"], answer: 1 },
+        { q: "Які вітри двічі на рік змінюють свій напрямок на протилежний?", options: ["Пасати", "Мусони", "Бризи", "Торнадо"], answer: 1 },
+        { q: "Що таке клімат?", options: ["Миттєвий стан погоди", "Багаторічний режим погоди в певній місцевості", "Температура повітря вдень", "Напрямок вітру вдосвіта"], answer: 1 },
+        { q: "Який газ переважає в складі атмосфери Землі?", options: ["Кисень", "Азот", "Вуглекислий газ", "Аргон"], answer: 1 },
+        { q: "З підняттям на кожні 1000 метрів у тропосфері температура зазвичай...", options: ["Зростає на 1°C", "Знижується приблизно на 6°C", "Не змінюється", "Знижується на 20°C"], answer: 1 },
+        { q: "Яку роль відіграє озоновий шар у стратосфері?", options: ["Затримує ультрафіолетове випромінювання Сонця", "Створює вітри", "Викликає опади", "Зберігає вуглекислий газ"], answer: 0 },
+        { q: "Що таке абсолютна вологість повітря?", options: ["Кількість водяної пари в грамах на 1 м³", "Відсоток насиченості повітря вологою", "Кількість опадів за рік", "Товщина хмарного покриву"], answer: 0 },
+        { q: "Де на Землі зазвичай фіксується найвищий атмосферний тиск?", options: ["Близько екватора", "У тропічних широтах", "На полюсах", "У помірних широтах"], answer: 1 },
+        { q: "Які повітряні маси формуються над Північним Льодовитим океаном?", options: ["Екваторіальні", "Тропічні", "Арктичні", "Морські помірні"], answer: 2 }
       ],
       5: [
-        { q: "Який відсоток від загального об'єму гідросфери припадає на Світовий океан?", options: ["50%", "71%", "96,5%", "99%"], correct: 2 },
-        { q: "Де зосереджена основна маса прісної води Землі?", options: ["У річках та озерах", "У підземних водах", "У льодовиках та сніжниках", "В атмосферній волозі"], correct: 2 },
-        { q: "Середня солоність вод Світового океану становить:", options: ["10 ‰", "35 ‰", "42 ‰", "5 ‰"], correct: 1 },
-        { q: "Найпотужніша тепла течія Атлантичного океану:", options: ["Перуанська", "Гольфстрим", "Течія Західних вітрів", "Канарська"], correct: 1 },
-        { q: "Рух води в океані, викликаний притяганням Місяця і Сонця:", options: ["Цунамі", "Припливи і відпливи", "Вітрові хвилі", "Шторм"], correct: 1 },
-        { q: "Найдовша річка у світі (за сучасними вимірами) або найповноводніша:", options: ["Дніпро", "Амазонка", "Міссісіпі", "Волга"], correct: 1 },
-        { q: "Найглибше озеро планети тектонічного походження:", options: ["Каспійське море", "Байкал", "Верхнє", "Вікторія"], correct: 1 },
-        { q: "Частина річкової долини, що затоплюється під час повідей:", options: ["Русло", "Заплава", "Тераса", "Витік"], correct: 1 },
-        { q: "Постійний підземний шар води на першому водотривкому пласті:", options: ["Артезіанські води", "Ґрунтові води", "Верховодка", "Міжпластові води"], correct: 1 },
-        { q: "Джерелом енергії для великого кругообігу води в природі є:", options: ["Енергія надр Землі", "Сонячна енергія та сила тяжіння", "Сила вітру", "Океанічні течії"], correct: 1 },
-        { q: "Найсолоніше море у складі Світового океану:", options: ["Чорне", "Червоне", "Балтійське", "Баренцове"], correct: 1 },
-        { q: "Широкий закритий лиман або затока, де прісна вода річки змішується з морською:", options: ["Естуарій", "Фіорд", "Атол", "Дельта"], correct: 0 }
+        { q: "Який відсоток від загального об'єму гідросфери становить Світовий океан?", options: ["Близько 50%", "Близько 75%", "Близько 96,5%", "Близько 99%"], answer: 2 },
+        { q: "Де зосереджена найбільша частина прісної води на Землі?", options: ["У річках та озерах", "У льодовиках та сніжниках", "В атмосфері", "У болотах"], answer: 1 },
+        { q: "Яка течія є теплою у Північній Атлантиці?", options: ["Перуанська", "Гольфстрим", "Каліфорнійська", "Західних Вітрів"], answer: 1 },
+        { q: "Що є рушійною силою глобального кругообігу води в природі?", options: ["Сонячна енергія та гравітація", "Обертання Місяця", "Тектоніка плит", "Вулканізм"], answer: 0 },
+        { q: "Яке озеро є найглибшим на Землі?", options: ["Вікторія", "Байкал", "Танганьїка", "Верхнє"], answer: 1 },
+        { q: "Як називається шар води в океані від поверхні до дна у вивченні?", options: ["Лід чи сніг", "Світовий океан та його частини", "Акваторія", "Літосфера"], answer: 1 },
+        { q: "Яка середня солоність води у Світовому океані?", options: ["35‰ (проміле)", "10‰", "50‰", "0‰"], answer: 0 },
+        { q: "Що таке артезіанські води?", options: ["Підземні напірні води у водоносних пластах", "Вода в гірських льодовиках", "Вода в болотах", "Річкові паводки"], answer: 0 },
+        { q: "Яка річка є найдовшою у світі?", options: ["Амазонка", "Ніл", "Дніпро", "Міссісіпі"], answer: 1 },
+        { q: "Що таке естуарій?", options: ["Однорукаве воронкоподібне гирло річки, що впадає в море", "Дельта з багатьма протоками", "Гірське озеро", "Підземна річка"], answer: 0 },
+        { q: "Який океан є найбільшим за площею?", options: ["Атлантичний", "Індійський", "Тихий", "Північний Льодовитий"], answer: 2 },
+        { q: "Які течії переносять тепло з низьких широт у високі?", options: ["Теплі течії", "Холодні течії", "Глибинні стоки", "Припливні хвилі"], answer: 0 },
       ],
       6: [
-        { q: "Хто створив учення про біосферу та роль живої речовини?", options: ["Олександр Гумбольдт", "Володимир Вернадський", "Чарльз Дарвін", "Альфред Вегенер"], correct: 1 },
-        { q: "Верхня межа біосфери в атмосфері обмежена:", options: ["Висотою 100 км", "Озоновим екраном (20-25 км)", "Висотою гір (8 км)", "Межею тропосфери"], correct: 1 },
-        { q: "Зміна природних зон від екватора до полюсів називається:", options: ["Висотною поясністю", "Широтною зональністю", "Ритмічністю", "Цілісністю"], correct: 1 },
-        { q: "Головна закономірність географічної оболонки, що полягає у взаємозв'язку всіх її компонентів:", options: ["Ритмічність", "Цілісність", "Зональність", "Неперервність"], correct: 1 },
-        { q: "Природна зона з бідною рослинністю та мохами і лишайниками у субарктичному поясі:", options: ["Тайга", "Тундра", "Степ", "Савана"], correct: 1 },
-        { q: "Які ґрунти є найродючішими у світі?", options: ["Подзолисті", "Чорноземи", "Червоно-жовті фералітні", "Сірі лісові"], correct: 1 },
-        { q: "Зміна ландшафтів при піднятті в гори називається:", options: ["Широтною зональністю", "Висотною поясністю", "Азональністю", "Профільністю"], correct: 1 },
-        { q: "Природна зона трав'янистих злакових рівнин безлісого помірного поясу:", options: ["Савана", "Степ", "Тайга", "Пустеля"], correct: 1 },
-        { q: "Для якої природної зони характерні вічнозелені багатоярусні ліси (гілеї)?", options: ["Вологі екваторіальні ліси", "Тайга", "Широколисті ліси", "Субтропіки"], correct: 0 },
-        { q: "Повторюваність природних явищ через однакові проміжки часу (доба, рік) — це:", options: ["Зональність", "Ритмічність", "Цілісність", "Еволюція"], correct: 1 },
-        { q: "Найпотужніший біоценоз за біомасою та різноманіттям видів розташований у:", options: ["Арктиці", "Екваторіальних широт", "Помірних широтах", "Пустелях"], correct: 1 },
-        { q: "Хвойні ліси помірного поясу Північної півкулі називаються:", options: ["Сельва", "Тайга", "Прерія", "Пампа"], correct: 1 }
+        { q: "Що таке біосфера?", options: ["Оболонка поширення життя на Землі", "Тільки рослинний світ", "Тільки тварини суші", "Верхній шар атмосфери"], answer: 0 },
+        { q: "Хто довів потужну геологічну роль живої речовини (живих організмів)?", options: ["Володимир Вернадський", "Дмитро Мендеєдєв", "Микола Вавилов", "Евгений Павловський"], answer: 0 },
+        { q: "Яка закономірність географічної оболонки передбачає взаємозв'язок усіх її компонентів?", options: ["Цілісність", "Ритмічність", "Широтна зональність", "Висотна поясність"], answer: 0 },
+        { q: "Що таке широтна зональність?", options: ["Зміна природних комплексів від екватора до полюсів", "Зміна висоти гір", "Зміна пір року", "Повторюваність подій у часі"], answer: 0 },
+        { q: "Чому виникає висотна поясність у горах?", options: ["Через зниження температури та зміну зволоження з висотою", "Через ближче розташування до Сонця", "Через силу Коріоліса", "Через рух літосферних плит"], answer: 0 },
+        { q: "Яка природна зона характеризується бідною рослинністю (мохи, лишайники) та вічною мерзлотою?", options: ["Тундра", "Савана", "Вологі екваторіальні ліси", "Степ"], answer: 0 },
+        { q: "Яка зона охоплює найбільші площі родючих чорноземів та трав'яної рослинності?", options: ["Степи", "Тайга", "Арктичні пустелі", "Савани"], answer: 0 },
+        { q: "Що таке ритмічність географічної оболонки?", options: ["Повторюваність природних процесів у часі (добові, річні)", "Зміна клімату раз на мільйон років", "Незмінність ландшафтів", "Хаотичність стихій"], answer: 0 },
+        { q: "Яка рослинність переважає у вологих екваторіальних лісах (сельвії)?", options: ["Багатоярусні вічнозелені ліси", "Хвойні дерева", "Лишайники і мохи", "Трава і рідкісні кущі"], answer: 0 },
+        { q: "Що є найважливішим чинником формування ґрунтів?", options: ["Живі організми та клімат", "Тільки материнська гірська порода", "Тільки вітер", "Близькість океану"], answer: 0 },
+        { q: "Яку роль відіграють зелені рослини в біосфері?", options: ["Здійснюють фотосинтез, виділяючи кисень і поглинаючи вуглекислий газ", "Руйнують гірські породи безповоротно", "Збільшують атмосферний тиск", "Створюють течії в океані"], answer: 0 },
+        { q: "Що таке савани?", options: ["Трав'янисті рівнини з окремими деревами і чагарниками у тропічних широтах", "Хвойні ліси півночі", "Пустелі без води", "Гірські вершини"], answer: 0 }
       ],
       7: [
-        { q: "Скільки материків існує на Землі?", options: ["4", "5", "6", "7"], correct: 2 },
-        { q: "Найбільший материк за площею та населенням:", options: ["Африка", "Північна Америка", "Євразія", "Південна Америка"], correct: 2 },
-        { q: "Найсухіший материк планети:", options: ["Африка", "Австралія", "Антарктида", "Південна Америка"], correct: 1 },
-        { q: "Найвищий материк за середньою висотою поверхні (включаючи льодовиковий щит):", options: ["Євразія", "Антарктида", "Північна Америка", "Африка"], correct: 1 },
-        { q: "Найбільший океан планети:", options: ["Атлантичний", "Індійський", "Тихий", "Північний Льодовитий"], correct: 2 },
-        { q: "Наймолодший виділений океан, що омиває Антарктиду:", options: ["Індійський", "Південний", "Тихий", "Атлантичний"], correct: 1 },
-        { q: "Давній суперконтинент, який об'єднував усю суходіл Землі у мезозої:", options: ["Лавразія", "Гондвана", "Пангея", "Тетіс"], correct: 2 },
-        { q: "Найвологіший материк на Землі:", options: ["Африка", "Південна Америка", "Євразія", "Австралія"], correct: 1 },
-        { q: "Найглибший океан світу:", options: ["Атлантичний", "Тихий", "Індійський", "Північний Льодовитий"], correct: 1 },
-        { q: "Яка частина світу складається з двох материків?", options: ["Азія", "Америка", "Австралія", "Європа"], correct: 1 },
-        { q: "Материк, на якому немає жодного діючого вулкана чи сучасного зледеніння:", options: ["Антарктида", "Австралія", "Африка", "Південна Америка"], correct: 1 },
-        { q: "Найбільший острів Землі:", options: ["Мадагаскар", "Гренландія", "Калімантан", "Нова Гвінея"], correct: 1 }
+        { q: "Який відсоток поверхні Землі займає суходіл?", options: ["Близько 29%", "Близько 50%", "Близько 71%", "Близько 10%"], answer: 0 },
+        { q: "Скільки материків налічує географія?", options: ["4", "5", "6", "7"], answer: 2 },
+        { q: "Який материк є найбільшим за площею?", options: ["Африка", "Північна Америка", "Євразія", "Антарктида"], answer: 2 },
+        { q: "У чому відмінність між поняттями «материк» і «частина світу»?", options: ["Материки — фізико-географічні об'єкти, частини світу — історико-географічні поняття", "Це абсолютно синонімічні поняття", "Частини світу включають океани", "Материки створені штучно"], answer: 0 },
+        { q: "Який океан є найменшим за площею?", options: ["Індійський", "Північний Льодовитий", "Південний", "Тихий"], answer: 1 },
+        { q: "Що лежить в основі всіх материків?", options: ["Стародавні платформи", "Молоді складчасті пояси", "Глибоководні жолоби", "Серединно-океанічні хребти"], answer: 0 },
+        { q: "Який материк повністю лежить у Південній півкулі і є найсухішим або крижаним?", options: ["Антарктида", "Австралія", "Південна Америка", "Африка"], answer: 0 },
+        { q: "Які океани омивають Євразію?", options: ["Усі чотири океани планети", "Тільки Тихий і Атлантичний", "Тільки Індійський", "Тихий і Північний Льодовитий"], answer: 0 },
+        { q: "Що таке шельф?", options: ["Мілководна затоплена окраїна материка", "Найглибша частина океану", "Океанічний хребет", "Гірський ланцюг на суходолі"], answer: 0 },
+        { q: "Який материк відкрили останкімєвропейців і він повністю є окремою державою-материком?", options: ["Австралія", "Антарктида", "Південна Америка", "Африка"], answer: 0 },
+        { q: "Який протік відокремлює Північну Америку від Євразії?", options: ["Берингова протока", "Доверська протока", "Магелланова протока", "Гібралтарська протока"], answer: 0 },
+        { q: "Який океан омиває узбережжя п'яти материків і є найглибшим?", options: ["Тихий", "Атлантичний", "Індійський", "Північний Льодовитий"], answer: 0 }
       ],
       8: [
-        { q: "Яка тектонічна структура лежить в основі більшої частини території України?", options: ["Західноєвропейська платформа", "Східноєвропейська платформа", "Карпатська складчаста система", "Скіфська плита"], correct: 1 },
-        { q: "Виступ кристалічного фундаменту Східноєвропейської платформи в Україні:", options: ["Український щит", "Дніпровсько-Донецька западина", "Волино-Подільська плита", "Причорноморська западина"], correct: 0 },
-        { q: "Який відсоток площі України займають рівнини?", options: ["50%", "70%", "95%", "80%"], correct: 2 },
-        { q: "Найвища точка України та її висота:", options: ["р. Роман-Кош (1545 м)", "г. Говерла (2061 м)", "г. Піп Іван (2028 м)", "г. Берда (515 м)"], correct: 1 },
-        { q: "У якому басейні зосереджені найбільші запаси залізних руд України?", options: ["Нікопольському", "Криворізькому", "Донецькому", "Львівсько-Волинському"], correct: 1 },
-        { q: "Найвиша точка рівнинної частини України:", options: ["г. Берда (515 м)", "г. Говерла", "г. Камула (471 м)", "Могила-Мечетна"], correct: 0 },
-        { q: "До якого типу корисних копалин належать нафта, природний газ та вугілля?", options: ["Рудні", "Паливні (горючі)", "Нерудні", "Будівельні"], correct: 1 },
-        { q: "Донецький басейн спеціалізується на видобутку:", options: ["Бурого вугілля", "Кам'яного вугілля та антрациту", "Залізної руди", "Калійних солей"], correct: 1 },
-        { q: "Криворізький, Кременчуцький та Білозерський басейни багаті на:", options: ["Марганцеві руди", "Залізні руди", "Уранові руди", "Мідні руди"], correct: 1 },
-        { q: "Дніпровсько-Донецька нафтогазоносна область дає основну частку видобутку в Україні:", options: ["Нафти", "Природного газу", "Торфу", "Горючих сланців"], correct: 1 },
-        { q: "Нікопольський басейн є одним із найбільших у світі за запасами руд:", options: ["Залізних", "Марганцевих", "Титанових", "Алюмінієвих"], correct: 1 },
-        { q: "Які гори України є молодими альпійської складчастості?", options: ["Кримські та Карпати", "Уральські", "Скандинавські", "Донецький кряж"], correct: 0 }
+        { q: "Яка головна тектонічна структура лежить в основі рівнинної частини України?", options: ["Східноєвропейська платформа", "Західноєвропейська плита", "Альпійська складчастість", "Тихоокеанське кільце"], answer: 0 },
+        { q: "Як називається виступ фундаменту Східноєвропейської платформи в Україні?", options: ["Український щит", "Причорноморська западина", "Дніпровсько-Донецька западина", "Воронезький масив"], answer: 0 },
+        { q: "Який відсоток території України займають рівнини?", options: ["Близько 95%", "Близько 50%", "Близько 20%", "100%"], answer: 0 },
+        { q: "Яка гора є найвищою в Українських Карпатах?", options: ["Говерла", "Петрос", "Роман-Кош", "Піп Іван"], answer: 0 },
+        { q: "Яка найвища точка Кримських гір?", options: ["Роман-Кош", "Ай-Петрі", "Говерла", "Чатырдаг"], answer: 0 },
+        { q: "Який басейн в Україні є головним за запасами залізних руд?", options: ["Криворізький", "Нікопольський", "Донецький", "Львівсько-Волинський"], answer: 0 },
+        { q: "Де в Україні зосереджені основні запаси марганцевих руд?", options: ["Нікопольський басейн", "Криворізький басейн", "Донбас", "Карпати"], answer: 0 },
+        { q: "Який вугільний басейн є головним за запасами та видобутком палива в Україні?", options: ["Донецький (Донбас)", "Львівсько-Волинський", "Дніпровський", "Кременчуцький"], answer: 0 },
+        { q: "Які нафтогазоносні провінції виділяють в Україні?", options: ["Дніпровсько-Донецька, Карпатська, Причорноморська", "Тільки Карпатська", "Тільки Кримська", "Тільки Поліська"], answer: 0 },
+        { q: "Які форми рельєфу переважають серед рівнин України?", options: ["Височини і низовини", "Тільки високі гори", "Тільки глибокі каньйони", "Вулканічні плато"], answer: 0 },
+        { q: "Яка тектонічна структура відповідає Карпатам?", options: ["Область альпійської складчастості", "Стародавня платформа", "Щит", "Плита"], answer: 0 },
+        { q: "Які будівельні корисні копалини поширені на Українському щиті?", options: ["Граніти, лабрадорити, гнейси", "Кам'яна сіль і нафта", "Тільки торф", "Тільки бурштин"], answer: 0 }
       ],
       9: [
-        { q: "Який тип клімату переважає на більшості території України?", options: ["Морський", "Помірно континентальний", "Різко континентальний", "Субтропічний"], correct: 1 },
-        { q: "Який тип клімату характерний для Південного берега Криму?", options: ["Помірно континентальний", "Субтропічний середземноморський", "Полярний", "Помірний морський"], correct: 1 },
-        { q: "Повітряні маси з якого океану несуть в Україну основну кількість опадів?", options: ["Тихого", "Атлантичного", "Північного Льодовитого", "Індійського"], correct: 1 },
-        { q: "Найдовша річка України:", options: ["Дністер", "Дніпро", "Південний Буг", "Сіверський Донець"], correct: 1 },
-        { q: "Скільки водосховищ утворюють каскад на річці Дніпро?", options: ["4", "6", "8", "10"], correct: 1 },
-        { q: "Найбільша за площею річка, що повністю протікає в межах України:", options: ["Дніпро", "Південний Буг", "Дністер", "Тиса"], correct: 1 },
-        { q: "Найглибше озеро України карстового походження:", options: ["Синєвир", "Світязь", "Ялпуг", "Сасик"], correct: 1 },
-        { q: "Найбільше високогірне озеро Українських Карпат:", options: ["Світязь", "Синєвир", "Бребенескул", "Несамовите"], correct: 1 },
-        { q: "Найбільше за площею прісне лиманне озеро України:", options: ["Світязь", "Ялпуг", "Сиваш", "Сасик"], correct: 1 },
-        { q: "Затока-Затока Чорного моря з надзвичайно високою солоністю (затока Сиваш) називається також:", options: ["Гнилим морем", "Мертвим морем", "Червоним лиманом", "Собка"], correct: 0 },
-        { q: "Який напрямок переносу повітряних мас є панівним в Україні?", options: ["Східний", "Західний", "Північний", "Південний"], correct: 1 },
-        { q: "Яка частина України отримує найбільшу кількість опадів за рік?", options: ["Південний степ", "Українські Карпати", "Полісся", "Приазов'я"], correct: 1 }
+        { q: "Який тип клімату переважає на більшій частині території України?", options: ["Помірно континентальний", "Тропічний вологий", "Різко континентальний", "Субтропічний мусонний"], answer: 0 },
+        { q: "Який клімат на Південному березі Криму (ПБК)?", options: ["Субтропічний середземноморського типу", "Арктичний", "Різко континентальний", "Екваторіальний"], answer: 0 },
+        { q: "Яка річка є головною водною артерією України?", options: ["Дніпро", "Південний Буг", "Дністер", "Дунай"], answer: 0 },
+        { q: "Скільки водосховищ утворюють каскад на Дніпрі?", options: ["6", "3", "10", "1"], answer: 0 },
+        { q: "Які річки входять до басейну Чорного та Азовського морів в Україні?", options: ["Дніпро, Дністер, Південний Буг, Дунай", "Тільки Західний Буг", "Тільки Тиса", "Тільки Сіверський Донець"], answer: 0 },
+        { q: "Яке найбільше гірське озеро в Українських Карпатах?", options: ["Синєвир", "Ялпуг", "Світязь", "Донузлав"], answer: 0 },
+        { q: "Яке озеро є найбільшим за площею в Україні (лиманне або заплавне на Волині чи півдні)?", options: ["Ялпуг (або Світязь серед прісних)", "Синевир", "Азовське море", "Кагул"], answer: 0 },
+        { q: "Які повітряні маси найчастіше приносять вологу в Україну?", options: ["Морські з Атлантичного океану", "Сухі з Центральної Азії", "Арктичні з півночі", "Екваторіальні з півдня"], answer: 0 },
+        { q: "Що таке паводок?", options: ["Швидке підняття рівня води в річці внаслідок дощів чи відлиги", "Повне пересихання річки влітку", "Замерзання річки", "Зміна напрямку течії"], answer: 0 },
+        { q: "Яка кількість річок налічується в Україні приблизно?", options: ["Понад 63 тисячі", "Близько 100", "Понад 1 мільйон", "Лише 5 великих"], answer: 0 },
+        { q: "Чому водні ресурси України вважаються відносно обмеженими?", options: ["Через невеликий власний місцевий стік та забруднення", "Через відсутність річок узагалі", "Через замерзання назавжди", "Через відсутність підземних вод"], answer: 0 },
+        { q: "Яка річка є природним кордоном на південному заході України з кількома країнами Європи?", options: ["Дунай", "Тиса", "Дністер", "Прут"], answer: 0 }
       ],
       10: [
-        { q: "На скільки основних природних зон поділяється рівнинна частина України?", options: ["2", "3", "4", "5"], correct: 1 },
-        { q: "Для якої зони України характерні дерново-підзолисті ґрунти та соснові ліси?", options: ["Степ", "Лісостеп", "Полісся (мішані ліси)", "Кримські гори"], correct: 2 },
-        { q: "Які ґрунти є переважаючими та найродючішими в Степовій зоні України?", options: ["Дерново-підзолисті", "Чорноземи (звичайні та південні)", "Сірі лісові", "Буроземи"], correct: 1 },
-        { q: "Яка природна зона України є найбільш розораною та освоєною для сільського господарства?", options: ["Полісся", "Лісостеп і Степ", "Карпати", "Гірський Крим"], correct: 1 },
-        { q: "Гірські луки в Українських Карпатах називаються:", options: ["Яйли", "Полонини", "Степи", "Прерії"], correct: 1 },
-        { q: "Вершинні плоскі безлісі масиви Кримських гір називаються:", options: ["Полонини", "Яйли", "Кряжі", "Берди"], correct: 1 },
-        { q: "Найдавніший степовий біосферний заповідник України:", options: ["Карпатський", "Асканія-Нова", "Дунайський", "Чорноморський"], correct: 1 },
-        { q: "Для зони Лісостепу типовими ґрунтами під дібровами є:", options: ["Сірі лісові", "Каштанові", "Солончаки", "Торф'яно-болотні"], correct: 0 },
-        { q: "Які рослини є типовими для степової зони України?", options: ["Дуб і сосна", "Ковила, типчак, тонконіг", "Сфагнум і журавлина", "Бук і ялиця"], correct: 1 },
-        { q: "Природний заповідник, розташований у дельті другої за довжиною річки Європи:", options: ["Дунайський", "Поліський", "Канівський", "Медобори"], correct: 0 },
-        { q: "Для сухого Південного Степу та Причорномор'я характерні ґрунти:", options: ["Дерново-підзолисті", "Каштанові та солонці", "Буроземи", "Сірі лісові"], correct: 1 },
-        { q: "Біосферний заповідник у Херсонській області на узбережжі заток Чорного моря:", options: ["Чорноморський", "Карпатський", "Асканія-Нова", "Рівненський"], correct: 0 }
+        { q: "Які три головні рівнинні природні зони виділяють в Україні з півночі на південь?", options: ["Мішані ліси, лісостеп, степ", "Тільки степи та пустелі", "Тільки тайга та тундра", "Арктична пустеля, савана, ліс"], answer: 0 },
+        { q: "Які ґрунти переважають у зоні мішаних і широколистих лісів (Поліссі)?", options: ["Дерново-підзолисті", "Чорноземи потужні", "Каштанові", "Червоноземи"], answer: 0 },
+        { q: "Які ґрунти є головним багатством Лісостепу та Степу України?", options: ["Чорноземи", "Підзолисті", "Болотні", "Арктичні"], answer: 0 },
+        { q: "Що характерно для рослинного світу Українського Полісся?", options: ["Соснові та дубово-соснові ліси, значні заболочування", "Суцільні ковилові степи", "Субтропічні пальми", "Альпійські луки"], answer: 0 },
+        { q: "Чому степова зона України зараз найбільше змінена людиною?", options: ["Через інтенсивне розорювання під сільськогосподарські угіддя", "Через затоплення водосховищами", "Через вічну мерзлоту", "Через забудову заводами всюди"], answer: 0 },
+        { q: "Які гори в Україні мають чітко виражену висотну поясність?", options: ["Українські Карпати та Кримські гори", "Тільки Придніпровська височина", "Донецький кряж", "Подільська височина"], answer: 0 },
+        { q: "Як називаються безлісі ділянки у верхньому поясі Українських Карпат?", options: ["Полонини", "Яйли", "Степи", "Савани"], answer: 0 },
+        { q: "Як називаються безлісі плоскі вершини Кримських гір?", options: ["Яйли", "Полонини", "Гірки", "Плато вулканічні"], answer: 0 },
+        { q: "Який біосферний заповідник України відомий розведенням диких коней (Пржевальського) та акліматизацією тварин у степу?", options: ["Асканія-Нова", "Карпатський", "Чорноморський", "Дунайський"], answer: 0 },
+        { q: "Яке головне призначення природних заповідників?", options: ["Збереження екосистем у природному стані без втручання людини", "Масовий туризм і полювання", "Видобуток корисних копалин", "Будівництво курортів"], answer: 0 },
+        { q: "Що таке ландшафт?", options: ["Однорідна за походженням природна територія з взаємозв'язаними компонентами", "Тільки рельєф місцевості", "Тільки рослинність", "Міська забудова"], answer: 0 },
+        { q: "Який заповідник розташований у зоні Українських Карпат?", options: ["Карпатський біосферний заповідник", "Асканія-Нова", "Поліський заповідник", "Канівський заповідник"], answer: 0 }
       ],
       11: [
-        { q: "Яка чисельність населення Землі перевищена у 2022-2023 роках?", options: ["6 мільярдів", "7 мільярдів", "8 мільярдів", "10 мільярдів"], correct: 2 },
-        { q: "Перший тип відтворення населення (демографічна зима) характерний для:", options: ["Країн Тропічної Африки", "Країн Західної Європи", "Південної Азії", "Латинської Америки"], correct: 1 },
-        { q: "Перевищення рівня смертності над рівнем народжуваності називається:", options: ["Депопуляцією (природним убутком)", "Демографічним вибухом", "Урбанізацією", "Субурбанізацією"], correct: 0 },
-        { q: "Зростання частки міського населення та поширення міського способу життя — це:", options: ["Агломерація", "Урбанізація", "Міграція", "Депопуляція"], correct: 1 },
-        { q: "Скупчення близьких міст, об'єднаних виробничими, культурними та транспортними зв'язками:", options: ["Мегаполіс", "Міська агломерація", "Село", "Мегасіті"], correct: 1 },
-        { q: "Найбільш густозаселений регіон світу:", options: ["Північна Америка", "Східна та Південна Азія", "Австралія", "Північна Африка"], correct: 1 },
-        { q: "Виїзд громадян на постійне місце проживання в іншу країну — це:", options: ["Імміграція", "Еміграція", "Репартріація", "Субурбанізація"], correct: 1 },
-        { q: "Яка країна світу посідає перше місце за чисельністю населення (на 2023-2024 рр.)?", options: ["Китай", "Індія", "США", "Індонезія"], correct: 1 },
-        { q: "Процес відтоку населення з центрів міст у передмістя називається:", options: ["Руралізація", "Субурбанізація", "Мегаполізація", "Джентрифікація"], correct: 1 },
-        { q: "Старіння нації спричинене:", options: ["Зростанням народжуваності", "Зменшенням народжуваності та зростанням тривалості життя", "Високою дитячою смертністю", "Еміграцією молоді"], correct: 1 },
-        { q: "Найбільший мегаполіс (зрощені агломерації) у світі за населенням:", options: ["Токайо (Токіо-Йокогама)", "Босваш", "Чипіттс", "Лондонський"], correct: 0 },
-        { q: "Основна релігія за кількістю віруючих у світі:", options: ["Іслам", "Християнство", "Буддизм", "Індуїзм"], correct: 2 }
+        { q: "Яка приблизна чисельність населення світу станом на сьогодні?", options: ["Понад 8 мільярдів", "Близько 3 мільярдів", "Близько 500 мільйонів", "Понад 20 мільярдів"], answer: 0 },
+        { q: "Який регіон світу є найбільш густозаселеним?", options: ["Східна, Південна та Південно-Східна Азія", "Центральна Австралія", "Північна Канада", "Пустеля Сахара"], answer: 0 },
+        { q: "Що характеризує перший тип відтворення населення?", options: ["Низька народжуваність, низька смертність, старіння нації", "Висока народжуваність, швидке зростання", "Висока смертність від хвороб", "Повна відсутність міграцій"], answer: 0 },
+        { q: "Що таке урбанізація?", options: ["Процес підвищення ролі міст і зростання міського населення", "Зменшення кількості міст", "Переїзд людей у села", "Розвиток сільського господарства"], answer: 0 },
+        { q: "Яка демографічна проблема спостерігається в Україні останні десятиліття?", options: ["Депопуляція (перевищення смертності над народжуваністю)", "Перенаселення", "Величезний бебі-бум", "Відсутність міграцій"], answer: 0 },
+        { q: "Як повномасштабна війна вплинула на розселення українців?", options: ["Спричинила масові внутрішні міграції та виїзд за кордон мільйонів громадян", "Збільшила чисельність населення вдвічі", "Ніяк не вплинула", "Зупинила всі міграції"], answer: 0 },
+        { q: "Що таке субурбанізація?", options: ["Відтік населення з великих міст у приміську зону", "Зростання мегаполісів", "Заселення гірських вершин", "Повне зникнення сіл"], answer: 0 },
+        { q: "Яка країна світу є лідером за чисельністю населення (або поступається Індії)?", options: ["Індія та Китай", "США та Канада", "Німеччина та Франція", "Бразилія та Аргентина"], answer: 0 },
+        { q: "Що таке механічний рух населення?", options: ["Міграції (перебування з одного місця в інше)", "Природний приріст", "Зміна вікової структури", "Народжуваність"], answer: 0 },
+        { q: "Що таке мегаполіс?", options: ["Зросла група сусідніх міських агломерацій", "Окреме маленьке село", "Столиця держави", "Місто з населенням до 10 тисяч"], answer: 0 },
+        { q: "Який тип відтворення характерний для більшості країн Тропічної Африки?", options: ["Другий тип (висока народжуваність)", "Перший тип", "Нульовий приріст", "Зменшення населення"], answer: 0 },
+        { q: "Що вивчає демографія?", options: ["Закономірності відтворення та зміни населення", "Будову земної кори", "Клімат планети", "Тваринний світ"], answer: 0 }
       ],
       12: [
-        { q: "Сукупність національних економік країн світу, пов'язаних міжнародним поділом праці:", options: ["Світовий ринок", "Світове господарство", "Глобалізація", "Транснаціональна корпорація"], correct: 1 },
-        { q: "До первинного сектору економіки належать:", options: ["Машинобудування та хімія", "Сільське та лісове господарство, видобувна промисловість", "Транспорт та освіта", "Будівництво та торгівля"], correct: 1 },
-        { q: "До вторинного сектору економіки належать:", options: ["Обробна промисловість та будівництво", "Сільське господарство", "Туризм і банківські послуги", "Рибальство"], correct: 0 },
-        { q: "До третинного сектору економіки належать:", options: ["Видобуток вугілля", "Сфера послуг (транспорт, торгівля, освіта, медицина)", "Металургія", "Рослинництво"], correct: 1 },
-        { q: "Спеціалізація окремих країн на виробництві певних товарів і послуг для обміну ними — це:", options: ["Міжнародний поділ праці (МПП)", "Інтеграція", "Глобалізація", "Кооперування"], correct: 0 },
-        { q: "Компанії, що мають виробничі підрозділи у багатьох країнах світу:", options: ["Фермерські господарства", "Транснаціональні корпорації (ТНК)", "Державні підприємства", "Малі бізнеси"], correct: 1 },
-        { q: "Четвертинний сектор економіки охоплює:", options: ["Сільське господарство", "Інформаційні технології, наукові дослідження та управління", "Текстильну промисловість", "Гірничу справу"], correct: 1 },
-        { q: "Країни, у структурі ВВП яких переважає третинний сектор, називаються:", options: ["Аграрними", "Індустріальними", "Постіндустріальними", "Сировинними"], correct: 2 },
-        { q: "Показник загальної вартості всіх кінцевих товарів і послуг, вироблених у країні за рік:", options: ["ВВП (Внутрішній валовий продукт)", "ІЛР (Індекс людського розвитку)", "Експорт", "Імпорт"], correct: 0 },
-        { q: "Ввезення товарів або послуг з-за кордону називається:", options: ["Експортом", "Імпортом", "Сальдо", "Транзитом"], correct: 1 },
-        { q: "Вивезення товарів або послуг за межі країни для продажу:", options: ["Експорт", "Імпорт", "Дефіцит", "Транзит"], correct: 0 },
-        { q: "Група найбільш високорозвинених країн світу часто називається:", options: ["Великою сімкою (G7)", "ОПЕК", "МЕРКОСУР", "АСЕАН"], correct: 0 }
+        { q: "Що таке світове господарство?", options: ["Сукупність національних економік усіх країн, пов'язаних МПП", "Тільки економіка Європейського Союзу", "Тільки видобуток нафти", "Внутрішня торгівля однієї країни"], answer: 0 },
+        { q: "Які три головні сектори виділяють у галузевій структурі економіки?", options: ["Первинний, вторинний, третинний", "Аграрний, космічний, туристичний", "Легкий, важкий, середній", "Державний, приватний, змішаний"], answer: 0 },
+        { q: "Які галузі належать до первинного сектору економіки?", options: ["Сільське господарство, рибальство, лісництво, видобувна промисловість", "Машинобудування і фінанси", "Освіта і медицина", "Транспорт і зв'язок"], answer: 0 },
+        { q: "Що охоплює вторинний сектор господарства?", options: ["Обробна промисловість і будівництво", "Сфера послуг і торгівля", "Видобуток сировини", "Наукові дослідження"], answer: 0 },
+        { q: "Що є основою третинного сектору економіки?", options: ["Сфера послуг (транспорт, зв'язок, фінанси, туризм, торгівля)", "Вирощування зернових", "Металургія", "Видобуток вугілля"], answer: 0 },
+        { q: "Який сектор формується у постіндустріальних країнах і охоплює науку та високі технології?", options: ["Четвертинний сектор", "Тільки первинний", "Тільки сільське господарство", "Будівельний сектор"], answer: 0 },
+        { q: "Що таке міжнародний поділ праці (МПП)?", options: ["Спеціалізація країн на виробництві певних товарів і послуг для обміну", "Однакова робота всіх країн світу", "Заборона торгівлі між державами", "Внутрішній ринок однієї області"], answer: 0 },
+        { q: "Які країни мають найвищий рівень економічного розвитку?", options: ["Високорозвинені країни", "Країни, що розвиваються", "Найменш розвинені країни", "Країни з перехідною економікою"], answer: 0 },
+        { q: "Що таке транснаціональна корпорація (ТНК)?", options: ["Велика компанія з філіями у багатьох країнах світу", "Маленький місцевий магазин", "Державне підприємство однієї країни", "Міжнародна організація ООН"], answer: 0 },
+        { q: "Яка галузь обробної промисловості належить до базових у вторинному секторі?", options: ["Металургія", "Туризм", "Банківська справа", "Освіта"], answer: 0 },
+        { q: "Що визначає міжнародну спеціалізацію країни?", options: ["Її природні ресурси, географічне положення та капітал", "Тільки її площа", "Тільки кількість річок", "Політичний устрій"], answer: 0 },
+        { q: "Яка роль сфери послуг у постіндустріальному суспільстві?", options: ["У ній зайнята більшість працюючого населення і створюється основна частина ВВП", "Вона майже не має значення", "Вона повністю замінює сільське господарство", "Вона обмежується лише транспортом"], answer: 0 }
       ],
       13: [
-        { q: "Який тип електростанцій дає найбільшу частку електроенергії у світі?", options: ["АЕС", "ГЕС", "ТЕС", "СЕС"], correct: 2 },
-        { q: "Який тип електростанцій є основою базової генерації в Україні (понад 50% до 2022 р.)?", options: ["ТЕС", "АЕС", "ГЕС", "ВЕС"], correct: 1 },
-        { q: "Найпотужніша АЕС в Європі, розташована в Україні:", options: ["Рівненська", "Запорізька", "Хмельницька", "Південноукраїнська"], correct: 1 },
-        { q: "Електростанції, що використовують відновлювані джерела енергії (сонце, вітер):", options: ["ТЕС", "ВДЕ (СЕС, ВЕС)", "АЕС", "ТЕЦ"], correct: 1 },
-        { q: "Сировиною для атомної енергетики є:", options: ["Кам'яне вугілля", "Уран", "Природний газ", "Торф"], correct: 1 },
-        { q: "Який чинник є вирішальним для розміщення підприємств чорної металургії повного циклу?", options: ["Науковий", "Сировинний та паливний", "Трудовий", "Споживчий"], correct: 1 },
-        { q: "Центрами точного машинобудування та електроніки зазвичай стають міста з орієнтацією на:", options: ["Сировину", "Науковий потенціал та кваліфіковані кадри", "Водні ресурси", "Корисні копалини"], correct: 1 },
-        { q: "Світовий лідер за виплавкою сталі та виробництвом автомобілів у ХХІ ст.:", options: ["США", "Німеччина", "Китай", "Японія"], correct: 2 },
-        { q: "Який тип електростанцій має найбільший екологічний вплив у вигляді викидів парникових газів?", options: ["ГЕС", "АЕС", "ТЕС на вугіллі", "СЕС"], correct: 2 },
-        { q: "Гідроелектростанції найдоцільніше будувати на:", options: ["Рівнинних повільних річках", "Гірських та повноводних річках з великим падінням", "Озерах", "Малих струмках"], correct: 1 },
-        { q: "Галузь хімічної промисловості, що виробляє мінеральні добрива, каучук та пластмаси:", options: ["Основна хімія та хімія органічного синтезу", "Фармацевтика", "Парфумерія", "Побутова хімія"], correct: 0 },
-        { q: "Яка АЕС в Україні була повністю зупинена після аварії 1986 року?", options: ["Рівненська", "Чорнобильська", "Запорізька", "Хмельницька"], correct: 1 }
+        { q: "Чому електроенергетика є ключовою галуззю промисловості?", options: ["Вона визначає рівень технологічного розвитку та забезпечує енергією всі інші галузі", "Вона займається лише видобутком води", "Вона не впливає на економіку", "Вона потрібна тільки для освітлення домівок"], answer: 0 },
+        { q: "Які типи електростанцій називають ТЕС?", options: ["Теплові електростанції (на вугіллі, газі, мазуті)", "Термоядерні станції", "Транспортні електростанції", "Торф'яні експериментальні станції"], answer: 0 },
+        { q: "Яка головна перевага АЕС?", options: ["Забезпечують стабільну базову генерацію на ядерному паливі без викидів СО₂ в атмосферу", "Працюють на сонячному світлі", "Будуються за кілька днів", "Не потребують охолодження водою"], answer: 0 },
+        { q: "Що використовують для роботи ГЕС?", options: ["Енергію водного потоку річок", "Атомну енергію ядра", "Нафту і мазут", "Вітрові потоки в степу"], answer: 0 },
+        { q: "Які станції належать до ВДЕ (відновлюваних джерел енергії)?", options: ["Сонячні (СЕС), вітрові (ВЕС), геотермальні", "Тільки вугільні ТЕС", "Тільки атомні станції", "Тільки газові котельні"], answer: 0 },
+        { q: "Що становить основу генерації електроенергії в Україні?", options: ["Атомна енергетика (АЕС)", "Тільки вітрові станції", "Тільки імпорт з інших країн", "Малі геотермальні станції"], answer: 0 },
+        { q: "Які українські АЕС працюють сьогодні?", options: ["Рівненська, Хмельницька, Південноукраїнська", "Чорнобильська та Запорізька діючі", "Тільки Київська АЕС", "В Україні немає АЕС"], answer: 0 },
+        { q: "Який екологічний мінус мають традиційні ТЕС?", options: ["Великі викиди парникових газів (вуглекислого газу) та забруднення повітря", "Затоплення величезних територій під водосховища", "Висока загроза радіації", "Повна залежність від фаз Місяця"], answer: 0 },
+        { q: "У чому складність роботи сонячних і вітрових електростанцій?", options: ["Залежність від погодних умов та нерегулярність виробництва енергії", "Вони виділяють радіацію", "Вони працюють тільки вночі", "Вони споживають занадто багато вугілля"], answer: 0 },
+        { q: "Що таке енергосистема?", options: ["Сукупність електростанцій, ліній електропередач і споживачів, об'єднаних спільним режимом", "Одна маленька батарейка", "Мережа газових труб", "Водопровід міста"], answer: 0 },
+        { q: "Яка електростанція використовує енергію надр Землі (гарячі джерела, пари)?", options: ["Геотермальна електростанція", "Гідроелектростанція", "Атомна станція", "Теплова станція"], answer: 0 },
+        { q: "Яке значення має об'єднання енергосистеми України з європейською мережею (ENTSO-E)?", options: ["Забезпечення надійності енергопостачання та аварійного взаємообміну енергією", "Повне припинення виробництва світла в Україні", "Перехід на живлення тільки від сонця", "Продаж вугілля за кордон"], answer: 0 }
       ],
       14: [
-        { q: "Сільське господарство належить до якого сектору економіки?", options: ["Первинного", "Вторинного", "Третинного", "Четвертинного"], correct: 0 },
-        { q: "Основні дві галузі сільського господарства:", options: ["Лісівництво і рибальство", "Рослинництво і тваринництво", "Тракторобудування і переробка", "Торгівля і логістика"], correct: 1 },
-        { q: "Головні зернові культури людства («три хліби людства»):", options: ["Пшениця, рис, кукурудза", "Жито, ячмінь, овес", "Соняшник, соя, ріпак", "Гречка, просо, сорго"], correct: 0 },
-        { q: "Україна є світовим лідером за експортом якої сільськогосподарської продукції?", options: ["Рису", "Соняшникової олії", "Кави", "Бавовни"], correct: 1 },
-        { q: "Пробудження й розведення великої рогатої худоби, свиней, птиці належить до:", options: ["Рослинництва", "Тваринництва", "Агрономії", "Селекції"], correct: 1 },
-        { q: "Технічна культура, з якої в помірному поясі виготовляють цукор:", options: ["Цукрова тростина", "Цукровий буряк", "Соняшник", "Соя"], correct: 1 },
-        { q: "Технічна культура, що є головним джерелом натурального волокна для текстилю:", options: ["Льон і бавовник", "Соняшник", "Джут і чай", "Тютюн"], correct: 0 },
-        { q: "Сільське господарство, спрямоване на отримання високого врожаю за рахунок добрив і нової техніки:", options: ["Екстенсивне", "Інтенсивне", "Натуральне", "Примітивне"], correct: 1 },
-        { q: "Сільське господарство, що розширюється за рахунок збільшення посівних площ без нових технологій:", options: ["Інтенсивне", "Екстенсивне", "Точне", "Товарне"], correct: 1 },
-        { q: "Сукупність галузей, що виробляють, переробляють і доводять до споживача сільгосппродукцію:", options: ["ВПК", "АПК (Агропромисловий комплекс)", "ТПК", "ГІС"], correct: 1 },
-        { q: "Головний зерновий продукт у країнах Східної, Південної та Південно-Східної Азії:", options: ["Пшениця", "Рис", "Кукурудза", "Жито"], correct: 1 },
-        { q: "Зернова культура, що походить з Америки та є важливою фуражною й продовольчою культурою:", options: ["Ячмінь", "Кукурудза", "Овес", "Просо"], correct: 1 }
+        { q: "З яких трьох сфер складається агропромисловий комплекс (АПК)?", options: ["Галузі забезпечення засобами виробництва, сільське господарство, переробка та торгівля", "Тільки рослинництво і тваринництво", "Тільки рибальство та полювання", "Тільки машинобудування і транспорт"], answer: 0 },
+        { q: "Які дві головні підгалузі входять до складу сільського господарства?", options: ["Рослинництво і тваринництво", "Металургія і хімія", "Транспорт і зв'язок", "Освіта і наука"], answer: 0 },
+        { q: "Які культури належать до зернових світового значення?", options: ["Пшениця, кукурудза, рис", "Картопля і помідори", "Бавовник і льон", "Кава і чай"], answer: 0 },
+        { q: "Що належить до технічних культур?", options: ["Цукровий буряк, соняшник, соя, бавовник", "Тільки яблука і груші", "Тільки пшениця", "Тільки трава для сіна"], answer: 0 },
+        { q: "Чому Україна є глобальним лідером в аграрному секторі?", options: ["Завдяки унікальним родючим чорноземам та високому аграрному потенціалу", "Через відсутність інших галузей", "Через вічну мерзлоту", "Через гірський рельєф"], answer: 0 },
+        { q: "Яку олійну культуру масово вирощують та переробляють в Україні для експорту олії?", options: ["Соняшник", "Кокосову пальму", "Оливкове дерево", "Чайний кущ"], answer: 0 },
+        { q: "Які галузі входять до складу тваринництва?", options: ["Скотарство, свинарство, птахівництво, вівчарство", "Тільки рибальство в океані", "Тільки розведення бджіл", "Тільки звірівництво"], answer: 0 },
+        { q: "Що забезпечує перша сфера АПК?", options: ["Трактори, комбайни, мінеральні добрива, отруτοхімікати для сільського господарства", "Випічку хліба в магазинах", "Перевезення зерна за кордон", "Зберігання продуктів у холодильниках"], answer: 0 },
+        { q: "Яка третя сфера АПК виконує функцію?", options: ["Зберігання, переробка, транспортування та збут харчової продукції", "Вирощування розсади", "Видобуток руди", "Будівництво доріг"], answer: 0 },
+        { q: "Яку зернову культуру Україна експортує у величезних обсягах на світовий ринок поряд із пшеницею?", options: ["Кукурудзу", "Рис", "Просо", "Сорго"], answer: 0 },
+        { q: "Яке значення має інтенсифікація сільського господарства?", options: ["Збільшення врожайності завдяки новітнім технологіям, добривам і селекції", "Збільшення площ без обробітку", "Зменшення кількості техніки", "Відмова від поливу"], answer: 0 },
+        { q: "Який компонент ґрунту визначає його надзвичайну родючість в Україні?", options: ["Гумус (перегній)", "Пісок", "Глина у великій кількості", "Щебінь і каміння"], answer: 0 }
       ],
       15: [
-        { q: "Вид транспорту, що забезпечує понад 80% обсягів міжнародної торгівлі вантажами:", options: ["Залізничний", "Морський", "Повітряний", "Автомобільний"], correct: 1 },
-        { q: "Вид транспорту, найбільш гнучкий для перевезення пасажирів і вантажів на короткі відстані «від дверей до дверей»:", options: ["Залізничний", "Автомобільний", "Річковий", "Трубопровідний"], correct: 1 },
-        { q: "Найшвидший, але найдорожчий вид транспорту:", options: ["Авіаційний (повітряний)", "Морський", "Залізничний", "Автомобільний"], correct: 0 },
-        { q: "Вид транспорту для транспортування нафти, нафтопродуктів та природного газу:", options: ["Трубопровідний", "Морський", "Залізничний", "Гужовий"], correct: 0 },
-        { q: "Найважливіші штучні судноплавні канали світового значення:", options: ["Суецький та Панамський", "Київський та Канівський", "Дунай-Майн", "Біломорсько-Балтійський"], correct: 0 },
-        { q: "Процес поглиблення взаємозв'язку та взаємозалежності економік країн світу:", options: ["Урбанізація", "Глобалізація", "Депопуляція", "Спеціалізація"], correct: 1 },
-        { q: "Всесвітня організація, що регулює правила міжнародної торгівлі:", options: ["СОТ (Світова організація торгівлі)", "ООН", "ВООЗ", "НАТО"], correct: 0 },
-        { q: "Найважливіший транспортний вузол і порт Європи у гирлі Рейну:", options: ["Лондон", "Роттердам", "Гамбург", "Марсель"], correct: 1 },
-        { q: "Швидкісний залізничний транспорт найбільш розвинений у:", options: ["Японії, Франції, Китаї", "Африці", "Австралії", "Південній Америці"], correct: 0 },
-        { q: "Транспортна система України є важливим ланцюгом між:", options: ["Азією та Америкою", "Європою та Азією", "Африкою та Європою", "Арктикою та Антарктикою"], correct: 1 },
-        { q: "Суецький канал сполучає:", options: ["Атлантичний і Тихий океани", "Середземне і Червоне моря", "Чорне і Азовське моря", "Балтійське і Північне моря"], correct: 1 },
-        { q: "Панамський канал сполучає:", options: ["Атлантичний і Тихий океани", "Індійський і Тихий океани", "Червоне і Середземне моря", "Північне і Балтійське моря"], correct: 0 }
+        { q: "Які головні види транспорту формують транспортну систему світу?", options: ["Залізничний, автомобільний, морський, трубопровідний, повітряний", "Тільки космічні ракети", "Тільки гужовий транспорт", "Тільки велосипеди"], answer: 0 },
+        { q: "Який вид транспорту забезпечує понад 80% світової торгівлі важкими вантажами між материками?", options: ["Морський транспорт", "Повітряний транспорт", "Автомобільний транспорт", "Трубопровідний транспорт"], answer: 0 },
+        { q: "Для чого використовується трубопровідний транспорт?", options: ["Для транспортування нафти, природного газу та продуктопроводів", "Для перевезення пасажирів", "Для доставки пошти", "Для перевезення зерна"], answer: 0 },
+        { q: "Що таке глобалізація в сучасній економіці?", options: ["Процес поглиблення інтеграції національних економік через вільну торгівлю та капітал", "Ізоляція країн одна від одної", "Повна заборона транскордонних перевезень", "Створення єдиної мови для всіх"], answer: 0 },
+        { q: "Яку роль відіграє транспортна система у світовому господарстві?", options: ["Виступає «кровоносною системою», зв'язуючи виробників і споживачів", "Не має жодного значення", "Використовується лише для розваги", "Слугує джерелом радіації"], answer: 0 },
+        { q: "Чому автомобільний транспорт дуже популярний на коротких і середніх відстанях?", options: ["Забезпечує перевезення «від дверей до дверей» з високою гнучкістю", "Він перевозить найбільшу у світі вагу за раз", "Він є абсолютно безкоштовним", "Він не потребує доріг"], answer: 0 },
+        { q: "Яке значення мають міжнародні транспортні коридори для України?", options: ["Забезпечують транзит вантажів між Європою та Азією через територію України", "Закривають країну від зовнішнього світу", "Використовують лише для туризму", "Призначені тільки для військових цілей"], answer: 0 },
+        { q: "Який вид транспорту є найшвидшим для доставки термінових вантажів і пасажирів на великі відстані?", options: ["Повітряний (авіаційний)", "Морський", "Залізничний", "Річковий"], answer: 0 },
+        { q: "Яка головна перевага залізничного транспорту?", options: ["Масова перевезення важких вантажів на суходілі незалежно від погоди", "Рух без рейкових шляхів у будь-якому місці", "Найвища швидкість серед усіх", "Відсутність витрат на енергію"], answer: 0 },
+        { q: "Що таке експорт?", options: ["Вивезення товарів і послуг за межі країни", "Ввезення товарів з-за кордону", "Внутрішня торгівля в місті", "Зберігання товарів на складі"], answer: 0 },
+        { q: "Що таке імпорт?", options: ["Ввезення товарів і послуг з інших країн", "Вивезення власних товарів", "Виробництво всередині заводу", "Знищення старих товарів"], answer: 0 },
+        { q: "Як міжнародна торгівля пов'язана з географією?", options: ["Розміщення ресурсів і виробництв зумовлює потоки товарів між країнами", "Географія ніяк не впливає на торгівлю", "Торгівля залежить лише від фантазії покупців", "Усі країни виробляють абсолютно однакові товари"], answer: 0 }
       ],
       16: [
-        { q: "Скільки суверенних держав існує на сучасній політичній карті світу?", options: ["Близько 100", "Близько 200", "Близько 500", "Понад 1000"], correct: 1 },
-        { q: "Форма правління, при якій верховна влада належить обраним органам (президенту, парламенту):", options: ["Монархія", "Республіка", "Диктатура", "Теократія"], correct: 1 },
-        { q: "Форма правління, при якій верховна влада передається у спадок:", options: ["Республіка", "Монархія", "Федерація", "Конфедерація"], correct: 1 },
-        { q: "Україна за формою правління є:", options: ["Президентською республікою", "Парламентсько-президентською республікою", "Конституційною монархією", "Абсолютною монархією"], correct: 1 },
-        { q: "Форма державного устрою, де суверенні одиниці об'єднуються у єдину союзну державу зі спільними законами:", options: ["Унітарна держава", "Федерація", "Конфедерація", "Монархія"], correct: 1 },
-        { q: "Прикладом федеративної держави є:", options: ["Україна", "Франція", "США", "Польща"], correct: 2 },
-        { q: "Держава, у складі якої немає автономних утворень із власними законами і парламентом, є:", options: ["Унітарною", "Федеративною", "Конфедеративною", "Імперією"], correct: 0 },
-        { q: "Прикладом конституційної монархії в Європі є:", options: ["Франція", "Велика Британія", "Німеччина", "Італія"], correct: 1 },
-        { q: "Універсальна міжнародна організація, створена для підтримання миру і безпеки у світі:", options: ["ЄС", "ООН", "НАТО", "ОБСЄ"], correct: 1 },
-        { q: "Військово-політичний союз західних держав, створений для колективної оборони:", options: ["ООН", "НАТО", "ЄС", "ЮНЕСКО"], correct: 1 },
-        { q: "Економічний і політичний союз 27 європейських держав:", options: ["НАТО", "Європейський Союз (ЄС)", "Рада Європи", "Співдружність націй"], correct: 1 },
-        { q: "Країна, що є прикладом абсолютної теократичної монархії:", options: ["Японія", "Ватикан / Саудівська Аравія", "Канада", "Іспанія"], correct: 1 }
+        { q: "Скільки суверенних держав налічується на сучасній політичній карті світу приблизно?", options: ["Близько 200", "Рівно 50", "Понад 1000", "Лише 10"], answer: 0 },
+        { q: "Що визначає форма правління держави?", options: ["Спосіб організації верховної державної влади (республіка чи монархія)", "Кількість областей у країні", "Тип клімату на території", "Рівень розвитку економіки"], answer: 0 },
+        { q: "Яка країна за формою правління є республікою?", options: ["Україна", "Велика Британія", "Саудівська Аравія", "Ватикан (абсолютна теократична монархія)"], answer: 0 },
+        { q: "Що таке монархія?", options: ["Форма правління, де влада формально передається у спадок", "Влада обирається народом на виборах", "Влада належить радам робітників", "Повна відсутність законів"], answer: 0 },
+        { q: "За державним устроєм країни поділяються на...", options: ["Унітарні та федеративні", "Великі та малі", "Багаті та бідні", "Морські та континентальні"], answer: 0 },
+        { q: "Що таке унітарна держава?", options: ["Держава з єдиною системою законодавства та влади на всій території (наприклад, Україна)", "Держава, що складається з автономних федеративних штатів", "Держава без кордонів", "Союз незалежних королівств"], answer: 0 },
+        { q: "Що таке федерація?", options: ["Форма державного устрою, де є суб'єкти зі своєю конституцією і законами (наприклад, США, Німеччина)", "Унітарна централізована республіка", "Монархія без парламенту", "Міжнародна організація"], answer: 0 },
+        { q: "Яка глобальна міжнародна організація була створена після Другої світової війни для підтримання миру і безпеки?", options: ["Організація Об'єднаних Націй (ООН)", "Європейський Союз", "НАТО", "ОПЕК"], answer: 0 },
+        { q: "Яка регіональна військово-політична організація об'єднує країни Північної Америки та Європи для колективної оборони?", options: ["НАТО", "Червоний Хрест", "Світовий банк", "ЮНЕСКО"], answer: 0 },
+        { q: "Що є головною метою Європейського Союзу (ЄС)?", options: ["Економічна та політична інтеграція європейських держав", "Видобуток нафти на Близькому Сході", "Підготовка космічних польотів", "Оборона тільки в Південній Америці"], answer: 0 },
+        { q: "Що таке суверенітет держави?", options: ["Незалежність у внутрішній та зовнішній політиці", "Велика площа території", "Наявність армії з мільйона солдатів", "Величезні запаси газу"], answer: 0 },
+        { q: "Які країни називають несамостійними (колонії, залежні території)?", options: ["Території, що перебувають під управлінням інших держав", "Усі країни Європи", "Країни з президентською республікою", "Федеративні республіки"], answer: 0 }
       ],
       17: [
-        { q: "Який регіон Європи характеризується найвищим рівнем економічного розвитку та інтеграції?", options: ["Східна Європа", "Західна та Північна Європа", "Південна Європа", "Балкани"], correct: 1 },
-        { q: "Країна — економічний лідер Європейського Союзу з найбільшим ВВП:", options: ["Франція", "Німеччина", "Італія", "Іспанія"], correct: 1 },
-        { q: "Найбільша за площею частина світу:", options: ["Америка", "Африка", "Азія", "Європа"], correct: 2 },
-        { q: "Країни Східної Азії, що стали світовими лідерами високих технологій:", options: ["Індія та Пакистан", "Японія, Південна Корея, Китай", "В'єтнам та Таїланд", "Саудівська Аравія"], correct: 1 },
-        { q: "Країни Перської затоки (Саудівська Аравія, ОАЕ, Катар) багатші за рахунок експорту:", options: ["Алмазів", "Нафти та природного газу", "Лісу", "Кави"], correct: 1 },
-        { q: "Найбільша за населенням країна Південної Азії:", options: ["Китай", "Індія", "Індонезія", "Японія"], correct: 1 },
-        { q: "Місто-держава, один із провідних фінансових і логістичних центрів Азії:", options: ["Токіо", "Сінгапур", "Пекін", "Делі"], correct: 1 },
-        { q: "Країна Азії, що є єдиною монархією з імператором на чолі:", options: ["Таїланд", "Японія", "Йорданія", "Саудівська Аравія"], correct: 1 },
-        { q: "До якого регіону Європи за географічною класифікацією належить Україна?", options: ["Західна", "Східна / Центрально-Східна", "Північна", "Південна"], correct: 1 },
-        { q: "Скандинавські країни (Норвегія, Швеція, Фінляндія) належать до регіону:", options: ["Західна Європа", "Північна Європа", "Східна Європа", "Південна Європа"], correct: 1 },
-        { q: "Організація країн-експортерів нафти називається:", options: ["ОПЕК", "АСЕАН", "НАТО", "МЕРКОСУР"], correct: 0 },
-        { q: "Міжнародне об'єднання країн Південно-Східної Азії:", options: ["ЄС", "АСЕАН", "ОАД", "НАФТА"], correct: 1 }
+        { q: "Чому Європа вирізняється у світовій економіці?", options: ["Високий рівень розвитку, поглиблена інтеграція в ЄС, потужна сфера послуг", "Наявність найбільших пустель світу", "Повна відсутність міст", "Основа економіки — тільки ручне видобування вугілля"], answer: 0 },
+        { q: "Як географічно зазвичай поділяють регіон Європи?", options: ["Західна, Північна, Південна, Східна (та Центрально-Східна) Європа", "Тільки Північна та Південна", "Тільки європейська та азійська", "За розміром площі країни"], answer: 0 },
+        { q: "Яка частина світу є найбільшою за площею та кількістю населення?", options: ["Азія", "Європа", "Африка", "Північна Америка"], answer: 0 },
+        { q: "Які країни Азії є глобальними лідерами за темпами економічного зростання та інноваціями (Східна Азія)?", options: ["Китай, Японія, Південна Корея", "Тільки острівні малі країни", "Країни Центральної Сахари", "Тільки країни Близького Сходу"], answer: 0 },
+        { q: "Який півострів в Азії є головним світовим центром видобутку нафти і газу (ПЗ Азії)?", options: ["Аравійський півострів", "Індостан", "Індокитай", "Скандинавський"], answer: 0 },
+        { q: "Яка країна Південної Азії має величезне населення та стрімко розвиває IT й промисловість?", options: ["Індія", "Японія", "Монголія", "В'єтнам"], answer: 0 },
+        { q: "Яка роль Японії у світовому господарстві?", options: ["Високорозвинена країна, центр робототехніки, електроніки та автомобілебудування", "Головний постачальник дешевої пшениці", "Країна виключно з аграрним укладом", "Постачальник нафти"], answer: 0 },
+        { q: "До якого регіону Європи географічно належить Україна?", options: ["Центрально-Східна Європа", "Північна Європа", "Західна Європа", "Південна Європа"], answer: 0 },
+        { q: "Чому регіон Південно-Західної Азії має стратегічне геополітичне значення?", options: ["Там зосереджені найбільші світові запаси нафти і важливі шляхи сполучення", "Там розташовані всі льодовики світу", "Там знаходиться найбільший ринок зерна", "Там немає жодних корисних копалин"], answer: 0 },
+        { q: "Яка форма рельєфу переважає в центральній частині Азії (наприклад, Тибет)?", options: ["Високі гори та нагір'я", "Низькі заболочені рівнини", "Глибокі океанічні западини", "Низькі пагорби"], answer: 0 },
+        { q: "Які країни входять до складу Великої сімки (G7) з європейських та азійських держав?", options: ["Німеччина, Франція, Італія, Велика Британія, Японія", "Тільки Україна та Польща", "Тільки Китай та Індія", "Тільки скандинавські країни"], answer: 0 },
+        { q: "Що таке євроінтеграція для України?", options: ["Прагнення вступити до Європейського Союзу та прийняти його стандарти", "Перехід на азійську ринкову модель", "Закриття кордонів з усіма сусідми", "Відмова від розвитку промисловості"], answer: 0 }
       ],
       18: [
-        { q: "США та Канада належать до макрорегіону:", options: ["Латинська Америка", "Північна Америка (Англо-Америка)", "Центральна Америка", "Кариби"], correct: 1 },
-        { q: "Усі країни до півдня від США у Західній півкулі утворюють регіон:", options: ["Латинська Америка", "Північна Америка", "Океанія", "Англо-Америка"], correct: 0 },
-        { q: "Найбільша за площею та населенням країна Південної Америки:", options: ["Аргентина", "Бразилія", "Колумбія", "Чилі"], correct: 1 },
-        { q: "Найрозвиненіша країна Африканського континенту:", options: ["Нігерія", "ПАР (Південно-Африканська Республіка)", "Єгипет", "Кенія"], correct: 1 },
-        { q: "Австралійський Союз є єдиною державою у світі, яка:", options: ["Займає цілий материк", "Не має виходу до океану", "Знаходиться у двох півкулях", "Має сухопутний кордон з 10 країнами"], correct: 0 },
-        { q: "Головна галузь спеціалізації господарства багатьох країн Африки:", options: ["Високі технології", "Гірничовидобувна промисловість та сільське господарство", "Автомобілебудування", "Фінансові послуги"], correct: 1 },
-        { q: "Найбільша за населенням країна Африки:", options: ["Єгипет", "Нігерія", "ПАР", "Ефіопія"], correct: 1 },
-        { q: "Спеціалізація сільського господарства Бразилії та Колумбії світового значення:", options: ["Пшениця та ячмінь", "Кава, какао та соя", "Рис", "Цукровий буряк"], correct: 1 },
-        { q: "Головний економічний та науково-технічний центр Західної півкулі:", options: ["Бразилія", "США", "Канада", "Мексика"], correct: 1 },
-        { q: "Яка галузь є провідною в експорті Австралії?", options: ["Літакобудування", "Мінеральна сировина (вугілля, залізна руда, золото) та вовна", "Електроніка", "Текстиль"], correct: 1 },
-        { q: "Острівна група у Тихому океані, що включає Полінезію, Мікронезію та Меланезію:", options: ["Океанія", "Кариби", "Борнео", "Зондські острови"], correct: 0 },
-        { q: "Країна Латинської Америки, яка є членом ОПЕК завдяки колосальним запасам нафти:", options: ["Аргентина", "Венесуела", "Чилі", "Перу"], correct: 1 }
+        { q: "Які дві високорозвинені країни утворюють регіон Північної Америки?", options: ["США та Канада", "Мексика та Бразилія", "Аргентина та Чилі", "Куба та Панама"], answer: 0 },
+        { q: "Чим вирізняється економіка США і Канади у світовому господарстві?", options: ["Потужний науково-технічний потенціал, ТНК, розвинений агрокомплекс та інновації", "Повна відсутність промисловості", "Залежність виключно від збору кави", "Видобуток алмазів у тундрі"], answer: 0 },
+        { q: "На чому переважно спеціалізуються країни Латинської Америки у МПП?", options: ["Гірничорудне виробництво, нафтовидобуток та експорт сільгоспкультур", "Виробництво космічних кораблів", "Високотехнологічні квантові комп'ютери", "Виготовлення арктичного одягу"], answer: 0 },
+        { q: "Якими природними багатствами володіє материк Африка?", options: ["Колосальними запасами мінеральної сировини (золото, алмази, нафта, уран)", "Найбільшими запасами прісної води у всьому світі", "Вічними льодовиками на рівнинах", "Великими родовищами кам'яного вугілля за полярним колом"], answer: 0 },
+        { q: "Які соціально-економічні проблеми характерні для багатьох країн Тропічної Африки?", options: ["Бідність, недостатній розвиток інфраструктури, голод і демографічні проблеми", "Повне перенасичення роботами", "Надлишок фінансових бірж", "Надзвичайно висока пенсія у всіх громадян"], answer: 0 },
+        { q: "Який економічний профіль має Австралійський Союз?", options: ["Високопродуктивне фермерське тваринництво (вовна, м'ясо) та потужна гірнича промисловість", "Масове виробництво автомобілів у тайзі", "Вирощування бананів в антарктичному кліматі", "Тільки рибальство на кризі"], answer: 0 },
+        { q: "Яка країна Латинської Америки є найбільшою за площею та економікою?", options: ["Бразилія", "Аргентина", "Перу", "Чилі"], answer: 0 },
+        { q: "Який канал має стратегічне значення для з'єднання Атлантичного і Тихого океанів у Південній/Центральній Америці?", options: ["Панамський канал", "Суецький канал", "Кільський канал", "Коринфський канал"], answer: 0 },
+        { q: "Яка пустеля розташована на півдні Африки?", options: ["Калахарі (і Наміб)", "Сахара", "Гобі", "Каракуми"], answer: 0 },
+        { q: "Що таке НАФТА / USMCA у Північній Америці?", options: ["Угода про вільну торгівлю між США, Канадою та Мексикою", "Військовий блок", "Космічне агентство", "Екологічний фонд"], answer: 0 },
+        { q: "Чому сільське господарство Аргентини та Бразилії має глобальне значення?", options: ["Вони є потужними експортерами м'яса, сої, кави та цукру", "Вони вирощують тільки рис для внутрішнього ринку", "Вони не займаються агровиробництвом", "Вони експортують лише цитрусові на Північний полюс"], answer: 0 },
+        { q: "Який регіон охоплює острівні держави і території у Тихому океані поряд з Австралією?", options: ["Океанія", "Скандинавія", "Карибський басейн", "Близький Схід"], answer: 0 }
       ],
       19: [
-        { q: "Збільшення концентрації парникових газів в атмосфері призводить до:", options: ["Озонових дір", "Глобального потепління (зміни клімату)", "Землетрусів", "Цунамі"], correct: 1 },
-        { q: "Концепція розвитку суспільства, що задовольняє потреби нинішніх поколінь без загрози для майбутніх:", options: ["НТР", "Концепція сталого розвитку", "Глобалізація", "Урбанізація"], correct: 1 },
-        { q: "Процес вирубки та знищення лісових масивів називається:", options: ["Деградацією", "Дефорестацією", "Опустелюванням", "Ерозією"], correct: 1 },
-        { q: "Руйнування озонового шару спричинене викидами:", options: ["Вуглекислого газу", "Фреонів (хлорфторвуглеводнів)", "Кисню", "Азоту"], correct: 1 },
-        { q: "Процес перетворення родючих земель на пустелю під дією посухи та перевипасу худоби:", options: ["Ерозія", "Опустелювання", "Заболочування", "Засолення"], correct: 1 },
-        { q: "Економіка, заснована на повторній переробці ресурсів та мінімізації відходів:", options: ["Сировинна", "Циркулярна (зелена)", "Традиційна", "Тіньова"], correct: 1 },
-        { q: "Головний парниковий газ, викиди якого контролюються міжнародними угодами:", options: ["Кисень", "Вуглекислий газ (CO2)", "Гелій", "Аргон"], correct: 1 },
-        { q: "Великі накопичення пластикового сміття в океанах утворюють:", options: ["Атоли", "Сміттєві плями (велика тихоокеанська сміттєва пляма)", "Шельфи", "Коралові рифи"], correct: 1 },
-        { q: "Міжнародна угода щодо боротьби зі зміною клімату, ухвалена у 2015 році:", options: ["Паризька кліматична угода", "Вашингтонський договір", "Женевська конвенція", "Римський статут"], correct: 0 },
-        { q: "Зниження родючості ґрунту під дією води та вітру називається:", options: ["Меліорацією", "Ерозією ґрунту", "Рекультивацією", "Гуміфікацією"], correct: 1 },
-        { q: "Міжнародна екологічна організація, що бореться за збереження дикої природи:", options: ["Greenpeace / WWF", "НАТО", "СОТ", "МВФ"], correct: 0 },
-        { q: "Перехід на які джерела енергії зменшує забруднення атмосфери?", options: ["Вугілля та мазут", "Відновлювані джерела (сонце, вітер, гідро)", "Торф", "Голючі сланці"], correct: 1 }
+        { q: "Що спричиняє глобальне потепління у сучасній географічній оболонці?", options: ["Антропогенні викиди парникових газів (вуглекислий газ, метан)", "Збільшення кількості вулканів", "Наближення Землі до Марса", "Обертання Місяця навколо Землі"], answer: 0 },
+        { q: "Що таке дефорестація?", options: ["Масштабна вирубка або знищення лісових масивів", "Садіння нових дерев у пустелі", "Очищення океанів від пластику", "Збільшення площі тайги"], answer: 0 },
+        { q: "Яку концепцію запропонувала ООН для подолання глобальних екологічних криз?", options: ["Концепція сталого розвитку (sustainable development)", "Концепція знищення всіх заводів", "Повне припинення споживання енергії", "Переселення людства на Марс"], answer: 0 },
+        { q: "Що передбачає концепція сталого розвитку?", options: ["Задоволення потреб теперішніх поколінь без загрози для майбутніх поколінь", "Максимальне споживання ресурсів тут і зараз", "Зменшення чисельності населення до нуля", "Відмову від будь-якої науки і медицини"], answer: 0 },
+        { q: "Чому утворення «озонових дір» було небезпечним для життя?", options: ["Збільшувався потік шкідливого ультрафіолетового випромінювання Сонця", "Зникав кисень у тропосфері", "Змінювався нахил земної осі", "Зупинялися океанічні течії"], answer: 0 },
+        { q: "Що таке циркулярна (економіка замкненого циклу)?", options: ["Модель, де ресурси і відходи повторно переробляються та використовуються, а не викидаються", "Економіка, де все спалюють у відкритих печах", "Повна відмова від купівлі речей", "Виробництво товарів лише на один день"], answer: 0 },
+        { q: "Яке глобальне забруднення загрожує екосистемам Світового океану найбільше в прибережних зонах?", options: ["Пластикове та мікропластикове забруднення", "Забруднення золотом", "Надлишок прісної води", "Охолодження океану льодовиками"], answer: 0 },
+        { q: "Чим небезпечне виснаження запасів прісної води на планеті?", options: ["Викликає водний дефіцит для населення, сільського господарства та промисловості", "Збільшує рівень океану", "Призводить до випадання кислотних дощів", "Зупиняє землетруси"], answer: 0 },
+        { q: "Що таке парниковий ефект?", options: ["Утримання тепла в атмосфері завдяки парникам із газів, що рятує Землю від замерзання, але в надлишку веде до перегріву", "Повне охолодження планети взимку", "Побудова теплиць для овочів", "Затемнення Сонця хмарами"], answer: 0 },
+        { q: "Які міжнародні зусилля спрямовані на боротьбу зі зміною клімату?", options: ["Кліматичні саміти ООН, Паризька угода щодо скорочення викидів", "Повна заборона користування автомобілями у світі", "Будівництво штучних крижаних стін навколо екватора", "Перенесення всіх фабрик під землю"], answer: 0 },
+        { q: "Що таке червона книга?", options: ["Офіційний перелік видів тварин і рослин, що перебувають під загрозою зникнення", "Книга обліку прибутку підприємств", "Географічний атлас світу", "Підручник з екології для шкіл"], answer: 0 },
+        { q: "Яка роль відновлюваних джерел енергії (ВДЕ) у вирішенні екологічних проблем?", options: ["Зменшення викидів СО₂ та зниження антропогенного навантаження на природу", "Збільшення площі сміттєзвалищ", "Виділення небезпечної радіації", "Збільшення витрат вугілля"], answer: 0 }
       ],
       20: [
-        { q: "Що таке ГІС?", options: ["Географічний інститут наук", "Геоінформаційна система", "Глобальна інспекція супутників", "Геодезична інформаційна служба"], correct: 1 },
-        { q: "Отримання інформації про поверхню Землі за допомогою супутників чи аерофотозйомки:", options: ["Дистанційне зондування Землі (ДЗЗ)", "Нівелювання", "Астрономія", "Геологічне буріння"], correct: 0 },
-        { q: "Глобальна супутникова система визначення точних координат на Землі:", options: ["ГІС", "GPS / GNSS", "GPRS", "HTML"], correct: 1 },
-        { q: "В якому вигляді ГІС зберігає дані про географічні об'єкти?", options: ["Тільки у вигляді тексту", "У вигляді поєднаних інформаційних шарів баз даних", "У вигляді звичайного паперового альбому", "У вигляді аудіозаписів"], correct: 1 },
-        { q: "За допомогою супутникового моніторингу ДЗЗ можна швидко виявити:", options: ["Лише кордони країн", "Лісові пожежі, паводки та зміни рослинності", "Глибину залягання нафти на 10 км", "Температуру ядра Землі"], correct: 1 },
-        { q: "Точне землеробство (precision agriculture) використовує ГІС та GPS для:", options: ["Збільшення використання пального", "Точного внесення добрив та оптимізації обробітку полів", "Заміни всіх працівників роботами", "Ручного збору врожаю"], correct: 1 },
-        { q: "Концепція управління сучасним містом за допомогою сенсорів та ГІС-технологій:", options: ["Урбанізація", "Smart City (Розумне місто)", "Субурбанізація", "Мегаполіс"], correct: 1 },
-        { q: "Який тип даних у ГІС відповідає об'єктам у вигляді точок, ліній та полігонів?", options: ["Растрові", "Векторні", "Текстові", "Табличні"], correct: 1 },
-        { q: "Який тип даних у ГІС являє собою сітку пікселів (як супутниковий знімок)?", options: ["Векторні", "Растрові", "Атрибутивні", "Цифрові"], correct: 1 },
-        { q: "Які супутники використовуються для прогнозування погоди та відстеження циклонів?", options: ["Навігаційні", "Метеорологічні", "Связові", "Астрономічні"], correct: 1 },
-        { q: "Сворення тривимірних моделей рельєфу у ГІС здійснюється на основі:", options: ["Цифрових моделей рельєфу (ЦМР / DEM)", "Паперових карт 1900 року", "Аудіосигналів", "Текстових описів"], correct: 0 },
-        { q: "Які технології дозволяють будувати інтерактивні карти в реальному часі?", options: ["Друк на типографії", "Веб-ГІС та хмарні сервіси", "Ручне малювання", "Телеграф"], correct: 1 }
+        { q: "Що таке геоінформаційні системи (ГІС)?", options: ["Комп'ютерні системи для збору, зберігання, аналізу та візуалізації просторових даних", "Тільки паперові карти в атласі", "Супутники зв'язку у космосі", "Мережа автомобільних доріг"], answer: 0 },
+        { q: "Що означає абревіатура ДЗЗ у сучасній географії?", options: ["Дистанційне зондування Землі (зйомка з космічних апаратів чи літаків)", "Дослідження земних залізниць", "Державний захист земель", "Динамічна зйомка звуків"], answer: 0 },
+        { q: "Для чого використовуються штучні супутники Землі у моніторингу довкілля?", options: ["Для фіксації змін рослинного покриву, температури океанів, погоди та наслідків лих у реальному часі", "Тільки для трансляції телесеріалів", "Для буріння свердловин нафти з космосу", "Для зміни нахилу земної осі"], answer: 0 },
+        { q: "Яку роль відіграють ГІС у навігації (наприклад, GPS/GNSS)?", options: ["Визначення точних координат об'єктів на поверхні Землі та побудова маршрутів", "Прогнозування землетрусів за тиждень", "Вимірювання глибини океану вручну", "Зміна назв вулиць у містах"], answer: 0 },
+        { q: "Що таке концепція «Розумне місто» (Smart City) із використанням ГІС?", options: ["Оптимізація міського управління, транспорту, комунікацій та енергомереж за допомогою даних", "Повне вимкнення світла вночі", "Заборона користуватися гаджетами в місті", "Побудова міст виключно з дерева"], answer: 0 },
+        { q: "Що таке точне землеробство (precision agriculture)?", options: ["Використання ГІС і супутникових даних для локального внесення добрив та контролю врожаю", "Збір врожаю виключно вручну", "Відмова від тракторів на полі", "Вирощування рослин у темній кімнаті"], answer: 0 },
+        { q: "Які дані поєднують у собі ГІС-технології?", options: ["Цифрові карти та масиви баз даних про об'єкти на них", "Тільки чорно-білі фотографії 19 століття", "Тільки художні оповідання про мандрівників", "Поетичні описи природи"], answer: 0 },
+        { q: "Як ДЗЗ допомагає під час стихійних лих (повеней, лісових пожеж)?", options: ["Оперативне виявлення осередків загоряння чи зон затоплення з космосу для рятувальників", "Зупинка стихії силою думки оператора", "Повне видалення наслідків за секунду", "Створення штучного дощу"], answer: 0 },
+        { q: "Чому сучасна географія стала високотехнологічною наукою?", options: ["Через використання комп'ютерного моделювання, космічних знімків та баз даних", "Через відмову від карт взагалі", "Через перехід виключно на паперові описи", "Через заборону подорожувати"], answer: 0 },
+        { q: "Що дозволяє шарова структура у ГІС-картах?", options: ["Накладати різні види інформації (рельєф, дороги, населення, рослинність) окремими шарами", "Ховати карти від користувачів", "Друкувати карти на папері різного кольору", "Зменшувати роздільну здатність екрана"], answer: 0 },
+        { q: "Хто є основними користувачами сучасних геоінформаційних систем?", options: ["Науковці, військові, рятувальники, екологи, містобудівники, логісти", "Тільки школярі на уроках малювання", "Тільки професійні рибалки", "Тільки пекарі"], answer: 0 },
+        { q: "Яка перспектива розвитку ГІС і ДЗЗ у майбутньому?", options: ["Штучний інтелект для автоматичного аналізу змін на планеті та прогнозування процесів у реальному часі", "Повне застарівання технологій та повернення до компасів", "Використання паперових глобусів", "Заборона супутників"], answer: 0 }
       ]
     };
 
-    // ==========================================
-    // 3. МЕХАНІЗМ ТЕСТУВАННЯ ТА ЗБЕРЕЖЕННЯ
-    // ==========================================
-    const userScores = {}; // Збереження результатів по темам
+    // Логіка інтерактивних тестів з інтеграцією у Firebase / активність
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizBoxes = document.querySelectorAll('.quiz-box');
 
-    function initQuizzes() {
-      for (let i = 1; i <= 20; i++) {
-        const quizContainer = document.getElementById(`quiz-topic-${i}`);
-        if (quizContainer) {
-          renderStartQuizScreen(i, quizContainer);
+      quizBoxes.forEach(box => {
+        const quizId = parseInt(box.getAttribute('data-quiz-id'));
+        const contentContainer = box.querySelector('.quiz-content');
+        const questions = geographyQuizzes[quizId];
+
+        if (!questions) return;
+
+        let currentQIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function renderQuestion() {
+          if (currentQIndex >= questions.length) {
+            // Тест завершено
+            contentContainer.innerHTML = `
+              <div class="quiz-result">
+                🎉 Вітаємо! Тест завершено.<br>
+                Ваш результат: ${score} з ${questions.length} правильних відповідей!
+              </div>
+            `;
+            
+            // Нарахування балів до загальної активності (інтеграція з системою користувача/Firebase)
+            updateUserActivityScore(score);
+            return;
+          }
+
+          const qData = questions[currentQIndex];
+          answered = false;
+
+          contentContainer.innerHTML = `
+            <div class="quiz-progress">Питання ${currentQIndex + 1} з ${questions.length}</div>
+            <div class="quiz-question-container">
+              <div class="quiz-question-text">${qData.q}</div>
+              <div class="quiz-options">
+                ${qData.options.map((opt, idx) => `
+                  <button class="quiz-option-btn" data-index="${idx}">${opt}</button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+
+            const optionBtns = contentContainer.querySelectorAll('.quiz-option-btn');
+            optionBtns.forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                if (answered) return;
+                answered = true;
+
+                const selectedIdx = parseInt(e.target.getAttribute('data-index'));
+                
+                optionBtns.forEach((b, idx) => {
+                  b.disabled = true;
+                  if (idx === qData.answer) {
+                    b.classList.add('correct');
+                  } else if (idx === selectedIdx) {
+                    b.classList.add('incorrect');
+                  }
+                });
+
+                if (selectedIdx === qData.answer) {
+                  score++;
+                }
+
+                // Перехід до наступного питання через 1.2 секунди
+                setTimeout(() => {
+                  currentQIndex++;
+                  renderQuestion();
+                }, 1200);
+              });
+            });
         }
-      }
-    }
 
-    function renderStartQuizScreen(topicId, container) {
-      container.innerHTML = `
-        <div style="text-align: center;">
-          <h4 style="font-size: 18px; color: #1e293b; margin-bottom: 8px;">Перевірте свої знання з теми ${topicId}</h4>
-          <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Тест містить 12 запитань. За кожну правильну відповідь ви отримуєте 1 бал у ваш загальний рейтинг.</p>
-          <button class="quiz-start-btn" onclick="startQuiz(${topicId})">Розпочати тест (12 питань)</button>
-        </div>
-      `;
-    }
-
-    const currentQuizState = {};
-
-    function startQuiz(topicId) {
-      currentQuizState[topicId] = {
-        currentQuestion: 0,
-        score: 0,
-        answered: false
-      };
-      renderQuestion(topicId);
-    }
-
-    function renderQuestion(topicId) {
-      const container = document.getElementById(`quiz-topic-${topicId}`);
-      const state = currentQuizState[topicId];
-      const questions = quizData[topicId];
-      const q = questions[state.currentQuestion];
-
-      let optionsHTML = '';
-      q.options.forEach((opt, idx) => {
-        optionsHTML += `<button class="quiz-option-btn" id="opt-${topicId}-${idx}" onclick="selectAnswer(${topicId}, ${idx})">${opt}</button>`;
+        renderQuestion();
       });
+    });
 
-      container.innerHTML = `
-        <div class="quiz-header">
-          <span class="quiz-title">Питання ${state.currentQuestion + 1} з ${questions.length}</span>
-          <span class="quiz-progress">Бали: ${state.score}</span>
-        </div>
-        <div class="quiz-question-text">${q.q}</div>
-        <div class="quiz-options">
-          ${optionsHTML}
-        </div>
-        <button id="next-btn-${topicId}" class="quiz-next-btn" onclick="nextQuestion(${topicId})">Наступне питання <i class="fa-solid fa-arrow-right"></i></button>
-      `;
-    }
-
-    function selectAnswer(topicId, selectedIdx) {
-      const state = currentQuizState[topicId];
-      if (state.answered) return;
-
-      state.answered = true;
-      const questions = quizData[topicId];
-      const q = questions[state.currentQuestion];
-      const nextBtn = document.getElementById(`next-btn-${topicId}`);
-
-      // Заблокувати всі кнопки
-      for (let i = 0; i < q.options.length; i++) {
-        const btn = document.getElementById(`opt-${topicId}-${i}`);
-        btn.disabled = true;
-        if (i === q.correct) {
-          btn.classList.add('correct');
+    // Функція синхронізації балів із загальною активністю та Firebase
+    function updateUserActivityScore(earnedPoints) {
+      // Перевіряємо наявність глобальних функцій збереження або оновлення балів у вашому проєкті
+      if (typeof window.saveUserScore === 'function') {
+        window.saveUserScore('geography', earnedPoints);
+      } else if (typeof firebase !== 'undefined' && firebase.auth && firebase.firestore) {
+        // Стандартний шаблон збереження у Firebase Firestore, якщо використовується напряму
+        const user = firebase.auth().currentUser;
+        if (user) {
+          const db = firebase.firestore();
+          db.collection('users').doc(user.uid).set({
+            geographyScore: firebase.firestore.FieldValue.increment(earnedPoints),
+            lastActive: new Date()
+          }, { merge: true }).catch(err => console.error("Помилка збереження у Firebase:", err));
         }
       }
-
-      if (selectedIdx === q.correct) {
-        state.score += 1;
-      } else {
-        const selectedBtn = document.getElementById(`opt-${topicId}-${selectedIdx}`);
-        selectedBtn.classList.add('incorrect');
-      }
-
-      if (nextBtn) {
-        if (state.currentQuestion === questions.length - 1) {
-          nextBtn.innerText = 'Завершити тест і зберегти результати';
-        }
-        nextBtn.style.display = 'inline-block';
+      
+      // Також дублюємо в localStorage для сумісності з загальним лічильником активності
+      try {
+        const currentTotal = parseInt(localStorage.getItem('user_activity_score') || '0');
+        localStorage.setItem('user_activity_score', currentTotal + earnedPoints);
+        window.dispatchEvent(new Event('storage'));
+      } catch (e) {
+        console.error(e);
       }
     }
-
-    function nextQuestion(topicId) {
-      const state = currentQuizState[topicId];
-      const questions = quizData[topicId];
-
-      state.currentQuestion += 1;
-      state.answered = false;
-
-      if (state.currentQuestion < questions.length) {
-        renderQuestion(topicId);
-      } else {
-        finishQuiz(topicId);
-      }
-    }
-
-    function finishQuiz(topicId) {
-      const state = currentQuizState[topicId];
-      const container = document.getElementById(`quiz-topic-${topicId}`);
-      const score = state.score;
-      const total = quizData[topicId].length;
-      const percentage = Math.round((score / total) * 100);
-
-      userScores[topicId] = score;
-
-      // Збереження у Firebase
-      saveScoreToFirebase(topicId, score);
-
-      container.innerHTML = `
-        <div class="quiz-result-box">
-          <h3 style="color: #1e293b; margin-bottom: 10px;">Тест з теми ${topicId} завершено!</h3>
-          <div class="quiz-result-score">${score} / ${total} балів (${percentage}%)</div>
-          <p style="color: #64748b; font-size: 15px; margin-bottom: 20px;">Ваш результат успішно зараховано до загального заліку активності.</p>
-          <button class="quiz-start-btn" onclick="startQuiz(${topicId})">Пройти тест ще раз</button>
-        </div>
-      `;
-    }
-
-    function saveScoreToFirebase(topicId, score) {
-      if (!currentUser) {
-        console.warn("Користувач не авторизований. Результат збережено лише локально.");
-        return;
-      }
-
-      const userRef = db.collection('users').doc(currentUser.uid);
-
-      db.runTransaction((transaction) => {
-        return transaction.get(userRef).then((userDoc) => {
-          let userData = userDoc.exists ? userDoc.data() : {};
-          let prevTopicScore = userData[`geo_topic_${topicId}`] || 0;
-          
-          // Оновлюємо бали, якщо новий результат вищий
-          let newTopicScore = Math.max(prevTopicScore, score);
-          let scoreDiff = newTopicScore - prevTopicScore;
-
-          let currentTotalScore = userData.totalScore || 0;
-          let newTotalScore = currentTotalScore + scoreDiff;
-
-          transaction.set(userRef, {
-            name: currentUser.displayName || currentUser.email,
-            email: currentUser.email,
-            totalScore: newTotalScore,
-            [`geo_topic_${topicId}`]: newTopicScore,
-            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true });
-        });
-      }).then(() => {
-        console.log(`Успішно збережено в Firebase: Тема ${topicId} = ${score} балів`);
-      }).catch((err) => {
-        console.error("Помилка збереження в Firebase:", err);
-      });
-    }
-
-    // Запуск тестів при завантаженні сторінки
-    document.addEventListener('DOMContentLoaded', initQuizzes);
   </script>
 
 </body>
