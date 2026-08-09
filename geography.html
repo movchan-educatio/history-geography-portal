@@ -1121,22 +1121,23 @@
       renderQuiz(themeId);
     }
 
-    // Збереження балів у LocalStorage та синхронізація з Firebase для географії
+    // Збереження найкращого результату кожної теми + синхронізація з Firebase
     function saveGeographyQuizScore(themeId, score) {
       let geoScores = JSON.parse(localStorage.getItem('geography_quiz_scores') || '{}');
-      geoScores[themeId] = score;
+      const oldScore = Number(geoScores[themeId]) || 0;
+      const bestScore = Math.max(oldScore, Number(score) || 0);
+
+      geoScores[themeId] = bestScore;
       localStorage.setItem('geography_quiz_scores', JSON.stringify(geoScores));
 
-      // Обчислення загальних балів з географії
-      let totalGeoPoints = Object.values(geoScores).reduce((a, b) => a + b, 0);
+      const totalGeoPoints = Object.values(geoScores).reduce((a, b) => a + (Number(b) || 0), 0);
       localStorage.setItem('total_geography_points', totalGeoPoints);
 
-      // Передаємо результат у Firebase.
-      // Якщо авторизація ще не завершилась, модуль Firebase збереже
-      // останній результат і відправить його одразу після входу.
       window.dispatchEvent(new CustomEvent('geographyScoreChanged'));
-      if (window.syncGeographyScoreToFirebase) {
-        window.syncGeographyScoreToFirebase();
+      if (window.syncGeographyQuizToFirebase) {
+        window.syncGeographyQuizToFirebase(totalGeoPoints);
+      } else {
+        window.pendingGeographyQuizScore = totalGeoPoints;
       }
     }
 
@@ -1156,21 +1157,70 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-  const firebaseConfig = {apiKey:"AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",authDomain:"movchan-portal.firebaseapp.com",databaseURL:"https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",projectId:"movchan-portal",storageBucket:"movchan-portal.firebasestorage.app",messagingSenderId:"535915495927",appId:"1:535915495927:web:71f899ea2876ee129c2ef2"};
-  const app=initializeApp(firebaseConfig), auth=getAuth(app), database=getDatabase(app);
-  let currentUser=null;
-  function localScores(){try{return JSON.parse(localStorage.getItem('geography_quiz_scores')||'{}')}catch{return {}}}
-  async function syncGeographyScoreToFirebase(){
-    if(!currentUser)return;
-    const scores=localScores(), total=Object.values(scores).reduce((a,b)=>a+Number(b||0),0); if(total<=0)return;
-    try{await runTransaction(ref(database,'users/'+currentUser.uid),data=>{
-      data=data||{}; const saved=data.quiz_geography_scores||{}; const oldTotal=Number(data.total_geography_points||0); const oldScore=Number(data.score||0); const merged={...saved}; let bestTotal=0;
-      for(const [id,v] of Object.entries(scores)){const best=Math.max(Number(saved[id]||0),Number(v||0));merged[id]=best;bestTotal+=best}
-      data.name=data.name||currentUser.displayName||'Учень'; data.score=oldScore+Math.max(0,bestTotal-oldTotal); data.total_geography_points=bestTotal; data.geographyPoints=bestTotal; data.quiz_geography_scores=merged; return data;
-    });}catch(e){console.error('Географія Firebase:',e)}
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+    authDomain: "movchan-portal.firebaseapp.com",
+    databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "movchan-portal",
+    storageBucket: "movchan-portal.firebasestorage.app",
+    messagingSenderId: "535915495927",
+    appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
+    measurementId: "G-8XBVKRZRS1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
+
+  async function syncScore(totalPoints) {
+    const localTotal = Number(totalPoints) || 0;
+    window.pendingGeographyQuizScore = localTotal;
+    if (!currentUser || localTotal < 0) return;
+
+    try {
+      const userRef = ref(database, 'users/' + currentUser.uid);
+      await runTransaction(userRef, (data) => {
+        data = data || {};
+        const savedTotal = Number(data.total_geography_points) || 0;
+        const currentScore = Number(data.score) || 0;
+        const currentOther = Number(data.total_history_points) || 0;
+
+        // Нараховуємо лише нові бали. Значення total ніколи не зменшуємо.
+        if (localTotal > savedTotal) {
+          data.name = data.name || currentUser.displayName || 'Учень';
+          data.total_geography_points = localTotal;
+          data.score = currentScore + (localTotal - savedTotal);
+        } else if (!data.total_geography_points) {
+          data.total_geography_points = savedTotal;
+        }
+
+        if (data.total_history_points === undefined) data.total_history_points = currentOther;
+        return data;
+      });
+      console.log('Географія: синхронізація OK', localTotal);
+    } catch (error) {
+      console.error('Географія: помилка синхронізації', error);
+    }
   }
-  window.syncGeographyScoreToFirebase=syncGeographyScoreToFirebase;
-  onAuthStateChanged(auth,u=>{currentUser=u;window.currentUserUid=u?u.uid:null;if(u)syncGeographyScoreToFirebase()});
+
+  window.syncGeographyQuizToFirebase = syncScore;
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    if (user && window.pendingGeographyQuizScore !== undefined) {
+      syncScore(window.pendingGeographyQuizScore);
+    }
+    if (user) {
+      const localTotal = Number(localStorage.getItem('total_geography_points')) || 0;
+      if (localTotal >= 0) syncScore(localTotal);
+    }
+  });
+
+  window.addEventListener('focus', () => {
+    if (currentUser) syncScore(Number(localStorage.getItem('total_geography_points')) || 0);
+  });
 </script>
 
 </body>
