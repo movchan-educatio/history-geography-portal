@@ -783,11 +783,24 @@
         
         const userRef = ref(database, 'users/' + user.uid);
         get(userRef).then((snapshot) => {
+          const historyTestPoints = parseInt(localStorage.getItem('total_history_points')) || 0;
           if (!snapshot.exists()) {
             set(userRef, {
               name: user.displayName,
-              score: 5
+              score: 5 + historyTestPoints,
+              total_history_points: historyTestPoints
             });
+          } else {
+            const currentData = snapshot.val();
+            const currentScore = currentData.score || 0;
+            const savedHistPoints = currentData.total_history_points || 0;
+            if (historyTestPoints > savedHistPoints) {
+              const diff = historyTestPoints - savedHistPoints;
+              update(userRef, {
+                score: currentScore + diff,
+                total_history_points: historyTestPoints
+              });
+            }
           }
         });
 
@@ -1119,8 +1132,8 @@
     });
 
     function loadNmtResults() {
-      const histScore = localStorage.getItem('nmt_history_score');
-      const histTotal = localStorage.getItem('nmt_history_total');
+      const histScore = localStorage.getItem('nmt_history_score') || localStorage.getItem('total_history_points');
+      const histTotal = localStorage.getItem('nmt_history_total') || '100';
       if (histScore !== null) {
         document.getElementById('res-history').innerHTML = `📜 Історія: <strong>${histScore} / ${histTotal} балів</strong>`;
       }
