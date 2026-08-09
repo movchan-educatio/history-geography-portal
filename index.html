@@ -961,16 +961,32 @@
     let dinoAnimationId;
     let speedInterval = null;
 
+    // Персонаж гри: Сергій Мовчан замість динозаврика
+    const teacherRunner = new Image();
+    teacherRunner.src = 'teacher-runner.png';
+    let teacherRunnerReady = false;
+    teacherRunner.onload = () => { teacherRunnerReady = true; };
+
     function drawDino(x, y) {
-      ctx.fillStyle = '#2563eb';
-      ctx.fillRect(x + 8, y + 10, 18, 20);
-      ctx.fillRect(x + 22, y + 2, 12, 12);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(x + 29, y + 5, 2, 2);
-      ctx.fillStyle = '#2563eb';
-      ctx.fillRect(x, y + 14, 10, 6);
-      ctx.fillRect(x + 10, y + 30, 4, 6);
-      ctx.fillRect(x + 20, y + 30, 4, 6);
+      if (!teacherRunnerReady) {
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x + 8, y + 10, 18, 20);
+        ctx.fillRect(x + 22, y + 2, 12, 12);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 29, y + 5, 2, 2);
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x, y + 14, 10, 6);
+        ctx.fillRect(x + 10, y + 30, 4, 6);
+        ctx.fillRect(x + 20, y + 30, 4, 6);
+        return;
+      }
+
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      // Фото-персонаж масштабується під висоту гри та стоїть на тій самій лінії,
+      // де раніше знаходився динозаврик.
+      ctx.drawImage(teacherRunner, x - 5, y - 48, 46, 51);
+      ctx.restore();
     }
 
     let dinoHighScore = parseInt(localStorage.getItem('dino_high_score')) || 0;
