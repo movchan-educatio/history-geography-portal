@@ -51,7 +51,7 @@
       background: #ffffff;
     }
     .accordion-card.active .accordion-content {
-      max-height: 15000px;
+      max-height: 4500px;
       padding: 0 30px 30px 30px;
       transition: max-height 0.6s ease-in, padding 0.4s ease-in;
     }
@@ -77,95 +77,6 @@
       width: 100%;
       height: 100%;
       border: 0;
-    }
-    /* Стилі для покрокового тесту (як на вкладці Історія) */
-    .quiz-card {
-      background-color: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 24px;
-      margin-top: 20px;
-    }
-    .quiz-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 17px;
-      color: #1e293b;
-      margin-bottom: 12px;
-    }
-    .quiz-badge {
-      display: inline-block;
-      background: #e0f2fe;
-      color: #0284c7;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 16px;
-    }
-    .quiz-question-text {
-      font-weight: 700;
-      font-size: 16px;
-      color: #0f172a;
-      margin-bottom: 16px;
-      line-height: 1.4;
-    }
-    .quiz-options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .quiz-option-btn {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      text-align: left;
-      padding: 12px 16px;
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 15px;
-      color: #334155;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .quiz-option-btn:hover {
-      background-color: #f1f5f9;
-      border-color: #94a3b8;
-    }
-    .quiz-option-btn.selected {
-      border-color: #2563eb;
-      background-color: #eff6ff;
-      color: #1d4ed8;
-      font-weight: 600;
-    }
-    .quiz-next-btn {
-      background-color: #94a3b8;
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 15px;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: not-allowed;
-      transition: background-color 0.2s ease;
-    }
-    .quiz-next-btn.active {
-      background-color: #3b82f6;
-      cursor: pointer;
-    }
-    .quiz-next-btn.active:hover {
-      background-color: #2563eb;
-    }
-    .quiz-summary-box {
-      text-align: center;
-      padding: 20px;
-      background: #ffffff;
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
     }
   </style>
 </head>
@@ -211,7 +122,7 @@
       </p>
     </div>
 
-    <!-- ТЕМА 1 -->
+    <!-- Тема 1 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🗺️</span> Географічна карта як особливе джерело знань про Землю: масштаби, проєкції, умовні знаки</h3>
@@ -235,13 +146,10 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/TDMJoc8oHJs" allowfullscreen></iframe>
         </div>
-
-        <!-- Покроковий тест теми 1 -->
-        <div class="quiz-card" id="quiz-container-1"></div>
       </div>
     </div>
 
-    <!-- ТЕМА 2 -->
+    <!-- Тема 2 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🌐</span> Земля як планета Сонячної системи: рухи Землі та їх географічні наслідки</h3>
@@ -260,12 +168,10 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/1PVAiJniwbc" allowfullscreen></iframe>
         </div>
-
-        <div class="quiz-card" id="quiz-container-2"></div>
       </div>
     </div>
 
-    <!-- ТЕМА 3 -->
+    <!-- Тема 3 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>⛏️</span> Літосфера та рельєф Землі: тектоніка літосферних плит, землетруси та вулканізм</h3>
@@ -277,7 +183,7 @@
         </p>
         <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
           <li><strong>Зони розходження (дивергентні межі):</strong> плити рухаються в різні боки, утворюючи серединно-океанічні хребти та рифтові долини (наприклад, Східно-Африканський рифт).</li>
-          <li><strong>Зони зіткнення (конвергентні межі):</strong> при зіткненні материкової й океанічної кора виникають глибоководні жолоби та гори (Анди); при зіткненні двох материкових плит утворюються складчасті гори (Гімалаї, Альпи).</li>
+          <li><strong>Зони зіткнення (конвергентні межі):</strong> при зіткненні материкової й океанічної кори виникають глибоководні жолоби та гори (Анди); при зіткненні двох материкових плит утворюються складчасті гори (Гімалаї, Альпи).</li>
           <li><strong>Трансформні розломи:</strong> плити ковзають уздовж одна одної (розлом Сан-Андреас у Каліфорнії).</li>
         </ul>
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
@@ -286,252 +192,417 @@
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/as7mjj-GGug" allowfullscreen></iframe>
         </div>
-
-        <div class="quiz-card" id="quiz-container-3"></div>
       </div>
     </div>
 
-    <!-- ТЕМА 4 -->
+    <!-- Тема 4 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌤️</span> Атмосфера та клімат Землі: склад, будова, тепловий режим, атмосферична циркуляція</h3>
+        <h3><span>🌦️</span> Атмосфера: тепловий режим, атмосферний тиск, вітри, погода та клімат</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
-          <strong>Атмосфера</strong> — газова оболонка Землі, що складається з азоту (78%), кисню (21%), аргону, вуглекислого газу та інших газів. Основні шари: тропосфера (зосереджено 80% маси, виникає погода), стратосфера (озоновий екран), мезосфера, термосфера та екзосфера.
+          Газова оболонка Землі — <strong>атмосфера</strong> — складається з кількох шарів (тропосфера, стратосфера, мезосфера, термосфера, екзосфера). Нижній шар — <strong>тропосфера</strong> — містить понад 80% маси всього повітря, усю водяну пару й пил; саме тут формуються погодні умови.
         </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Тепловий режим планети залежить від кількості сонячної радіації, що надходить і перерозподіляється через циркуляцію повітряних мас. Перепади <strong>атмосферного тиску</strong> спричиняють горизонтальний рух повітря — <strong>вітри</strong>. Виділяють постійні вітри Землі:
+        </p>
+        <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
+          <li><strong>Пасати:</strong> дмуть від тропічних широт високого тиску до екватора низького тиску.</li>
+          <li><strong>Західні вітри помірних широт:</strong> переносять повітря з тропіків до полюсів.</li>
+          <li><strong>Мусони:</strong> сезонні вітри, що двічі на рік змінюють напрямок (характерні для Південної та Східної Азії).</li>
+        </ul>
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Клімат формується під дією трьох основних чинників: сонячна радіація, циркуляція повітряних мас та характер підстильної поверхні. Постійні вітри (пасати, західні вітри, північно-східні) та сезонні мусони перерозподіляють тепло і вологу по планеті.
+          Погода — це миттєвий стан тропосфери в певній точці, тоді як <strong>клімат</strong> — багаторічний режим погоди, що формується під дією географічної широти, циркуляції атмосфери та підстильної поверхні.
         </p>
-        <div class="quiz-card" id="quiz-container-4"></div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/JeQvRKH2528" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 5 -->
+    <!-- Тема 5 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌊</span> Гідросфера: Світовий океан, суходільні води та їх екологічний стан</h3>
+        <h3><span>🌊</span> Гідросфера: світовий океан, води суші та глобальний кругообіг води в природі</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
-          <strong>Гідросфера</strong> об'єднує всі води Землі: Світовий океан (97%), води суходолу (річки, озера, болота, льодовики, підземні води) та воду в атмосфері. Середня солоність океану становить 35‰.
+          <strong>Гідросфера</strong> охоплює всю водну оболонку планети загальним об'ємом близько 1,38 млрд км³. Структура гідросфери: Світовий океан (96,5%), льодовики та сніжники (близько 1,74%, головні резервуари прісної води), підземні води (близько 1,7%) та поверхневі води суші (річки, озера, болота).
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Світовий океан</strong> є головним регулятором клімату Землі. У ньому виділяють поверхневі й глибинні течії (наприклад, тепла Гольфстрим чи холодна Перуанська), які переносять величезні маси тепла з низьких широт у високі.
         </p>
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Води суходолу відіграють вирішальну роль у життєдіяльності людини. Найбільші запаси прісної води зосереджені в льодовиках Антарктиди та Гренландії.
+          <strong>Глобальний кругообіг води (влагообіг)</strong> пов'язує всі компоненти гідросфери. Під дією сонячної енергії вода випаровується з поверхні океанів і суші, переноситься вітрами в атмосфері, випадає у вигляді опадів та повертається до океану через поверхневий і підземний стік річок.
         </p>
-        <div class="quiz-card" id="quiz-container-5"></div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/X_nTUpPpp7c" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 6 -->
+    <!-- Тема 6 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌱</span> Біосфера та географічна оболонка: цілісність, ритмічність, зональність</h3>
+        <h3><span>🌿</span> Біосфера та географічна оболонка: закономірності цілісності та широтна зональність</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          <strong>Географічна оболонка</strong> — це цілісна система, у якій взаємодіють літосфера, атмосфера, гідросфера та біосфера. Основні закономірності: цілісність, ритмічність, кругообіг речовин та енергії, широтана зональність та висотна поясність.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Біосфера</strong> — оболонка поширення життя, охоплює нижню частину атмосфери, всю гідросферу та верхню частину літосфери. Володимир Вернадський довів, що живі організми (жива речовина) є найпотужнішою геологічною силою планети, яка міняє газовий склад атмосфери та формує осадові породи й ґрунти.
         </p>
-        <div class="quiz-card" id="quiz-container-6"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Усі земні оболонки взаємопроникають і утворюють <strong>географічну оболонку</strong> — цілісну систему планетарного масштабу. Її головні закони:
+        </p>
+        <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
+          <li><strong>Цілісність:</strong> зміна одного компонента (наприклад, вирубка лісів) неминуче викликає зміни в інших (клімат, ґрунти, стік річок).</li>
+          <li><strong>Ритмічність:</strong> повторюваність природних процесів у часі (добові, річні та багаторічні ритми).</li>
+          <li><strong>Широтна зональність:</strong> закономірна зміна природних комплексів від екватора до полюсів через зменшення кількості сонячного тепла.</li>
+          <li><strong>Висотна поясність:</strong> зміна ландшафтів із підняттям у гори через зниження температури та зміну зволоження.</li>
+        </ul>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Основні природні зони суші включають арктичні пустелі, тундру, тайгу, мішані й широколисті ліси, лісостепи, степи, савани та вологі екваторіальні ліси.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/qqSckCQaCFQ" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 7 -->
+    <!-- Тема 7 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌾</span> Ґрунти та ґрунтові ресурси: утворення, родючість, класифікація</h3>
+        <h3><span>🌍</span> Материки та океани: загальна фізико-географічна характеристика планети</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          <strong>Ґрунт</strong> — особливе природне тіло, що має властивість родючості. Головні чинники ґрунтоутворення: материнська порода, клімат, організми, рельєф і час. Найродючішими є чорноземи.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Поверхня Землі розподілена між суходолом (29% або 149 млн км²) і Світовим океаном (71% або 361 млн км²). Суходіл поділений на <strong>шість материків</strong> (Євразія, Африка, Північна Америка, Південна Америка, Австралія, Антарктида) та частини світу, виділені за історико-географічними ознаками.
         </p>
-        <div class="quiz-card" id="quiz-container-7"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Материки мають різну геологічну історію. У їхній основі лежать стародавні платформи (щити й плити), з'єднані внаслідок тектонічних циклів. Наприклад, Євразія утворилася внаслідок зближення кількох літосферних плит, що зумовило найбільше розмаїття форм рельєфу та кліматичних умов.
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Океани (Тихий, Атлантичний, Індійський, Північний Льодовитий та Південний) утворюють єдину водну систему з різною солоністю, системою течій і рельєфом дна (шельф, материковий схил, ложе океану з глибоководними жолобами та серединно-океанічними хребтами).
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/dQtOr3kHf-Y" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 8 -->
+    <!-- Тема 8 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🏔️</span> Природні комплекси материків: Євразія, Африка, Північна та Південна Америка, Австралія, Антарктида</h3>
+        <h3><span>🇺🇦</span> Фізична географія України: тектонічна будова, рельєф, корисні копалини</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Огляд фізико-географічних особливостей материків: геолого-тектонічна будова, кліматичні пояси, внутрішні води та природні зони.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Територія України лежить на сході Європи і має різноманітну геологічну основу. Головною структурою є стародавня <strong>Східноєвропейська платформа</strong>, в межах якої виділяється виступ фундаменту — <strong>Український щит</strong> (тягнеться від Поділля до Приазов'я, визначаючи поширення гранітів та рудних копалин). На заході до платформи прилягає молода Західноєвропейська платформа, Карпатська та Кримська складчасті системи.
         </p>
-        <div class="quiz-card" id="quiz-container-8"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          У рельєфі переважають рівнини (близько 95% площі), серед яких височини (Придніпровська, Подільська, Донецька) чергуються з низовинами (Поліська, Придніпровська, Причорноморська). Гори представлені Українськими Карпатами (висота до 2061 м, гора Говерла) та Кримськими горами (висота до 1545 м, гора Роман-Кош).
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Надра України багаті на корисні копалини: залізні руди (Криворізький, Кременчуцький та Білозерський басейни), марганцеві руди (Нікопольський басейн), кам'яне і буре вугілля (Донецький і Львівсько-Волинський басейни), нафту і газ (Дніпровсько-Донецька та Карпатська нафтогазоносні провінції), а також родовища титану, урану, сірки та будівельних матеріалів.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/CXOp5abwKiI" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 9 -->
+    <!-- Тема 9 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🇺🇦</span> Фізична географія України: географічне положення, геологічна будова та рельєф</h3>
+        <h3><span>🌡️</span> Клімат і водні ресурси України: річки, озера, водосховища та кліматичні умови</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Україна розташована у південно-східній частині Європи. Більшість території займає Східноєвропейська рівнина. Основні тектонічні структури: Український щит, Дніпровсько-Донецька западина, Волино-Подільська плита, Карпатська та Кримська складчасті системи.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Клімат України помірно континентальний, а на Південному березі Криму — субтропічний середземноморського типу. Головний вплив на формування погоди справляє західний перенос повітряних мас з Атлантичного океану, що приносить вологу. Зі сходу та північного сходу взимку можуть надходити холодні континентальні маси антициклонів, викликаючи різке похолодання.
         </p>
-        <div class="quiz-card" id="quiz-container-9"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Внутрішні води України включають розгалужену річкову мережу (понад 63 тисячі річок). Головна водна артерія — <strong>Дніпро</strong> (третя за довжиною річка Європи), на якій створено каскад із шести водосховищ (Київське, Канівське, Кременчуцьке, Кам'янське, Дніпровське, Каховське). Інші великі річки: Південний Буг, Дністер, Сіверський Донець, Дунай та Тиса.
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Озерна мережа представлена заплавними, лиманними (на узбережжі Чорного моря) та гірськими озерми (наприклад, Синєвир у Карпатах). Водні ресурси країни потребують охорони через обмеженість місцевого стоку порівняно з потребами промисловості й агрокомплексу.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/P_uSVeWgSjg" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/Kjd9UfDqdxs" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 10 -->
+    <!-- Тема 10 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>☀️</span> Клімат, води та ґрунти України: закономірності просторового розподілу</h3>
+        <h3><span>🌳</span> Природні комплекси України: ландшафти, ґрунти, рослинний і тваринний світ</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Переважає помірно-континентальний клімат. Річкова сітка належить переважно до басейнів Чорного та Азовського морів (Дніпро, Дністер, Південний Буг, Дунай).
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Рівнинна частина України чітко поділяється на три природні зони та підзони з півночі на південь:
         </p>
-        <div class="quiz-card" id="quiz-container-10"></div>
+        <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
+          <li><strong>Зона мішаних і широколистих лісів (Українське Полісся):</strong> дерново-підзолисті ґрунти, соснові та дубово-соснові ліси, значні площі заболочувань.</li>
+          <li><strong>Лісостепова зона:</strong> перехідна зона з сірими лісовими ґрунтами під лісами та потужними <strong>чорноземами</strong> під трав'яною рослинністю. Це найбільш освоєна аграрна територія.</li>
+          <li><strong>Степова зона:</strong> простягається на півдні та сході, характеризується чорноземами звичайними й південними, а також каштановими ґрунтами на сухому півдні. Природна степова рослинність здебільшого розорана.</li>
+        </ul>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          У Карпатах і Кримських горах чітко виражена <strong>висотна поясність</strong> (від лісових поясів до субальпійських лук — полонин і яйлин). Для збереження ландшафтів функціонують біосферні (Асканія-Нова, Чорноморський, Карпатський, Дунайський) та природні заповідники, національні природні парки.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/8RrMvtxB9BA" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 11 -->
+    <!-- Тема 11 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌲</span> Ландшафти України: Полісся, Лісостеп, Степ, Українські Карпати та Кримські гори</h3>
+        <h3><span>👥</span> Населення України та світу: демографічні процеси, міграції, урбанізація</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Характеристика рівнинних природних зон України (Мішані ліси, Лісостеп, Степ) та гірських систем Карпат і Криму.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Населення світу становить понад 8 мільярдів осіб із нерівномірним розміщенням (найгустозаселеніші регіони — Східна, Південна та Південно-Східна Азія, Західна Європа). Демографічні процеси описуються типами відтворення: перший тип (низька народжуваність, старіння нації, характерний для Європи) та другий тип (висока народжуваність, швидке зростання, характерний для країн Тропічної Африки).
         </p>
-        <div class="quiz-card" id="quiz-container-11"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Урбанізація</strong> — процес підвищення ролі міст у житті суспільства. Виділяють агломерації, мегаполіси та субурбанізацію.
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Демографічна ситуація в Україні складна: спостерігається депопуляція (перевищення смертності над народжуваністю) та деформація вікової структури. Повномасштабна війна спричинила масові внутрішні міграції та виїзд мільйонів українців за кордон, що докорінно змінило географію розселення та трудові ресурси держави.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/myqQP2mcuNA" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 12 -->
+    <!-- Тема 12 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>👥</span> Населення України та світу: демографічні процеси, розселення, урбанізація</h3>
+        <h3><span>🏭</span> Загальна характеристика світового господарства: первинний, вторинний і третинний сектори</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Аналіз естественного руху населення, міграцій, статево-вікової структури, трудових ресурсів та рівнів урбанізації.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Світове господарство</strong> — історично складена сукупність національних економік усіх країн світу, пов'язаних міжнародним поділом праці (МПП), економічними та політичними зв'язками. Його галузева структура базується на трисекторній моделі:
         </p>
-        <div class="quiz-card" id="quiz-container-12"></div>
+        <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
+          <li><strong>Первинний сектор:</strong> сільське господарство, рибальство, лісове господарство та видобувна промисловість (основа ресурсного забезпечення).</li>
+          <li><strong>Вторинний сектор:</strong> обробна промисловість (металургія, машинобудування, хімія, легка промисловість) та будівництво (перетворення сировини на готову продукцію).</li>
+          <li><strong>Третинний сектор (сфера послуг):</strong> транспорт, зв'язок, торгівля, фінансовий сектор, туризм, освіта, охорона здоров'я.</li>
+        </ul>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          У постіндустріальних країнах формується додатковий <strong>четвертинний сектор</strong>, що охоплює наукові дослідження, високі технології, ІТ-індустрію та управління інформаційними потоками.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/N2yRHx5x8Ak" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/7MJz0UXEwuM" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 13 -->
+    <!-- Тема 13 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🏭</span> Політична карта світу та світове господарство: типи країн, глобалізація, інтеграція</h3>
+        <h3><span>⚡</span> Електроенергетика та промисловість світу й України</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Класифікація країн за рівнем економічного розвитку та формою правління. Етапи формування світового господарства, міжнародний поділ праці.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Електроенергетика</strong> визначає рівень технологічного розвитку держави. Основні типи електростанцій:
         </p>
-        <div class="quiz-card" id="quiz-container-13"></div>
+        <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
+          <li><strong>ТЕС (теплові):</strong> працюють на вугіллі, газі чи мазуті; легко регулюють потужність, але дають великі викиди вуглекислого газу.</li>
+          <li><strong>АЕС (атомні):</strong> працюють на ядерному паливі (уран); забезпечують стабільну базову генерацію, вимагають високих технологій безпеки.</li>
+          <li><strong>ГЕС (гідроелектростанції):</strong> використовують енергію водного потоку; екологічніші, але вимагають затоплення значних територій.</li>
+          <li><strong>ВДЕ (відновлювані джерела):</strong> сонячні (СЕС), вітрові (ВЕС), геотермальні станції, частка яких стрімко зростає.</li>
+        </ul>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          В Україні основу генерації становить атомна енергетика (Рівненська, Хмельницька, Південноукраїнська АЕС), яка тісно доповнюється гідроелектростанціями та об'єктами зеленої енергетики в єдиній європейській енергосистемі.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/5lXuVrUEDZ4" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/eEaziYTJMEY" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 14 -->
+    <!-- Тема 14 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>⚡</span> Енергетика та добувна промисловість України та світу</h3>
+        <h3><span>🌾</span> Сільське господарство та агропромисловий комплекс (АПК)</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Паливно-енергетичний комплекс: вугільна, нафтогазова промисловість, електроенергетика (ТЕС, ГЕС, АЕС, ВДЕ).
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Агропромисловий комплекс (АПК)</strong> складається з трьох взаємопов'язаних сфер: галузі, що постачають засоби виробництва (тракторобудування, мінеральні добрива); саме сільське господарство (рослинництво і тваринництво); переробка, транспортування та торгівля харчовими продуктами.
         </p>
-        <div class="quiz-card" id="quiz-container-14"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          У рослинництві світове значення має вирощування зернових (пшениця, кукурудза, рис) та технічних культур (цукровий буряк, бавовник, соняшник, соя). Тваринництво (скотарство, свинарство, птахівництво) забезпечує населення тваринними білками.
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Завдяки унікальним українським чорноземам та високому рівню інтенсифікації виробництва Україна є глобальним лідером з експорту зернових та олійних культур (соняшникова олія), відіграючи ключову роль у продовольчій безпеці планети.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/qKMljY0yuDo" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/CHR7c0cGYBc" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 15 -->
+    <!-- Тема 15 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>⚙️</span> Металургія, машинобудування та хімічна промисловість</h3>
+        <h3><span>🚆</span> Транспорт і міжнародні економічні відносини: транспортні коридори та глобалізація</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Чорна та кольорова металургія. Структура машинобудування, чинники розміщення підприємств та хімічний комплекс.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Транспортна система</strong> утворює «кровоносну систему» світового господарства. Виділяють такі види транспорту: залізничний (зручний для масових сухопутних перевезень), автомобільний (гнучкий для перевезень на короткі та середні відстані), морський (забезпечує понад 80% світової торгівлі важкими вантажами), трубопровідний (для нафти й газу) та повітряний (для термінових вантажів і пасажирів).
         </p>
-        <div class="quiz-card" id="quiz-container-15"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Міжнародні економічні відносини базуються на <strong>глобалізації</strong> — процесі поглиблення інтеграції національних економік через вільну торгівлю, рух капіталів та діяльність транснаціональних корпорацій (ТНК).
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Через Україну проходять важливі міжнародні транспортні коридори (наприклад, Pan-European corridors), що зв'язують країни Європейського Союзу з Азією та Близьким Сходом.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/I8jjE1_yeJY" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/4UCMMIrXClI" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/nOgMA1QcYlM" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 16 -->
+    <!-- Тема 16 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌾</span> Сільське господарство, лісове господарство та харчова промисловість</h3>
+        <h3><span>🏛️</span> Політична карта світу: форми правління, державний устрій та міжнародні організації</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Рослинництво та тваринництво. Зональна спеціалізація сільського господарства України та світу.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Політична карта світу</strong> динамічно змінюється під впливом історичних, військових та економічних подій. На ній налічується близько 200 суверенних держав. За формою правління виділяють:
         </p>
-        <div class="quiz-card" id="quiz-container-16"></div>
+        <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
+          <li><strong>Республіки:</strong> влада належить обраним органам (президентські, парламентські та змішані республіки, наприклад Україна).</li>
+          <li><strong>Монархії:</strong> верховна влада формально передається у спадок (конституційні або абсолютні монархії, наприклад Велика Британія, Саудівська Аравія).</li>
+        </ul>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          За державним устроєм країни діляться на унітарні (один рівень законодавчої влади) та федеративні (складаються з автономних суб'єктів, наприклад США, Німеччина, Канада).
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Для врегулювання глобальних проблем і безпеки держави створюють міжнародні організації: глобальні (ООН, Світовий банк) та регіональні (Європейський Союз, НАТО, Рада Європи).
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/21MLy6o5oPk" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 17 -->
+    <!-- Тема 17 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🚚</span> Сфера послуг: транспорт, торгівля, туризм, фінансові та інформаційні послуги</h3>
+        <h3><span>🇪🇺</span> Регіони та країни світу: Європа та Азія — політико-географічний огляд</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Види транспорту (залізничний, автомобільний, морський, авіаційний, трубопровідний). Міжнародний туризм та торгівля.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Європа</strong> є компактним регіоном високого рівня соціально-економічного розвитку. Вона характеризується поглибленою інтеграцією в межах Європейського Союзу, зрілою ринковою економікою, високою часткою сфери послуг та переходом до зеленої енергетики. У географічному плані виділяють Західну, Північну, Південну, Східну Європу та країни Центрально-Східної Європи, куди входить і Україна.
         </p>
-        <div class="quiz-card" id="quiz-container-17"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          <strong>Азія</strong> — найбільша частина світу за площею та населенням. Вона поділяється на Східну (Китай, Японія, Південна Корея — світові центри інновацій і промисловості), Південну (Індія — центр швидкого демографічного та економічного зростання), Південно-Східну, Південно-Західну (регіон нафтовидобутку) та Центральну Азію.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/IK0_oLrJfps" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/LqPP_KmS5po" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 18 -->
+    <!-- Тема 18 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🇪🇺</span> Регіони світу: Європа, Азія, Америка, Африка, Океанія</h3>
+        <h3><span>🌎</span> Америка, Африка та Австралія: особливості економічного та соціального розвитку</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Економіко-географічна характеристика провідних регіонів та країн світу (США, Китай, Німеччина, Японія, Великобританія тощо).
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Північна Америка</strong> об'єднує високорозвинені США та Канаду з потужним науково-технічним потенціалом, транснаціональними компаніями та розвиненим агрокомплексом. <strong>Латинська Америка</strong> (Центральна і Південна Америка) спеціалізується на гірничорудному виробництві, нафтовидобутку (Венесуела, Бразилія) та експорті тропічних сільгоспкультур.
         </p>
-        <div class="quiz-card" id="quiz-container-18"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          <strong>Африка</strong> володіє колосальними запасами мінеральної сировини (золото, алмази, нафта, уран), але бореться зі структурними економічними та соціальними проблемами. <strong>Австралія та Океанія</strong> утворюють унікальний економічний регіон із високопродуктивним фермерським тваринництвом і гірничою промисловістю Австралійського Союзу.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/UYcygz2MhN0" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/MH4JZqpPZSc" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/Ac95M5jUNpI" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 19 -->
+    <!-- Тема 19 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🇺🇦</span> Економічні райони України та міжнародні зв'язки</h3>
+        <h3><span>♻️</span> Екологічні проблеми планети та сталий розвиток суспільства</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Сучасне районування України, зовнішньоекономічні зв'язки, експорт та імпорт товарів і послуг.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          Антропогенний вплив на географічну оболонку породив низку глобальних екологічних криз: глобальне потепління через парникові викиди, утворення озонових дір, руйнування лісових масивів (дефорестація), виснаження запасів прісної води та глобальне забруднення Світового океану пластиком.
         </p>
-        <div class="quiz-card" id="quiz-container-19"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Для подолання цих загроз ООН проголосила концепцію <strong>сталого розвитку</strong> (sustainable development). Вона передбачає задоволення потреб теперішніх поколінь без загрози для можливості майбутніх поколінь задовольняти власні потреби, що вимагає переходу до циркулярної економіки, де ресурси переробляються та використовуються повторно.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/jSu8O7O4q9M" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
-    <!-- ТЕМА 20 -->
+    <!-- Тема 20 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3><span>🌍</span> Глобальні проблеми людства та сталий розвиток</h3>
+        <h3><span>🛰️</span> Сучасні геоінформаційні системи (ГІС) та дистанційне зондування Землі</h3>
         <i class="fa-solid fa-chevron-down accordion-icon"></i>
       </div>
       <div class="accordion-content">
-        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
-          Екологічна, сировинна, енергетична, демографічна та продовольча проблеми. Концепція сталого розвитку.
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          У ХХІ столітті географія перетворилася на високотехнологічну галузь завдяки <strong>геоінформаційним системам (ГІС)</strong> та <strong>дистанційному зондуванню Землі (ДЗЗ)</strong>. Штучні супутники Землі виконують багатоспектральну зйомку поверхні в реальному часі, фіксуючи зміни рослинного покриву, температури океанів, рух повітряних мас та наслідки стихійних лих чи антропогенних аварій.
         </p>
-        <div class="quiz-card" id="quiz-container-20"></div>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          ГІС інтегрують цифрові карти з масивами баз даних, дозволяючи аналізувати просторові закономірності. Це критично важливо для навігації (GPS/GNSS), управління міським господарством (Smart City), точного землеробства (precision agriculture) та вирішення завдань безпеки й оборони.
+        </p>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/sxR2sD7puB0" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
 
@@ -542,227 +613,12 @@
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній портал «Історія і географія БЕЗ МЕЖ»</p>
   </footer>
 
-  <!-- Інтеграція Firebase SDK та скриптів -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyYourApiKeyHere",
-      authDomain: "history-geography-portal.firebaseapp.com",
-      projectId: "history-geography-portal",
-      storageBucket: "history-geography-portal.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    let currentUser = null;
-
-    onAuthStateChanged(auth, (user) => {
-      currentUser = user || null;
-    });
-
-    // База даних тестових питань для всіх 20 тем
-    const allQuizData = {
-      1: [
-        { q: "Що таке географічна карта?", options: ["Художній малюнок місцевості", "Математично узагальнене зменшене зображення земної поверхні на площині", "Фотографія з космічного супутника", "Точна тривимірна модель Землі"], correct: 1 },
-        { q: "Чому виникають спотворення при створенні карт?", options: ["Через різні мови підпису", "Неможливо розгорнути сферичну поверхню геоїда на площину без деформацій", "Через коливання рівня океану", "Через зміну орбіти Землі"], correct: 1 },
-        { q: "Які картографічні проєкції зберігають площі об'єктів без спотворення?", options: ["Рівнокутні", "Рівновеликі", "Довільні", "Перспективні"], correct: 1 },
-        { q: "Яка проєкція найчастіше використовується для карт помірних широт (зокрема України)?", options: ["Азимутальна", "Конічна", "Циліндрична", "Полярна"], correct: 1 },
-        { q: "Для картування яких територій найчастіше застосовують азимутальну проєкцію?", options: ["Полюсів та півкуль", "Вздовж усього екватора", "Виключно гірських масивів", "Океанічних жолобів"], correct: 0 },
-        { q: "Що показує масштаб карти?", options: ["Висоту місцевості", "Ступінь зменшення довжин ліній на карті порівняно з дійсною відстані", "Точну кількість населения", "Кут нахилу земної осі"], correct: 1 },
-        { q: "Який вигляд має чисельний масштаб?", options: ["Дріб виду 1 : 100 000", "Текстовий запис 'в 1 см 1 км'", "Графічна лінійка", "Градусна сітка"], correct: 0 },
-        { q: "Які умовні знаки використовуються для об'єктів, що не відтворюються в масштабі?", options: ["Позамасштабні", "Контурні", "Якісний фон", "Лінійні"], correct: 0 },
-        { q: "Що з перерахованого належить до лінійних умовних знаків?", options: ["Дороги, річки, кордони", "Озера та водосховища", "Млини та вітряки", "Заповідні лісові масиви"], correct: 0 },
-        { q: "Проєкція Меркатора належить до:", options: ["Циліндричних", "Конічних", "Азимутальних", "Псевдоконічних"], correct: 0 },
-        { q: "Як перетворити чисельний масштаб 1 : 25 000 в іменований?", options: ["В 1 см — 250 м", "В 1 см — 2.5 км", "В 1 см — 25 км", "В 1 см — 250 км"], correct: 0 },
-        { q: "Спосіб якісного фону на карті застосовують для:", options: ["Позначення типів ґрунтів чи ландшафтних зон", "Відображення висоти точок", "Позначення напрямку вітру", "Позначення точності координат"], correct: 0 }
-      ],
-      2: [
-        { q: "Яка тривалість зоряної доби обертання Землі навколо осі?", options: ["24 години точно", "23 год 56 хв 4 с", "25 годин", "365 днів"], correct: 1 },
-        { q: "Головним наслідком обертання Землі навколо власної осі є:", options: ["Зміна пір року", "Зміна дня і ночі", "Зміна сонячної активності", "Формування материків"], correct: 1 },
-        { q: "Як сила Коріоліса впливає на рух тіл у Північній півкулі?", options: ["Відхиляє праворуч за напрямком руху", "Відхиляє ліворуч за напрямком руху", "Зменшує швидкість руху", "Не чинить впливу"], correct: 0 },
-        { q: "Під яким кутом нахилена вісь Землі до площини орбіти?", options: ["90°", "66,5°", "23,5°", "45°"], correct: 1 },
-        { q: "Коли у Північній півкулі спостерігається день літнього сонцестояння?", options: ["21 березня", "22 червня", "23 вересня", "22 грудня"], correct: 1 },
-        { q: "В які дні тривалість дня і ночі на всій Землі однакова?", options: ["Дні рівнодення (21.03 та 23.09)", "Дні сонцестояння (22.06 та 22.12)", "Щомісяця 15 числа", "Тільки 1 січня"], correct: 0 },
-        { q: "Середня швидкість руху Землі по орбіті навколо Сонця становить близько:", options: ["30 км/с", "100 км/год", "300 км/с", "10 км/с"], correct: 0 },
-        { q: "Який географічний наслідок має обертання Землі навколо Сонця та нахил її осі?", options: ["Зміна пір року", "Виникнення припливів", "Формування цунамі", "Рух літосферних плит"], correct: 0 },
-        { q: "Яка планета за рахунком від Сонця є Земля?", options: ["Третя", "Друга", "Четверта", "П'ята"], correct: 0 },
-        { q: "Закон Бера пояснює:", options: ["Асиметричний розмив берегів річок під дією сили Коріоліса", "Зміну температури з висотою", "Залежність солоності від випаровування", "Швидкість вивітрювання"], correct: 0 },
-        { q: "У день зимового сонцестояння (22 грудня) в Північній півкулі:", options: ["Найдовший день", "Найкоротший день і найдовша ніч", "День дорівнює ночі", "Сонце не заходить"], correct: 1 },
-        { q: "Теплові пояси Землі утворюються внаслідок:", options: ["Нерівномірного розподілу сонячного тепла через кулястість Землі", "Вулканічної діяльності", "Різниці висот", "Впливу циклонів"], correct: 0 }
-      ],
-      3: [
-        { q: "З чого складається літосфера?", options: ["Тільки з земної кори", "З земної кори та верхньої частини мантії", "З ядра та мантії", "З атмосфери та гідросфери"], correct: 1 },
-        { q: "На якому в'язко-пластичному шарі мантії переміщуються літосферні плити?", options: ["Астеносфера", "Стратосфера", "Внутрішнє ядро", "Базальтовий шар"], correct: 0 },
-        { q: "Що виникає у зонах розходження (дивергентних межах) літосферних плит?", options: ["Серединно-океанічні хребти та рифтові долини", "Глибоководні жолоби", "Високі складчасті гори", "Мегаполіси"], correct: 0 },
-        { q: "Які гори утворилися внаслідок зіткнення Євразійської та Індостанської плит?", options: ["Гімалаї", "Анди", "Кордильєри", "Аппалачі"], correct: 0 },
-        { q: "Прикладом трансформного розлому є:", options: ["Розлом Сан-Андреас", "Маріанський жолоб", "Драконові гори", "Дніпровсько-Донецька западина"], correct: 0 },
-        { q: "До ендогенних процесів формування рельєфу належать:", options: ["Тектонічні рухи, магматизм, землетруси", "Вивітрювання, дія вітру та текучих вод", "Робота льодовиків", "Діяльність біосфери"], correct: 0 },
-        { q: "Головною рисою екзогенних процесів є:", options: ["Руйнування та згладжування великих нерівностей рельєфу", "Створення гірських систем", "Виверження вулканів", "Переміщення материків"], correct: 0 },
-        { q: "Чим материкова земна кора відрізняється від океанічної?", options: ["Вона товща і має додатковий гранітний шар", "Вона тонша і складається тільки з базальту", "Вона не має осадового шару", "Вона складається з заліза"], correct: 0 },
-        { q: "Місце під землею, де відбувається розрив гірських порід під час землетрусу:", options: ["Гіпоцентр (вогнище)", "Епіцентр", "Кратер", "Жерло"], correct: 0 },
-        { q: "Точка на земній поверхні, розташована безпосередньо над вогнищем землетрусу:", options: ["Епіцентр", "Гіпоцентр", "Рифт", "Щит"], correct: 0 },
-        { q: "При зіткненні океанічної плити з материковою утворюються:", options: ["Глибоководні жолоби та острівні дуги", "Серединно-океанічні хребти", "Рівнинні щити", "Артезіанські басейни"], correct: 0 },
-        { q: "Східно-Африканський рифт є прикладом:", options: ["Розходження літосферних плит на материку", "Зіткнення двох океанічних плит", "Згаслого кратера", "Вітрової ерозії"], correct: 0 }
-      ]
-    };
-
-    // Генерація типових питань для тем 4-20
-    for (let t = 4; t <= 20; t++) {
-      if (!allQuizData[t]) {
-        allQuizData[t] = [];
-        for (let q = 1; q <= 12; q++) {
-          allQuizData[t].push({
-            q: `Запитання ${q} з теми ${t}: Визначте основну закономірність чи характеристику поняття.`,
-            options: [`Правильне твердження варіанта А`, `Альтернативний варіант Б`, `Варіант В`, `Варіант Г`],
-            correct: 0
-          });
-        }
-      }
-    }
-
-    window.toggleAccordion = function(header) {
+  <!-- JavaScript для акордеона -->
+  <script>
+    function toggleAccordion(header) {
       const card = header.parentElement;
       card.classList.toggle('active');
-    };
-
-    // Стан тестування для кожної теми
-    const quizStates = {};
-
-    function renderQuiz(topicId) {
-      const container = document.getElementById(`quiz-container-${topicId}`);
-      if (!container) return;
-
-      if (!quizStates[topicId]) {
-        quizStates[topicId] = {
-          currentQuestion: 0,
-          answers: [],
-          selectedIndex: null,
-          isFinished: false
-        };
-      }
-
-      const state = quizStates[topicId];
-      const questions = allQuizData[topicId];
-      const total = questions.length;
-
-      if (state.isFinished) {
-        let score = 0;
-        questions.forEach((q, idx) => {
-          if (state.answers[idx] === q.correct) score++;
-        });
-
-        container.innerHTML = `
-          <div class="quiz-summary-box">
-            <h4 style="font-size:18px; color:#1e293b; margin-bottom:10px;">Тест завершено!</h4>
-            <p style="font-size:16px; color:#059669; font-weight:700; margin-bottom:15px;">
-              Ваш результат: ${score} з ${total} балів.
-            </p>
-            <button onclick="restartQuiz(${topicId})" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Пройти знову</button>
-          </div>
-        `;
-
-        if (currentUser) {
-          saveToFirebase(topicId, score);
-        }
-        return;
-      }
-
-      const qData = questions[state.currentQuestion];
-
-      let optionsHtml = '';
-      const letters = ['А', 'Б', 'В', 'Г'];
-      qData.options.forEach((opt, idx) => {
-        const isSelected = state.selectedIndex === idx ? 'selected' : '';
-        optionsHtml += `
-          <button class="quiz-option-btn ${isSelected}" onclick="selectOption(${topicId}, ${idx})">
-            <strong>${letters[idx]})</strong>&nbsp;${opt}
-          </button>
-        `;
-      });
-
-      const isBtnActive = state.selectedIndex !== null ? 'active' : '';
-
-      container.innerHTML = `
-        <div class="quiz-header">
-          📝 <span>Інтерактивний перевірочний тест</span>
-        </div>
-        <div class="quiz-badge">Запитання ${state.currentQuestion + 1} з ${total}</div>
-        <div class="quiz-question-text">${qData.q}</div>
-        <div class="quiz-options-list">${optionsHtml}</div>
-        <button class="quiz-next-btn ${isBtnActive}" onclick="nextQuestion(${topicId})">
-          ${state.currentQuestion + 1 === total ? 'Завершити тест' : 'Наступне запитання ➔'}
-        </button>
-      `;
     }
-
-    window.selectOption = function(topicId, index) {
-      quizStates[topicId].selectedIndex = index;
-      renderQuiz(topicId);
-    };
-
-    window.nextQuestion = function(topicId) {
-      const state = quizStates[topicId];
-      if (state.selectedIndex === null) return;
-
-      state.answers[state.currentQuestion] = state.selectedIndex;
-      state.selectedIndex = null;
-
-      if (state.currentQuestion + 1 < allQuizData[topicId].length) {
-        state.currentQuestion++;
-      } else {
-        state.isFinished = true;
-      }
-      renderQuiz(topicId);
-    };
-
-    window.restartQuiz = function(topicId) {
-      quizStates[topicId] = {
-        currentQuestion: 0,
-        answers: [],
-        selectedIndex: null,
-        isFinished: false
-      };
-      renderQuiz(topicId);
-    };
-
-    async function saveToFirebase(topicId, score) {
-      try {
-        const userRef = doc(db, "users", currentUser.uid);
-        const userSnap = await getDoc(userRef);
-
-        let geoScores = {};
-        if (userSnap.exists() && userSnap.data().geographyScores) {
-          geoScores = userSnap.data().geographyScores;
-        }
-
-        if (!geoScores[`topic_${topicId}`] || score > geoScores[`topic_${topicId}`]) {
-          geoScores[`topic_${topicId}`] = score;
-          const totalGeoScore = Object.values(geoScores).reduce((a, b) => a + b, 0);
-
-          await setDoc(userRef, {
-            geographyScores: geoScores,
-            geographyTotalScore: totalGeoScore,
-            updatedAt: new Date()
-          }, { merge: true });
-        }
-      } catch (e) {
-        console.error("Помилка збереження в Firebase:", e);
-      }
-    }
-
-    // Ініціалізація тестів при завантаженні
-    document.addEventListener("DOMContentLoaded", () => {
-      for (let t = 1; t <= 20; t++) {
-        renderQuiz(t);
-      }
-    });
   </script>
 
 </body>
