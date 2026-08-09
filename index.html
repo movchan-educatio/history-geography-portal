@@ -746,95 +746,43 @@
       if (user) {
         window.currentStudent = user.displayName;
         window.currentUserUid = user.uid;
-
+        
         const userRef = ref(database, 'users/' + user.uid);
         get(userRef).then((snapshot) => {
           const historyTestPoints = parseInt(localStorage.getItem('total_history_points')) || 0;
           const geographyTestPoints = parseInt(localStorage.getItem('total_geography_points')) || 0;
           const totalTestPoints = historyTestPoints + geographyTestPoints;
 
-          // Результати НМТ з localStorage
-          const historyNmtScore = parseInt(localStorage.getItem('nmt_history_score')) || 0;
-          const historyNmtTotal = parseInt(localStorage.getItem('nmt_history_total')) || 0;
-          const geographyNmtScore = parseInt(localStorage.getItem('nmt_geography_score')) || 0;
-          const geographyNmtTotal = parseInt(localStorage.getItem('nmt_geography_total')) || 0;
-
           if (!snapshot.exists()) {
-            const totalNmtPoints = historyNmtScore + geographyNmtScore;
-
             set(userRef, {
               name: user.displayName,
-              score: 5 + totalTestPoints + totalNmtPoints,
+              score: 5 + totalTestPoints,
               total_history_points: historyTestPoints,
-              total_geography_points: geographyTestPoints,
-
-              nmt_history_score: historyNmtScore,
-              nmt_history_total: historyNmtTotal,
-              nmt_geography_score: geographyNmtScore,
-              nmt_geography_total: geographyNmtTotal,
-              nmt_total_score: totalNmtPoints
+              total_geography_points: geographyTestPoints
             });
           } else {
             const currentData = snapshot.val();
             const currentScore = currentData.score || 0;
-
             const savedHistPoints = currentData.total_history_points || 0;
             const savedGeoPoints = currentData.total_geography_points || 0;
-
-            const savedNmtHistoryScore = currentData.nmt_history_score || 0;
-            const savedNmtGeographyScore = currentData.nmt_geography_score || 0;
-
+            
             let diff = 0;
             let updates = {};
 
-            // Звичайні бали
             if (historyTestPoints > savedHistPoints) {
-              diff += historyTestPoints - savedHistPoints;
+              diff += (historyTestPoints - savedHistPoints);
               updates.total_history_points = historyTestPoints;
             }
-
             if (geographyTestPoints > savedGeoPoints) {
-              diff += geographyTestPoints - savedGeoPoints;
+              diff += (geographyTestPoints - savedGeoPoints);
               updates.total_geography_points = geographyTestPoints;
             }
 
-            // НМТ: додаємо тільки різницю, якщо результат став більшим
-            if (historyNmtScore > savedNmtHistoryScore) {
-              diff += historyNmtScore - savedNmtHistoryScore;
-            }
-
-            if (geographyNmtScore > savedNmtGeographyScore) {
-              diff += geographyNmtScore - savedNmtGeographyScore;
-            }
-
-            if (historyNmtScore >= savedNmtHistoryScore) {
-              updates.nmt_history_score = historyNmtScore;
-              updates.nmt_history_total = historyNmtTotal;
-            }
-
-            if (geographyNmtScore >= savedNmtGeographyScore) {
-              updates.nmt_geography_score = geographyNmtScore;
-              updates.nmt_geography_total = geographyNmtTotal;
-            }
-
-            const newNmtTotal = Math.max(
-              savedNmtHistoryScore + savedNmtGeographyScore,
-              historyNmtScore + geographyNmtScore
-            );
-
-            updates.nmt_total_score = newNmtTotal;
-
-            // Оновлюємо загальний score тільки на нові бали
             if (diff > 0) {
               updates.score = currentScore + diff;
-            }
-
-            if (Object.keys(updates).length > 0) {
               update(userRef, updates);
             }
           }
-        }).catch((error) => {
-          console.error('Помилка синхронізації балів:', error);
         });
 
         authBox.innerHTML = `
@@ -850,6 +798,7 @@
       }
     });
 
+    // ПЕРЕВІРКА ТА ЩОТИЖНЕВЕ СКИДАННЯ БАЛІВ І ПОВІДОМЛЕНЬ (НЕДІЛЯ о 23:59)
     function checkWeeklyReset() {
       const now = new Date();
       const day = now.getDay();
@@ -1205,12 +1154,263 @@
       { title: "Полтавська битва (1709)", short: "Зіткнення у Північній війні за участю Мазепи.", full: "Поразка гетьмана Івана Мазепи та шведського короля Карла XII від військ Петра I призвела до втрати автономії Гетьманщини." },
       { title: "Ліквідація Запорозької Січі (1775)", short: "Остаточне знищення російськими військами останньої Січі.", full: "За наказом імператриці Катерини II російські війська зруйнували Нову Січ, остаточно ліквідувавши козацьке самоврядування." },
       { title: "Відкриття Львівського університету (1661)", short: "Найстаріший вищий навчальний заклад в Україні.", full: "Король Польщі Ян II Казимир надав єзуїтській колегії у Львові статус академії з правом присвоєння вчених ступенів." },
-      { title: "Створення Кирило-Мефодіївського братства (1845)", short: "Таємна політична організація в Києві.", full: "До товариства входили Тарас Шевченко, Микола Костомаров, Пантелеймон Куліш, які пропагували ідеї слов'янської федерації." },
+      { title: "Створення Кирило-Мефодіївського братства (1845)", short: "Таємна политична організація в Києві.", full: "До товариства входили Тарас Шевченко, Микола Костомаров, Пантелеймон Куліш, які пропагували ідеї слов'янської федерації." },
       { title: "Видання «Кобзаря» Тараса Шевченка (1840)", short: "Початок нової української літератури.", full: "У Санкт-Петербурзі вийшла друком перша збірка віршів Тараса Шевченка, яка назавжди змінила українську національну свідомість." },
       { title: "Скасування кріпацтва в Російській імперії (1861)", short: "Маніфест Олександра II про звільнення селян.", full: "Селяни отримали особисту свободу, проте реформа вимагала тривалого викупу земельних наділів." },
       { title: "Валуєвський циркуляр (1863)", short: "Таємне розпорядження про обмеження української мови.", full: "Міністр внутрішніх справ Петро Валуєв заборонив друк літератури українською мовою, стверджуючи, що її «не було, немає і бути не може»." },
-      { title: "Емський указ (1876)", short: "Повна заборона на ввезення та друк українських книг.", full: "Підписаний імператором Олександром II у Німеччині, цей указ забороняв будь-які українські видання та"
+      { title: "Емський указ (1876)", short: "Полна заборона на ввезення та друк українських книг.", full: "Підписаний імператором Олександром II у Німеччині, цей указ забороняв будь-які українські видання та театральні вистави." },
+      { title: "Утворення Української Центральної Ради (1917)", short: "Головний представницький орган у період революції.", full: "Очолювана Михайлом Грушевським, Центральна Рада пройшла шлях від автономії до проголошення незалежності УНР." },
+      { title: "IV Універсал Центральної Ради (1918)", short: "Проголошення повної незалежності УНР.", full: "22 січня 1918 року УНР проголосила себе суверенною та незалежною державою." },
+      { title: "Акт Злуки УНР і ЗУНР (1919)", short: "Об'єднання українських земель у єдину соборну державу.", full: "22 січня 1919 року на Софійській площі в Києві урочисто проголошено об'єднання Української Народної Республіки та Західноукраїнської Народної Республіки." },
+      { title: "Початок Першої світової війни (1914)", short: "Українські землі розділені між двома імперіями.", full: "Галичина опинилась у складі Австро-Угорщини, а Наддніпрянщина — у складі Росії, що призвело до братовбивчого протистояння." },
+      { title: "Голодомор в Україні (1932–1933)", short: "Штучний масовий голод, влаштований радянським тоталітарним режимом.", full: "Геноцид українського народу, що забрав життя мільйонів невинних селян та назавжди змінив демографічну карту країни." },
+      { title: "Друга світова війна на українських землях (1939–1945)", short: "Масштабні бойові дії та руйнування.", full: "Україна стала ареною найзапекліших боїв між арміями гітлерівської Німеччини та сталінського СРСР." },
+      { title: "Проголошення Карпатської України (1939)", short: "Спроба створення незалежної держави в Закарпатті.", full: "15 березня 1939 року собор у Хусті проголосив незалежність Карпатської України, яка героично чинила опір угорській окупації." },
+      { title: "Депортація кримських татар (1944)", short: "Насильницьке виселення корінного народу Криму.", full: "Сталінський режим депортував увесь кримськотатарський народ до Середньої Азії та Уралу." },
+      { title: "Входження Криму до складу УРСР (1954)", short: "Передача Кримської області.", full: "У лютому 1954 року Президія Верховної Ради СРСР передала Кримську область до складу Української РСР через економічні та господарські зв'язки." },
+      { title: "Чорнобильська катастрофа (1986)", short: "Найбільша техногенна аварія в історії атомної енергетики.", full: "26 квітня 1986 року стався вибух на 4-му енергоблоці ЧАЕС, наслідки якого відчули мільйони людей у всьому світі." },
+      { title: "Помаранчева революція (2004)", short: "Масові протести проти фальсифікації виборів.", full: "Громадянське суспільство в Україні виступило на захист своїх демократичних прав та свобод." },
+      { title: "Революція Гідності (2013–2014)", short: "Боротьба за європейський вибір та демократію.", full: "Доленосні події зими 2014 року, які коштували життя Героїв Небесної Сотні, що відстояли суверенітет України." },
+      { title: "Повномасштабна оборона України (з 2022)", short: "Героїчний опір агресії та захист незалежності.", full: "Український народ продемонстрував небувалу єдність, хоробрість та стійкість у боротьбі за свою свободу." }
     ];
+
+    const geoFacts = [
+      { title: "Амазонка — річка без мостів", short: "Найповноводніша річка планети не має жодного мосту.", full: "Головна причина відсутності мостів — м'які береги, сезонні розливи на кілометри та відсутність великих доріг у джунглях." },
+      { title: "Найглибше озеро — Байкал", short: "Містить близько 20% світових запасів прісної води.", full: "Байкал — найдавніше, найчистіше та найглибше озеро планети, розташоване у Східному Сибіру." },
+      { title: "Пустеля Сахара колись була зеленою", short: "Тисячоліття тому тут шуміли савани та річки.", full: "Завдяки змінам клімату та нахилу земної осі Сахара циклічно зеленіє кожні кілька тисяч років." },
+      { title: "Найвища вершина світу — Еверест", short: "Йому немає рівних за висотою над рівнем моря.", full: "Гора Джомолунгма підіймається на 8848 метрів у Гімалаях і продовжує повільно рости щороку." },
+      { title: "Найсухіше місце — пустеля Атакама", short: "Деякі метеостанції там ніколи не фіксували дощу.", full: "Розташована в Чилі, Атакама є найсухішою пустелею через холодну течію та високі гори." },
+      { title: "Найбільший океан — Тихий", short: "Він більший за всі материки разом узяті.", full: "Тихий океан займає третину поверхні Землі та містить найглибшу точку — Маріанську западину." },
+      { title: "Найменший океан — Північний Льодовитий", short: "Він переважно вкритий крижаним панциром.", full: "Цей океан має найменшу глибину та унікальну арктичну екосистему." },
+      { title: "Найнижча точка суходолу — Мертве море", short: "Розташоване на 430 метрів нижче рівня моря.", full: "Через неймовірну солоність вода в Мертвому морі настільки щільна, що людина може вільно лежати на поверхні." },
+      { title: "Найвища точка України — Говерла", short: "Її висота становить 2061 метр.", full: "Говерла розташована в масиві Чорногора в Карпатах і є найпопулярнішою вершиною для туристів." },
+      { title: "Найдовша гірська система — Анди", short: "Простягнулися уздовж усього західного узбережжя Південної Америки.", full: "Довжина Анд перевищує 7000 кілометрів, охоплюючи кілька кліматичних зон." },
+      { title: "Найбільший острів світу — Гренландія", short: "Більша частина острова вкрита потужним льодовиком.", full: "Попри назву 'зелена земля', Гренландія переважно біла через крижаний щит." },
+      { title: "Найжаркіше місце на Землі — Долина Смерті", short: "Зафіксовано температурний рекорд понад +56°C.", full: "Пустеля в Каліфорнії (США) має унікальну форму котловану, що затримує спеку." },
+      { title: "Найхолодніше місце — Антарктида", short: "Зафіксовано рекорд температури -89.2°C.", full: "Антарктида — найвіддаленіший, найсухіший і найвітряніший материк планети." },
+      { title: "Найдовша річка — Ніл (або Амазонка)", short: "Суперечки вчених тривають десятиліттями.", full: "Залежно від методу вимірювання витоку першість ділять Ніл у Африці та Амазонка в Південній Америці." },
+      { title: "Найбільше озеро-море — Каспійське", short: "Це найбільша внутрішня водойма на Землі.", full: "Каспій має солонувату воду і площу, що перевищує багато європейських країн." },
+      { title: "Найбільший півострів — Аравійський", short: "Центральна частина зайнята безплідними пустелями.", full: "Півострів славиться родовищами нафти та екстремально спекотним кліматом." },
+      { title: "Найбільший архіпелаг — Малайський", short: "Складається з понад 25 000 островів.", full: "Розташований між Азією та Австралією, включає Індонезію та Філіппіни." },
+      { title: "Найвищий водоспад — Анхель", short: "Вода падає з висоти майже 979 метрів.", full: "Розташований у тропічних лісах Венесуели, водоспад настільки високий, що вода розпилюється в туман." },
+      { title: "Тихоокеанське вогняне кільце", short: "Зона концентрації більшості вулканів і землетрусів.", full: "Опаясує весь Тихий океан, будучи тектонічно найактивнішим регіоном планети." },
+      { title: "Острів Мадагаскар", short: "Батьківщина унікальних ендеміків, зокрема лемурів.", full: "Ізольованість острова дозволила розвинутися унікальній флорі та фауні, що не зустрічаються більше ніде." },
+      { title: "Найбільша країна світу за площею — Росія", short: "Охоплює 11 часових поясів.", full: "Простягається від Східної Європи до Тихого океану." },
+      { title: "Найменша країна — Ватикан", short: "Місто-держава всередині Рима.", full: "Його площа становить лише близько 44 гектарів." },
+      { title: "Найбільша кількість населення — Індія та Китай", short: "Дві найбільші країни за чисельністю.", full: "Кожна з них налічує понад 1,4 мільярда мешканців." },
+      { title: "Найбільший масив тропічних лісів — Амазонія", short: "Легендарні легеневі тканини планети.", full: "Виробляють величезну кількість кисню та приховують незвідані види рослин і тварин." },
+      { title: "Найдвіжніший материк — Антарктида", short: "Дрейфує завдяки тектоніці плит.", full: "Весь материк повільно зміщується на південь." },
+      { title: "Найдовший державний кордон — США та Канада", short: "Протяжність становить майже 9 000 кілометрів.", full: "Це найдовший у світі демілітаризований кордон між двома країнами." },
+      { title: "Найбільший півострів Європи — Скандинавський", short: "Має мальовничі фіорди та гори.", full: "Омивається кількома морями Атлантичного океану." },
+      { title: "Найглибша точка океану — Безодня Челленджера", short: "Глибина Маріанської западини сягає майже 11 км.", full: "Тиск там настільки колосальний, що дорівнює вазі десятків слонів на квадратний сантиметр." },
+      { title: "Найбільше озеро України — Ялпуг", short: "Прісноводне лиманне озеро на півдні Одещини.", full: "Відіграє величезну екологічну та господарську роль регіону." },
+      { title: "Найсолоніше озеро України — Сиваш", short: "Мілководна система затоки Азовського моря.", full: "Має величезні поклади лікувальних грязей та солей." }
+    ];
+
+    const countriesGameData = [
+      { country: "Франція", text: "Ейфелева вежа влітку стає вищою приблизно на 15 см через теплове розширення.", isTrue: true },
+      { country: "Австралія", text: "У цій країні офіційно заборонено тримати вдома ведмедів коал.", isTrue: true },
+      { country: "Японія", text: "На території Японії розташовано рівно 10 діючих вулканів і жодного сплячого.", isTrue: false },
+      { country: "Італія", text: "У місті Венеція немає автомобільних доріг, весь транспорт пересувається по каналах.", isTrue: true },
+      { country: "Канада", text: "У Канаді більше озер, ніж у всіх інших країнах світу разом узятих.", isTrue: true },
+      { country: "Бразилія", text: "Офіційною мовою Бразилії є іспанська.", isTrue: false },
+      { country: "Ісландія", text: "В Ісландії практично немає комаров через специфічний клімат.", isTrue: true },
+      { country: "Єгипет", text: "Більшу частину території країни займає пустеля Сахара.", isTrue: true },
+      { country: "Велика Британія", text: "У Лондоні заборонено вмирати в будівлі парламенту за законами давнини.", isTrue: true },
+      { country: "США", text: "У штаті Аляска сонце може не заходити протягом кількох тижнів влітку.", isTrue: true },
+      { country: "Німеччина", text: "Берлін за кількістю мостів перевершує навіть Венецію.", isTrue: true },
+      { country: "Мексика", text: "Столиця Мексики місто Мехіко побудоване на дні висохлого озера.", isTrue: true },
+      { country: "Китай", text: "Велика Китайська стіна повністю видима з космосу неозброєним оком.", isTrue: false },
+      { country: "Норвегія", text: "У деяких містах Норвегії сонце не з'являється з-об горизонту місяцями взимку.", isTrue: true },
+      { country: "Швейцарія", text: "У Швейцарії заборонено змивати унітаз у квартирах після 22:00 за законом про шум.", isTrue: false },
+      { country: "Індія", text: "В Індії є єдиний у світі плавучий поштовий відділення на озері Дал.", isTrue: true },
+      { country: "ПАР", text: "Південно-Африканська Республіка має одразу три столиці.", isTrue: true },
+      { country: "Аргентина", text: "Назва країни походить від латинського слова 'срібло'.", isTrue: true },
+      { country: "Фінляндія", text: "Фінляндія офіційно визнана країною з найщасливішим населенням.", isTrue: true },
+      { country: "Греція", text: "Понад 80% території Греції займають рівнини та поля.", isTrue: false },
+      { country: "Швеція", text: "У Швеції розташований відомий крижаний готель, який щороку будують заново.", isTrue: true },
+      { country: "Монголія", text: "Монголія має найменшу щільність населення серед незалежних держав світу.", isTrue: true },
+      { country: "Таїланд", text: "Таїланд офіційно ніколи не був колонією жодної європейської держави.", isTrue: true },
+      { country: "Кенія", text: "Через територію Кенії проходить лінія екватора.", isTrue: true },
+      { country: "Нова Зеландія", text: "У Новій Зеландії мешкає більше людей, ніж овець.", isTrue: false },
+      { country: "Португалія", text: "Лісабон є однією з найдавніших столиць Західної Європи.", isTrue: true },
+      { country: "Чилі", text: "Чилі є однією з найвужчих і найдовших країн світу у формі смуги.", isTrue: true },
+      { country: "В'єтнам", text: "В'єтнам є найбільшим експортером кави арабіка у світі.", isTrue: false },
+      { country: "Перу", text: "Стародавнє місто інків Мачу-Пікчу розташоване високо в Андах.", isTrue: true },
+      { country: "Туреччина", text: "Стамбул — єдине у світі місто, розташоване одразу на двох континентах.", isTrue: true },
+      { country: "Мадагаскар", text: "Понад 90% дикої природи цього острова не зустрічається більше ніде на Землі.", isTrue: true },
+      { country: "Південна Корея", text: "Сеул є одним із найтехнологічніших мегаполісів світу з найшвидшим інтернетом.", isTrue: true },
+      { country: "Нідерланди", text: "Більша частина території Нідерландів лежить нижче рівня моря.", isTrue: true },
+      { country: "Ірландія", text: "В Ірландії повністю відсутні змії через географічну ізоляцію.", isTrue: true },
+      { country: "Ватикан", text: "Ватикан має власну залізницю довжиною лише кілька сотень метрів.", isTrue: true },
+      { country: "Монако", text: "Князівство Монако є найбільшою країною за площею в Європі.", isTrue: false },
+      { country: "Куба", text: "На Кубі досі масово їздять старовинні американські автомобілі середини XX століття.", isTrue: true },
+      { country: "Марокко", text: "У Марокко розташована одна з найспекотніших пустель світу — Сахара.", isTrue: true },
+      { country: "Україна", text: "Географічний центр Європи офіційно розташований на Закарпатті біля Ділового.", isTrue: true },
+      { country: "Австрія", text: "Відень неодноразово очолював рейтинги найкращих для життя міст планети.", isTrue: true },
+      { country: "Бельгія", text: "Бельгія є світовою столицею шоколаду та має тисячі сортів пива.", isTrue: true }
+    ];
+
+    let currentCountryGameIndex = 0;
+
+    /* --- ЛОГІКА ГЛОБАЛЬНОГО ПОШУКУ ПО САЙТУ --- */
+    const siteSearchIndex = [
+      { title: "📜 Розділ: Історія", desc: "Уроки, історичні матеріали та інтерактивні тести з історії", url: "history.html" },
+      { title: "🌍 Розділ: Географія", desc: "Географічні карти, конспекти та практичні завдання", url: "geography.html" },
+      { title: "🎓 Тренажер НМТ", desc: "Онлайн-тестування та підготовка до НМТ з історії та географії", url: "nmt.html" },
+      { title: "📚 Методична скарбничка", desc: "Корисні розробки, методички та інструменти для вчителів", url: "methodology.html" },
+      { title: "🎧 AUDIO & 3D Віртуальні Тури", desc: "Аудіоекскурсії та віртуальне занурення у видатні місця", url: "tours.html" },
+      { title: "🏺 3D Артефакти", desc: "Інтерактивні тривимірні моделі історичних артефактів", url: "artifacts.html" },
+      { title: "▶️ YouTube-канал «Реальна історія»", desc: "Відеоматеріали та історичні розслідування на YouTube", url: "https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" },
+      { title: "🦖 Клуб дослідників & Динозаврик", desc: "Зона розваг, міні-ігри та студентська стіна коментарів", url: "#kids-club" }
+    ];
+
+    // Додаємо факти до пошукового індексу
+    keyEvents.forEach(evt => {
+      siteSearchIndex.push({
+        title: `📜 Історія: ${evt.title}`,
+        desc: evt.short,
+        url: "history.html"
+      });
+    });
+
+    geoFacts.forEach(fact => {
+      siteSearchIndex.push({
+        title: `🌍 Географія: ${fact.title}`,
+        desc: fact.short,
+        url: "geography.html"
+      });
+    });
+
+    function setupSiteSearch() {
+      const searchInput = document.getElementById('siteSearchInput');
+      const searchResults = document.getElementById('searchResults');
+      if (!searchInput || !searchResults) return;
+
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+          searchResults.style.display = 'none';
+          searchResults.innerHTML = '';
+          return;
+        }
+
+        const filtered = siteSearchIndex.filter(item => 
+          item.title.toLowerCase().includes(query) || 
+          item.desc.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+          searchResults.innerHTML = `<div class="search-result-item" style="color: #64748b; font-size: 13px;">Нічого не знайдено за запитом "${e.target.value}"</div>`;
+        } else {
+          searchResults.innerHTML = filtered.slice(0, 8).map(item => `
+            <a href="${item.url}" class="search-result-item">
+              <div class="search-result-title">${item.title}</div>
+              <div class="search-result-desc">${item.desc}</div>
+            </a>
+          `).join('');
+        }
+        searchResults.style.display = 'block';
+      });
+
+      // Перехід за натисканням Enter
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const firstLink = searchResults.querySelector('a');
+          if (firstLink) {
+            window.location.href = firstLink.getAttribute('href');
+          }
+        }
+      });
+
+      // Закриття результатів при кліку поза полем пошуку
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+          searchResults.style.display = 'none';
+        }
+      });
+    }
+
+    function initPageData() {
+      setupTravelerAnimation();
+      updateDinoHighScoreUI();
+      setupSiteSearch();
+
+      // Завантаження випадкового факту історії
+      const randomHist = keyEvents[Math.floor(Math.random() * keyEvents.length)];
+      const histElement = document.getElementById('event-content');
+      if (histElement) {
+        histElement.innerHTML = `<strong>${randomHist.title}</strong><br>${randomHist.short}`;
+        window.currentHistFact = randomHist;
+      }
+
+      // Завантаження випадкового факту географії
+      const randomGeo = geoFacts[Math.floor(Math.random() * geoFacts.length)];
+      const geoElement = document.getElementById('geo-content');
+      if (geoElement) {
+        geoElement.innerHTML = `<strong>${randomGeo.title}</strong><br>${randomGeo.short}`;
+        window.currentGeoFact = randomGeo;
+      }
+
+      // Завантаження гри "Правда чи Брехня"
+      currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
+      const gameItem = countriesGameData[currentCountryGameIndex];
+      const gameTextElem = document.getElementById('country-game-text');
+      if (gameTextElem) {
+        gameTextElem.innerHTML = `🏳️ <strong>${gameItem.country}:</strong> ${gameItem.text}`;
+      }
+    }
+
+    function checkCountryGame(userAnswer) {
+      const gameItem = countriesGameData[currentCountryGameIndex];
+      const resultElem = document.getElementById('country-game-result');
+      if (!resultElem) return;
+
+      resultElem.style.display = 'block';
+      if (userAnswer === gameItem.isTrue) {
+        resultElem.style.background = '#dcfce7';
+        resultElem.style.color = '#15803d';
+        resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +5 балів!';
+        addPoints(5);
+      } else {
+        resultElem.style.background = '#fee2e2';
+        resultElem.style.color = '#b91c1c';
+        resultElem.innerHTML = '❌ Неправильно! Спробуйте ще раз.';
+      }
+
+      setTimeout(() => {
+        currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
+        const nextItem = countriesGameData[currentCountryGameIndex];
+        const gameTextElem = document.getElementById('country-game-text');
+        if (gameTextElem) {
+          gameTextElem.innerHTML = `🏳️ <strong>${nextItem.country}:</strong> ${nextItem.text}`;
+        }
+        resultElem.style.display = 'none';
+      }, 3000);
+    }
+
+    function openModal(type) {
+      const modal = document.getElementById('info-modal');
+      const titleElem = document.getElementById('modal-title');
+      const textElem = document.getElementById('modal-text');
+
+      if (type === 'event' && window.currentHistFact) {
+        titleElem.textContent = window.currentHistFact.title;
+        textElem.textContent = window.currentHistFact.full;
+      } else if (type === 'geo' && window.currentGeoFact) {
+        titleElem.textContent = window.currentGeoFact.title;
+        textElem.textContent = window.currentGeoFact.full;
+      }
+
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('info-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', initPageData);
   </script>
 </body>
 </html>
