@@ -276,7 +276,7 @@
 
       <div id="history-questions-container"></div>
 
-      <div id="history-check-container" style="text-align: center; margin-top: 25px; display: none;">
+      <div style="text-align: center; margin-top: 25px;">
         <button class="btn-check" style="background: #2563eb;" onclick="checkTest('history', 30)">Перевірити тест з історії</button>
         <div id="history-result" style="margin-top: 15px; font-size: 18px; font-weight: 700;"></div>
       </div>
@@ -290,13 +290,41 @@
 
       <div id="geography-questions-container"></div>
 
-      <div id="geography-check-container" style="text-align: center; margin-top: 25px; display: none;">
+      <div style="text-align: center; margin-top: 25px;">
         <button class="btn-check" style="background: #059669;" onclick="checkTest('geography', 30)">Перевірити тест з географії</button>
         <div id="geography-result" style="margin-top: 15px; font-size: 18px; font-weight: 700;"></div>
       </div>
     </div>
 
   </main>
+
+  <!-- Firebase SDK версії 8 (компактна, чудово підходить для HTML-проєктів) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  
+  <script>
+    // ==========================================
+    // TODO: ІНІЦІАЛІЗАЦІЯ FIREBASE
+    // Вставте ваші ключі Firebase у цей об'єкт
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    let db;
+    if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      db = firebase.database();
+    }
+  </script>
 
   <!-- Скрипти для генерації, перемішування, перевірки тестів та експорту -->
   <script>
@@ -376,95 +404,93 @@
       return arr;
     }
 
-    // НОВА ФУНКЦІЯ: Перемикання на наступне питання
-    function nextQuestion(type, currentIndex) {
-      setTimeout(() => {
-        const currentCard = document.getElementById(`${type}-qcard-${currentIndex}`);
-        const nextCard = document.getElementById(`${type}-qcard-${currentIndex + 1}`);
-        
-        if (currentCard && nextCard) {
-          currentCard.style.display = 'none'; // приховуємо поточне
-          nextCard.style.display = 'block';   // показуємо наступне
-        } else if (!nextCard) {
-          // Якщо це останнє питання - відкриваємо кнопку перевірки
-          const checkBtnContainer = document.getElementById(`${type}-check-container`);
-          if (checkBtnContainer) checkBtnContainer.style.display = 'block';
-        }
-      }, 400); // 400мс затримки, щоб дитина встигла побачити, куди натиснула
-    }
-
-    // НОВА ФУНКЦІЯ: Синхронізація результатів із Firebase
-    function syncScoreWithFirebase(subject, score) {
-      try {
-        // Якщо у вашому проєкті вже підключено Firebase і є авторизація:
-        if (typeof firebase !== 'undefined' && firebase.database) {
-          const user = firebase.auth().currentUser;
-          if (user) {
-            // Записуємо бали до бази даних за ID користувача
-            firebase.database().ref(`students/${user.uid}/activityScores/${subject}`).set(score)
-              .then(() => console.log(`Бали за ${subject} успішно збережено на Firebase!`))
-              .catch((err) => console.error('Помилка збереження на Firebase:', err));
-          } else {
-            console.log('Користувач не авторизований у Firebase.');
-          }
-        }
-      } catch (error) {
-        console.error('Помилка синхронізації з Firebase:', error);
-      }
-    }
-
     function renderTests() {
-      // Перемішуємо самі запитання випадковим чином
-      const shuffledHistory = shuffleArray(historyData);
-      const histContainer = document.getElementById('history-questions-container');
-      let histHTML = '';
-      
-      shuffledHistory.forEach((item, index) => {
-        let optionsWithMeta = item.opts.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.ans }));
-        optionsWithMeta = shuffleArray(optionsWithMeta);
+      const tests = [
+        { id: 'history', data: historyData, containerId: 'history-questions-container' },
+        { id: 'geography', data: geographyData, containerId: 'geography-questions-container' }
+      ];
 
-        // ЗМІНЕНО: Додано унікальний ID та стиль для приховування всіх питань, окрім першого
-        histHTML += `<div class="quiz-card" id="history-qcard-${index}" style="display: ${index === 0 ? 'block' : 'none'};">
-          <div class="quiz-question">${index + 1}. ${item.q.replace(/^\d+\.\s*/, '')}</div><div class="quiz-options">`;
+      tests.forEach(test => {
+        const shuffledData = shuffleArray(test.data);
+        const container = document.getElementById(test.containerId);
+        let html = '';
         
-        optionsWithMeta.forEach((optObj) => {
-          const val = optObj.isCorrect ? 'correct' : 'wrong';
-          // ЗМІНЕНО: Додано подію onchange для перемикання на наступне питання
-          histHTML += `<label><input type="radio" name="hist_q${index}" value="${val}" onchange="nextQuestion('history', ${index})"> ${optObj.text}</label>`;
+        shuffledData.forEach((item, index) => {
+          let optionsWithMeta = item.opts.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.ans }));
+          optionsWithMeta = shuffleArray(optionsWithMeta);
+
+          // Показуємо лише перше запитання, інші приховуємо
+          const displayStyle = index === 0 ? 'block' : 'none';
+          
+          html += `<div id="${test.id}_card_${index}" class="quiz-card" style="display: ${displayStyle};">
+                     <div class="quiz-question">${index + 1}. ${item.q.replace(/^\d+\.\s*/, '')}</div>
+                     <div class="quiz-options">`;
+          
+          optionsWithMeta.forEach((optObj) => {
+            const val = optObj.isCorrect ? 'correct' : 'wrong';
+            html += `<label><input type="radio" name="${test.id}_q${index}" value="${val}" onchange="handleAnswer('${test.id}', ${index}, ${shuffledData.length})"> ${optObj.text}</label>`;
+          });
+          html += `</div></div>`;
         });
-        histHTML += `</div></div>`;
+        container.innerHTML = html;
       });
-      histContainer.innerHTML = histHTML;
+    }
 
-      // Те ж саме робимо для географії
-      const shuffledGeography = shuffleArray(geographyData);
-      const geoContainer = document.getElementById('geography-questions-container');
-      let geoHTML = '';
-      
-      shuffledGeography.forEach((item, index) => {
-        let optionsWithMeta = item.opts.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.ans }));
-        optionsWithMeta = shuffleArray(optionsWithMeta);
-
-        // ЗМІНЕНО: Додано унікальний ID та стиль для приховування
-        geoHTML += `<div class="quiz-card" id="geography-qcard-${index}" style="display: ${index === 0 ? 'block' : 'none'};">
-          <div class="quiz-question">${index + 1}. ${item.q.replace(/^\d+\.\s*/, '')}</div><div class="quiz-options">`;
+    // Логіка для перемикання запитань одне за одним
+    function handleAnswer(type, currentIndex, totalCount) {
+      // Затримка 350мс, щоб учень побачив, куди він натиснув
+      setTimeout(() => {
+        const currentCard = document.getElementById(`${type}_card_${currentIndex}`);
+        if (currentCard) {
+          currentCard.style.display = 'none';
+        }
         
-        optionsWithMeta.forEach((optObj) => {
-          const val = optObj.isCorrect ? 'correct' : 'wrong';
-          // ЗМІНЕНО: Додано подію onchange
-          geoHTML += `<label><input type="radio" name="geo_q${index}" value="${val}" onchange="nextQuestion('geography', ${index})"> ${optObj.text}</label>`;
-        });
-        geoHTML += `</div></div>`;
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < totalCount) {
+          const nextCard = document.getElementById(`${type}_card_${nextIndex}`);
+          if (nextCard) {
+            nextCard.style.display = 'block';
+          }
+        } else {
+          // Якщо питання закінчилися, нагадуємо натиснути кнопку перевірки
+          const resDiv = document.getElementById(`${type}-result`);
+          resDiv.style.color = "#2563eb";
+          resDiv.textContent = "✅ Ви відповіли на всі запитання! Натисніть кнопку «Перевірити тест», щоб зберегти бали.";
+        }
+      }, 350);
+    }
+
+    function syncScoreToFirebase(subject, score, total) {
+      if (typeof db === 'undefined' || !db) {
+        console.warn("Firebase не ініціалізовано. Будь ласка, додайте конфігурацію в код.");
+        return;
+      }
+      
+      // Запитуємо або беремо ім'я учня з пам'яті браузера
+      let studentName = localStorage.getItem("student_nmt_name");
+      if (!studentName) {
+        studentName = prompt("Введіть ваше Прізвище та Ім'я для збереження результатів у загальний рейтинг:") || "Анонімний учень";
+        localStorage.setItem("student_nmt_name", studentName);
+      }
+
+      const ref = db.ref('student_activity/' + studentName + '/' + subject);
+      ref.set({
+        score: score,
+        total: total,
+        timestamp: new Date().toISOString()
+      }).then(() => {
+        console.log(`Бали з ${subject} успішно збережено на Firebase для учня ${studentName}.`);
+      }).catch((error) => {
+        console.error("Помилка збереження на Firebase:", error);
       });
-      geoContainer.innerHTML = geoHTML;
     }
 
     function checkTest(type, totalCount) {
       let score = 0;
       let answeredCount = 0;
 
-      // Перевіряємо всі (навіть приховані) питання
       for (let i = 0; i < totalCount; i++) {
+        // Усунено баг: тепер скрипт шукає правильне ім'я (наприклад, history_q0, а не hist_q0)
         const selected = document.querySelector(`input[name="${type}_q${i}"]:checked`);
         if (selected) {
           answeredCount++;
@@ -478,23 +504,36 @@
 
       if (answeredCount < totalCount) {
         resDiv.style.color = "#d97706";
-        resDiv.textContent = `⚠️ Ви відповіли лише на ${answeredCount} з ${totalCount} запитань. Дайте відповідь на всі, щоб зафіксувати бали!`;
+        resDiv.textContent = `⚠️ Ви відповіли лише на ${answeredCount} з ${totalCount} запитань. Пройдіть тест до кінця, щоб зафіксувати бали!`;
+        
+        // Якщо натиснули "Перевірити", але не пройшли до кінця, відкриваємо перше невідповіджене запитання
+        for (let i = 0; i < totalCount; i++) {
+          const selected = document.querySelector(`input[name="${type}_q${i}"]:checked`);
+          if (!selected) {
+            // Ховаємо всі
+            document.querySelectorAll(`[id^="${type}_card_"]`).forEach(el => el.style.display = 'none');
+            // Показуємо перше без відповіді
+            document.getElementById(`${type}_card_${i}`).style.display = 'block';
+            break;
+          }
+        }
         return;
       }
 
+      // Збереження в localStorage
       localStorage.setItem(`nmt_${type}_score`, score);
       localStorage.setItem(`nmt_${type}_total`, totalCount);
-      
-      // ЗМІНЕНО: Викликаємо функцію відправки результатів до Firebase
-      syncScoreWithFirebase(type, score);
+
+      // Збереження на Firebase
+      syncScoreToFirebase(type, score, totalCount);
 
       const percentage = Math.round((score / totalCount) * 100);
       if (score === totalCount) {
         resDiv.style.color = "#16a34a";
-        resDiv.textContent = `🎉 Фантастично! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали успішно збережено до загального рейтингу!`;
+        resDiv.textContent = `🎉 Фантастично! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали успішно збережено!`;
       } else if (score >= 22) {
         resDiv.style.color = "#2563eb";
-        resDiv.textContent = `👍 Чудовий результат! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали успішно збережено до загального рейтингу!`;
+        resDiv.textContent = `👍 Чудовий результат! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали успішно збережено!`;
       } else if (score >= 15) {
         resDiv.style.color = "#d97706";
         resDiv.textContent = `⚠️ Задовільно. Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено.`;
