@@ -717,6 +717,39 @@
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, set, get, update, onValue, remove, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+    // 1. Зчитуємо результати тестів з урахуванням нових ключів з localStorage
+    const historyScore = parseInt(localStorage.getItem('nmt_history_score')) || 0;
+    const historyTotal = parseInt(localStorage.getItem('nmt_history_total')) || 0;
+
+    const geographyScore = parseInt(localStorage.getItem('nmt_geography_score')) || 0;
+    const geographyTotal = parseInt(localStorage.getItem('nmt_geography_total')) || 0;
+
+    const totalTestPoints = historyScore + geographyScore;
+
+    // 2. Інтеграція з Firebase для збереження загального рейтингу користувача
+    import { getDatabase as getDbInstance, ref as dbRef, get as dbGet, update as dbUpdate } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const currentUserUidSession = localStorage.getItem('current_user_uid'); // або ваш ключ збереження сесії користувача
+
+    if (currentUserUidSession) {
+      const db = getDatabase();
+      const userRefSession = ref(db, 'users/' + currentUserUidSession);
+      
+      get(userRefSession).then((snapshot) => {
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          const currentDbScore = userData.score || 0;
+          
+          // Можете оновити загальну суму балів у базі даних
+          update(userRefSession, {
+            score: totalTestPoints,
+            history_score: historyScore,
+            geography_score: geographyScore
+          });
+        }
+      });
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
       authDomain: "movchan-portal.firebaseapp.com",
