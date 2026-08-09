@@ -1134,10 +1134,9 @@
       // Передаємо результат у Firebase.
       // Якщо авторизація ще не завершилась, модуль Firebase збереже
       // останній результат і відправить його одразу після входу.
+      window.dispatchEvent(new CustomEvent('geographyScoreChanged'));
       if (window.syncGeographyScoreToFirebase) {
-        window.syncGeographyScoreToFirebase(totalGeoPoints);
-      } else {
-        window.pendingGeographyScore = totalGeoPoints;
+        window.syncGeographyScoreToFirebase();
       }
     }
 
@@ -1152,9 +1151,9 @@
   </script>
 
 
-  <!-- Firebase: синхронізація балів тестів з географії -->
+  <!-- Firebase: синхронізація балів географії -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
@@ -1169,66 +1168,57 @@
       measurementId: "G-8XBVKRZRS1"
     };
 
-    const app = initializeApp(firebaseConfig);
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
-
-    let firebaseReady = false;
     let currentUser = null;
-    let pendingScore = null;
+    let lastLocalScore = 0;
 
-    async function syncGeographyScore(totalGeoPoints) {
-      pendingScore = Number(totalGeoPoints) || 0;
-
-      if (!currentUser) return;
+    async function syncGeographyScore() {
+      const localScore = Number(localStorage.getItem('total_geography_points')) || 0;
+      lastLocalScore = localScore;
+      if (!currentUser || localScore < 1) return;
 
       try {
-        const userRef = ref(database, "users/" + currentUser.uid);
+        const userRef = ref(database, 'users/' + currentUser.uid);
         const snapshot = await get(userRef);
         const data = snapshot.exists() ? snapshot.val() : {};
-
-        const savedGeoPoints = Number(data.total_geography_points) || 0;
+        const savedGeo = Number(data.total_geography_points) || 0;
         const currentScore = Number(data.score) || 0;
 
-        // Додаємо тільки нові бали. Уже синхронізовані бали повторно не нараховуються.
-        const newTotalGeoPoints = Math.max(savedGeoPoints, pendingScore);
-        const difference = newTotalGeoPoints - savedGeoPoints;
+        if (localScore <= savedGeo) return;
 
+        const difference = localScore - savedGeo;
         const updates = {
-          total_geography_points: newTotalGeoPoints,
-          geographyPoints: newTotalGeoPoints
+          total_geography_points: localScore,
+          geographyPoints: localScore,
+          score: currentScore + difference
         };
 
         if (!snapshot.exists()) {
-          updates.name = currentUser.displayName || "";
-          updates.score = 5 + newTotalGeoPoints;
-        } else if (difference > 0) {
-          updates.score = currentScore + difference;
+          updates.name = currentUser.displayName || '';
+          updates.score = 5 + localScore;
         }
 
         await update(userRef, updates);
-
-        console.log("Бали з географії синхронізовано:", newTotalGeoPoints);
-        pendingScore = null;
+        console.log('GEOGRAPHY SYNC OK:', localScore, 'added:', difference);
       } catch (error) {
-        console.error("Помилка синхронізації географії:", error);
+        console.error('GEOGRAPHY SYNC ERROR:', error.code, error.message);
       }
     }
 
     window.syncGeographyScoreToFirebase = syncGeographyScore;
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       currentUser = user;
       window.currentUserUid = user ? user.uid : null;
+      if (user) syncGeographyScore();
+    });
 
-      if (user) {
-        const localScore = Number(localStorage.getItem("total_geography_points")) || 0;
-        if (localScore > 0) {
-          syncGeographyScore(localScore);
-        } else if (pendingScore !== null) {
-          syncGeographyScore(pendingScore);
-        }
-      }
+    window.addEventListener('geographyScoreChanged', syncGeographyScore);
+    window.addEventListener('focus', syncGeographyScore);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) syncGeographyScore();
     });
   </script>
 
