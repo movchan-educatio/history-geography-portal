@@ -34,7 +34,7 @@
       100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
     }
 
-    .hero-text-content, .info-card, .leaderboard-section, .nmt-results-widget, .virtual-tour-card, .kids-club-section, .target-audience-section {
+    .hero-text-content, .info-card, .leaderboard-section, .virtual-tour-card, .kids-club-section, .target-audience-section {
       animation: fadeInUp 0.6s ease-out both;
     }
 
@@ -375,31 +375,6 @@
     .student-rank.top-3 { color: #b45309; }
     .student-score { background: #2563eb; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px; }
 
-    /* Віджет НМТ */
-    .nmt-results-widget {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-      max-width: 1200px;
-      margin: 20px auto;
-      text-align: left;
-      border: 1px solid #e2e8f0;
-      position: relative;
-      z-index: 1;
-    }
-    .nmt-results-widget h3 {
-      font-size: 18px;
-      color: #1e293b;
-      font-weight: 800;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .nmt-results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
-    .nmt-result-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 16px; font-size: 14px; color: #334155; }
-
     /* Спеціальний блок: КЛУБ ДОСЛІДНИКІВ */
     .kids-club-section {
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
@@ -611,15 +586,6 @@
         </div>
       </div>
     </section>
-
-    <!-- ВІДЖЕТ РЕЗУЛЬТАТІВ НМТ -->
-    <div class="nmt-results-widget">
-      <h3><i class="fas fa-graduation-cap" style="color: #2563eb;"></i> Ваші результати тестування НМТ</h3>
-      <div class="nmt-results-grid">
-        <div class="nmt-result-card" id="res-history">📜 Історія: ще не пройдено</div>
-        <div class="nmt-result-card" id="res-geography">🌍 Географія: ще не пройдено</div>
-      </div>
-    </div>
 
     <!-- ТАБЛИЦЯ АКТИВНОСТІ -->
     <div class="leaderboard-section">
@@ -1146,19 +1112,6 @@
       startDinoGame();
     });
 
-    function loadNmtResults() {
-      const histScore = localStorage.getItem('nmt_history_score') || localStorage.getItem('total_history_points');
-      const histTotal = localStorage.getItem('nmt_history_total') || '100';
-      if (histScore !== null) {
-        document.getElementById('res-history').innerHTML = `📜 Історія: <strong>${histScore} / ${histTotal} балів</strong>`;
-      }
-      const geoScore = localStorage.getItem('nmt_geography_score') || localStorage.getItem('total_geography_points');
-      const geoTotal = localStorage.getItem('nmt_geography_total') || '100';
-      if (geoScore !== null) {
-        document.getElementById('res-geography').innerHTML = `🌍 Географія: <strong>${geoScore} / ${geoTotal} балів</strong>`;
-      }
-    }
-
     window.studentsData = window.studentsData || [];
 
     function renderLeaderboard() {
@@ -1380,7 +1333,6 @@
 
     function initPageData() {
       setupTravelerAnimation();
-      loadNmtResults();
       updateDinoHighScoreUI();
       setupSiteSearch();
 
