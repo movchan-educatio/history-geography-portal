@@ -9,11 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=5">
   <style>
-    .quiz-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .quiz-question { font-weight: 600; font-size: 15px; color: #1e293b; margin-bottom: 12px; }
-    .quiz-options label { display: block; background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-    .quiz-options label:hover { background: #f1f5f9; border-color: #94a3b8; }
-    .quiz-options input { margin-right: 10px; }
+    .quiz-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .quiz-title { font-weight: 700; font-size: 18px; color: #1e293b; margin-bottom: 10px; }
+    .quiz-question { font-weight: 700; font-size: 16px; color: #1e293b; margin-bottom: 14px; }
+    .quiz-progress { color: #64748b; font-size: 14px; margin-bottom: 16px; }
+    .quiz-options { display: grid; gap: 10px; }
+    .quiz-option-btn { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 8px; text-align: left; font-size: 14px; color: #334155; cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
+    .quiz-option-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+    .quiz-option-btn.selected { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; font-weight: 600; }
+    .quiz-next-btn { background: #2563eb; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; margin-top: 14px; }
+    .quiz-next-btn:hover { background: #1d4ed8; }
+    .quiz-next-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+    .quiz-result-box { text-align: center; padding: 20px; }
+    .quiz-result-score { font-size: 28px; font-weight: 800; color: #10b981; margin-bottom: 10px; }
     .btn-check { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: background 0.2s; }
     .btn-check:hover { background: #1d4ed8; }
     .global-test-container { background: #f8fafc; border: 2px solid #2563eb; border-radius: 12px; padding: 25px; margin-top: 40px; margin-bottom: 40px; }
@@ -269,6 +277,15 @@
     </div>
 
 
+    <div style="text-align:center; margin: 20px 0;">
+      <div id="nmt-sync-status" style="display:inline-block; padding:10px 16px; background:#f1f5f9; border-radius:10px; color:#475569; font-size:14px;">
+        🔄 Перевіряємо синхронізацію...
+      </div>
+      <button id="nmt-login-button" onclick="loginNmtWithGoogle()" style="display:none; margin-left:8px; background:#2563eb; color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+        Увійти через Google
+      </button>
+    </div>
+
     <!-- ================= БЛОК 3: ІНТЕРАКТИВНИЙ ТЕСТ З ІСТОРІЇ (30 ЗАПИТАНЬ) ================= -->
     <div class="global-test-container" style="border-color: #2563eb;">
       <h2 style="color: #2563eb; text-align: center; margin-bottom: 10px;">📜 ІНТЕРАКТИВНИЙ ТЕСТ З ІСТОРІЇ (30 ЗАПИТАНЬ)</h2>
@@ -295,6 +312,103 @@
     </div>
 
   </main>
+
+
+  <!-- FIREBASE: синхронізація НМТ з рейтингом -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const nmtFirebaseConfig = {
+      apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+      authDomain: "movchan-portal.firebaseapp.com",
+      databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "movchan-portal",
+      storageBucket: "movchan-portal.firebasestorage.app",
+      messagingSenderId: "535915495927",
+      appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
+      measurementId: "G-8XBVKRZRS1"
+    };
+
+    const nmtApp = initializeApp(nmtFirebaseConfig, "nmtSyncApp");
+    const nmtAuth = getAuth(nmtApp);
+    const nmtDb = getDatabase(nmtApp);
+    const nmtProvider = new GoogleAuthProvider();
+
+    let nmtAuthReady = false;
+    const pendingNmtScores = { history: 0, geography: 0 };
+
+    window.loginNmtWithGoogle = async function () {
+      try {
+        await signInWithPopup(nmtAuth, nmtProvider);
+      } catch (error) {
+        console.error("Помилка входу НМТ:", error);
+        alert("Не вдалося виконати вхід: " + error.message);
+      }
+    };
+
+    async function syncNmtProgress(type, score) {
+      score = Number(score) || 0;
+      if (score <= 0) return;
+
+      const bestKey = type === "history" ? "nmt_history_best" : "nmt_geography_best";
+
+      if (!nmtAuth.currentUser) {
+        pendingNmtScores[type] = Math.max(pendingNmtScores[type], score);
+        return;
+      }
+
+      const userRef = ref(nmtDb, `users/${nmtAuth.currentUser.uid}`);
+
+      try {
+        await runTransaction(userRef, current => {
+          const data = current || {};
+          const oldBest = Number(data[bestKey] || 0);
+
+          if (score <= oldBest) return data;
+
+          data[bestKey] = score;
+          data.score = Number(data.score || 0) + (score - oldBest);
+          data.lastUpdated = Date.now();
+          return data;
+        });
+
+        pendingNmtScores[type] = 0;
+        console.log(`НМТ ${type}: синхронізовано до ${score} балів`);
+      } catch (error) {
+        console.error(`Помилка синхронізації НМТ (${type}):`, error);
+        pendingNmtScores[type] = Math.max(pendingNmtScores[type], score);
+      }
+    }
+
+    window.syncNmtProgress = syncNmtProgress;
+
+    async function flushPendingNmtScores() {
+      if (!nmtAuth.currentUser) return;
+
+      const historyScore = Number(localStorage.getItem("nmt_history_score") || 0);
+      const geographyScore = Number(localStorage.getItem("nmt_geography_score") || 0);
+
+      await syncNmtProgress("history", Math.max(historyScore, pendingNmtScores.history));
+      await syncNmtProgress("geography", Math.max(geographyScore, pendingNmtScores.geography));
+    }
+
+    onAuthStateChanged(nmtAuth, async user => {
+      nmtAuthReady = true;
+      const status = document.getElementById("nmt-sync-status");
+      const loginButton = document.getElementById("nmt-login-button");
+
+      if (user) {
+        if (status) status.textContent = `✅ Синхронізація увімкнена: ${user.displayName || "Google"}`;
+        if (loginButton) loginButton.style.display = "none";
+        await flushPendingNmtScores();
+      } else {
+        if (status) status.textContent = "🔐 Увійдіть через Google, щоб бали НМТ потрапляли в рейтинг";
+        if (loginButton) loginButton.style.display = "inline-block";
+      }
+    });
+  </script>
 
   <!-- Скрипти для генерації, перемішування, покрокового відображення тестів та експорту -->
   <script>
@@ -374,21 +488,23 @@
       return arr;
     }
 
-    // Зберігаємо поточний стан тестів в пам'яті сесії
+    // Стан двох тестів НМТ. Результат кожної правильної відповіді
+    // фіксується одразу після натискання кнопки «Наступне запитання».
     let quizState = {
-      history: { shuffled: [], currentIndex: 0, score: 0 },
-      geography: { shuffled: [], currentIndex: 0, score: 0 }
+      history: { shuffled: [], currentIndex: 0, score: 0, selectedOption: null },
+      geography: { shuffled: [], currentIndex: 0, score: 0, selectedOption: null }
     };
 
     function renderTests() {
-      // Перемішуємо самі запитання випадковим чином при кожному завантаженні/перезавантаженні
       quizState.history.shuffled = shuffleArray(historyData);
       quizState.history.currentIndex = 0;
       quizState.history.score = 0;
+      quizState.history.selectedOption = null;
 
       quizState.geography.shuffled = shuffleArray(geographyData);
       quizState.geography.currentIndex = 0;
       quizState.geography.score = 0;
+      quizState.geography.selectedOption = null;
 
       renderQuestion('history');
       renderQuestion('geography');
@@ -399,69 +515,118 @@
       const state = quizState[type];
       const resDiv = document.getElementById(`${type}-result`);
 
-      resDiv.textContent = '';
-
       if (state.currentIndex >= state.shuffled.length) {
-        // Тест завершено
         const totalCount = state.shuffled.length;
         const score = state.score;
-        
-        // Зберігаємо результат локально та передаємо його у Firebase.
-        const nmtScoreKey = `nmt_${type}_score`;
-        const previousNmtScore = Number(localStorage.getItem(nmtScoreKey)) || 0;
-        const bestNmtScore = Math.max(previousNmtScore, Number(score) || 0);
-        localStorage.setItem(nmtScoreKey, bestNmtScore);
+
+        localStorage.setItem(`nmt_${type}_score`, score);
         localStorage.setItem(`nmt_${type}_total`, totalCount);
-        syncNmtResult(type, score, totalCount);
+
+        // Синхронізація вже відбулася по ходу тесту, але фінальний результат
+        // також відправляємо, щоб не втратити його після останнього питання.
+        if (typeof window.syncNmtProgress === 'function') {
+          window.syncNmtProgress(type, score);
+        }
 
         const percentage = Math.round((score / totalCount) * 100);
         let msg = "";
         if (score === totalCount) {
           resDiv.style.color = "#16a34a";
-          msg = `🎉 Фантастично! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'})!`;
+          msg = `🎉 Фантастично! ${score} з ${totalCount} (${percentage}%). Усі бали синхронізовано.`;
         } else if (score >= 22) {
           resDiv.style.color = "#2563eb";
-          msg = `👍 Чудовий результат! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'})!`;
+          msg = `👍 Чудовий результат! ${score} з ${totalCount} (${percentage}%). Бали синхронізовано.`;
         } else if (score >= 15) {
           resDiv.style.color = "#d97706";
-          msg = `⚠️ Задовільно. Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'}).`;
+          msg = `⚠️ Результат: ${score} з ${totalCount} (${percentage}%). Бали синхронізовано.`;
         } else {
           resDiv.style.color = "#dc2626";
-          msg = `📚 Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'}).`;
+          msg = `📚 Результат: ${score} з ${totalCount} (${percentage}%). Бали синхронізовано.`;
         }
 
-        container.innerHTML = `<div class="quiz-card" style="text-align: center;"><h3 style="margin-bottom: 15px;">Тест завершено!</h3><p style="font-size: 16px; font-weight: 600;">${msg}</p><button class="btn-check" style="margin-top: 15px;" onclick="renderTests()">Пройти знову</button></div>`;
+        container.innerHTML = `
+          <div class="quiz-result-box">
+            <div class="quiz-title">🏁 Тест завершено!</div>
+            <div class="quiz-result-score">${score} / ${totalCount} балів</div>
+            <p style="font-size:14px;color:#64748b;margin-bottom:15px;">${msg}</p>
+            <button class="btn-check" onclick="restartNmtQuiz('${type}')">🔄 Пройти ще раз</button>
+          </div>
+        `;
         return;
       }
 
       const item = state.shuffled[state.currentIndex];
-      let optionsWithMeta = item.opts.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.ans }));
-      optionsWithMeta = shuffleArray(optionsWithMeta);
+      const optionsWithMeta = item.opts.map((opt, oIdx) => ({
+        text: opt,
+        originalIndex: oIdx
+      }));
+      const shuffledOptions = shuffleArray(optionsWithMeta);
 
-      let html = `<div class="quiz-card"><div class="quiz-question">Питання ${state.currentIndex + 1} з ${state.shuffled.length}: ${item.q.replace(/^\d+\.\s*/, '')}</div><div class="quiz-options">`;
-      
-      optionsWithMeta.forEach((optObj, oIndex) => {
-        const val = optObj.isCorrect ? 'correct' : 'wrong';
-        html += `<label><input type="radio" name="${type}_current" value="${val}" onclick="handleAnswer('${type}', this)"> ${optObj.text}</label>`;
-      });
-      html += `</div></div>`;
+      let html = `
+        <div class="quiz-card">
+          <div class="quiz-title">📝 Інтерактивний тест</div>
+          <div class="quiz-progress">Запитання ${state.currentIndex + 1} з ${state.shuffled.length}</div>
+          <div class="quiz-question">${item.q.replace(/^\d+\.\s*/, '')}</div>
+          <div class="quiz-options">
+            ${shuffledOptions.map(opt => `
+              <button type="button"
+                class="quiz-option-btn ${state.selectedOption === opt.originalIndex ? 'selected' : ''}"
+                onclick="selectNmtOption('${type}', ${opt.originalIndex})">
+                ${['А','Б','В','Г'][opt.originalIndex]}) ${opt.text}
+              </button>
+            `).join('')}
+          </div>
+          <button type="button" class="quiz-next-btn"
+            ${state.selectedOption === null ? 'disabled' : ''}
+            onclick="nextNmtQuestion('${type}')">
+            ${state.currentIndex === state.shuffled.length - 1 ? 'Завершити тест' : 'Наступне запитання ➔'}
+          </button>
+        </div>
+      `;
 
       container.innerHTML = html;
+      resDiv.textContent = '';
     }
 
-    function handleAnswer(type, inputElement) {
-      const state = quizState[type];
-      const isCorrect = inputElement.value === 'correct';
+    function selectNmtOption(type, originalIndex) {
+      quizState[type].selectedOption = originalIndex;
+      renderQuestion(type);
+    }
 
-      if (isCorrect) {
-        state.score++;
+    async function nextNmtQuestion(type) {
+      const state = quizState[type];
+      if (state.selectedOption === null) return;
+
+      const q = state.shuffled[state.currentIndex];
+      const wasCorrect = state.selectedOption === q.ans;
+
+      if (wasCorrect) {
+        state.score += 1;
+
+        // Ключовий момент: кожна правильна відповідь одразу потрапляє
+        // у Firebase. Повторно ті самі бали не нарахуються.
+        if (typeof window.syncNmtProgress === 'function') {
+          await window.syncNmtProgress(type, state.score);
+        }
       }
 
-      // Невелика затримка перед переходом до наступного питання для зручності
-      setTimeout(() => {
-        state.currentIndex++;
+      state.selectedOption = null;
+
+      if (state.currentIndex < state.shuffled.length - 1) {
+        state.currentIndex += 1;
         renderQuestion(type);
-      }, 300);
+      } else {
+        state.currentIndex += 1;
+        renderQuestion(type);
+      }
+    }
+
+    function restartNmtQuiz(type) {
+      quizState[type].shuffled = shuffleArray(type === 'history' ? historyData : geographyData);
+      quizState[type].currentIndex = 0;
+      quizState[type].score = 0;
+      quizState[type].selectedOption = null;
+      renderQuestion(type);
     }
 
     function downloadFullPage() {
@@ -483,79 +648,6 @@
     }
 
     window.onload = renderTests;
-  </script>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
-      authDomain: "movchan-portal.firebaseapp.com",
-      databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "movchan-portal",
-      storageBucket: "movchan-portal.firebasestorage.app",
-      messagingSenderId: "535915495927",
-      appId: "1:535915495927:web:71f899ea2876ee129c2ef2"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const database = getDatabase(app);
-    let currentUser = null;
-
-    async function syncNmtResult(type, score, total) {
-      if (!currentUser) return;
-      const scoreValue = Number(score) || 0;
-      const totalValue = Number(total) || 0;
-      if (scoreValue <= 0) return;
-
-      try {
-        const userRef = ref(database, 'users/' + currentUser.uid);
-        await runTransaction(userRef, (data) => {
-          data = data || {};
-          const scoreKey = `nmt_${type}_score`;
-          const totalKey = `nmt_${type}_total`;
-          const savedScore = Number(data[scoreKey]) || 0;
-          const currentTotalScore = Number(data.score) || 0;
-          const bestScore = Math.max(savedScore, scoreValue);
-          const additionalPoints = bestScore - savedScore;
-
-          data.name = data.name || currentUser.displayName || 'Учень';
-          data[scoreKey] = bestScore;
-          data[totalKey] = Math.max(Number(data[totalKey]) || 0, totalValue);
-          data.nmt_total_score = (Number(data.nmt_history_score) || 0) + (Number(data.nmt_geography_score) || 0);
-
-          if (additionalPoints > 0) data.score = currentTotalScore + additionalPoints;
-          return data;
-        });
-      } catch (error) {
-        console.error(`НМТ ${type}: помилка синхронізації`, error);
-      }
-    }
-
-    window.syncNmtResult = syncNmtResult;
-
-    function syncStoredNmtResults() {
-      if (!currentUser) return;
-      const hs = Number(localStorage.getItem('nmt_history_score')) || 0;
-      const ht = Number(localStorage.getItem('nmt_history_total')) || 0;
-      const gs = Number(localStorage.getItem('nmt_geography_score')) || 0;
-      const gt = Number(localStorage.getItem('nmt_geography_total')) || 0;
-      if (hs > 0) syncNmtResult('history', hs, ht);
-      if (gs > 0) syncNmtResult('geography', gs, gt);
-    }
-
-    onAuthStateChanged(auth, user => {
-      currentUser = user;
-      syncStoredNmtResults();
-    });
-
-    window.addEventListener('focus', syncStoredNmtResults);
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) syncStoredNmtResults();
-    });
   </script>
 
 </body>
