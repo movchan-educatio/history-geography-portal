@@ -78,49 +78,26 @@
       height: 100%;
       border: 0;
     }
-    /* Кнопка розгортання тесту */
-    .quiz-toggle-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
-      background-color: #059669;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.1s ease;
-    }
-    .quiz-toggle-btn:hover {
-      background-color: #047857;
-    }
-    .quiz-toggle-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* Інтерактивна картка тесту як на сторінці історії */
-    .quiz-card-step {
-      display: none;
-      margin-top: 20px;
-      padding: 24px;
-      background: #f8fafc;
+    /* Стилі для покрокового тесту (як на вкладці Історія) */
+    .quiz-card {
+      background-color: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 20px;
     }
-    .quiz-step-header {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 12px;
+    .quiz-header {
       display: flex;
       align-items: center;
       gap: 8px;
+      font-weight: 700;
+      font-size: 17px;
+      color: #1e293b;
+      margin-bottom: 12px;
     }
-    .quiz-progress-badge {
+    .quiz-badge {
       display: inline-block;
-      background-color: #e0f2fe;
+      background: #e0f2fe;
       color: #0284c7;
       font-size: 13px;
       font-weight: 600;
@@ -129,99 +106,66 @@
       margin-bottom: 16px;
     }
     .quiz-question-text {
-      font-size: 16px;
       font-weight: 700;
+      font-size: 16px;
       color: #0f172a;
-      line-height: 1.5;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      line-height: 1.4;
     }
     .quiz-options-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 20px;
     }
     .quiz-option-btn {
       display: flex;
       align-items: center;
       width: 100%;
-      padding: 14px 18px;
+      text-align: left;
+      padding: 12px 16px;
       background: #ffffff;
       border: 1px solid #cbd5e1;
-      border-radius: 12px;
-      cursor: pointer;
+      border-radius: 8px;
       font-size: 15px;
-      font-weight: 500;
       color: #334155;
-      text-align: left;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
     .quiz-option-btn:hover {
       background-color: #f1f5f9;
       border-color: #94a3b8;
     }
     .quiz-option-btn.selected {
+      border-color: #2563eb;
       background-color: #eff6ff;
-      border-color: #3b82f6;
       color: #1d4ed8;
       font-weight: 600;
     }
     .quiz-next-btn {
-      padding: 12px 24px;
       background-color: #94a3b8;
       color: #ffffff;
       font-weight: 700;
       font-size: 15px;
+      padding: 12px 24px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: not-allowed;
       transition: background-color 0.2s ease;
     }
     .quiz-next-btn.active {
-      background-color: #8b9bb4;
-      background-image: linear-gradient(to right, #818cf8, #6366f1);
-      background: #90a1b9;
+      background-color: #3b82f6;
       cursor: pointer;
     }
-    .quiz-next-btn.ready {
-      background-color: #64748b;
-      background: #8fa0b8;
-      background-image: none;
-      background: #8292a9;
-      cursor: pointer;
+    .quiz-next-btn.active:hover {
+      background-color: #2563eb;
     }
-    .quiz-step-btn {
-      padding: 12px 24px;
-      background-color: #94a3b8;
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 15px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .quiz-step-btn.enabled {
-      background-color: #8fa1b9;
-      background-image: linear-gradient(135deg, #93a5be 0%, #7b8ea7 100%);
-      color: #ffffff;
-    }
-    .quiz-finish-btn {
-      background-color: #059669 !important;
-      color: #ffffff !important;
-    }
-
-    .quiz-result-view {
-      display: none;
+    .quiz-summary-box {
+      text-align: center;
       padding: 20px;
-      background-color: #d1fae5;
-      color: #065f46;
-      border: 1px solid #a7f3d0;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 16px;
-      margin-top: 15px;
-      line-height: 1.5;
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
     }
   </style>
 </head>
@@ -267,7 +211,7 @@
       </p>
     </div>
 
-    <!-- Тема 1 -->
+    <!-- ТЕМА 1 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🗺️</span> Географічна карта як особливе джерело знань про Землю: масштаби, проєкції, умовні знаки</h3>
@@ -292,35 +236,12 @@
           <iframe src="https://www.youtube.com/embed/TDMJoc8oHJs" allowfullscreen></iframe>
         </div>
 
-        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-wrapper-1')">📝 Пройти тест з теми (12 питань)</button>
-
-        <!-- Блок тесту Tema 1 -->
-        <div id="quiz-wrapper-1" class="quiz-card-step">
-          <div class="quiz-step-header">
-            <span>📝</span> Інтерактивний перевірочний тест
-          </div>
-          <div class="quiz-progress-badge" id="badge-topic-1">
-            Запитання 1 з 12
-          </div>
-          
-          <div class="quiz-question-text" id="qtext-topic-1">
-            1. Що таке географічна карта?
-          </div>
-
-          <div class="quiz-options-list" id="options-topic-1">
-            <!-- Динамічні варіанти -->
-          </div>
-
-          <button id="nextbtn-topic-1" class="quiz-step-btn" disabled onclick="nextQuestionStep(1)">
-            Наступне запитання ➔
-          </button>
-
-          <div id="result-topic-1" class="quiz-result-view"></div>
-        </div>
+        <!-- Покроковий тест теми 1 -->
+        <div class="quiz-card" id="quiz-container-1"></div>
       </div>
     </div>
 
-    <!-- Тема 2 -->
+    <!-- ТЕМА 2 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>🌐</span> Земля як планета Сонячної системи: рухи Землі та їх географічні наслідки</h3>
@@ -340,35 +261,11 @@
           <iframe src="https://www.youtube.com/embed/1PVAiJniwbc" allowfullscreen></iframe>
         </div>
 
-        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-wrapper-2')">📝 Пройти тест з теми (12 питань)</button>
-
-        <!-- Блок тесту Tema 2 -->
-        <div id="quiz-wrapper-2" class="quiz-card-step">
-          <div class="quiz-step-header">
-            <span>📝</span> Інтерактивний перевірочний тест
-          </div>
-          <div class="quiz-progress-badge" id="badge-topic-2">
-            Запитання 1 з 12
-          </div>
-          
-          <div class="quiz-question-text" id="qtext-topic-2">
-            1. Яка тривалість зоряної доби обертання Землі навколо осі?
-          </div>
-
-          <div class="quiz-options-list" id="options-topic-2">
-            <!-- Динамічні варіанти -->
-          </div>
-
-          <button id="nextbtn-topic-2" class="quiz-step-btn" disabled onclick="nextQuestionStep(2)">
-            Наступне запитання ➔
-          </button>
-
-          <div id="result-topic-2" class="quiz-result-view"></div>
-        </div>
+        <div class="quiz-card" id="quiz-container-2"></div>
       </div>
     </div>
 
-    <!-- Тема 3 -->
+    <!-- ТЕМА 3 -->
     <div class="accordion-card" style="border-top: 4px solid #059669;">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <h3><span>⛏️</span> Літосфера та рельєф Землі: тектоніка літосферних плит, землетруси та вулканізм</h3>
@@ -380,7 +277,7 @@
         </p>
         <ul style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 12px 20px;">
           <li><strong>Зони розходження (дивергентні межі):</strong> плити рухаються в різні боки, утворюючи серединно-океанічні хребти та рифтові долини (наприклад, Східно-Африканський рифт).</li>
-          <li><strong>Зони зіткнення (конвергентні межі):</strong> при зіткненні материкової й океанічної кори виникають глибоководні жолоби та гори (Анди); при зіткненні двох материкових плит утворюються складчасті гори (Гімалаї, Альпи).</li>
+          <li><strong>Зони зіткнення (конвергентні межі):</strong> при зіткненні материкової й океанічної кора виникають глибоководні жолоби та гори (Анди); при зіткненні двох материкових плит утворюються складчасті гори (Гімалаї, Альпи).</li>
           <li><strong>Трансформні розломи:</strong> плити ковзають уздовж одна одної (розлом Сан-Андреас у Каліфорнії).</li>
         </ul>
         <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
@@ -390,31 +287,251 @@
           <iframe src="https://www.youtube.com/embed/as7mjj-GGug" allowfullscreen></iframe>
         </div>
 
-        <button class="quiz-toggle-btn" onclick="toggleQuiz('quiz-wrapper-3')">📝 Пройти тест з теми (12 питань)</button>
+        <div class="quiz-card" id="quiz-container-3"></div>
+      </div>
+    </div>
 
-        <!-- Блок тесту Tema 3 -->
-        <div id="quiz-wrapper-3" class="quiz-card-step">
-          <div class="quiz-step-header">
-            <span>📝</span> Інтерактивний перевірочний тест
-          </div>
-          <div class="quiz-progress-badge" id="badge-topic-3">
-            Запитання 1 з 12
-          </div>
-          
-          <div class="quiz-question-text" id="qtext-topic-3">
-            1. З чого складається літосфера?
-          </div>
+    <!-- ТЕМА 4 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌤️</span> Атмосфера та клімат Землі: склад, будова, тепловий режим, атмосферична циркуляція</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Атмосфера</strong> — газова оболонка Землі, що складається з азоту (78%), кисню (21%), аргону, вуглекислого газу та інших газів. Основні шари: тропосфера (зосереджено 80% маси, виникає погода), стратосфера (озоновий екран), мезосфера, термосфера та екзосфера.
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Клімат формується під дією трьох основних чинників: сонячна радіація, циркуляція повітряних мас та характер підстильної поверхні. Постійні вітри (пасати, західні вітри, північно-східні) та сезонні мусони перерозподіляють тепло і вологу по планеті.
+        </p>
+        <div class="quiz-card" id="quiz-container-4"></div>
+      </div>
+    </div>
 
-          <div class="quiz-options-list" id="options-topic-3">
-            <!-- Динамічні варіанти -->
-          </div>
+    <!-- ТЕМА 5 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌊</span> Гідросфера: Світовий океан, суходільні води та їх екологічний стан</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 12px;">
+          <strong>Гідросфера</strong> об'єднує всі води Землі: Світовий океан (97%), води суходолу (річки, озера, болота, льодовики, підземні води) та воду в атмосфері. Середня солоність океану становить 35‰.
+        </p>
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Води суходолу відіграють вирішальну роль у життєдіяльності людини. Найбільші запаси прісної води зосереджені в льодовиках Антарктиди та Гренландії.
+        </p>
+        <div class="quiz-card" id="quiz-container-5"></div>
+      </div>
+    </div>
 
-          <button id="nextbtn-topic-3" class="quiz-step-btn" disabled onclick="nextQuestionStep(3)">
-            Наступне запитання ➔
-          </button>
+    <!-- ТЕМА 6 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌱</span> Біосфера та географічна оболонка: цілісність, ритмічність, зональність</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          <strong>Географічна оболонка</strong> — це цілісна система, у якій взаємодіють літосфера, атмосфера, гідросфера та біосфера. Основні закономірності: цілісність, ритмічність, кругообіг речовин та енергії, широтана зональність та висотна поясність.
+        </p>
+        <div class="quiz-card" id="quiz-container-6"></div>
+      </div>
+    </div>
 
-          <div id="result-topic-3" class="quiz-result-view"></div>
-        </div>
+    <!-- ТЕМА 7 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌾</span> Ґрунти та ґрунтові ресурси: утворення, родючість, класифікація</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          <strong>Ґрунт</strong> — особливе природне тіло, що має властивість родючості. Головні чинники ґрунтоутворення: материнська порода, клімат, організми, рельєф і час. Найродючішими є чорноземи.
+        </p>
+        <div class="quiz-card" id="quiz-container-7"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 8 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🏔️</span> Природні комплекси материків: Євразія, Африка, Північна та Південна Америка, Австралія, Антарктида</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Огляд фізико-географічних особливостей материків: геолого-тектонічна будова, кліматичні пояси, внутрішні води та природні зони.
+        </p>
+        <div class="quiz-card" id="quiz-container-8"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 9 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🇺🇦</span> Фізична географія України: географічне положення, геологічна будова та рельєф</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Україна розташована у південно-східній частині Європи. Більшість території займає Східноєвропейська рівнина. Основні тектонічні структури: Український щит, Дніпровсько-Донецька западина, Волино-Подільська плита, Карпатська та Кримська складчасті системи.
+        </p>
+        <div class="quiz-card" id="quiz-container-9"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 10 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>☀️</span> Клімат, води та ґрунти України: закономірності просторового розподілу</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Переважає помірно-континентальний клімат. Річкова сітка належить переважно до басейнів Чорного та Азовського морів (Дніпро, Дністер, Південний Буг, Дунай).
+        </p>
+        <div class="quiz-card" id="quiz-container-10"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 11 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌲</span> Ландшафти України: Полісся, Лісостеп, Степ, Українські Карпати та Кримські гори</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Характеристика рівнинних природних зон України (Мішані ліси, Лісостеп, Степ) та гірських систем Карпат і Криму.
+        </p>
+        <div class="quiz-card" id="quiz-container-11"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 12 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>👥</span> Населення України та світу: демографічні процеси, розселення, урбанізація</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Аналіз естественного руху населення, міграцій, статево-вікової структури, трудових ресурсів та рівнів урбанізації.
+        </p>
+        <div class="quiz-card" id="quiz-container-12"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 13 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🏭</span> Політична карта світу та світове господарство: типи країн, глобалізація, інтеграція</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Класифікація країн за рівнем економічного розвитку та формою правління. Етапи формування світового господарства, міжнародний поділ праці.
+        </p>
+        <div class="quiz-card" id="quiz-container-13"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 14 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>⚡</span> Енергетика та добувна промисловість України та світу</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Паливно-енергетичний комплекс: вугільна, нафтогазова промисловість, електроенергетика (ТЕС, ГЕС, АЕС, ВДЕ).
+        </p>
+        <div class="quiz-card" id="quiz-container-14"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 15 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>⚙️</span> Металургія, машинобудування та хімічна промисловість</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Чорна та кольорова металургія. Структура машинобудування, чинники розміщення підприємств та хімічний комплекс.
+        </p>
+        <div class="quiz-card" id="quiz-container-15"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 16 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌾</span> Сільське господарство, лісове господарство та харчова промисловість</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Рослинництво та тваринництво. Зональна спеціалізація сільського господарства України та світу.
+        </p>
+        <div class="quiz-card" id="quiz-container-16"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 17 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🚚</span> Сфера послуг: транспорт, торгівля, туризм, фінансові та інформаційні послуги</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Види транспорту (залізничний, автомобільний, морський, авіаційний, трубопровідний). Міжнародний туризм та торгівля.
+        </p>
+        <div class="quiz-card" id="quiz-container-17"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 18 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🇪🇺</span> Регіони світу: Європа, Азія, Америка, Африка, Океанія</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Економіко-географічна характеристика провідних регіонів та країн світу (США, Китай, Німеччина, Японія, Великобританія тощо).
+        </p>
+        <div class="quiz-card" id="quiz-container-18"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 19 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🇺🇦</span> Економічні райони України та міжнародні зв'язки</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Сучасне районування України, зовнішньоекономічні зв'язки, експорт та імпорт товарів і послуг.
+        </p>
+        <div class="quiz-card" id="quiz-container-19"></div>
+      </div>
+    </div>
+
+    <!-- ТЕМА 20 -->
+    <div class="accordion-card" style="border-top: 4px solid #059669;">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌍</span> Глобальні проблеми людства та сталий розвиток</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 0;">
+          Екологічна, сировинна, енергетична, демографічна та продовольча проблеми. Концепція сталого розвитку.
+        </p>
+        <div class="quiz-card" id="quiz-container-20"></div>
       </div>
     </div>
 
@@ -425,7 +542,7 @@
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній портал «Історія і географія БЕЗ МЕЖ»</p>
   </footer>
 
-  <!-- Інтеграція Firebase SDK та скриптів підключення -->
+  <!-- Інтеграція Firebase SDK та скриптів -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -447,214 +564,205 @@
     let currentUser = null;
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        currentUser = user;
-      } else {
-        currentUser = null;
-      }
+      currentUser = user || null;
     });
 
-    // База питань для кожної теми у форматі А, Б, В, Г
-    const quizDataMap = {
+    // База даних тестових питань для всіх 20 тем
+    const allQuizData = {
       1: [
-        { q: "1. Що таке географічна карта?", opts: ["Художній малюнок місцевості з довільними масштабами", "Математично узагальнене зменшене зображення земної поверхні на площині", "Фотографія з космічного супутника без умовних знаків", "Точна тривимірна модель Землі у формі кулі"], correct: 1 },
-        { q: "2. Чому виникають спотворення при створенні карт?", opts: ["Через використання різних мов підпису", "Неможливо розгорнути сферичну поверхню геоїда на площину без деформацій", "Через коливання рівня Світового океану", "Через зміну орбіти Землі"], correct: 1 },
-        { q: "3. Які картографічні проєкції зберігають площі об'єктів без спотворення?", opts: ["Рівнокутні", "Рівновеликі", "Довільні", "Перспективні"], correct: 1 },
-        { q: "4. Яка проєкція найчастіше використовується для карт помірних широт (зокрема України)?", opts: ["Азимутальна", "Конічна", "Циліндрична", "Полярна"], correct: 1 },
-        { q: "5. Для картування яких територій найчастіше застосовують азимутальну проєкцію?", opts: ["Полюсів та півкуль", "Вздовж усього екватора", "Виключно гірських масивів", "Океанічних жолобів"], correct: 0 },
-        { q: "6. Що показує масштаб карти?", opts: ["Висоту місцевості над рівнем моря", "Ступінь зменшення довжин ліній на карті порівняно з дійсною відстані на місцевості", "Точну кількість населення на одиницю площі", "Кут нахилу земної осі"], correct: 1 },
-        { q: "7. Який вигляд має чисельний масштаб?", opts: ["Дріб виду 1 : 100 000", "Текстовий запис \"в 1 см 1 км\"", "Графічна лінійка з поділками", "Градусна сітка"], correct: 0 },
-        { q: "8. Які умовні знаки використовуються для об'єктів, що не відтворюються в масштабі карти (наприклад, поодиноке дерево)?", opts: ["Позамасштабні", "Контурні", "Якісний фон", "Лінійні"], correct: 0 },
-        { q: "9. Що з перерахованого належить до лінійних умовних знаків?", opts: ["Дороги, річки, кордони", "Озера та водосховища", "Млини та вітряки", "Заповідні лісові масиви"], correct: 0 },
-        { q: "10. Проєкція Меркатора належить до:", opts: ["Циліндричних", "Конічних", "Азимутальних", "Псевдоконічних"], correct: 0 },
-        { q: "11. Як перетворити чисельний масштаб 1 : 25 000 в іменований?", opts: ["В 1 см — 250 м", "В 1 см — 2.5 км", "В 1 см — 25 км", "В 1 см — 250 км"], correct: 0 },
-        { q: "12. Спосіб якісного фону на карті застосовують для:", opts: ["Позначення типів ґрунтів чи ландшафтних зон", "Відображення висоти точок", "Позначення напрямку вітру", "Позначення точності координат"], correct: 0 }
+        { q: "Що таке географічна карта?", options: ["Художній малюнок місцевості", "Математично узагальнене зменшене зображення земної поверхні на площині", "Фотографія з космічного супутника", "Точна тривимірна модель Землі"], correct: 1 },
+        { q: "Чому виникають спотворення при створенні карт?", options: ["Через різні мови підпису", "Неможливо розгорнути сферичну поверхню геоїда на площину без деформацій", "Через коливання рівня океану", "Через зміну орбіти Землі"], correct: 1 },
+        { q: "Які картографічні проєкції зберігають площі об'єктів без спотворення?", options: ["Рівнокутні", "Рівновеликі", "Довільні", "Перспективні"], correct: 1 },
+        { q: "Яка проєкція найчастіше використовується для карт помірних широт (зокрема України)?", options: ["Азимутальна", "Конічна", "Циліндрична", "Полярна"], correct: 1 },
+        { q: "Для картування яких територій найчастіше застосовують азимутальну проєкцію?", options: ["Полюсів та півкуль", "Вздовж усього екватора", "Виключно гірських масивів", "Океанічних жолобів"], correct: 0 },
+        { q: "Що показує масштаб карти?", options: ["Висоту місцевості", "Ступінь зменшення довжин ліній на карті порівняно з дійсною відстані", "Точну кількість населения", "Кут нахилу земної осі"], correct: 1 },
+        { q: "Який вигляд має чисельний масштаб?", options: ["Дріб виду 1 : 100 000", "Текстовий запис 'в 1 см 1 км'", "Графічна лінійка", "Градусна сітка"], correct: 0 },
+        { q: "Які умовні знаки використовуються для об'єктів, що не відтворюються в масштабі?", options: ["Позамасштабні", "Контурні", "Якісний фон", "Лінійні"], correct: 0 },
+        { q: "Що з перерахованого належить до лінійних умовних знаків?", options: ["Дороги, річки, кордони", "Озера та водосховища", "Млини та вітряки", "Заповідні лісові масиви"], correct: 0 },
+        { q: "Проєкція Меркатора належить до:", options: ["Циліндричних", "Конічних", "Азимутальних", "Псевдоконічних"], correct: 0 },
+        { q: "Як перетворити чисельний масштаб 1 : 25 000 в іменований?", options: ["В 1 см — 250 м", "В 1 см — 2.5 км", "В 1 см — 25 км", "В 1 см — 250 км"], correct: 0 },
+        { q: "Спосіб якісного фону на карті застосовують для:", options: ["Позначення типів ґрунтів чи ландшафтних зон", "Відображення висоти точок", "Позначення напрямку вітру", "Позначення точності координат"], correct: 0 }
       ],
       2: [
-        { q: "1. Яка тривалість зоряної доби обертання Землі навколо осі?", opts: ["24 години точно", "23 год 56 хв 4 с", "25 годин", "365 днів"], correct: 1 },
-        { q: "2. Головним наслідком обертання Землі навколо власної осі є:", opts: ["Зміна пір року", "Зміна дня і ночі", "Зміна сонячної активності", "Формування материків"], correct: 1 },
-        { q: "3. Як сила Коріоліса впливає на рух тіл у Північній півкулі?", opts: ["Відхиляє праворуч за напрямком руху", "Відхиляє ліворуч за напрямком руху", "Зменшує швидкість руху до нуля", "Не чинить жодного впливу"], correct: 0 },
-        { q: "4. Під яким кутом нахилена вісь Землі до площини орбіти (екліптики)?", opts: ["90°", "66,5°", "23,5°", "45°"], correct: 1 },
-        { q: "5. Коли у Північній півкулі спостерігається день літнього сонцестояння?", opts: ["21 березня", "22 червня", "23 вересня", "22 грудня"], correct: 1 },
-        { q: "6. В які дні тривалість дня і ночі на всій Землі однакова?", opts: ["Дні рівнодення (21.03 та 23.09)", "Дні сонцестояння (22.06 та 22.12)", "Щомісяця 15 числа", "Тільки 1 січня"], correct: 0 },
-        { q: "7. Середня швидкість руху Землі по орбіті навколо Сонця становить близько:", opts: ["30 км/с", "100 км/год", "300 км/с", "10 км/с"], correct: 0 },
-        { q: "8. Який географічний наслідок має обертання Землі навколо Сонця та нахил її осі?", opts: ["Зміна пір року", "Виникнення припливів та відпливів", "Формування цунамі", "Рух літосферних плит"], correct: 0 },
-        { q: "9. Яка планета за рахунком від Сонця є Земля?", opts: ["Третя", "Друга", "Четверта", "П'ята"], correct: 0 },
-        { q: "10. Закон Бера пояснює:", opts: ["Асиметрію та асиметричний розмив берегів річок під дією сили Коріоліса", "Зміну температури з висотою", "Залежність солоності океанів від випаровування", "Швидкість вивітрювання гірських порід"], correct: 0 },
-        { q: "11. У день зимового сонцестояння (22 грудня) в Північній півкулі:", opts: ["Найдовший день і найкоротша ніч", "Найкоротший день і найдовша ніч", "День дорівнює ночі", "Сонце взагалі не заходить за обрій"], correct: 1 },
-        { q: "12. Теплові пояси Землі утворюються внаслідок:", opts: ["Нерівномірного розподілу сонячного тепла через кулястість Землі та кут падіння променів", "Вулканічної діяльності", "Різниці у висотах між материками", "Впливу атмосферних циклонів"], correct: 0 }
+        { q: "Яка тривалість зоряної доби обертання Землі навколо осі?", options: ["24 години точно", "23 год 56 хв 4 с", "25 годин", "365 днів"], correct: 1 },
+        { q: "Головним наслідком обертання Землі навколо власної осі є:", options: ["Зміна пір року", "Зміна дня і ночі", "Зміна сонячної активності", "Формування материків"], correct: 1 },
+        { q: "Як сила Коріоліса впливає на рух тіл у Північній півкулі?", options: ["Відхиляє праворуч за напрямком руху", "Відхиляє ліворуч за напрямком руху", "Зменшує швидкість руху", "Не чинить впливу"], correct: 0 },
+        { q: "Під яким кутом нахилена вісь Землі до площини орбіти?", options: ["90°", "66,5°", "23,5°", "45°"], correct: 1 },
+        { q: "Коли у Північній півкулі спостерігається день літнього сонцестояння?", options: ["21 березня", "22 червня", "23 вересня", "22 грудня"], correct: 1 },
+        { q: "В які дні тривалість дня і ночі на всій Землі однакова?", options: ["Дні рівнодення (21.03 та 23.09)", "Дні сонцестояння (22.06 та 22.12)", "Щомісяця 15 числа", "Тільки 1 січня"], correct: 0 },
+        { q: "Середня швидкість руху Землі по орбіті навколо Сонця становить близько:", options: ["30 км/с", "100 км/год", "300 км/с", "10 км/с"], correct: 0 },
+        { q: "Який географічний наслідок має обертання Землі навколо Сонця та нахил її осі?", options: ["Зміна пір року", "Виникнення припливів", "Формування цунамі", "Рух літосферних плит"], correct: 0 },
+        { q: "Яка планета за рахунком від Сонця є Земля?", options: ["Третя", "Друга", "Четверта", "П'ята"], correct: 0 },
+        { q: "Закон Бера пояснює:", options: ["Асиметричний розмив берегів річок під дією сили Коріоліса", "Зміну температури з висотою", "Залежність солоності від випаровування", "Швидкість вивітрювання"], correct: 0 },
+        { q: "У день зимового сонцестояння (22 грудня) в Північній півкулі:", options: ["Найдовший день", "Найкоротший день і найдовша ніч", "День дорівнює ночі", "Сонце не заходить"], correct: 1 },
+        { q: "Теплові пояси Землі утворюються внаслідок:", options: ["Нерівномірного розподілу сонячного тепла через кулястість Землі", "Вулканічної діяльності", "Різниці висот", "Впливу циклонів"], correct: 0 }
       ],
       3: [
-        { q: "1. З чого складається літосфера?", opts: ["Тільки з земної кори", "З земної кори та верхньої частини мантії", "З ядра та мантії", "З атмосфери та гідросфери"], correct: 1 },
-        { q: "2. На якому в'язко-пластичному шарі мантії переміщуються літосферні плити?", opts: ["Астеносфера", "Стратосфера", "Внутрішнє ядро", "Базальтовий шар"], correct: 0 },
-        { q: "3. Що виникає у зонах розходження (дивергентних межах) літосферних плит?", opts: ["Серединно-океанічні хребти та рифтові долини", "Глибоководні жолоби", "Високі складчасті гори", "Мегаполіси"], correct: 0 },
-        { q: "4. Які гори утворилися внаслідок зіткнення двох материкових плит (Євразійської та Індостанської)?", opts: ["Гімалаї", "Анди", "Кордильєри", "Аппалачі"], correct: 0 },
-        { q: "5. Прикладом трансформного розлому є:", opts: ["Розлом Сан-Андреас", "Марианський жолоб", "Драконові гори", "Дніпровсько-Донецька западина"], correct: 0 },
-        { q: "6. До ендогенних процесів формування рельєфу належать:", opts: ["Тектонічні рухи, магматизм, землетруси", "Вивітрювання, дія вітру та текучих вод", "Робота льодовиків та морського прибою", "Діяльність біосфери"], correct: 0 },
-        { q: "7. Головною рисою екзогенних процесів є:", opts: ["Руйнування та згладжування великих нерівностей рельєфу під дією зовнішніх сил", "Створення гірських систем", "Виверження вулканів", "Переміщення материків"], correct: 0 },
-        { q: "8. Чим материкова земна кора відрізняється від океанічної?", opts: ["Вона товща і має додатковий гранітний шар", "Вона тонша і складається тільки з базальту", "Вона не має осадового шару", "Вона складається виключно з заліза"], correct: 0 },
-        { q: "9. Місце під землею, де відбувається розрив або зміщення гірських порід під час землетрусу — це:", opts: ["Гіпоцентр (вогнище)", "Епіцентр", "Кратер", "Жерло"], correct: 0 },
-        { q: "10. Точка на земній поверхні, розташована безпосередньо над вогнищем землетрусу:", opts: ["Епіцентр", "Гіпоцентр", "Рифт", "Щит"], correct: 0 },
-        { q: "11. При зіткненні океанічної плити з материковою відбувається занурення океанічної плити, що утворює:", opts: ["Глибоководні жолоби та острівні дуги / берегові хребти", "Серединно-океанічні хребти", "Рівнинні щити", "Артезіанські басейни"], correct: 0 },
-        { q: "12. Східно-Африканський рифт є прикладом:", opts: ["Розходження літосферних плит на материку", "Зіткнення двох океанічних плит", "Згаслого вулканічного кратера", "Дії вітрової ерозії"], correct: 0 }
+        { q: "З чого складається літосфера?", options: ["Тільки з земної кори", "З земної кори та верхньої частини мантії", "З ядра та мантії", "З атмосфери та гідросфери"], correct: 1 },
+        { q: "На якому в'язко-пластичному шарі мантії переміщуються літосферні плити?", options: ["Астеносфера", "Стратосфера", "Внутрішнє ядро", "Базальтовий шар"], correct: 0 },
+        { q: "Що виникає у зонах розходження (дивергентних межах) літосферних плит?", options: ["Серединно-океанічні хребти та рифтові долини", "Глибоководні жолоби", "Високі складчасті гори", "Мегаполіси"], correct: 0 },
+        { q: "Які гори утворилися внаслідок зіткнення Євразійської та Індостанської плит?", options: ["Гімалаї", "Анди", "Кордильєри", "Аппалачі"], correct: 0 },
+        { q: "Прикладом трансформного розлому є:", options: ["Розлом Сан-Андреас", "Маріанський жолоб", "Драконові гори", "Дніпровсько-Донецька западина"], correct: 0 },
+        { q: "До ендогенних процесів формування рельєфу належать:", options: ["Тектонічні рухи, магматизм, землетруси", "Вивітрювання, дія вітру та текучих вод", "Робота льодовиків", "Діяльність біосфери"], correct: 0 },
+        { q: "Головною рисою екзогенних процесів є:", options: ["Руйнування та згладжування великих нерівностей рельєфу", "Створення гірських систем", "Виверження вулканів", "Переміщення материків"], correct: 0 },
+        { q: "Чим материкова земна кора відрізняється від океанічної?", options: ["Вона товща і має додатковий гранітний шар", "Вона тонша і складається тільки з базальту", "Вона не має осадового шару", "Вона складається з заліза"], correct: 0 },
+        { q: "Місце під землею, де відбувається розрив гірських порід під час землетрусу:", options: ["Гіпоцентр (вогнище)", "Епіцентр", "Кратер", "Жерло"], correct: 0 },
+        { q: "Точка на земній поверхні, розташована безпосередньо над вогнищем землетрусу:", options: ["Епіцентр", "Гіпоцентр", "Рифт", "Щит"], correct: 0 },
+        { q: "При зіткненні океанічної плити з материковою утворюються:", options: ["Глибоководні жолоби та острівні дуги", "Серединно-океанічні хребти", "Рівнинні щити", "Артезіанські басейни"], correct: 0 },
+        { q: "Східно-Африканський рифт є прикладом:", options: ["Розходження літосферних плит на материку", "Зіткнення двох океанічних плит", "Згаслого кратера", "Вітрової ерозії"], correct: 0 }
       ]
     };
 
-    // Стан тестів для кожного блоку
-    const quizState = {};
+    // Генерація типових питань для тем 4-20
+    for (let t = 4; t <= 20; t++) {
+      if (!allQuizData[t]) {
+        allQuizData[t] = [];
+        for (let q = 1; q <= 12; q++) {
+          allQuizData[t].push({
+            q: `Запитання ${q} з теми ${t}: Визначте основну закономірність чи характеристику поняття.`,
+            options: [`Правильне твердження варіанта А`, `Альтернативний варіант Б`, `Варіант В`, `Варіант Г`],
+            correct: 0
+          });
+        }
+      }
+    }
 
     window.toggleAccordion = function(header) {
       const card = header.parentElement;
       card.classList.toggle('active');
     };
 
-    window.toggleQuiz = function(wrapperId) {
-      const wrapper = document.getElementById(wrapperId);
-      const topicId = parseInt(wrapperId.replace('quiz-wrapper-', ''));
+    // Стан тестування для кожної теми
+    const quizStates = {};
 
-      if (wrapper.style.display === "block") {
-        wrapper.style.display = "none";
-      } else {
-        wrapper.style.display = "block";
-        if (!quizState[topicId]) {
-          initQuiz(topicId);
-        }
-      }
-    };
+    function renderQuiz(topicId) {
+      const container = document.getElementById(`quiz-container-${topicId}`);
+      if (!container) return;
 
-    function initQuiz(topicId) {
-      quizState[topicId] = {
-        currentIndex: 0,
-        score: 0,
-        userAnswers: [],
-        selectedOption: null
-      };
-      renderStep(topicId);
-    }
-
-    function renderStep(topicId) {
-      const state = quizState[topicId];
-      const questions = quizDataMap[topicId];
-      if (!questions) return;
-
-      const currentQ = questions[state.currentIndex];
-      const totalQ = questions.length;
-
-      // Оновлюємо бейдж та питання
-      document.getElementById(`badge-topic-${topicId}`).innerText = `Запитання ${state.currentIndex + 1} з ${totalQ}`;
-      document.getElementById(`qtext-topic-${topicId}`).innerText = currentQ.q;
-
-      // Варіанти А, Б, В, Г
-      const optionsContainer = document.getElementById(`options-topic-${topicId}`);
-      optionsContainer.innerHTML = '';
-
-      const prefixes = ['А)', 'Б)', 'В)', 'Г)'];
-
-      currentQ.opts.forEach((optText, idx) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'quiz-option-btn';
-        btn.innerHTML = `<strong>${prefixes[idx]}</strong>&nbsp; ${optText}`;
-
-        if (state.selectedOption === idx) {
-          btn.classList.add('selected');
-        }
-
-        btn.onclick = () => {
-          state.selectedOption = idx;
-          renderStep(topicId);
+      if (!quizStates[topicId]) {
+        quizStates[topicId] = {
+          currentQuestion: 0,
+          answers: [],
+          selectedIndex: null,
+          isFinished: false
         };
+      }
 
-        optionsContainer.appendChild(btn);
+      const state = quizStates[topicId];
+      const questions = allQuizData[topicId];
+      const total = questions.length;
+
+      if (state.isFinished) {
+        let score = 0;
+        questions.forEach((q, idx) => {
+          if (state.answers[idx] === q.correct) score++;
+        });
+
+        container.innerHTML = `
+          <div class="quiz-summary-box">
+            <h4 style="font-size:18px; color:#1e293b; margin-bottom:10px;">Тест завершено!</h4>
+            <p style="font-size:16px; color:#059669; font-weight:700; margin-bottom:15px;">
+              Ваш результат: ${score} з ${total} балів.
+            </p>
+            <button onclick="restartQuiz(${topicId})" style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Пройти знову</button>
+          </div>
+        `;
+
+        if (currentUser) {
+          saveToFirebase(topicId, score);
+        }
+        return;
+      }
+
+      const qData = questions[state.currentQuestion];
+
+      let optionsHtml = '';
+      const letters = ['А', 'Б', 'В', 'Г'];
+      qData.options.forEach((opt, idx) => {
+        const isSelected = state.selectedIndex === idx ? 'selected' : '';
+        optionsHtml += `
+          <button class="quiz-option-btn ${isSelected}" onclick="selectOption(${topicId}, ${idx})">
+            <strong>${letters[idx]})</strong>&nbsp;${opt}
+          </button>
+        `;
       });
 
-      // Кнопка переходу
-      const nextBtn = document.getElementById(`nextbtn-topic-${topicId}`);
-      if (state.selectedOption !== null) {
-        nextBtn.disabled = false;
-        nextBtn.classList.add('enabled');
-      } else {
-        nextBtn.disabled = true;
-        nextBtn.classList.remove('enabled');
-      }
+      const isBtnActive = state.selectedIndex !== null ? 'active' : '';
 
-      if (state.currentIndex === totalQ - 1) {
-        nextBtn.innerText = "Завершити тест та зберегти результат";
-        nextBtn.classList.add('quiz-finish-btn');
-      } else {
-        nextBtn.innerText = "Наступне запитання ➔";
-        nextBtn.classList.remove('quiz-finish-btn');
-      }
+      container.innerHTML = `
+        <div class="quiz-header">
+          📝 <span>Інтерактивний перевірочний тест</span>
+        </div>
+        <div class="quiz-badge">Запитання ${state.currentQuestion + 1} з ${total}</div>
+        <div class="quiz-question-text">${qData.q}</div>
+        <div class="quiz-options-list">${optionsHtml}</div>
+        <button class="quiz-next-btn ${isBtnActive}" onclick="nextQuestion(${topicId})">
+          ${state.currentQuestion + 1 === total ? 'Завершити тест' : 'Наступне запитання ➔'}
+        </button>
+      `;
     }
 
-    window.nextQuestionStep = async function(topicId) {
-      const state = quizState[topicId];
-      const questions = quizDataMap[topicId];
-
-      if (state.selectedOption === null) return;
-
-      if (state.selectedOption === questions[state.currentIndex].correct) {
-        state.score++;
-      }
-
-      state.currentIndex++;
-      state.selectedOption = null;
-
-      if (state.currentIndex < questions.length) {
-        renderStep(topicId);
-      } else {
-        // Тест завершено
-        await finishQuiz(topicId);
-      }
+    window.selectOption = function(topicId, index) {
+      quizStates[topicId].selectedIndex = index;
+      renderQuiz(topicId);
     };
 
-    async function finishQuiz(topicId) {
-      const state = quizState[topicId];
-      const totalQ = quizDataMap[topicId].length;
-      const score = state.score;
+    window.nextQuestion = function(topicId) {
+      const state = quizStates[topicId];
+      if (state.selectedIndex === null) return;
 
-      const resultDiv = document.getElementById(`result-topic-${topicId}`);
-      const optionsContainer = document.getElementById(`options-topic-${topicId}`);
-      const nextBtn = document.getElementById(`nextbtn-topic-${topicId}`);
-      const qtext = document.getElementById(`qtext-topic-${topicId}`);
+      state.answers[state.currentQuestion] = state.selectedIndex;
+      state.selectedIndex = null;
 
-      optionsContainer.style.display = "none";
-      nextBtn.style.display = "none";
-      qtext.style.display = "none";
-
-      resultDiv.style.display = "block";
-      resultDiv.innerHTML = `Ваш результат з теми ${topicId}: <strong>${score} з ${totalQ} балів</strong>.`;
-
-      if (currentUser) {
-        try {
-          const userRef = doc(db, "users", currentUser.uid);
-          const userSnap = await getDoc(userRef);
-
-          let geoScores = {};
-          if (userSnap.exists() && userSnap.data().geographyScores) {
-            geoScores = userSnap.data().geographyScores;
-          }
-
-          if (!geoScores[`topic_${topicId}`] || score > geoScores[`topic_${topicId}`]) {
-            geoScores[`topic_${topicId}`] = score;
-
-            const totalGeoScore = Object.values(geoScores).reduce((a, b) => a + b, 0);
-
-            await setDoc(userRef, {
-              geographyScores: geoScores,
-              geographyTotalScore: totalGeoScore,
-              updatedAt: new Date()
-            }, { merge: true });
-
-            resultDiv.innerHTML += `<br>✅ Результат збережено та синхронізовано з профілем на головній сторінці!`;
-          }
-        } catch (e) {
-          console.error("Помилка збереження результату в Firebase: ", e);
-        }
+      if (state.currentQuestion + 1 < allQuizData[topicId].length) {
+        state.currentQuestion++;
       } else {
-        resultDiv.innerHTML += `<br>⚠️ Ви не авторизовані через Google. Увійдіть на головній сторінці, щоб зберегти бали у свій профіль.`;
+        state.isFinished = true;
+      }
+      renderQuiz(topicId);
+    };
+
+    window.restartQuiz = function(topicId) {
+      quizStates[topicId] = {
+        currentQuestion: 0,
+        answers: [],
+        selectedIndex: null,
+        isFinished: false
+      };
+      renderQuiz(topicId);
+    };
+
+    async function saveToFirebase(topicId, score) {
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        let geoScores = {};
+        if (userSnap.exists() && userSnap.data().geographyScores) {
+          geoScores = userSnap.data().geographyScores;
+        }
+
+        if (!geoScores[`topic_${topicId}`] || score > geoScores[`topic_${topicId}`]) {
+          geoScores[`topic_${topicId}`] = score;
+          const totalGeoScore = Object.values(geoScores).reduce((a, b) => a + b, 0);
+
+          await setDoc(userRef, {
+            geographyScores: geoScores,
+            geographyTotalScore: totalGeoScore,
+            updatedAt: new Date()
+          }, { merge: true });
+        }
+      } catch (e) {
+        console.error("Помилка збереження в Firebase:", e);
       }
     }
+
+    // Ініціалізація тестів при завантаженні
+    document.addEventListener("DOMContentLoaded", () => {
+      for (let t = 1; t <= 20; t++) {
+        renderQuiz(t);
+      }
+    });
   </script>
 
 </body>
