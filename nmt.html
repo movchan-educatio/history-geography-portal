@@ -376,8 +376,8 @@
 
     // Зберігаємо поточний стан тестів в пам'яті сесії
     let quizState = {
-      history: { shuffled: [], currentIndex: 0, score: 0 },
-      geography: { shuffled: [], currentIndex: 0, score: 0 }
+      history: { shuffled: [], currentIndex: 0, score: 0, selectedAnswer: null, answerLocked: false },
+      geography: { shuffled: [], currentIndex: 0, score: 0, selectedAnswer: null, answerLocked: false }
     };
 
     function renderTests() {
@@ -399,35 +399,29 @@
       const state = quizState[type];
       const resDiv = document.getElementById(`${type}-result`);
 
-      resDiv.textContent = '';
-
       if (state.currentIndex >= state.shuffled.length) {
-        // Тест завершено
         const totalCount = state.shuffled.length;
         const score = state.score;
-        
-        // Зберігаємо результат локально та передаємо його у Firebase.
         localStorage.setItem(`nmt_${type}_score`, score);
         localStorage.setItem(`nmt_${type}_total`, totalCount);
-        syncNmtResult(type, score, totalCount);
 
-        const percentage = Math.round((score / totalCount) * 100);
+        const percentage = totalCount ? Math.round((score / totalCount) * 100) : 0;
         let msg = "";
         if (score === totalCount) {
           resDiv.style.color = "#16a34a";
-          msg = `🎉 Фантастично! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'})!`;
+          msg = `🎉 Фантастично! Ваш результат: ${score} з ${totalCount} балів (${percentage}%).`;
         } else if (score >= 22) {
           resDiv.style.color = "#2563eb";
-          msg = `👍 Чудовий результат! Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'})!`;
+          msg = `👍 Чудовий результат! Ваш результат: ${score} з ${totalCount} балів (${percentage}%).`;
         } else if (score >= 15) {
           resDiv.style.color = "#d97706";
-          msg = `⚠️ Задовільно. Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'}).`;
+          msg = `⚠️ Задовільно. Ваш результат: ${score} з ${totalCount} балів (${percentage}%).`;
         } else {
           resDiv.style.color = "#dc2626";
-          msg = `📚 Ваш результат: ${score} з ${totalCount} балів (${percentage}%). Бали збережено (${type === 'history' ? 'history_point' : 'geography_point'}).`;
+          msg = `📚 Ваш результат: ${score} з ${totalCount} балів (${percentage}%).`;
         }
 
-        container.innerHTML = `<div class="quiz-card" style="text-align: center;"><h3 style="margin-bottom: 15px;">Тест завершено!</h3><p style="font-size: 16px; font-weight: 600;">${msg}</p><button class="btn-check" style="margin-top: 15px;" onclick="renderTests()">Пройти знову</button></div>`;
+        container.innerHTML = `<div class="quiz-card" style="text-align:center;"><h3 style="margin-bottom:15px;">🏁 Тест завершено!</h3><p style="font-size:16px;font-weight:600;">${msg}</p><p style="color:#64748b;">Правильні відповіді вже зараховувалися по 1 балу під час проходження.</p><button class="btn-check" style="margin-top:15px;" onclick="renderTests()">🔄 Пройти ще раз</button></div>`;
         return;
       }
 
@@ -435,30 +429,42 @@
       let optionsWithMeta = item.opts.map((opt, oIdx) => ({ text: opt, isCorrect: oIdx === item.ans }));
       optionsWithMeta = shuffleArray(optionsWithMeta);
 
-      let html = `<div class="quiz-card"><div class="quiz-question">Питання ${state.currentIndex + 1} з ${state.shuffled.length}: ${item.q.replace(/^\d+\.\s*/, '')}</div><div class="quiz-options">`;
-      
+      let html = `<div class="quiz-card"><div class="quiz-question">Питання ${state.currentIndex + 1} з ${state.shuffled.length}: ${item.q.replace(/^\\d+\.\\s*/, '')}</div><div class="quiz-options">`;
       optionsWithMeta.forEach((optObj, oIndex) => {
-        const val = optObj.isCorrect ? 'correct' : 'wrong';
-        html += `<label><input type="radio" name="${type}_current" value="${val}" onclick="handleAnswer('${type}', this)"> ${optObj.text}</label>`;
+        const value = optObj.isCorrect ? 'correct' : 'wrong';
+        html += `<label><input type="radio" name="${type}_current" value="${value}" onchange="selectNmtAnswer('${type}', this)"> ${optObj.text}</label>`;
       });
-      html += `</div></div>`;
-
+      html += `</div><button id="${type}-next-btn" class="btn-check" style="margin-top:12px;opacity:.55;cursor:not-allowed;" disabled onclick="nextNmtQuestion('${type}')">Наступне запитання ➜</button><div id="${type}-sync-status" style="margin-top:10px;color:#64748b;font-size:13px;min-height:18px;"></div></div>`;
       container.innerHTML = html;
     }
 
-    function handleAnswer(type, inputElement) {
+    function selectNmtAnswer(type, inputElement) {
       const state = quizState[type];
-      const isCorrect = inputElement.value === 'correct';
+      state.selectedAnswer = inputElement.value;
+      const btn = document.getElementById(`${type}-next-btn`);
+      if (btn) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+      }
+    }
 
+    async function nextNmtQuestion(type) {
+      const state = quizState[type];
+      if (!state.selectedAnswer || state.answerLocked) return;
+      state.answerLocked = true;
+
+      const isCorrect = state.selectedAnswer === 'correct';
       if (isCorrect) {
         state.score++;
+        // ВАЖЛИВО: один правильний вибір = рівно один бал.
+        await awardNmtPoint(type, state.score, state.shuffled.length);
       }
 
-      // Невелика затримка перед переходом до наступного питання для зручності
-      setTimeout(() => {
-        state.currentIndex++;
-        renderQuestion(type);
-      }, 300);
+      state.currentIndex++;
+      state.selectedAnswer = null;
+      state.answerLocked = false;
+      renderQuestion(type);
     }
 
     function downloadFullPage() {
@@ -486,17 +492,79 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
   const firebaseConfig = {apiKey:"AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",authDomain:"movchan-portal.firebaseapp.com",databaseURL:"https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",projectId:"movchan-portal",storageBucket:"movchan-portal.firebasestorage.app",messagingSenderId:"535915495927",appId:"1:535915495927:web:71f899ea2876ee129c2ef2"};
-  const app=initializeApp(firebaseConfig), auth=getAuth(app), database=getDatabase(app); let currentUser=null;
-  async function syncNmtResult(type,score,total){
-    if(!currentUser)return; score=Math.max(0,Number(score)||0); total=Math.max(0,Number(total)||0); if(!total)return;
-    try{await runTransaction(ref(database,'users/'+currentUser.uid),data=>{
-      data=data||{}; const key='nmt_'+type+'_score', totalKey='nmt_'+type+'_total'; const old=Number(data[key]||0); const best=Math.max(old,score); const delta=best-old;
-      data.name=data.name||currentUser.displayName||'Учень'; data[key]=best; data[totalKey]=total; data.nmt_total_score=Number(data.nmt_history_score||0)+Number(data.nmt_geography_score||0); data.score=Number(data.score||0)+delta; return data;
-    });}catch(e){console.error('НМТ Firebase:',e)}
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
+  const pending = { history: 0, geography: 0 };
+
+  function pendingKey(type) { return `nmt_pending_${type}`; }
+  function loadPending(type) { return Math.max(0, Number(localStorage.getItem(pendingKey(type)) || 0)); }
+  function savePending(type, value) { localStorage.setItem(pendingKey(type), String(Math.max(0, value))); }
+
+  // Надійна модель: у Firebase зберігаємо найкращий результат НМТ,
+  // а в users/UID/score додаємо тільки різницю до попереднього найкращого.
+  // Тому одна й та сама правильна відповідь фізично не може бути зарахована двічі.
+  async function awardNmtPoint(type, newScore, total) {
+    const target = Math.max(0, Number(newScore) || 0);
+    if (!total || target <= 0) return;
+
+    if (!currentUser) {
+      pending[type] = Math.max(pending[type], target);
+      savePending(type, pending[type]);
+      const status = document.getElementById(`${type}-sync-status`);
+      if (status) status.textContent = '⏳ Бал буде синхронізовано після входу через Google.';
+      return;
+    }
+
+    try {
+      await runTransaction(ref(database, 'users/' + currentUser.uid), data => {
+        data = data || {};
+        const key = `nmt_${type}_score`;
+        const totalKey = `nmt_${type}_total`;
+        const oldBest = Math.max(0, Number(data[key] || 0));
+        const best = Math.min(Number(total) || target, Math.max(oldBest, target));
+        const delta = best - oldBest;
+
+        data.name = data.name || currentUser.displayName || 'Учень';
+        data[key] = best;
+        data[totalKey] = Number(total) || 0;
+        data.nmt_total_score = Number(data.nmt_history_score || 0) + Number(data.nmt_geography_score || 0);
+        if (delta > 0) data.score = Number(data.score || 0) + delta;
+        else data.score = Number(data.score || 0);
+        return data;
+      });
+
+      pending[type] = 0;
+      savePending(type, 0);
+      const status = document.getElementById(`${type}-sync-status`);
+      if (status) status.textContent = '✅ Бал синхронізовано';
+    } catch (error) {
+      console.error('НМТ Firebase:', error);
+      pending[type] = Math.max(pending[type], target);
+      savePending(type, pending[type]);
+      const status = document.getElementById(`${type}-sync-status`);
+      if (status) status.textContent = '⚠️ Не вдалося синхронізувати. Спробуйте ще раз.';
+    }
   }
-  window.syncNmtResult=syncNmtResult;
-  onAuthStateChanged(auth,u=>{currentUser=u;window.currentUserUid=u?u.uid:null;if(!u)return;const hs=Number(localStorage.getItem('nmt_history_score')||0),ht=Number(localStorage.getItem('nmt_history_total')||0),gs=Number(localStorage.getItem('nmt_geography_score')||0),gt=Number(localStorage.getItem('nmt_geography_total')||0);if(ht)syncNmtResult('history',hs,ht);if(gt)syncNmtResult('geography',gs,gt)});
+
+  window.awardNmtPoint = awardNmtPoint;
+
+  onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    window.currentUserUid = user ? user.uid : null;
+    if (!user) return;
+
+    for (const type of ['history', 'geography']) {
+      const storedScore = Math.max(0, Number(localStorage.getItem(`nmt_${type}_score`) || 0));
+      const queued = loadPending(type);
+      const target = Math.max(storedScore, queued);
+      const total = Math.max(0, Number(localStorage.getItem(`nmt_${type}_total`) || 30));
+      if (target > 0) await awardNmtPoint(type, target, total);
+    }
+  });
 </script>
 
 </body>
