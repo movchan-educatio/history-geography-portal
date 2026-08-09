@@ -9,12 +9,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=5">
   <style>
-    .quiz-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .quiz-question { font-weight: 600; font-size: 15px; color: #1e293b; margin-bottom: 12px; }
-    .quiz-options label { display: block; background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+    /* Тести НМТ оформлені так само, як тести в розділах Історія та Географія */
+    .quiz-card { margin-top: 25px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .quiz-question { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 15px; line-height: 1.4; }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .quiz-options label { display: block; background: #ffffff; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; color: #334155; font-weight: 500; transition: all 0.2s ease; }
     .quiz-options label:hover { background: #f1f5f9; border-color: #94a3b8; }
     .quiz-options input { margin-right: 10px; }
-    .btn-check { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: background 0.2s; }
+    .btn-check { background: #2563eb; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; }
     .btn-check:hover { background: #1d4ed8; }
     .global-test-container { background: #f8fafc; border: 2px solid #2563eb; border-radius: 12px; padding: 25px; margin-top: 40px; margin-bottom: 40px; }
     .export-container { text-align: center; background: #eff6ff; border: 2px dashed #2563eb; padding: 20px; border-radius: 12px; margin: 30px 0; }
@@ -483,21 +485,92 @@
   </script>
 
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-  const firebaseConfig = {apiKey:"AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",authDomain:"movchan-portal.firebaseapp.com",databaseURL:"https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",projectId:"movchan-portal",storageBucket:"movchan-portal.firebasestorage.app",messagingSenderId:"535915495927",appId:"1:535915495927:web:71f899ea2876ee129c2ef2"};
-  const app=initializeApp(firebaseConfig), auth=getAuth(app), database=getDatabase(app); let currentUser=null;
-  async function syncNmtResult(type,score,total){
-    if(!currentUser)return; score=Math.max(0,Number(score)||0); total=Math.max(0,Number(total)||0); if(!total)return;
-    try{await runTransaction(ref(database,'users/'+currentUser.uid),data=>{
-      data=data||{}; const key='nmt_'+type+'_score', totalKey='nmt_'+type+'_total'; const old=Number(data[key]||0); const best=Math.max(old,score); const delta=best-old;
-      data.name=data.name||currentUser.displayName||'Учень'; data[key]=best; data[totalKey]=total; data.nmt_total_score=Number(data.nmt_history_score||0)+Number(data.nmt_geography_score||0); data.score=Number(data.score||0)+delta; return data;
-    });}catch(e){console.error('НМТ Firebase:',e)}
-  }
-  window.syncNmtResult=syncNmtResult;
-  onAuthStateChanged(auth,u=>{currentUser=u;window.currentUserUid=u?u.uid:null;if(!u)return;const hs=Number(localStorage.getItem('nmt_history_score')||0),ht=Number(localStorage.getItem('nmt_history_total')||0),gs=Number(localStorage.getItem('nmt_geography_score')||0),gt=Number(localStorage.getItem('nmt_geography_total')||0);if(ht)syncNmtResult('history',hs,ht);if(gt)syncNmtResult('geography',gs,gt)});
-</script>
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+      authDomain: "movchan-portal.firebaseapp.com",
+      databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "movchan-portal",
+      storageBucket: "movchan-portal.firebasestorage.app",
+      messagingSenderId: "535915495927",
+      appId: "1:535915495927:web:71f899ea2876ee129c2ef2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    let currentUser = null;
+
+    // Результати, які з'явилися до завершення Firebase-авторизації.
+    const pending = {};
+
+    async function syncOne(type, score, total) {
+      score = Number(score) || 0;
+      total = Number(total) || 0;
+      if (score < 0 || total <= 0) return;
+
+      if (!currentUser) {
+        pending[type] = { score, total };
+        return;
+      }
+
+      const userRef = ref(database, 'users/' + currentUser.uid);
+
+      try {
+        const snapshot = await get(userRef);
+        const data = snapshot.exists() ? snapshot.val() : {};
+
+        const scoreKey = `nmt_${type}_score`;
+        const totalKey = `nmt_${type}_total`;
+        const savedScore = Number(data[scoreKey]) || 0;
+        const newScore = Math.max(savedScore, score);
+        const additionalPoints = newScore - savedScore;
+        const currentTotalScore = Number(data.score) || 0;
+
+        const updates = {
+          [scoreKey]: newScore,
+          [totalKey]: Math.max(Number(data[totalKey]) || 0, total),
+          nmt_total_score: newScore + (type === 'history'
+            ? Number(data.nmt_geography_score) || 0
+            : Number(data.nmt_history_score) || 0)
+        };
+
+        if (additionalPoints > 0) {
+          updates.score = currentTotalScore + additionalPoints;
+        }
+
+        await update(userRef, updates);
+        console.log(`НМТ ${type}: ${newScore}/${total} синхронізовано.`);
+      } catch (error) {
+        console.error(`Помилка синхронізації НМТ (${type}):`, error);
+        pending[type] = { score, total };
+      }
+    }
+
+    window.syncNmtResult = syncOne;
+
+    onAuthStateChanged(auth, async user => {
+      currentUser = user;
+      if (!user) return;
+
+      const saved = [
+        ['history', localStorage.getItem('nmt_history_score'), localStorage.getItem('nmt_history_total')],
+        ['geography', localStorage.getItem('nmt_geography_score'), localStorage.getItem('nmt_geography_total')]
+      ];
+
+      for (const [type, score, total] of saved) {
+        if (Number(score) > 0) await syncOne(type, score, total);
+      }
+
+      for (const [type, result] of Object.entries(pending)) {
+        if (result) await syncOne(type, result.score, result.total);
+        delete pending[type];
+      }
+    });
+  </script>
 
 </body>
 </html>
