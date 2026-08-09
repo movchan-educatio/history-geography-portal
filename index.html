@@ -784,22 +784,37 @@
         const userRef = ref(database, 'users/' + user.uid);
         get(userRef).then((snapshot) => {
           const historyTestPoints = parseInt(localStorage.getItem('total_history_points')) || 0;
+          const geographyTestPoints = parseInt(localStorage.getItem('total_geography_points')) || 0;
+          const totalTestPoints = historyTestPoints + geographyTestPoints;
+
           if (!snapshot.exists()) {
             set(userRef, {
               name: user.displayName,
-              score: 5 + historyTestPoints,
-              total_history_points: historyTestPoints
+              score: 5 + totalTestPoints,
+              total_history_points: historyTestPoints,
+              total_geography_points: geographyTestPoints
             });
           } else {
             const currentData = snapshot.val();
             const currentScore = currentData.score || 0;
             const savedHistPoints = currentData.total_history_points || 0;
+            const savedGeoPoints = currentData.total_geography_points || 0;
+            
+            let diff = 0;
+            let updates = {};
+
             if (historyTestPoints > savedHistPoints) {
-              const diff = historyTestPoints - savedHistPoints;
-              update(userRef, {
-                score: currentScore + diff,
-                total_history_points: historyTestPoints
-              });
+              diff += (historyTestPoints - savedHistPoints);
+              updates.total_history_points = historyTestPoints;
+            }
+            if (geographyTestPoints > savedGeoPoints) {
+              diff += (geographyTestPoints - savedGeoPoints);
+              updates.total_geography_points = geographyTestPoints;
+            }
+
+            if (diff > 0) {
+              updates.score = currentScore + diff;
+              update(userRef, updates);
             }
           }
         });
@@ -1137,8 +1152,8 @@
       if (histScore !== null) {
         document.getElementById('res-history').innerHTML = `📜 Історія: <strong>${histScore} / ${histTotal} балів</strong>`;
       }
-      const geoScore = localStorage.getItem('nmt_geography_score');
-      const geoTotal = localStorage.getItem('nmt_geography_total');
+      const geoScore = localStorage.getItem('nmt_geography_score') || localStorage.getItem('total_geography_points');
+      const geoTotal = localStorage.getItem('nmt_geography_total') || '100';
       if (geoScore !== null) {
         document.getElementById('res-geography').innerHTML = `🌍 Географія: <strong>${geoScore} / ${geoTotal} балів</strong>`;
       }
