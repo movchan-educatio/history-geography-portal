@@ -233,7 +233,7 @@
     .search-result-title { font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 2px; }
     .search-result-desc { font-size: 12px; color: #64748b; }
 
-    /* Блок «Для кого призначений Портал?» */
+    /* Блок «Кому буде корисний Портал?» */
     .target-audience-section {
       background: #ffffff;
       border-radius: 16px;
@@ -584,9 +584,9 @@
   <!-- Основний контент -->
   <main class="main-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
     
-    <!-- БЛОК: ДЛЯ КОГО ПРИЗНАЧЕНИЙ ПОРТАЛ? -->
+    <!-- БЛОК: КОМУ БУДЕ КОРИСНИЙ ПОРТАЛ? -->
     <section class="target-audience-section">
-      <h3>Для кого призначений Портал?</h3>
+      <h3>Кому буде корисний Портал?</h3>
       <div class="target-audience-grid">
         <div class="audience-card">
           <h4>🎓 Учням та випускникам</h4>
@@ -1272,10 +1272,89 @@
 
     let currentCountryGameIndex = 0;
 
+    /* --- ЛОГІКА ГЛОБАЛЬНОГО ПОШУКУ ПО САЙТУ --- */
+    const siteSearchIndex = [
+      { title: "📜 Розділ: Історія", desc: "Уроки, історичні матеріали та інтерактивні тести з історії", url: "history.html" },
+      { title: "🌍 Розділ: Географія", desc: "Географічні карти, конспекти та практичні завдання", url: "geography.html" },
+      { title: "🎓 Тренажер НМТ", desc: "Онлайн-тестування та підготовка до НМТ з історії та географії", url: "nmt.html" },
+      { title: "📚 Методична скарбничка", desc: "Корисні розробки, методички та інструменти для вчителів", url: "methodology.html" },
+      { title: "🎧 AUDIO & 3D Віртуальні Тури", desc: "Аудіоекскурсії та віртуальне занурення у видатні місця", url: "tours.html" },
+      { title: "🏺 3D Артефакти", desc: "Інтерактивні тривимірні моделі історичних артефактів", url: "artifacts.html" },
+      { title: "▶️ YouTube-канал «Реальна історія»", desc: "Відеоматеріали та історичні розслідування на YouTube", url: "https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" },
+      { title: "🦖 Клуб дослідників & Динозаврик", desc: "Зона розваг, міні-ігри та студентська стіна коментарів", url: "#kids-club" }
+    ];
+
+    // Додаємо факти до пошукового індексу
+    keyEvents.forEach(evt => {
+      siteSearchIndex.push({
+        title: `📜 Історія: ${evt.title}`,
+        desc: evt.short,
+        url: "history.html"
+      });
+    });
+
+    geoFacts.forEach(fact => {
+      siteSearchIndex.push({
+        title: `🌍 Географія: ${fact.title}`,
+        desc: fact.short,
+        url: "geography.html"
+      });
+    });
+
+    function setupSiteSearch() {
+      const searchInput = document.getElementById('siteSearchInput');
+      const searchResults = document.getElementById('searchResults');
+      if (!searchInput || !searchResults) return;
+
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+          searchResults.style.display = 'none';
+          searchResults.innerHTML = '';
+          return;
+        }
+
+        const filtered = siteSearchIndex.filter(item => 
+          item.title.toLowerCase().includes(query) || 
+          item.desc.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+          searchResults.innerHTML = `<div class="search-result-item" style="color: #64748b; font-size: 13px;">Нічого не знайдено за запитом "${e.target.value}"</div>`;
+        } else {
+          searchResults.innerHTML = filtered.slice(0, 8).map(item => `
+            <a href="${item.url}" class="search-result-item">
+              <div class="search-result-title">${item.title}</div>
+              <div class="search-result-desc">${item.desc}</div>
+            </a>
+          `).join('');
+        }
+        searchResults.style.display = 'block';
+      });
+
+      // Перехід за натисканням Enter
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const firstLink = searchResults.querySelector('a');
+          if (firstLink) {
+            window.location.href = firstLink.getAttribute('href');
+          }
+        }
+      });
+
+      // Закриття результатів при кліку поза полем пошуку
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+          searchResults.style.display = 'none';
+        }
+      });
+    }
+
     function initPageData() {
       setupTravelerAnimation();
       loadNmtResults();
       updateDinoHighScoreUI();
+      setupSiteSearch();
 
       // Завантаження випадкового факту історії
       const randomHist = keyEvents[Math.floor(Math.random() * keyEvents.length)];
