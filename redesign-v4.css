@@ -1,0 +1,186 @@
+/* =========================================================
+   HISTORY & GEOGRAPHY WITHOUT BORDERS — REDESIGN V4
+   Clean educational UI: no glow, no blur, no decorative noise.
+   ========================================================= */
+:root{
+  --v4-ink:#102a43;
+  --v4-text:#243b53;
+  --v4-muted:#627d98;
+  --v4-blue:#2563eb;
+  --v4-blue-dark:#1d4ed8;
+  --v4-teal:#0f766e;
+  --v4-gold:#d97706;
+  --v4-bg:#f7f9fc;
+  --v4-paper:#ffffff;
+  --v4-line:#d9e2ec;
+  --v4-soft:#eef4ff;
+  --v4-shadow:0 8px 24px rgba(16,42,67,.07);
+}
+
+/* Global cleanup */
+html{scroll-behavior:smooth}
+body,body.portal{background:var(--v4-bg)!important;color:var(--v4-text)!important}
+*{box-shadow:none!important;text-shadow:none!important}
+
+/* Keep only useful, subtle depth */
+.info-card,.audience-card,.leaderboard-section,.virtual-tour-card,.kids-club-section,
+.nmt-library,.nmt-results-widget,.section-block,.page-header,.panel,.dash-card,.item{
+  box-shadow:var(--v4-shadow)!important;
+  border:1px solid var(--v4-line)!important;
+}
+
+/* Kill old glow/pulse effects */
+.pulse,.glow,.nmt-hero-glow,.user-login-btn,.traveler-container,
+.user-login-btn{animation:none!important;filter:none!important}
+.nmt-hero-glow{display:none!important}
+
+/* Shared navigation */
+header,.portal-nav{
+  background:#fff!important;
+  border-bottom:1px solid var(--v4-line)!important;
+  box-shadow:0 2px 12px rgba(16,42,67,.04)!important;
+}
+.logo-text,.portal-brand{color:var(--v4-ink)!important}
+.logo-text span{color:var(--v4-blue)!important}
+nav a,.portal-links a{color:var(--v4-text)!important}
+nav a:hover,nav a.active,.portal-links a:hover,.portal-links a.active{
+  background:#eef4ff!important;color:var(--v4-blue-dark)!important;
+}
+
+/* Main hero */
+.mountain-banner{
+  min-height:470px!important;
+  padding:70px clamp(24px,6vw,90px)!important;
+  margin:0 0 36px!important;
+  border-radius:0 0 28px 28px!important;
+  background:
+    linear-gradient(90deg,rgba(9,28,48,.94) 0%,rgba(9,28,48,.78) 43%,rgba(9,28,48,.25) 76%,rgba(9,28,48,.18) 100%),
+    url('hero-banner.jpeg') center 30%/cover no-repeat!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;text-align:left!important;
+  overflow:hidden!important;
+}
+.mountain-banner .hero-text-content{max-width:760px!important;margin-left:clamp(0px,5vw,70px)!important}
+.mountain-banner h1{
+  max-width:760px!important;font-size:clamp(42px,6vw,78px)!important;line-height:.96!important;
+  letter-spacing:-.045em!important;margin:0 0 18px!important;color:#fff!important;
+}
+.mountain-banner h1 span{color:#38bdf8!important}
+.mountain-banner .subtitle{font-size:clamp(18px,2vw,25px)!important;color:#fff!important;margin:0 0 10px!important}
+.mountain-banner .quote{font-size:17px!important;color:#dbeafe!important;margin:0 0 28px!important}
+.search-wrapper{max-width:680px!important;margin:0!important}
+.search-bar-box{border:1px solid #cbd5e1!important;border-radius:14px!important;padding:5px 16px!important;background:#fff!important}
+.search-bar-box:focus-within{border-color:#60a5fa!important}
+.search-input-field{color:var(--v4-text)!important}
+
+/* Home content */
+.main-container{max-width:1180px!important}
+.target-audience-section{background:#fff!important;border:1px solid var(--v4-line)!important;border-radius:22px!important;padding:28px!important}
+.target-audience-section>h3{text-align:center!important;color:var(--v4-ink)!important;font-size:30px!important;margin-top:0!important}
+.target-audience-grid{gap:16px!important}
+.audience-card{background:#fff!important;border-radius:18px!important;padding:22px!important}
+.audience-card h4{color:var(--v4-ink)!important;font-size:18px!important}
+.audience-card li{color:var(--v4-text)!important;line-height:1.65!important}
+
+/* Buttons — one coherent language */
+button,.btn-link,.user-login-btn,.nmt-hero-test-button,.nmt-hero-button,.btn-primary,.btn-secondary,.tab-btn{
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease!important;
+}
+button:hover,.btn-link:hover,.nmt-hero-test-button:hover,.nmt-hero-button:hover,.btn-primary:hover,.btn-secondary:hover{transform:translateY(-1px)!important}
+.user-login-btn,.btn-primary,.nmt-hero-test-button.history,.nmt-hero-button.history{background:var(--v4-blue)!important;border-color:var(--v4-blue)!important;color:#fff!important}
+.user-login-btn:hover,.btn-primary:hover{background:var(--v4-blue-dark)!important}
+.btn-secondary{background:#fff!important;color:var(--v4-ink)!important;border:1px solid var(--v4-line)!important}
+.btn-link{color:var(--v4-blue-dark)!important}
+
+/* Cards and headings */
+.info-card,.section-block{background:#fff!important;color:var(--v4-text)!important;border-radius:18px!important}
+.info-card h1,.info-card h2,.info-card h3,.info-card h4,.section-title{color:var(--v4-ink)!important}
+.info-card p,.info-card li,.section-block p,.section-block li{color:var(--v4-text)!important}
+.section-title{font-weight:800!important}
+
+/* NMT */
+.nmt-hero,.nmt-hero-section,.nmt-library-hero{
+  background:#102a43!important;color:#fff!important;border-radius:24px!important;border:1px solid #1e3a56!important;
+}
+.nmt-hero h1,.nmt-hero h2,.nmt-hero p,.nmt-hero .quote{color:#fff!important}
+.nmt-hero h1 span{color:#fbbf24!important}
+.nmt-hero-test-button,.nmt-hero-button{background:#1f4261!important;border:1px solid #5f7f9d!important;border-radius:12px!important}
+.nmt-hero-test-button.geography,.nmt-hero-button.geography{border-color:#5eead4!important}
+.nmt-library{background:#fff!important;border-radius:22px!important}
+.nmt-library h2{color:var(--v4-ink)!important}
+.nmt-library-sub{color:var(--v4-muted)!important}
+.nmt-card,.nmt-person,.nmt-monument,.nmt-term{background:#fff!important;border:1px solid var(--v4-line)!important;color:var(--v4-text)!important}
+
+/* Methodology */
+.page-header{background:#fff!important;border-radius:22px!important;padding:34px!important;text-align:center!important}
+.page-header h1{color:var(--v4-ink)!important;font-size:clamp(32px,4vw,48px)!important}
+.page-header p{color:var(--v4-muted)!important;font-size:17px!important}
+.methodology,.page-header + *{color:var(--v4-text)}
+/* The poem block was becoming invisible because of inherited styles. */
+.info-card:has(.fa-pen-nib){background:#102a43!important;color:#fff!important;border:0!important}
+.info-card:has(.fa-pen-nib) h3{color:#7dd3fc!important}
+.info-card:has(.fa-pen-nib) div{color:#f8fafc!important;font-size:18px!important;line-height:1.95!important;text-align:center!important;max-width:760px!important;margin-left:auto!important;margin-right:auto!important}
+.info-card:has(.fa-pen-nib) p{color:#dbeafe!important}
+
+/* Footer on every page */
+footer{
+  background:#102a43!important;color:#fff!important;border-top:0!important;
+  padding:28px 20px!important;text-align:center!important;margin-top:50px!important;
+}
+footer p{color:#dbeafe!important;margin:5px 0!important}
+.footer-teacher-line{color:#fff!important;font-weight:800!important}
+
+/* Back to top */
+#backToTop{
+  position:fixed!important;right:22px!important;bottom:22px!important;width:48px!important;height:48px!important;
+  border-radius:50%!important;border:1px solid #cbd5e1!important;background:#fff!important;color:var(--v4-blue)!important;
+  font-size:22px!important;font-weight:900!important;display:grid!important;place-items:center!important;
+  opacity:0!important;visibility:hidden!important;transform:translateY(8px)!important;z-index:9999!important;
+  box-shadow:0 8px 22px rgba(16,42,67,.12)!important;
+}
+#backToTop.visible{opacity:1!important;visibility:visible!important;transform:none!important}
+#backToTop:hover{background:var(--v4-blue)!important;color:#fff!important}
+
+/* Dashboard v4 */
+body.portal .portal-shell{max-width:1240px!important}
+.portal-hero{background:#fff!important;border:1px solid var(--v4-line)!important;border-radius:24px!important}
+.portal-hero:after{display:none!important}
+.portal-hero h1{color:var(--v4-ink)!important}
+.portal-hero h1 span{color:var(--v4-blue)!important}
+.portal-hero p{color:var(--v4-text)!important}
+.hero-visual img{border-radius:20px!important}
+.section-head{justify-content:center!important;text-align:center!important}
+.section-head h2{color:var(--v4-ink)!important}
+.dashboard-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.dash-card{background:#fff!important;border:1px solid var(--v4-line)!important;border-radius:18px!important}
+.dash-card:before{display:none!important}
+.dash-card .icon{background:#eef4ff!important}
+.portal-tabs{background:#fff!important;border:1px solid var(--v4-line)!important;border-radius:16px!important;box-shadow:none!important}
+.tab-btn{background:#fff!important;color:var(--v4-text)!important;border:1px solid var(--v4-line)!important}
+.tab-btn.active{background:var(--v4-blue)!important;border-color:var(--v4-blue)!important;color:#fff!important}
+.panel{background:#fff!important;border:1px solid var(--v4-line)!important;border-radius:20px!important}
+.field input,.field textarea,.field select{background:#fff!important;border-color:#cbd5e1!important;color:var(--v4-text)!important;box-shadow:none!important}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#60a5fa!important;box-shadow:0 0 0 3px rgba(37,99,235,.10)!important}
+.item{background:#fff!important;border-color:var(--v4-line)!important}
+.pill{background:#eef4ff!important;color:var(--v4-blue-dark)!important}
+.grade{color:var(--v4-teal)!important}
+.notice{background:#fff8e7!important;color:#7c4a03!important;border-color:#f2d28b!important}
+.teacher-help,.student-help,.subjects-box{border:1px solid var(--v4-line)!important;border-radius:16px!important;background:#f8fbff!important;padding:18px!important;margin-top:18px!important}
+.subject-tag{display:inline-flex!important;background:#e8f0ff!important;color:#1e40af!important;border:1px solid #c7d8ff!important;border-radius:999px!important;padding:7px 10px!important;margin:4px!important;font-size:12px!important;font-weight:800!important}
+.role-badge{background:var(--v4-blue)!important;color:#fff!important}
+
+@media(max-width:900px){
+  .mountain-banner{min-height:430px!important;padding:55px 24px!important}
+  .mountain-banner .hero-text-content{margin-left:0!important}
+  .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:600px){
+  .mountain-banner{min-height:460px!important;border-radius:0 0 22px 22px!important;background-position:63% center!important}
+  .mountain-banner h1{font-size:42px!important}
+  .target-audience-section{padding:20px!important}
+  .dashboard-grid{grid-template-columns:1fr!important}
+  .portal-hero{padding:28px!important}
+  #backToTop{right:14px!important;bottom:14px!important;width:44px!important;height:44px!important}
+}
+.hero-text-content,.info-card,.leaderboard-section,.virtual-tour-card,.kids-club-section,.target-audience-section{animation:none!important}
+.user-login-btn{animation:none!important}
+.v4-build-badge{display:inline-block;margin-left:8px;padding:4px 7px;border-radius:999px;background:#eef4ff;color:#1d4ed8;font-size:10px;letter-spacing:.08em;font-weight:900}
