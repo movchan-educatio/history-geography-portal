@@ -1,0 +1,12 @@
+/* Unified visual layer for the existing portal pages. Does not replace their content or scripts. */
+:root{--pm-ink:#2b120b;--pm-muted:#7b5d52;--pm-paper:#fff;--pm-bg:#fbf6f2;--pm-line:#ead9d1;--pm-accent:#5b1d0f;--pm-rose:#f8e9e6}
+body{background:linear-gradient(180deg,#fffaf7,#f7f2ef)!important;color:var(--pm-ink)!important;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif!important}
+header{background:rgba(255,255,255,.94)!important;border-bottom:1px solid var(--pm-line)!important;box-shadow:0 8px 25px rgba(65,31,22,.06)!important;backdrop-filter:blur(14px)!important;position:sticky!important;top:0!important;z-index:100!important}
+nav ul{gap:5px!important}nav a{border-radius:12px!important;color:#704f45!important;font-weight:700!important;transition:.2s!important}nav a:hover,nav a.active{background:var(--pm-rose)!important;color:var(--pm-ink)!important}
+.logo-text{color:var(--pm-ink)!important}.logo-text span{color:#9e6657!important}.logo-img{filter:none!important}
+main,.main-container{position:relative;z-index:1}.info-card,.audience-card,.leaderboard-section,.dino-game-card,.virtual-tour-card,.quiz-card,.methodology-card,.section-card,.content-card{border:1px solid var(--pm-line)!important;box-shadow:0 12px 35px rgba(65,31,22,.06)!important;border-radius:20px!important;background:#fff!important}
+button,.btn,.btn-link,.user-login-btn{border-radius:13px!important;transition:transform .18s,box-shadow .18s,background .18s!important}button:hover,.btn:hover,.user-login-btn:hover{transform:translateY(-1px)!important}
+.section-title,h2,h3{letter-spacing:-.025em}
+.mountain-banner{box-shadow:0 22px 55px rgba(40,20,12,.14)!important}
+.search-bar-box{border-radius:16px!important;box-shadow:0 12px 30px rgba(0,0,0,.12)!important}
+@media(max-width:800px){header{position:relative!important}.logo-text{font-size:14px!important}nav ul{flex-wrap:wrap!important;justify-content:center!important}.traveler-container{display:none!important}}
