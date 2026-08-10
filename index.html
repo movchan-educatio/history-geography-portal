@@ -374,6 +374,7 @@
     .student-rank.top-2 { color: #94a3b8; }
     .student-rank.top-3 { color: #b45309; }
     .student-score { background: #2563eb; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px; }
+    #myScoreBadge { white-space: nowrap; }
 
     /* Спеціальний блок: КЛУБ ДОСЛІДНИКІВ */
     .kids-club-section {
@@ -762,6 +763,7 @@
 
           if (!snapshot.exists()) {
             set(userRef, {
+              uid: user.uid,
               name: user.displayName,
               email: user.email || '',
               role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student',
@@ -772,6 +774,7 @@
           } else {
             const currentData = snapshot.val();
             update(userRef, {
+              uid: currentData.uid || user.uid,
               name: currentData.name || user.displayName || 'Учень',
               email: currentData.email || user.email || '',
               role: user.uid === PORTAL_OWNER_UID ? 'teacher' : (currentData.role || 'student')
@@ -804,9 +807,17 @@
 
         const ownerBadge = user.uid === PORTAL_OWNER_UID ? '<span class="home-role-badge">ВЧИТЕЛЬ</span>' : '<span class="home-role-badge student">УЧЕНЬ</span>';
         authBox.innerHTML = `
-          <div class="home-user-chip"><span class="home-user-avatar">${(user.displayName||'У').charAt(0).toUpperCase()}</span><span class="home-user-name">${user.displayName || 'Користувач'}</span>${ownerBadge}</div>
+          <div class="home-user-chip"><span class="home-user-avatar">${(user.displayName||'У').charAt(0).toUpperCase()}</span><span class="home-user-name">${user.displayName || 'Користувач'}</span>${ownerBadge}<span id="myScoreBadge" class="home-role-badge student" style="background:#e0f2fe;color:#0369a1;">0 балів</span></div>
           <button class="user-login-btn" onclick="logoutGoogle()">Вийти</button>
         `;
+        get(userRef).then(scoreSnap => {
+          const d = scoreSnap.exists() ? (scoreSnap.val() || {}) : {};
+          const score = Math.max(0, Number(d.score) || 0);
+          const badge = document.getElementById('myScoreBadge');
+          if (badge) badge.textContent = `${score} балів`;
+          window.currentUserScore = score;
+          renderLeaderboard();
+        }).catch(err => console.warn('Не вдалося прочитати бали:', err));
       } else {
         window.currentStudent = null;
         window.currentUserUid = null;
@@ -1195,15 +1206,56 @@
       const listContainer = document.getElementById('leaderboardList');
       if (!listContainer) return;
 
-      // У рейтингу показуємо тільки учнів. Учительський акаунт не займає місце в рейтингу.
-      const students = (window.studentsData || [])
-        .filter(student => student && student.role !== 'teacher' && (student.name || student.email))
-        .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+      // Нормалізуємо дані: старі записи могли не мати uid або score.
+      const raw = Array.isArray(window.studentsData) ? window.studentsData : [];
+      const byUid = new Map();
+      raw.forEach(student => {
+        if (!student) return;
+        const key = student.uid || student.email || student.name;
+        if (key) byUid.set(key, { ...student });
+      });
+
+      // Гарантовано додаємо поточного учня до рейтингу, навіть якщо запис у users ще не створений.
+      // Після синхронізації Firebase цей тимчасовий рядок автоматично заміниться реальними даними.
+      if (window.currentUserUid && window.currentStudent) {
+        const existing = byUid.get(window.currentUserUid) || byUid.get(window.currentStudent);
+        if (!existing) {
+          byUid.set(window.currentUserUid, {
+            uid: window.currentUserUid,
+            name: window.currentStudent,
+            role: 'student',
+            score: 0
+          });
+        } else {
+          existing.uid = existing.uid || window.currentUserUid;
+          existing.name = existing.name || window.currentStudent;
+        }
+      }
+
+      // У рейтингу показуємо тільки учнів; учительський акаунт не займає місце.
+      const students = Array.from(byUid.values())
+        .filter(student => {
+          const role = String(student.role || 'student').trim().toLowerCase();
+          return role !== 'teacher' && (student.name || student.email || student.uid);
+        })
+        .map(student => {
+          const hist = Number(student.total_history_points) || 0;
+          const geo = Number(student.total_geography_points) || 0;
+          const nmtHist = Number(student.nmt_history_score) || 0;
+          const nmtGeo = Number(student.nmt_geography_score) || 0;
+          const truth = Number(student.truth_or_lie_points) || 0;
+          const dino = Number(student.dino_best_score) || 0;
+          // Якщо старий запис не мав score, відновлюємо його з компонентів.
+          const calculated = hist + geo + nmtHist + nmtGeo + truth + dino;
+          const score = Math.max(Number(student.score) || 0, calculated);
+          return { ...student, hist, geo, nmtHist, nmtGeo, truth, dino, score };
+        })
+        .sort((a, b) => b.score - a.score);
 
       listContainer.innerHTML = '';
 
       if (!students.length) {
-        listContainer.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Поки що немає результатів учнів.</span></div></div>';
+        listContainer.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Увійдіть через Google, щоб з’явитися в рейтингу.</span></div></div>';
         return;
       }
 
@@ -1211,13 +1263,6 @@
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const isMe = student.uid === window.currentUserUid ||
           (student.name && student.name === window.currentStudent);
-        const score = Number(student.score) || 0;
-        const hist = Number(student.total_history_points) || 0;
-        const geo = Number(student.total_geography_points) || 0;
-        const nmtHist = Number(student.nmt_history_score) || 0;
-        const nmtGeo = Number(student.nmt_geography_score) || 0;
-        const truth = Number(student.truth_or_lie_points) || 0;
-        const dino = Number(student.dino_best_score) || 0;
 
         listContainer.innerHTML += `
           <div class="leaderboard-item ${isMe ? 'current-user' : ''}">
@@ -1226,11 +1271,11 @@
               <div>
                 <span>${student.name || 'Учень'} ${isMe ? '(Ви)' : ''}</span>
                 <div style="font-size:11px;color:#64748b;margin-top:3px;">
-                  Іст. ${hist} • Геогр. ${geo} • НМТ ${nmtHist + nmtGeo} • Гра ${truth} • 🦖 ${dino}
+                  Іст. ${student.hist} • Геогр. ${student.geo} • НМТ ${student.nmtHist + student.nmtGeo} • Гра ${student.truth} • 🦖 ${student.dino}
                 </div>
               </div>
             </div>
-            <span class="student-score">${score} балів</span>
+            <span class="student-score">${student.score} балів</span>
           </div>
         `;
       });
