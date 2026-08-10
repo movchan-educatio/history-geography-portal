@@ -735,6 +735,7 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
+    const PORTAL_OWNER_UID = 'LGw3zPR7w4SdN8zvi4LWExYTfFh2';
 
     window.loginWithGoogle = function() {
       signInWithPopup(auth, provider).catch(error => alert("Помилка входу: " + error.message));
@@ -759,12 +760,17 @@
           if (!snapshot.exists()) {
             set(userRef, {
               name: user.displayName,
+              email: user.email || '',
+              role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student',
               score: totalTestPoints,
               total_history_points: historyTestPoints,
               total_geography_points: geographyTestPoints
             });
           } else {
             const currentData = snapshot.val();
+            if (user.uid === PORTAL_OWNER_UID && currentData.role !== 'teacher') {
+              update(userRef, { role: 'teacher', name: user.displayName, email: user.email || '' });
+            }
             const currentScore = currentData.score || 0;
             const savedHistPoints = currentData.total_history_points || 0;
             const savedGeoPoints = currentData.total_geography_points || 0;
@@ -788,9 +794,10 @@
           }
         });
 
+        const ownerBadge = user.uid === PORTAL_OWNER_UID ? '<span class="home-role-badge">ВЧИТЕЛЬ</span>' : '<span class="home-role-badge student">УЧЕНЬ</span>';
         authBox.innerHTML = `
-          <span style="font-size: 13px; font-weight: 600; color: #1e293b;">👤 ${user.displayName}</span>
-          <button class="user-login-btn" style="background: #ef4444;" onclick="logoutGoogle()">Вийти</button>
+          <div class="home-user-chip"><span class="home-user-avatar">${(user.displayName||'У').charAt(0).toUpperCase()}</span><span class="home-user-name">${user.displayName || 'Користувач'}</span>${ownerBadge}</div>
+          <button class="user-login-btn" onclick="logoutGoogle()">Вийти</button>
         `;
       } else {
         window.currentStudent = null;

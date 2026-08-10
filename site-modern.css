@@ -10,3 +10,73 @@ button,.btn,.btn-link,.user-login-btn{border-radius:13px!important;transition:tr
 .mountain-banner{box-shadow:0 22px 55px rgba(40,20,12,.14)!important}
 .search-bar-box{border-radius:16px!important;box-shadow:0 12px 30px rgba(0,0,0,.12)!important}
 @media(max-width:800px){header{position:relative!important}.logo-text{font-size:14px!important}nav ul{flex-wrap:wrap!important;justify-content:center!important}.traveler-container{display:none!important}}
+
+/* =========================================================
+   PREMIUM PORTAL LAYER v4
+   Тільки візуальний шар: існуючий HTML/JS/контент не видаляється.
+   ========================================================= */
+:root{
+  --p-ink:#241713;--p-brown:#4b1f13;--p-brown-2:#7d4635;--p-sand:#f7f0eb;
+  --p-card:rgba(255,255,255,.88);--p-line:#e8d9d1;--p-muted:#806d65;
+  --p-shadow:0 24px 70px rgba(62,29,18,.10);--p-soft:0 10px 32px rgba(62,29,18,.07)
+}
+body{color:var(--p-ink)!important}
+header{padding-left:clamp(16px,5vw,82px)!important;padding-right:clamp(16px,5vw,82px)!important}
+.logo-group{gap:12px!important}.logo-img{width:42px!important;height:42px!important;border-radius:13px!important}
+nav a{font-size:13px!important;padding:10px 15px!important}
+
+/* Додаємо легкий «app-like» контур до головних блоків */
+.target-audience-section,.leaderboard-section,.kids-club-section{backdrop-filter:blur(10px)!important}
+.target-audience-section{margin-top:28px!important}
+.target-audience-section>h3{font-size:30px!important}
+.audience-card{position:relative!important;overflow:hidden!important}
+.audience-card:before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,#4b1f13,#c48b75,#d9ad58);opacity:.9}
+.info-card{position:relative!important;overflow:hidden!important}
+.info-card:after{content:"";position:absolute;right:-45px;top:-55px;width:130px;height:130px;border-radius:50%;background:rgba(239,218,208,.38);pointer-events:none}
+
+/* Кнопки — сучасні, але без зміни їхніх функцій */
+.btn-link,.user-login-btn,button{font-weight:800!important}
+.user-login-bar{align-items:center!important}
+.home-user-chip{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--p-line);padding:6px 10px 6px 6px;border-radius:999px;box-shadow:0 8px 22px rgba(62,29,18,.06)}
+.home-user-avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#4b1f13,#a76d58);color:#fff;font-weight:900;font-size:12px}
+.home-user-name{font-size:12px;font-weight:800;color:var(--p-ink);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-role-badge{font-size:9px;letter-spacing:.08em;font-weight:900;color:#fff;background:#4b1f13;border-radius:999px;padding:5px 7px}.home-role-badge.student{background:#eadfd9;color:#6f554c}
+
+/* Внутрішні сторінки: один дизайн-каркас */
+body:not(:has(.mountain-banner)) .main-container,
+body:not(:has(.mountain-banner)) .container{width:min(1240px,calc(100% - 40px))!important;margin:0 auto!important}
+body:not(:has(.mountain-banner)) .page-header,
+body:not(:has(.mountain-banner)) .hero,
+body:not(:has(.mountain-banner)) .event-card-full,
+body:not(:has(.mountain-banner)) .nmt200-hero,
+body:not(:has(.mountain-banner)) .nmt200-tools,
+body:not(:has(.mountain-banner)) .nmt200-wrap{border:1px solid var(--p-line)!important;box-shadow:var(--p-shadow)!important}
+body:not(:has(.mountain-banner)) .page-header{background:linear-gradient(135deg,#fff,#f6e9e4)!important;border-radius:28px!important;padding:34px!important}
+body:not(:has(.mountain-banner)) .accordion-card{border:1px solid var(--p-line)!important;border-radius:20px!important;background:var(--p-card)!important;box-shadow:var(--p-soft)!important;overflow:hidden!important;transition:.22s ease!important}
+body:not(:has(.mountain-banner)) .accordion-card:hover{transform:translateY(-3px)!important;box-shadow:var(--p-shadow)!important}
+body:not(:has(.mountain-banner)) .accordion-header{background:linear-gradient(180deg,#fff,#fcf7f4)!important;padding:19px 21px!important}
+body:not(:has(.mountain-banner)) .accordion-content{background:#fff!important}
+body:not(:has(.mountain-banner)) .quiz-container{border:1px solid var(--p-line)!important;border-radius:24px!important;box-shadow:var(--p-shadow)!important;background:#fff!important}
+body:not(:has(.mountain-banner)) .quiz-option-btn{border-radius:14px!important;border:1px solid var(--p-line)!important;background:#fff!important;transition:.18s ease!important}
+body:not(:has(.mountain-banner)) .quiz-option-btn:hover{transform:translateY(-2px)!important;background:#fbf2ee!important;border-color:#cba595!important}
+body:not(:has(.mountain-banner)) .quiz-next-btn,body:not(:has(.mountain-banner)) .quiz-restart-btn{border-radius:14px!important;background:var(--p-brown)!important}
+
+/* НМТ — виразний центр тестування */
+.nmt200-hero{border-radius:30px!important;background:linear-gradient(135deg,#32150d 0%,#653221 58%,#9b6652 100%)!important;color:#fff!important;overflow:hidden!important}
+.nmt200-hero h1,.nmt200-hero h2,.nmt200-hero p{color:#fff!important}
+.nmt-hero-test-buttons{gap:12px!important}.nmt-hero-test-button{border-radius:16px!important;box-shadow:0 12px 28px rgba(0,0,0,.18)!important}
+.nmt200-card,.quiz-card,.nmt200-tools{border-radius:22px!important;box-shadow:var(--p-soft)!important;border:1px solid var(--p-line)!important}
+
+/* Відчуття завершеного продукту */
+footer{background:linear-gradient(135deg,#32150d,#5a2a1c)!important}
+
+@media(max-width:900px){
+  header{gap:12px!important}
+  .home-user-name{max-width:100px}
+  .mountain-banner{min-height:540px!important;padding-top:62px!important}
+}
+@media(max-width:560px){
+  .home-user-chip{max-width:160px}.home-user-name{max-width:75px}
+  .mountain-banner{min-height:500px!important}
+  body:not(:has(.mountain-banner)) .main-container,body:not(:has(.mountain-banner)) .container{width:calc(100% - 24px)!important}
+}

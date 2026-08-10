@@ -5,6 +5,8 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'http
 
 const firebaseConfig={apiKey:'AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw',authDomain:'movchan-portal.firebaseapp.com',databaseURL:'https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app',projectId:'movchan-portal',storageBucket:'movchan-portal.firebasestorage.app',messagingSenderId:'535915495927',appId:'1:535915495927:web:71f899ea2876ee129c2ef2',measurementId:'G-8XBVKRZRS1'};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),storage=getStorage(app),provider=new GoogleAuthProvider();
+// Власник порталу: цей Google-акаунт автоматично отримує роль teacher.
+const PORTAL_OWNER_UID='LGw3zPR7w4SdN8zvi4LWExYTfFh2';
 let user=null, profile=null, lessons={}, assignments={}, resources={}, submissions={}, grades={};
 const $=id=>document.getElementById(id); const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
@@ -32,5 +34,9 @@ window.addEventListener('DOMContentLoaded',()=>{
  $('loginBtn').onclick=login;$('logoutBtn').onclick=logout;$('lessonForm').onsubmit=saveLesson;$('assignmentForm').onsubmit=saveAssignment;$('resourceForm').onsubmit=addResource;$('submissionForm').onsubmit=submitWork;
 });
 
-onAuthStateChanged(auth,async u=>{user=u;if(!u){profile=null;$('authArea').innerHTML='<button id="loginBtn" class="portal-login">Увійти через Google</button>';$('loginBtn').onclick=login;$('privateArea').classList.add('hidden');return}const snap=await get(ref(db,'users/'+u.uid));profile=snap.exists()?snap.val():{displayName:u.displayName,email:u.email,role:'student',createdAt:Date.now()};if(!snap.exists())await set(ref(db,'users/'+u.uid),profile);$('authArea').innerHTML=`<div class="user-chip"><img src="${esc(u.photoURL||'logo.png')}" alt=""><div><b>${esc(u.displayName||'Користувач')}</b><small class="role-badge" id="roleText">${profile.role==='teacher'?'Вчитель':'Учень'}</small></div><button id="logoutBtn" class="btn-secondary">Вийти</button></div>`;$('logoutBtn').onclick=logout;$('privateArea').classList.remove('hidden');
+onAuthStateChanged(auth,async u=>{user=u;if(!u){profile=null;$('authArea').innerHTML='<button id="loginBtn" class="portal-login">Увійти через Google</button>';$('loginBtn').onclick=login;$('privateArea').classList.add('hidden');return}const snap=await get(ref(db,'users/'+u.uid));
+if(snap.exists()){ profile=snap.val(); } else { profile={displayName:u.displayName,email:u.email,role:(u.uid===PORTAL_OWNER_UID?'teacher':'student'),createdAt:Date.now()}; await set(ref(db,'users/'+u.uid),profile); }
+// Якщо це власник порталу, виправляємо старий профіль з role: student на teacher.
+if(u.uid===PORTAL_OWNER_UID && profile.role!=='teacher'){ profile={...profile,role:'teacher'}; await update(ref(db,'users/'+u.uid),{role:'teacher',displayName:u.displayName,email:u.email}); }
+$('authArea').innerHTML=`<div class="user-chip"><img src="${esc(u.photoURL||'logo.png')}" alt=""><div><b>${esc(u.displayName||'Користувач')}</b><small class="role-badge" id="roleText">${profile.role==='teacher'?'Вчитель':'Учень'}</small></div><button id="logoutBtn" class="btn-secondary">Вийти</button></div>`;$('logoutBtn').onclick=logout;$('privateArea').classList.remove('hidden');
  onValue(ref(db,'lessons'),s=>{lessons=s.val()||{};renderAll()});onValue(ref(db,'assignments'),s=>{assignments=s.val()||{};renderAll()});onValue(ref(db,'resources'),s=>{resources=s.val()||{};renderAll()});onValue(ref(db,'submissions'),s=>{submissions=s.val()||{};renderAll()});onValue(ref(db,'grades'),s=>{grades=s.val()||{};renderAll()});renderAll();});
