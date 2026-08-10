@@ -213,3 +213,21 @@ footer .footer-teacher-line{
 .poetry-card h3 *{
   color:#fff!important;
 }
+
+
+/* FINAL TEXT COLOR HARD LOCK v4 */
+.nmt200-hero h2,
+.nmt200-hero h2 *,
+.nmt200-hero p,
+.nmt200-hero p *,
+.nmt200-hero .nmt200-badge,
+.nmt200-hero .nmt200-badge *{
+  color:#fff !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+}
+.poetry-card h3,
+.poetry-card h3 *,
+.poetry-card h3 i{
+  color:#fff !important;
+}

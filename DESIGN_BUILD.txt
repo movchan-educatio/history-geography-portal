@@ -1,1 +1,3 @@
 Premium design v3 — rectangular banners, centered footer, white poetry title. Visual-only changes; functionality preserved.
+
+Design patch v4: final text contrast hard-lock; existing files only.

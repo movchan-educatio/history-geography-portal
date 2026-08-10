@@ -1,2 +1,4 @@
 HISTORY-GEOGRAPHY-PORTAL V8
 Firebase realtime rating unified
+
+Design patch v4: final text contrast hard-lock; existing files only.
