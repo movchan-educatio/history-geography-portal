@@ -895,8 +895,10 @@
             bonus: 2,
             savedAt: Date.now()
           };
-          updates[`users/${winner.uid}/weekly_bonus`] =
-            (Number(winner.weekly_bonus) || 0) + 2;
+          const previousBonus = Number(winner.weekly_bonus) || 0;
+          updates[`users/${winner.uid}/weekly_bonus`] = previousBonus + 2;
+          updates[`users/${winner.uid}/grade_bonus`] =
+            (Number(winner.grade_bonus) || 0) + 2;
         }
 
         Object.keys(users).forEach(uid => {
@@ -945,95 +947,71 @@
     // permission denied до того, як Firebase Auth встигне визначити user.
     // ============================================================
     let stopLeaderboardListener = null;
-    let stopCurrentUserListener = null;
 
+    // ============================================================
+    // V7 LIVE RATING — ЄДИНЕ ДЖЕРЕЛО: users/{uid}/week_score
+    // Один listener для всього рейтингу + поточного учня.
+    // Жодних локальних балів у відображенні рейтингу.
+    // ============================================================
     function startRealtimeLeaderboard(user) {
       if (stopLeaderboardListener) {
         stopLeaderboardListener();
         stopLeaderboardListener = null;
       }
-      if (stopCurrentUserListener) {
-        stopCurrentUserListener();
-        stopCurrentUserListener = null;
-      }
+
+      window.studentsData = [];
+      window.firebaseCurrentScore = 0;
 
       if (!user) {
-        window.studentsData = [];
-        window.firebaseCurrentScore = 0;
         renderLeaderboard();
         return;
       }
 
-      const leaderboardRef = ref(database, 'users');
+      const usersRef = ref(database, 'users');
 
-      // Усі учні оновлюються в реальному часі.
-      stopLeaderboardListener = onValue(leaderboardRef, (snapshot) => {
-        const data = snapshot.val() || {};
+      stopLeaderboardListener = onValue(usersRef, (snapshot) => {
+        const raw = snapshot.val() || {};
+        const entries = Object.entries(raw);
 
-        window.studentsData = Object.entries(data)
+        // Показуємо тільки реальних учнів.
+        // Учительський UID ніколи не потрапляє до рейтингу.
+        window.studentsData = entries
           .map(([uid, profile]) => ({
             ...(profile || {}),
             uid,
             score: Number(profile?.week_score) || 0
           }))
-          .filter(student => {
-            // Учитель не потрапляє до рейтингу.
-            // Не довіряємо старому полю role: єдиний teacher — PORTAL_OWNER_UID.
-            return student.uid !== PORTAL_OWNER_UID &&
-                   (student.name || student.displayName || student.email || student.uid);
-          })
-          .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+          .filter(p =>
+            p.uid !== PORTAL_OWNER_UID &&
+            p.role !== 'teacher' &&
+            Boolean(p.name || p.displayName || p.email || p.uid)
+          )
+          .sort((a, b) => b.score - a.score);
+
+        // Поточний бал і рейтинг читаються з ОДНОГО snapshot.
+        const me = raw[user.uid] || {};
+        window.firebaseCurrentScore = Number(me.week_score) || 0;
+
+        const badge = document.getElementById('currentUserScore');
+        if (badge) badge.textContent = `${window.firebaseCurrentScore} балів`;
 
         renderLeaderboard();
-
-        // Верхній бейдж бере ТОЧНО ТЕ САМЕ значення score.
-        const current = data[user.uid];
-        const firebaseScore = Number(current?.week_score) || 0;
-        window.firebaseCurrentScore = firebaseScore;
-
-        const scoreBadge = document.getElementById('currentUserScore');
-        if (scoreBadge) scoreBadge.textContent = `${firebaseScore} балів`;
       }, (error) => {
-        console.error('Рейтинг Firebase:', error);
+        console.error('LIVE RATING Firebase:', error);
         window.studentsData = [];
         renderLeaderboard();
-      });
 
-      // Окремий listener поточного учня.
-      // Навіть якщо users був завантажений раніше, зміна score одразу
-      // перемальовує і верхній бейдж, і рядок рейтингу.
-      stopCurrentUserListener = onValue(ref(database, 'users/' + user.uid), (snapshot) => {
-        const profile = snapshot.val() || {};
-        const score = Number(profile.week_score) || 0;
-
-        window.firebaseCurrentScore = score;
-
-        const scoreBadge = document.getElementById('currentUserScore');
-        if (scoreBadge) scoreBadge.textContent = `${score} балів`;
-
-        const normalized = { ...profile, uid: user.uid, score };
-        const list = window.studentsData || [];
-        const idx = list.findIndex(x => x.uid === user.uid);
-
-        // Якщо це учень — гарантуємо його наявність у рейтингу.
-        const isStudent = user.uid !== PORTAL_OWNER_UID;
-
-        if (isStudent) {
-          if (idx >= 0) list[idx] = normalized;
-          else list.push(normalized);
-          list.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
-        } else if (idx >= 0) {
-          list.splice(idx, 1);
+        const list = document.getElementById('leaderboardList');
+        if (list) {
+          list.innerHTML =
+            '<div class="leaderboard-item"><div class="student-info">' +
+            '<span>⚠️ Не вдалося завантажити рейтинг. Перевірте авторизацію та опубліковані Firebase Rules.</span>' +
+            '</div></div>';
         }
-
-        window.studentsData = list;
-        renderLeaderboard();
-      }, (error) => {
-        console.error('Поточний профіль Firebase:', error);
       });
     }
 
-    // ВАЖЛИВО: запускаємо рейтинг після встановлення auth-сесії.
+    // Один і той самий listener запускається після визначення Auth.
     onAuthStateChanged(auth, (user) => {
       startRealtimeLeaderboard(user);
     });
@@ -1403,8 +1381,13 @@
 
       // У рейтингу показуємо тільки учнів. Учительський акаунт не займає місце в рейтингу.
       const students = (window.studentsData || [])
-        .filter(student => student && student.uid !== PORTAL_OWNER_UID && (student.name || student.displayName || student.email || student.uid))
-        .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+        .filter(student =>
+          student &&
+          student.uid !== PORTAL_OWNER_UID &&
+          student.role !== 'teacher' &&
+          (student.name || student.displayName || student.email || student.uid)
+        )
+        .sort((a, b) => (Number(b.week_score) || 0) - (Number(a.week_score) || 0));
 
       listContainer.innerHTML = '';
 
@@ -1415,8 +1398,7 @@
 
       students.forEach((student, index) => {
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
-        const isMe = student.uid === window.currentUserUid ||
-          (student.name && student.name === window.currentStudent);
+        const isMe = student.uid === window.currentUserUid;
         const score = Number(student.week_score) || 0;
         const hist = Number(student.total_history_points) || 0;
         const geo = Number(student.total_geography_points) || 0;

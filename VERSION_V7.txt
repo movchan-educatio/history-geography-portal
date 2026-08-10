@@ -1,0 +1,5 @@
+HISTORY-GEOGRAPHY-PORTAL V7
+LIVE RATING + FIREBASE SYNC
+Rating source: users/{uid}/week_score
+Teacher accounts excluded from student ranking.
+NMT and Truth/Lie use the same Firebase score flow.
