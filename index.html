@@ -714,7 +714,7 @@
   <!-- FIREBASE SCRIPTS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, set, get, update, onValue, remove, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
@@ -733,25 +733,24 @@
     const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
-    window.loginWithGoogle = async function() {
+    setPersistence(auth, browserLocalPersistence).catch(error => {
+      console.warn("Не вдалося встановити постійність входу:", error);
+    });
+
+    window.loginWithGoogle = async function() {
       try {
-        sessionStorage.setItem("google_login_return", window.location.href);
-        await signInWithRedirect(auth, provider);
+        const result = await signInWithPopup(auth, provider);
+        if (result && result.user) {
+          console.log("Google-вхід успішний:", result.user.displayName);
+        }
       } catch (error) {
         console.error("Google login error:", error);
-        alert("Помилка входу через Google: " + error.message);
+        if (error.code !== "auth/popup-closed-by-user" &&
+            error.code !== "auth/cancelled-popup-request") {
+          alert("Помилка входу через Google: " + error.message);
+        }
       }
     };
-
-    getRedirectResult(auth).then(result => {
-      if (result && result.user) {
-        sessionStorage.removeItem("google_login_return");
-        const cleanUrl = window.location.origin + window.location.pathname + window.location.search;
-        window.history.replaceState({}, document.title, cleanUrl);
-      }
-    }).catch(error => {
-      console.error("Google redirect result error:", error);
-    });
 
     window.logoutGoogle = function() {
       signOut(auth);
