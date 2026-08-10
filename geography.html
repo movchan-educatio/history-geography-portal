@@ -174,10 +174,6 @@
       background: #334155;
     }
   </style>
-  <link rel="stylesheet" href="modern-theme.css?v=301">
-<link rel="stylesheet" href="site-modern.css?v=2">
-<link rel="stylesheet" href="redesign.css?v=9">
-<link rel="stylesheet" href="mobile.css?v=12">
 </head>
 <body>
 
@@ -194,7 +190,6 @@
         <li><a href="geography.html" class="active">Географія</a></li>
         <li><a href="nmt.html">НМТ</a></li>
         <li><a href="methodology.html">Методична скарбничка</a></li>
-      <li><a href="dashboard.html">Мій кабінет</a></li>
       </ul>
     </nav>
   </header>
@@ -731,7 +726,6 @@
   <!-- Футер -->
   <footer style="background: #1e293b; color: #ffffff; padding: 30px 20px; text-align: center; margin-top: 40px; border-top: 4px solid #059669;">
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній портал «Історія і географія БЕЗ МЕЖ»</p>
-  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
   </footer>
 
   <!-- JavaScript для акордеона та тестів -->
@@ -1191,16 +1185,18 @@
         data = data || {};
         const savedTotal = Number(data.total_geography_points) || 0;
         const currentScore = Number(data.score) || 0;
+        const currentWeekScore = Number(data.week_score) || 0;
+        const currentUid = currentUser.uid;
         const currentOther = Number(data.total_history_points) || 0;
 
         // Нараховуємо лише нові бали. Значення total ніколи не зменшуємо.
         if (localTotal > savedTotal) {
-          const delta = localTotal - savedTotal;
           data.name = data.name || currentUser.displayName || 'Учень';
-          data.role = data.role || 'student';
+          data.email = data.email || currentUser.email || '';
+          data.role = currentUid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' ? 'teacher' : 'student';
           data.total_geography_points = localTotal;
-          data.score = currentScore + delta;
-          data.week_score = (Number(data.week_score) || 0) + delta;
+          data.score = currentScore + (localTotal - savedTotal);
+          data.week_score = currentWeekScore + (localTotal - savedTotal);
         } else if (!data.total_geography_points) {
           data.total_geography_points = savedTotal;
         }
@@ -1232,9 +1228,5 @@
   });
 </script>
 
-<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
-<script>
-(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
-</script>
 </body>
 </html>

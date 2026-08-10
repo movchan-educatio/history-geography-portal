@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Підключення іконок -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="stylesheet" href="style.css?v=17">
   
   <style>
     html {
@@ -236,7 +236,7 @@
     /* Блок «Кому буде корисний Портал?» */
     .target-audience-section {
       background: #ffffff;
-      border-radius: 0;
+      border-radius: 16px;
       padding: 25px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
       max-width: 1200px;
@@ -293,7 +293,7 @@
     /* Таблиця рейтингу */
     .leaderboard-section {
       background: #ffffff;
-      border-radius: 0;
+      border-radius: 16px;
       padding: 20px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
       max-width: 1200px;
@@ -374,13 +374,12 @@
     .student-rank.top-2 { color: #94a3b8; }
     .student-rank.top-3 { color: #b45309; }
     .student-score { background: #2563eb; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px; }
-    .home-score-badge { background:#e0f2fe; color:#0369a1; padding:4px 9px; border-radius:999px; font-weight:800; font-size:12px; white-space:nowrap; }
 
     /* Спеціальний блок: КЛУБ ДОСЛІДНИКІВ */
     .kids-club-section {
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       border: 2px dashed #0284c7;
-      border-radius: 0;
+      border-radius: 20px;
       padding: 25px;
       margin: 50px auto 30px auto;
       max-width: 1200px;
@@ -498,10 +497,6 @@
     .virtual-tour-card .icon { font-size: 38px; margin-bottom: 10px; }
     .virtual-tour-card span { font-size: 14px; font-weight: 700; color: #1e293b; }
   </style>
-  <link rel="stylesheet" href="modern-theme.css?v=301">
-<link rel="stylesheet" href="site-modern.css?v=2">
-<link rel="stylesheet" href="redesign.css?v=8">
-<link rel="stylesheet" href="mobile.css?v=10">
 </head>
 <body>
 
@@ -518,7 +513,6 @@
         <li><a href="geography.html">Географія</a></li>
         <li><a href="nmt.html">НМТ</a></li>
         <li><a href="methodology.html">Методична скарбничка</a></li>
-      <li><a href="dashboard.html">Мій кабінет</a></li>
       </ul>
     </nav>
 
@@ -599,8 +593,7 @@
         <h3><i class="fas fa-medal" style="color: #2563eb;"></i> Рейтинг активності учнів</h3>
         <span id="weekResetTimer" class="reset-timer-badge">🔄 Оновлення тижня...</span>
         <div class="user-login-bar" id="authBox">
-          <input type="text" id="studentNameInput" class="user-login-input" placeholder="Введіть ваше ПІБ..." maxlength="25">
-          <button class="user-login-btn" onclick="registerStudent()">Увійти</button>
+          <button class="user-login-btn" onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Увійти через Google</button>
         </div>
       </div>
       <div id="leaderboardList" class="leaderboard-list"></div>
@@ -707,7 +700,6 @@
       <a href="https://www.facebook.com/share/1ETNyD3yDX/?mibextid=wwXIfr" target="_blank" title="Facebook" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877f2; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;"><i class="fa-brands fa-facebook-f"></i></a>
     </div>
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
-  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
   </footer>
 
   <div class="modal-overlay" id="info-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
@@ -718,11 +710,11 @@
     </div>
   </div>
 
-  <!-- FIREBASE SCRIPTS -->
+  <!-- FIREBASE SCRIPTS: єдиний realtime-шар рейтингу та чату -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, set, get, update, onValue, remove, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, get, set, update, onValue, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
@@ -741,126 +733,20 @@
     const provider = new GoogleAuthProvider();
     const PORTAL_OWNER_UID = 'LGw3zPR7w4SdN8zvi4LWExYTfFh2';
 
-    window.loginWithGoogle = function() {
-      signInWithPopup(auth, provider).catch(error => alert("Помилка входу: " + error.message));
+    window.currentStudent = null;
+    window.currentUserUid = null;
+    window.currentUserRole = null;
+    window.studentsData = [];
+    window.chatData = [];
+
+    window.loginWithGoogle = function () {
+      signInWithPopup(auth, provider).catch(error => alert('Помилка входу: ' + error.message));
     };
 
-    window.logoutGoogle = function() {
+    window.logoutGoogle = function () {
       signOut(auth);
     };
 
-    onAuthStateChanged(auth, async (user) => {
-      const authBox = document.getElementById('authBox');
-
-      if (!user) {
-        window.currentStudent = null;
-        window.currentUserUid = null;
-        authBox.innerHTML = `
-          <button class="user-login-btn" onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Увійти через Google</button>
-        `;
-        return;
-      }
-
-      window.currentStudent = user.displayName || 'Учень';
-      window.currentUserUid = user.uid;
-
-      const owner = user.uid === PORTAL_OWNER_UID;
-      const userRef = ref(database, 'users/' + user.uid);
-
-      try {
-        await runTransaction(userRef, data => {
-          data = data || {};
-          data.name = data.name || user.displayName || 'Учень';
-          data.email = data.email || user.email || '';
-          data.role = owner ? 'teacher' : 'student';
-          if (data.score === undefined) data.score = 0;
-          if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
-          if (data.total_history_points === undefined) data.total_history_points = 0;
-          if (data.total_geography_points === undefined) data.total_geography_points = 0;
-          if (data.nmt_history_score === undefined) data.nmt_history_score = 0;
-          if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
-          if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
-          if (data.dino_best_score === undefined) data.dino_best_score = 0;
-          return data;
-        });
-
-        // Одноразово підтягуємо локальні результати історії/географії.
-        // Додається лише різниця, тому повторний вхід не дублює бали.
-        const snap = await get(userRef);
-        const data = snap.val() || {};
-        const historyLocal = Number(localStorage.getItem('total_history_points')) || 0;
-        const geoLocal = Number(localStorage.getItem('total_geography_points')) || 0;
-
-        await runTransaction(userRef, current => {
-          current = current || {};
-          const savedHist = Number(current.total_history_points) || 0;
-          const savedGeo = Number(current.total_geography_points) || 0;
-          const diffHist = Math.max(0, historyLocal - savedHist);
-          const diffGeo = Math.max(0, geoLocal - savedGeo);
-          const diff = diffHist + diffGeo;
-
-          if (historyLocal > savedHist) current.total_history_points = historyLocal;
-          if (geoLocal > savedGeo) current.total_geography_points = geoLocal;
-          if (diff > 0) {
-            current.score = (Number(current.score) || 0) + diff;
-            current.week_score = (Number(current.week_score) || 0) + diff;
-          }
-
-          // НМТ є окремим джерелом балів. Додаємо тільки новий найкращий результат.
-          const localNmtHist = Number(localStorage.getItem('nmt_history_score')) || 0;
-          const localNmtGeo = Number(localStorage.getItem('nmt_geography_score')) || 0;
-          const savedNmtHist = Number(current.nmt_history_score) || 0;
-          const savedNmtGeo = Number(current.nmt_geography_score) || 0;
-          const nmtDiff = Math.max(0, localNmtHist - savedNmtHist) + Math.max(0, localNmtGeo - savedNmtGeo);
-
-          if (localNmtHist > savedNmtHist) current.nmt_history_score = localNmtHist;
-          if (localNmtGeo > savedNmtGeo) current.nmt_geography_score = localNmtGeo;
-          current.nmt_history_total = Math.max(Number(current.nmt_history_total) || 0, Number(localStorage.getItem('nmt_history_total')) || 0);
-          current.nmt_geography_total = Math.max(Number(current.nmt_geography_total) || 0, Number(localStorage.getItem('nmt_geography_total')) || 0);
-          current.nmt_total_score = (Number(current.nmt_history_score) || 0) + (Number(current.nmt_geography_score) || 0);
-
-          if (nmtDiff > 0) {
-            current.score = (Number(current.score) || 0) + nmtDiff;
-            current.week_score = (Number(current.week_score) || 0) + nmtDiff;
-          }
-          return current;
-        });
-
-        // Перевіряємо новий тиждень. Старі користувачі НЕ видаляються.
-        await handleWeeklyRollover(owner);
-      } catch (error) {
-        console.error('Firebase профіль:', error);
-      }
-
-      const ownerBadge = owner
-        ? '<span class="home-role-badge">ВЧИТЕЛЬ</span>'
-        : '<span class="home-role-badge student">УЧЕНЬ</span>';
-
-      authBox.innerHTML = `
-        <div class="home-user-chip">
-          <span class="home-user-avatar">${(user.displayName||'У').charAt(0).toUpperCase()}</span>
-          <span class="home-user-name">${user.displayName || 'Користувач'}</span>
-          ${ownerBadge}
-          <span id="currentUserScore" class="home-score-badge">0 балів</span>
-        </div>
-        <button class="user-login-btn" onclick="logoutGoogle()">Вийти</button>
-      `;
-
-      // Після побудови шапки ще раз беремо Firebase-значення,
-      // щоб бейдж не залишився на "0 балів" через race між listeners.
-      const finalSnap = await get(userRef);
-      const finalProfile = finalSnap.val() || {};
-      const finalBadge = document.getElementById('currentUserScore');
-      if (finalBadge) finalBadge.textContent = `${Number(finalProfile.week_score) || 0} балів`;
-    });
-
-    // ============================================================
-    // ЩОТИЖНЕВИЙ РЕЙТИНГ
-    // Бали users/{uid}/score зберігаються назавжди.
-    // users/{uid}/week_score — тільки поточний тиждень.
-    // Наприкінці тижня переможець записується у weeklyWinners,
-    // а week_score обнуляється без видалення користувачів.
-    // ============================================================
     function getWeekKey(date = new Date()) {
       const d = new Date(date);
       const day = d.getDay() || 7;
@@ -870,179 +756,77 @@
       return `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
     }
 
-    function getPreviousWeekKey() {
-      const d = new Date();
-      d.setDate(d.getDate() - 7);
-      return getWeekKey(d);
-    }
-
-    async function handleWeeklyRollover(isTeacher) {
-      const currentWeek = getWeekKey();
-      const weekRef = ref(database, 'system/currentWeek');
-
-      try {
-        const snap = await get(weekRef);
-        const storedWeek = snap.exists() ? snap.val() : null;
-
-        if (!storedWeek) {
-          await set(weekRef, currentWeek);
-          return;
-        }
-
-        if (storedWeek === currentWeek) return;
-
-        // Лише акаунт учителя виконує одноразовий перехід тижня.
-        if (!isTeacher) return;
-
-        const usersSnap = await get(ref(database, 'users'));
-        const users = usersSnap.val() || {};
-        const students = Object.entries(users)
-          .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && (p.name || p.displayName || p.email))
-          .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
-          .sort((a,b) => b.week_score - a.week_score);
-
-        const previousWeek = storedWeek || getPreviousWeekKey();
-        const winner = students[0] || null;
-
-        const updates = {};
-        if (winner && winner.week_score > 0) {
-          updates[`weeklyWinners/${previousWeek}`] = {
-            uid: winner.uid,
-            name: winner.name || winner.displayName || 'Учень',
-            points: winner.week_score,
-            bonus: 2,
-            savedAt: Date.now()
-          };
-          updates[`users/${winner.uid}/weekly_bonus`] =
-            (Number(winner.weekly_bonus) || 0) + 2;
-        }
-
-        Object.keys(users).forEach(uid => {
-          if (uid !== PORTAL_OWNER_UID && users[uid]) {
-            updates[`users/${uid}/week_score`] = 0;
-          }
-        });
-
-        updates['system/currentWeek'] = currentWeek;
-        await update(ref(database), updates);
-
-        if (winner) {
-          toast(`🏆 Переможець минулого тижня: ${winner.name || 'Учень'} — +2 до реальної оцінки.`);
-        }
-      } catch (error) {
-        console.error('Щотижневий рейтинг:', error);
-      }
-    }
-
     function updateWeekTimer() {
       const now = new Date();
       const day = now.getDay() || 7;
       const next = new Date(now);
-      const daysToNext = 7 - day;
-      next.setDate(now.getDate() + daysToNext);
-      next.setHours(23, 59, 59, 999);
-      if (next <= now) next.setDate(next.getDate() + 7);
-
-      const diff = next - now;
+      const daysToNextMonday = 8 - day;
+      next.setDate(now.getDate() + (daysToNextMonday > 7 ? 0 : daysToNextMonday));
+      if (day === 7) next.setDate(now.getDate() + 1);
+      next.setHours(0, 0, 0, 0);
+      const diff = Math.max(0, next - now);
       const d = Math.floor(diff / 86400000);
       const h = Math.floor((diff / 3600000) % 24);
       const m = Math.floor((diff / 60000) % 60);
       const s = Math.floor((diff / 1000) % 60);
-
-      const timerBadge = document.getElementById('weekResetTimer');
-      if (timerBadge) {
-        timerBadge.innerHTML = `<i class="fa-regular fa-clock"></i> До завершення тижня: ${d}д ${h}г ${m}хв ${s}с`;
-      }
+      const badge = document.getElementById('weekResetTimer');
+      if (badge) badge.innerHTML = `<i class="fa-regular fa-clock"></i> До завершення тижня: ${d}д ${h}г ${m}хв ${s}с`;
     }
     updateWeekTimer();
     setInterval(updateWeekTimer, 1000);
 
-    // ============================================================
-    // ЖИВИЙ РЕЙТИНГ V8 — Firebase є єдиним джерелом балів.
-    // ВАЖЛИВО: рейтинг ніколи не залежить від localStorage.
-    // ============================================================
-    let stopLeaderboardListener = null;
-    let stopCurrentUserListener = null;
+    async function ensureUserProfile(user) {
+      if (!user) return;
+      const userRef = ref(database, 'users/' + user.uid);
+      await runTransaction(userRef, data => {
+        data = data || {};
+        data.name = data.name || user.displayName || 'Учень';
+        data.email = data.email || user.email || '';
+        data.role = user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student';
+        if (data.score === undefined) data.score = 0;
+        if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
+        if (data.total_history_points === undefined) data.total_history_points = 0;
+        if (data.total_geography_points === undefined) data.total_geography_points = 0;
+        if (data.nmt_history_score === undefined) data.nmt_history_score = 0;
+        if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
+        if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
+        return data;
+      });
+    }
 
-    function startRealtimeLeaderboard(user) {
-      if (stopLeaderboardListener) stopLeaderboardListener();
-      if (stopCurrentUserListener) stopCurrentUserListener();
-      stopLeaderboardListener = null;
-      stopCurrentUserListener = null;
+    function renderRealtimeLeaderboard() {
+      const box = document.getElementById('leaderboardList');
+      if (!box) return;
+      const students = (window.studentsData || [])
+        .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher')
+        .filter(p => p.name || p.displayName || p.email)
+        .sort((a, b) => (Number(b.week_score) || 0) - (Number(a.week_score) || 0));
 
-      window.studentsData = [];
-      window.firebaseCurrentScore = 0;
-
-      const listContainer = document.getElementById('leaderboardList');
-      if (listContainer) {
-        listContainer.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⏳ Завантажуємо рейтинг з Firebase…</span></div></div>';
-      }
-
-      if (!user) {
-        renderLeaderboard();
+      if (!students.length) {
+        box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Поки що немає результатів учнів.</span></div></div>';
         return;
       }
 
-      const usersRef = ref(database, 'users');
-      const myRef = ref(database, 'users/' + user.uid);
-
-      // 1) Головний realtime-канал: усі учні.
-      stopLeaderboardListener = onValue(usersRef, (snapshot) => {
-        const raw = snapshot.val() || {};
-        const rows = [];
-
-        Object.entries(raw).forEach(([uid, profile]) => {
-          if (!profile || uid === PORTAL_OWNER_UID) return;
-          // Старі teacher-профілі також не показуємо.
-          if (profile.role === 'teacher') return;
-          if (!(profile.name || profile.displayName || profile.email)) return;
-
-          rows.push({
-            ...profile,
-            uid,
-            week_score: Number(profile.week_score) || 0,
-            score: Number(profile.week_score) || 0
-          });
-        });
-
-        window.studentsData = rows.sort((a,b) => b.week_score - a.week_score);
-        renderLeaderboard();
-
-        // Верхня плашка та рейтинг беруть ОДНЕ й ТЕ САМЕ поле Firebase.
-        const mine = raw[user.uid];
-        const myScore = Number(mine?.week_score) || 0;
-        window.firebaseCurrentScore = myScore;
-        updateCurrentScoreBadge(myScore);
-      }, (error) => {
-        console.error('Firebase users read:', error);
-        renderLeaderboard('⚠️ Не вдалося прочитати рейтинг. Перевірте Firebase Rules і натисніть Publish.');
-      });
-
-      // 2) Надійний канал поточного учня. Він працює навіть якщо загальний
-      // список тимчасово недоступний і гарантує миттєву зміну його рядка.
-      stopCurrentUserListener = onValue(myRef, (snapshot) => {
-        const profile = snapshot.val() || {};
-        const score = Number(profile.week_score) || 0;
-        window.firebaseCurrentScore = score;
-        updateCurrentScoreBadge(score);
-
-        if (user.uid === PORTAL_OWNER_UID || profile.role === 'teacher') return;
-
-        const mine = {
-          ...profile,
-          uid: user.uid,
-          week_score: score,
-          score
-        };
-
-        const rows = Array.isArray(window.studentsData) ? [...window.studentsData] : [];
-        const idx = rows.findIndex(x => x.uid === user.uid);
-        if (idx >= 0) rows[idx] = mine;
-        else rows.push(mine);
-        rows.sort((a,b) => (Number(b.week_score)||0) - (Number(a.week_score)||0));
-        window.studentsData = rows;
-        renderLeaderboard();
-      }, (error) => console.error('Firebase current user read:', error));
+      box.innerHTML = students.map((student, index) => {
+        const score = Number(student.week_score) || 0;
+        const hist = Number(student.total_history_points) || 0;
+        const geo = Number(student.total_geography_points) || 0;
+        const nmt = (Number(student.nmt_history_score) || 0) + (Number(student.nmt_geography_score) || 0);
+        const truth = Number(student.truth_or_lie_points) || 0;
+        const isMe = student.uid === window.currentUserUid;
+        const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
+        const name = student.name || student.displayName || student.email || 'Учень';
+        return `<div class="leaderboard-item ${isMe ? 'current-user' : ''}">
+          <div class="student-info">
+            <span class="student-rank ${rankClass}">#${index + 1}</span>
+            <div>
+              <span>${name}${isMe ? ' (Ви)' : ''}</span>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth}</div>
+            </div>
+          </div>
+          <span class="student-score">${score} балів</span>
+        </div>`;
+      }).join('');
     }
 
     function updateCurrentScoreBadge(score) {
@@ -1050,130 +834,135 @@
       if (badge) badge.textContent = `${Number(score) || 0} балів`;
     }
 
-    // Запускаємо рейтинг тільки після визначення Firebase Auth.
-    onAuthStateChanged(auth, (user) => startRealtimeLeaderboard(user));
+    // ЄДИНИЙ realtime-слухач. Firebase сам надсилає зміни без перезавантаження.
+    onValue(ref(database, 'users'), snapshot => {
+      const raw = snapshot.val() || {};
+      window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
+        .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
+      renderRealtimeLeaderboard();
 
-    // Якщо користувач повернувся на вкладку після тесту НМТ/історії/географії,
-    // примусово синхронізуємо локальні результати ще раз.
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && auth.currentUser) {
-        startRealtimeLeaderboard(auth.currentUser);
+      if (window.currentUserUid) {
+        const mine = raw[window.currentUserUid] || {};
+        updateCurrentScoreBadge(Number(mine.week_score) || 0);
       }
+    }, error => {
+      console.error('Firebase рейтинг:', error);
+      const box = document.getElementById('leaderboardList');
+      if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Перевірте Database Rules.</span></div></div>';
     });
 
-    let stopChatListener = null;
+    // Чат теж realtime.
+    onValue(ref(database, 'chat'), snapshot => {
+      const data = snapshot.val() || {};
+      window.chatData = Object.values(data).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0)).slice(-100);
+      renderChat();
+    }, error => console.error('Firebase чат:', error));
 
-    function startRealtimeChat(user) {
-      if (stopChatListener) {
-        stopChatListener();
-        stopChatListener = null;
-      }
+    onAuthStateChanged(auth, async user => {
+      window.currentStudent = user ? (user.displayName || 'Учень') : null;
+      window.currentUserUid = user ? user.uid : null;
+      window.currentUserRole = user ? (user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student') : null;
 
+      const authBox = document.getElementById('authBox');
       if (!user) {
-        window.chatData = [];
-        renderChat();
-        return;
-      }
-
-      stopChatListener = onValue(ref(database, 'chat'), (snapshot) => {
-        const data = snapshot.val() || {};
-        window.chatData = Object.values(data)
-          .sort((a,b) => Number(a.timestamp || 0) - Number(b.timestamp || 0))
-          .slice(-100);
-        renderChat();
-      }, error => console.error('Чат Firebase:', error));
-    }
-
-    // Чат читається тільки після авторизації — більше не буде
-    // "Simulated read denied" для неавторизованого playground.
-    window.sendChatMessage = async function() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      if (!window.currentUserUid) {
-        toast('Спочатку увійдіть через Google.');
+        if (authBox) authBox.innerHTML = '<button class="user-login-btn" onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Увійти через Google</button>';
+        renderRealtimeLeaderboard();
         return;
       }
 
       try {
-        await push(ref(database, 'chat'), {
-          uid: window.currentUserUid,
-          author: window.currentStudent || 'Учень',
-          text: text,
-          timestamp: Date.now()
-        });
-        input.value = '';
-      } catch (error) {
-        console.error('Надсилання чату:', error);
-        toast('Не вдалося надіслати повідомлення.');
+        await ensureUserProfile(user);
+      } catch (e) {
+        console.error('Профіль Firebase:', e);
       }
-    };
 
-    onAuthStateChanged(auth, (user) => startRealtimeChat(user));
+      if (authBox) {
+        const role = window.currentUserRole === 'teacher' ? 'ВЧИТЕЛЬ' : 'УЧЕНЬ';
+        authBox.innerHTML = `<div class="home-user-chip" style="display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;">
+          <span class="home-user-avatar" style="width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#8b5e3c;color:#fff;font-weight:800;">${(user.displayName || 'У').charAt(0).toUpperCase()}</span>
+          <span style="font-weight:700;color:#1e293b;">${user.displayName || 'Користувач'}</span>
+          <span class="home-role-badge" style="padding:4px 8px;border-radius:999px;background:${window.currentUserRole === 'teacher' ? '#5b1f0e' : '#e7ddd5'};color:${window.currentUserRole === 'teacher' ? '#fff' : '#5b1f0e'};font-size:11px;font-weight:800;">${role}</span>
+          <span id="currentUserScore" class="home-score-badge">0 балів</span>
+        </div><button class="user-login-btn" onclick="logoutGoogle()">Вийти</button>`;
+      }
 
+      const snap = await get(ref(database, 'users/' + user.uid));
+      updateCurrentScoreBadge(Number(snap.val()?.week_score) || 0);
+      renderRealtimeLeaderboard();
+    });
+
+    // Синхронізація тижня: не видаляємо учнів і не втрачаємо загальні бали.
+    async function ensureCurrentWeek() {
+      const currentWeek = getWeekKey();
+      const systemRef = ref(database, 'system/currentWeek');
+      const snap = await get(systemRef);
+      const stored = snap.exists() ? snap.val() : null;
+      if (!stored) {
+        await set(systemRef, currentWeek);
+        return;
+      }
+      if (stored === currentWeek) return;
+
+      // Переходимо на новий тиждень тільки через один transaction-прапорець.
+      const claim = await runTransaction(systemRef, old => old === stored ? currentWeek : old);
+      if (!claim.committed || claim.snapshot.val() !== currentWeek) return;
+
+      const usersSnap = await get(ref(database, 'users'));
+      const users = usersSnap.val() || {};
+      const students = Object.entries(users)
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher')
+        .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
+        .sort((a, b) => b.week_score - a.week_score);
+      const winner = students[0];
+      const previousWeek = stored;
+      const updates = {};
+
+      if (winner && winner.week_score > 0) {
+        updates[`weeklyWinners/${previousWeek}`] = { uid: winner.uid, name: winner.name || 'Учень', points: winner.week_score, bonus: 2, savedAt: Date.now() };
+        updates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
+      }
+      Object.keys(users).forEach(uid => {
+        if (uid !== PORTAL_OWNER_UID && users[uid]) updates[`users/${uid}/week_score`] = 0;
+      });
+      if (Object.keys(updates).length) await update(ref(database), updates);
+    }
+
+    ensureCurrentWeek().catch(error => console.error('Тижневий рейтинг:', error));
+
+    // Усі додаткові бали (Правда/Брехня) одразу потрапляють у score + week_score.
     window.addPointsToFirebase = function(points) {
       if (!window.currentUserUid) {
-        alert('Увійдіть у систему за допомогою Google, щоб зберігати бали!');
+        alert('Увійдіть через Google, щоб бали зберігалися у рейтингу.');
         return Promise.resolve(false);
       }
-
       const safePoints = Math.max(0, Number(points) || 0);
       if (!safePoints) return Promise.resolve(false);
-
-      const userRef = ref(database, 'users/' + window.currentUserUid);
-
-      // Transaction захищає від втрати балів, якщо кілька подій
-      // відбуваються майже одночасно.
-      return runTransaction(userRef, (data) => {
+      return runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
         data = data || {};
         data.name = data.name || window.currentStudent || 'Учень';
-        data.email = data.email || '';
         data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
-
-        const currentTruth = Number(data.truth_or_lie_points) || 0;
-        const currentScore = Number(data.score) || 0;
-        const currentWeekScore = Number(data.week_score) || 0;
-
-        data.truth_or_lie_points = currentTruth + safePoints;
-        data.score = currentScore + safePoints;
-        data.week_score = currentWeekScore + safePoints;
-
+        data.score = (Number(data.score) || 0) + safePoints;
+        data.week_score = (Number(data.week_score) || 0) + safePoints;
+        data.truth_or_lie_points = (Number(data.truth_or_lie_points) || 0) + safePoints;
         return data;
-      }).then(() => {
-        // onValue вище автоматично оновить рейтинг без перезавантаження.
-        return true;
-      }).catch(error => {
-        console.error('Правда чи Брехня: Firebase:', error);
-        return false;
       });
     };
 
-    // Окремо синхронізуємо найкращий результат Dino Runner.
-    // У загальний рейтинг потрапляє тільки приріст від нового рекорду,
-    // щоб повторний запуск гри не накручував бали.
-    window.syncDinoScoreToFirebase = function(points) {
-      if (!window.currentUserUid) return;
-
-      const best = Math.max(0, Number(points) || 0);
-      if (!best) return;
-
-      const userRef = ref(database, 'users/' + window.currentUserUid);
-      return import('https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js')
-        .then(({ runTransaction }) => runTransaction(userRef, (data) => {
-          data = data || {};
-          const oldBest = Number(data.dino_best_score) || 0;
-          const delta = Math.max(0, best - oldBest);
-
-          if (best > oldBest) {
-            data.dino_best_score = best;
-            data.score = (Number(data.score) || 0) + delta;
-             data.week_score = (Number(data.week_score) || 0) + delta;
-          }
-          data.name = data.name || window.currentStudent || 'Учень';
-          data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
-          return data;
-        }));
+    window.sendChatMessage = async function() {
+      const input = document.getElementById('chatInput');
+      const text = input ? input.value.trim() : '';
+      if (!text) return;
+      if (!window.currentUserUid) {
+        alert('Спочатку увійдіть через Google.');
+        return;
+      }
+      await push(ref(database, 'chat'), {
+        uid: window.currentUserUid,
+        author: window.currentStudent || 'Учень',
+        text,
+        timestamp: Date.now()
+      });
+      input.value = '';
     };
   </script>
 
@@ -1222,8 +1011,8 @@
       window.chatData.forEach(msg => {
         chatContainer.innerHTML += `
           <div class="chat-message-item">
-            <div class="chat-message-author">${esc(msg.author)}</div>
-            <div style="color: #334155;">${esc(msg.text)}</div>
+            <div class="chat-message-author">${msg.author}</div>
+            <div style="color: #334155;">${msg.text}</div>
           </div>
         `;
       });
@@ -1369,12 +1158,6 @@
         dinoGameRunning = false;
         if (speedInterval) clearInterval(speedInterval);
 
-        if (typeof window.syncDinoScoreToFirebase === 'function') {
-          window.syncDinoScoreToFirebase(dinoScore).catch(error => {
-            console.error('Dino Runner: Firebase:', error);
-          });
-        }
-
         if (dinoScore > dinoHighScore) {
           dinoHighScore = dinoScore;
           localStorage.setItem('dino_high_score', dinoHighScore);
@@ -1420,51 +1203,24 @@
 
     window.studentsData = window.studentsData || [];
 
-    function renderLeaderboard(errorMessage = '') {
+    function renderLeaderboard() {
+      window.studentsData.sort((a, b) => b.score - a.score);
       const listContainer = document.getElementById('leaderboardList');
       if (!listContainer) return;
-
-      const students = (window.studentsData || [])
-        .filter(student => student && student.uid !== PORTAL_OWNER_UID && student.role !== 'teacher')
-        .filter(student => student.name || student.displayName || student.email)
-        .sort((a,b) => (Number(b.week_score)||0) - (Number(a.week_score)||0));
-
-      if (errorMessage && !students.length) {
-        listContainer.innerHTML = `<div class="leaderboard-item"><div class="student-info"><span>${errorMessage}</span></div></div>`;
-        return;
-      }
-
-      if (!students.length) {
-        listContainer.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Поки що немає результатів учнів.</span></div></div>';
-        return;
-      }
-
-      listContainer.innerHTML = students.map((student, index) => {
-        const isMe = student.uid === window.currentUserUid;
-        const score = Number(student.week_score) || 0;
-        const hist = Number(student.total_history_points) || 0;
-        const geo = Number(student.total_geography_points) || 0;
-        const nmtHist = Number(student.nmt_history_score) || 0;
-        const nmtGeo = Number(student.nmt_geography_score) || 0;
-        const truth = Number(student.truth_or_lie_points) || 0;
-        const dino = Number(student.dino_best_score) || 0;
-        const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
-        const name = student.name || student.displayName || student.email || 'Учень';
-
-        return `
-          <div class="leaderboard-item ${isMe ? 'current-user' : ''}">
+      listContainer.innerHTML = '';
+      window.studentsData.forEach((student, index) => {
+        let rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
+        const isMe = student.name === window.currentStudent ? 'current-user' : '';
+        listContainer.innerHTML += `
+          <div class="leaderboard-item ${isMe}">
             <div class="student-info">
               <span class="student-rank ${rankClass}">#${index + 1}</span>
-              <div>
-                <span>${name}${isMe ? ' (Ви)' : ''}</span>
-                <div style="font-size:11px;color:#64748b;margin-top:3px;">
-                  Тиждень: ${score} • Іст. ${hist} • Геогр. ${geo} • НМТ ${nmtHist + nmtGeo} • Гра ${truth} • 🦖 ${dino}
-                </div>
-              </div>
+              <span>${student.name} ${isMe ? '(Ви)' : ''}</span>
             </div>
-            <span class="student-score">${score} балів</span>
-          </div>`;
-      }).join('');
+            <span class="student-score">${student.score} балів</span>
+          </div>
+        `;
+      });
     }
 
     function addPoints(points) {
@@ -1745,9 +1501,5 @@
 
     window.addEventListener('DOMContentLoaded', initPageData);
   </script>
-<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
-<script>
-(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
-</script>
 </body>
 </html>

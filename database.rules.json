@@ -1,44 +1,6 @@
 {
   "rules": {
-    ".read": "auth != null",
-    "users": {
-      "$uid": {
-        ".write": "auth != null && (auth.uid === $uid || auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')",
-        "role": {
-          ".validate": "newData.val() != 'teacher' || auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2'"
-        }
-      }
-    },
-    "submissions": {
-      "$id": {
-        ".write": "auth != null && (!data.exists() ? newData.child('studentUid').val() === auth.uid : (data.child('studentUid').val() === auth.uid || auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher'))"
-      }
-    },
-    "grades": {
-      "$id": {
-        ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
-      }
-    },
-    "lessons": {
-      ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
-    },
-    "assignments": {
-      ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
-    },
-    "resources": {
-      ".write": "auth != null"
-    },
-    "chat": {
-      ".read": "auth != null",
-      ".write": "auth != null"
-    },
-    "weeklyWinners": {
-      ".read": "auth != null",
-      ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
-    },
-    "system": {
-      ".read": "auth != null",
-      ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
-    }
+    ".read": true,
+    ".write": true
   }
 }
