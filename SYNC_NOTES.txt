@@ -1,8 +1,7 @@
-Фінальна логіка:
-1. Firebase Realtime Database — єдине джерело рейтингу.
-2. Тижневі бали: users/{uid}/week_score.
-3. Загальні бали: users/{uid}/score.
-4. Історія/географія/НМТ/Правда чи Брехня додають бали в week_score.
-5. НМТ синхронізує лише приріст до найкращого результату, щоб повторне відкриття тесту не накручувало бали.
-6. У кінці тижня переможець зберігається у weeklyWinners, йому додається weekly_bonus = +2.
-7. Особистого кабінету/dashboard.html у фінальній версії немає.
+RATING FIX V2
+
+History and Geography quiz results are stored per theme in Firebase.
+localStorage is no longer used to calculate total/rating points.
+A retake only adds the difference when the new result is higher than the previous best for that theme.
+The first V2 load removes old local quiz-total caches to prevent stale scores from the previous buggy system.
+Design and lesson content were not intentionally changed.

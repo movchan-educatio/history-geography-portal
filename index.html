@@ -790,6 +790,19 @@
         if (data.nmt_history_score === undefined) data.nmt_history_score = 0;
         if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
         if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
+
+        // ЄДИНЕ джерело правди для поточного тижня. Старі записи мігруємо один раз.
+        if (data.week_history_points === undefined) data.week_history_points = Number(data.total_history_points) || 0;
+        if (data.week_geography_points === undefined) data.week_geography_points = Number(data.total_geography_points) || 0;
+        if (data.week_nmt_history_score === undefined) data.week_nmt_history_score = Number(data.nmt_history_score) || 0;
+        if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = Number(data.nmt_geography_score) || 0;
+        if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = Number(data.truth_or_lie_points) || 0;
+        data.week_score =
+          (Number(data.week_history_points) || 0) +
+          (Number(data.week_geography_points) || 0) +
+          (Number(data.week_nmt_history_score) || 0) +
+          (Number(data.week_nmt_geography_score) || 0) +
+          (Number(data.week_truth_or_lie_points) || 0);
         return data;
       });
     }
@@ -809,10 +822,10 @@
 
       box.innerHTML = students.map((student, index) => {
         const score = Number(student.week_score) || 0;
-        const hist = Number(student.total_history_points) || 0;
-        const geo = Number(student.total_geography_points) || 0;
-        const nmt = (Number(student.nmt_history_score) || 0) + (Number(student.nmt_geography_score) || 0);
-        const truth = Number(student.truth_or_lie_points) || 0;
+        const hist = Number(student.week_history_points) || 0;
+        const geo = Number(student.week_geography_points) || 0;
+        const nmt = (Number(student.week_nmt_history_score) || 0) + (Number(student.week_nmt_geography_score) || 0);
+        const truth = Number(student.week_truth_or_lie_points) || 0;
         const isMe = student.uid === window.currentUserUid;
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const name = student.name || student.displayName || student.email || 'Учень';
@@ -922,7 +935,14 @@
         updates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
       }
       Object.keys(users).forEach(uid => {
-        if (uid !== PORTAL_OWNER_UID && users[uid]) updates[`users/${uid}/week_score`] = 0;
+        if (uid !== PORTAL_OWNER_UID && users[uid]) {
+          updates[`users/${uid}/week_score`] = 0;
+          updates[`users/${uid}/week_history_points`] = 0;
+          updates[`users/${uid}/week_geography_points`] = 0;
+          updates[`users/${uid}/week_nmt_history_score`] = 0;
+          updates[`users/${uid}/week_nmt_geography_score`] = 0;
+          updates[`users/${uid}/week_truth_or_lie_points`] = 0;
+        }
       });
       if (Object.keys(updates).length) await update(ref(database), updates);
     }
@@ -942,8 +962,14 @@
         data.name = data.name || window.currentStudent || 'Учень';
         data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
         data.score = (Number(data.score) || 0) + safePoints;
-        data.week_score = (Number(data.week_score) || 0) + safePoints;
         data.truth_or_lie_points = (Number(data.truth_or_lie_points) || 0) + safePoints;
+        data.week_truth_or_lie_points = (Number(data.week_truth_or_lie_points) || 0) + safePoints;
+        data.week_score =
+          (Number(data.week_history_points) || 0) +
+          (Number(data.week_geography_points) || 0) +
+          (Number(data.week_nmt_history_score) || 0) +
+          (Number(data.week_nmt_geography_score) || 0) +
+          (Number(data.week_truth_or_lie_points) || 0);
         return data;
       });
     };

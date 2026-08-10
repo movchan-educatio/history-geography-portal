@@ -2389,11 +2389,17 @@
         data.nmt_total_score = Number(data.nmt_history_score || 0) + Number(data.nmt_geography_score || 0);
         if (delta > 0) {
           data.score = Number(data.score || 0) + delta;
-          data.week_score = Number(data.week_score || 0) + delta;
+          const weeklyKey = type === 'history' ? 'week_nmt_history_score' : 'week_nmt_geography_score';
+          data[weeklyKey] = (Number(data[weeklyKey]) || 0) + delta;
         } else {
           data.score = Number(data.score || 0);
-          data.week_score = Number(data.week_score || 0);
         }
+        data.week_score =
+          (Number(data.week_history_points) || 0) +
+          (Number(data.week_geography_points) || 0) +
+          (Number(data.week_nmt_history_score) || 0) +
+          (Number(data.week_nmt_geography_score) || 0) +
+          (Number(data.week_truth_or_lie_points) || 0);
         return data;
       });
 
