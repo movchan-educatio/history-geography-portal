@@ -189,3 +189,36 @@ body.portal{background:#f7f3f0!important}
 .nmt200-hero .nmt200-badge{
   color:#fff!important;
 }
+
+/* =========================================================
+   V4.2 — FIXES: contrast, poetry card, role initialization
+   ========================================================= */
+
+/* NMT hero: force white text even against generic inner-page rules */
+body .hero-banner .hero-text,
+body .hero-banner .hero-text h1,
+body .hero-banner .hero-text h1 span,
+body .hero-banner .hero-text .subtitle,
+body .hero-banner .hero-text .quote{color:#fff!important;text-shadow:none!important}
+body .hero-banner .hero-text .quote{opacity:.9!important}
+
+/* Big NMT directory: force white headings over the brown/blue banner */
+body:not(:has(.mountain-banner)) .nmt200-hero,
+body:not(:has(.mountain-banner)) .nmt200-hero h2,
+body:not(:has(.mountain-banner)) .nmt200-hero p,
+body:not(:has(.mountain-banner)) .nmt200-hero .nmt200-badge{color:#fff!important}
+body:not(:has(.mountain-banner)) .nmt200-hero{background:linear-gradient(135deg,#32150d 0%,#653221 58%,#9b6652 100%)!important;box-shadow:none!important}
+
+/* Methodical page header: readable subtitle */
+body:not(:has(.mountain-banner)) .page-header h1{color:var(--clean-ink)!important}
+body:not(:has(.mountain-banner)) .page-header p{color:#5f504a!important;text-shadow:none!important;opacity:1!important}
+
+/* Methodical page: restore the intended dark poetry card and readable poem */
+.poetry-card{background:linear-gradient(135deg,#24150f 0%,#3b2117 100%)!important;border-color:#6b4434!important;color:#fff!important}
+.poetry-card h3{color:#f1c27d!important}
+.poetry-card .poetry-text{color:#fff!important;opacity:1!important;font-size:1.08rem!important;line-height:1.95!important;text-shadow:none!important;white-space:pre-line!important}
+.poetry-card .poetry-signature{color:#f1c27d!important}
+.poetry-card .poetry-note{color:#e7ddd8!important}
+
+/* Cabinet: never leave the user in a permanent “role check” state */
+#roleText{transition:none!important}
