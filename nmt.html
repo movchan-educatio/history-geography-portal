@@ -37,42 +37,17 @@
     .nmt-person-body { padding:14px; }
     .nmt-monument img { width:100%; height:170px; object-fit:cover; border-radius:10px; margin-bottom:10px; background:#e2e8f0; }
     .nmt-section-label { font-size:20px; font-weight:800; color:#0f172a; margin:24px 0 12px; }
-
-    /* ================= НМТ: КНОПКИ ТЕСТІВ ================= */
-    .nmt-test-buttons {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:18px;
-      margin:25px 0 35px;
-    }
-    .nmt-test-button {
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:18px;
-      padding:22px 25px;
-      border-radius:18px;
-      text-decoration:none;
-      color:#fff;
-      overflow:hidden;
-      transition:transform .25s ease,box-shadow .25s ease;
-      box-shadow:0 8px 22px rgba(15,23,42,.12);
-    }
-    .nmt-test-button:hover {
-      transform:translateY(-4px);
-      box-shadow:0 14px 30px rgba(15,23,42,.18);
-    }
-    .nmt-test-button .nmt-test-icon { font-size:42px; flex-shrink:0; }
-    .nmt-test-button .nmt-test-text { display:flex; flex-direction:column; gap:5px; }
-    .nmt-test-button strong { font-size:19px; line-height:1.2; }
-    .nmt-test-button span { font-size:13px; opacity:.9; }
-    .nmt-history-button { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
-    .nmt-geography-button { background:linear-gradient(135deg,#059669,#047857); }
-    @media (max-width:650px) {
-      .nmt-test-buttons { grid-template-columns:1fr; }
-      .nmt-test-button { padding:18px 20px; }
-    }
     @media (max-width:600px){ .nmt-library{padding:16px;} .nmt-person img,.nmt-monument img{height:150px;} }
+
+  
+    /* ================= КНОПКИ ТЕСТІВ НА БАНЕРІ НМТ ================= */
+    .nmt-hero-test-buttons { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:18px; }
+    .nmt-hero-test-button { display:inline-flex; align-items:center; gap:9px; padding:12px 18px; border-radius:12px; color:#fff; text-decoration:none; font-weight:800; font-size:14px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.14); box-shadow:0 6px 18px rgba(0,0,0,.18); backdrop-filter:blur(5px); transition:transform .2s ease,background .2s ease,box-shadow .2s ease; }
+    .nmt-hero-test-button:hover { transform:translateY(-2px); background:rgba(255,255,255,.24); box-shadow:0 9px 22px rgba(0,0,0,.24); }
+    .nmt-hero-test-button.history { border-color:rgba(147,197,253,.7); }
+    .nmt-hero-test-button.geography { border-color:rgba(110,231,183,.7); }
+    .nmt-hero-test-button .icon { font-size:21px; line-height:1; }
+    @media (max-width:600px) { .nmt-hero-test-buttons { flex-direction:column; align-items:stretch; } .nmt-hero-test-button { justify-content:center; } }
 
   </style>
 </head>
@@ -101,6 +76,10 @@
       <h1>МЕГА-ДОВІДНИК ТА ТЕСТИ <span>НМТ</span></h1>
       <p class="subtitle">200 ключових матеріалів у довіднику + великі інтерактивні тести з історії та географії (1 питання = 1 бал)</p>
       <p class="quote">“Системність і практика — твій шлях до 200 балів!”</p>
+      <div class="nmt-hero-test-buttons">
+        <a href="#history-nmt-test" class="nmt-hero-test-button history"><span class="icon">📜</span><span>Пройти тест з історії</span></a>
+        <a href="#geography-nmt-test" class="nmt-hero-test-button geography"><span class="icon">🌍</span><span>Пройти тест з географії</span></a>
+      </div>
     </div>
     <div class="hero-author">
       <img src="author-photo.jpeg" alt="Сергій Мовчан">
@@ -112,24 +91,6 @@
 
   <!-- Основний контент -->
   <main class="main-container">
-
-    <!-- ================= ШВИДКИЙ ДОСТУП ДО ТЕСТІВ НМТ ================= -->
-    <div class="nmt-test-buttons">
-      <a href="#history-nmt-test" class="nmt-test-button nmt-history-button">
-        <div class="nmt-test-icon">📜</div>
-        <div class="nmt-test-text">
-          <strong>Пройти тест з історії</strong>
-          <span>30 запитань • Історія України та світу</span>
-        </div>
-      </a>
-      <a href="#geography-nmt-test" class="nmt-test-button nmt-geography-button">
-        <div class="nmt-test-icon">🌍</div>
-        <div class="nmt-test-text">
-          <strong>Пройти тест з географії</strong>
-          <span>30 запитань • Географія України та світу</span>
-        </div>
-      </a>
-    </div>
 
     <!-- КНОПКА ЕКСПОРТУ ЗБЕРЕЖЕННЯ МАТЕРІАЛУ -->
     <div class="export-container">
