@@ -176,8 +176,8 @@
   </style>
   <link rel="stylesheet" href="modern-theme.css?v=301">
 <link rel="stylesheet" href="site-modern.css?v=2">
-<link rel="stylesheet" href="redesign.css?v=8">
-<link rel="stylesheet" href="mobile.css?v=10">
+<link rel="stylesheet" href="redesign.css?v=9">
+<link rel="stylesheet" href="mobile.css?v=12">
 </head>
 <body>
 
@@ -1195,12 +1195,13 @@
 
         // Нараховуємо лише нові бали. Значення total ніколи не зменшуємо.
         if (localTotal > savedTotal) {
+          const delta = localTotal - savedTotal;
           data.name = data.name || currentUser.displayName || 'Учень';
+          data.role = data.role || 'student';
           data.total_geography_points = localTotal;
-          data.score = currentScore + (localTotal - savedTotal);
-           data.week_score = (Number(data.week_score) || 0) + (localTotal - savedTotal);
-        } else if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
-         if (!data.total_geography_points) {
+          data.score = currentScore + delta;
+          data.week_score = (Number(data.week_score) || 0) + delta;
+        } else if (!data.total_geography_points) {
           data.total_geography_points = savedTotal;
         }
 

@@ -236,7 +236,7 @@
     /* Блок «Кому буде корисний Портал?» */
     .target-audience-section {
       background: #ffffff;
-      border-radius: 16px;
+      border-radius: 0;
       padding: 25px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
       max-width: 1200px;
@@ -293,7 +293,7 @@
     /* Таблиця рейтингу */
     .leaderboard-section {
       background: #ffffff;
-      border-radius: 16px;
+      border-radius: 0;
       padding: 20px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
       max-width: 1200px;
@@ -380,7 +380,7 @@
     .kids-club-section {
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
       border: 2px dashed #0284c7;
-      border-radius: 20px;
+      border-radius: 0;
       padding: 25px;
       margin: 50px auto 30px auto;
       max-width: 1200px;
@@ -805,6 +805,24 @@
             current.score = (Number(current.score) || 0) + diff;
             current.week_score = (Number(current.week_score) || 0) + diff;
           }
+
+          // НМТ є окремим джерелом балів. Додаємо тільки новий найкращий результат.
+          const localNmtHist = Number(localStorage.getItem('nmt_history_score')) || 0;
+          const localNmtGeo = Number(localStorage.getItem('nmt_geography_score')) || 0;
+          const savedNmtHist = Number(current.nmt_history_score) || 0;
+          const savedNmtGeo = Number(current.nmt_geography_score) || 0;
+          const nmtDiff = Math.max(0, localNmtHist - savedNmtHist) + Math.max(0, localNmtGeo - savedNmtGeo);
+
+          if (localNmtHist > savedNmtHist) current.nmt_history_score = localNmtHist;
+          if (localNmtGeo > savedNmtGeo) current.nmt_geography_score = localNmtGeo;
+          current.nmt_history_total = Math.max(Number(current.nmt_history_total) || 0, Number(localStorage.getItem('nmt_history_total')) || 0);
+          current.nmt_geography_total = Math.max(Number(current.nmt_geography_total) || 0, Number(localStorage.getItem('nmt_geography_total')) || 0);
+          current.nmt_total_score = (Number(current.nmt_history_score) || 0) + (Number(current.nmt_geography_score) || 0);
+
+          if (nmtDiff > 0) {
+            current.score = (Number(current.score) || 0) + nmtDiff;
+            current.week_score = (Number(current.week_score) || 0) + nmtDiff;
+          }
           return current;
         });
 
@@ -997,8 +1015,7 @@
         updateCurrentScoreBadge(myScore);
       }, (error) => {
         console.error('Firebase users read:', error);
-        // Не залишаємо користувача з порожнім блоком.
-        renderLeaderboard('⚠️ Firebase не дозволив прочитати загальний рейтинг. Перевірте Rules → .read = auth != null.');
+        renderLeaderboard('⚠️ Не вдалося прочитати рейтинг. Перевірте Firebase Rules і натисніть Publish.');
       });
 
       // 2) Надійний канал поточного учня. Він працює навіть якщо загальний
@@ -1035,6 +1052,14 @@
 
     // Запускаємо рейтинг тільки після визначення Firebase Auth.
     onAuthStateChanged(auth, (user) => startRealtimeLeaderboard(user));
+
+    // Якщо користувач повернувся на вкладку після тесту НМТ/історії/географії,
+    // примусово синхронізуємо локальні результати ще раз.
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && auth.currentUser) {
+        startRealtimeLeaderboard(auth.currentUser);
+      }
+    });
 
     let stopChatListener = null;
 

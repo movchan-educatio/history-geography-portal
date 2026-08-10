@@ -187,10 +187,6 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="modern-theme.css?v=301">
-<link rel="stylesheet" href="site-modern.css?v=2">
-<link rel="stylesheet" href="redesign.css?v=8">
-<link rel="stylesheet" href="mobile.css?v=10">
 </head>
 <body>
 
@@ -207,7 +203,6 @@
         <li><a href="geography.html">Географія</a></li>
         <li><a href="nmt.html">НМТ</a></li>
         <li><a href="methodology.html">Методична скарбничка</a></li>
-      <li><a href="dashboard.html">Мій кабінет</a></li>
       </ul>
     </nav>
   </header>
@@ -899,80 +894,7 @@
 
   </main>
 
-  
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
-    authDomain: "movchan-portal.firebaseapp.com",
-    databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "movchan-portal",
-    storageBucket: "movchan-portal.firebasestorage.app",
-    messagingSenderId: "535915495927",
-    appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
-    measurementId: "G-8XBVKRZRS1"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const database = getDatabase(app);
-  let currentUser = null;
-
-  async function syncScore(totalPoints) {
-    const localTotal = Number(totalPoints) || 0;
-    window.pendingHistoryQuizScore = localTotal;
-    if (!currentUser || localTotal < 0) return;
-
-    try {
-      const userRef = ref(database, 'users/' + currentUser.uid);
-      await runTransaction(userRef, (data) => {
-        data = data || {};
-        const savedTotal = Number(data.total_history_points) || 0;
-        const currentScore = Number(data.score) || 0;
-        const currentOther = Number(data.total_geography_points) || 0;
-
-        // Нараховуємо лише нові бали. Значення total ніколи не зменшуємо.
-        if (localTotal > savedTotal) {
-          data.name = data.name || currentUser.displayName || 'Учень';
-          data.total_history_points = localTotal;
-          data.score = currentScore + (localTotal - savedTotal);
-           data.week_score = (Number(data.week_score) || 0) + (localTotal - savedTotal);
-        } else if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
-         if (!data.total_history_points) {
-          data.total_history_points = savedTotal;
-        }
-
-        if (data.total_geography_points === undefined) data.total_geography_points = currentOther;
-        return data;
-      });
-      console.log('Історія: синхронізація OK', localTotal);
-    } catch (error) {
-      console.error('Історія: помилка синхронізації', error);
-    }
-  }
-
-  window.syncHistoryQuizToFirebase = syncScore;
-
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    if (user && window.pendingHistoryQuizScore !== undefined) {
-      syncScore(window.pendingHistoryQuizScore);
-    }
-    if (user) {
-      const localTotal = Number(localStorage.getItem('total_history_points')) || 0;
-      if (localTotal >= 0) syncScore(localTotal);
-    }
-  });
-
-  window.addEventListener('focus', () => {
-    if (currentUser) syncScore(Number(localStorage.getItem('total_history_points')) || 0);
-  });
-</script>
-
-<script>
+  <script>
     function toggleAccordion(header) {
       const card = header.parentElement;
       card.classList.toggle('active');
@@ -1337,6 +1259,18 @@
       const q = state.questions[state.currentIndex];
       if (state.selectedOption === q.correctIndex) {
         state.score += 1;
+        let bestScores = JSON.parse(localStorage.getItem('history_quiz_scores') || '{}');
+        const oldBest = Number(bestScores[themeId] || 0);
+        if (state.score > oldBest) {
+          bestScores[themeId] = state.score;
+          localStorage.setItem('history_quiz_scores', JSON.stringify(bestScores));
+          if (typeof window.syncQuizPoint === 'function') window.syncQuizPoint(1);
+          else {
+            const pending = JSON.parse(localStorage.getItem('quiz_pending_points') || '{}');
+            pending.total = (pending.total || 0) + 1;
+            localStorage.setItem('quiz_pending_points', JSON.stringify(pending));
+          }
+        }
       }
 
       state.selectedOption = null;
@@ -1356,23 +1290,13 @@
       renderQuiz(themeId);
     }
 
-    // Збереження найкращого результату кожної теми + синхронізація з Firebase
     function saveQuizScore(themeId, score) {
       let historyScores = JSON.parse(localStorage.getItem('history_quiz_scores') || '{}');
-      const oldScore = Number(historyScores[themeId]) || 0;
-      const bestScore = Math.max(oldScore, Number(score) || 0);
-
-      historyScores[themeId] = bestScore;
+      const oldBest = Number(historyScores[themeId] || 0);
+      historyScores[themeId] = Math.max(oldBest, Number(score) || 0);
       localStorage.setItem('history_quiz_scores', JSON.stringify(historyScores));
-
-      const totalHistoryPoints = Object.values(historyScores).reduce((a, b) => a + (Number(b) || 0), 0);
+      const totalHistoryPoints = Object.values(historyScores).reduce((a, b) => a + Number(b || 0), 0);
       localStorage.setItem('total_history_points', totalHistoryPoints);
-
-      if (window.syncHistoryQuizToFirebase) {
-        window.syncHistoryQuizToFirebase(totalHistoryPoints);
-      } else {
-        window.pendingHistoryQuizScore = totalHistoryPoints;
-      }
     }
 
     // Ініціалізація всіх тестів при завантаженні сторінки
@@ -1386,10 +1310,76 @@
       });
     });
   </script>
-<footer><p>© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p><p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p></footer>
-<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
-<script>
-(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
-</script>
+
+  <!-- Єдина синхронізація балів з Firebase Realtime Database -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, runTransaction, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+      authDomain: "movchan-portal.firebaseapp.com",
+      databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "movchan-portal",
+      storageBucket: "movchan-portal.firebasestorage.app",
+      messagingSenderId: "535915495927",
+      appId: "1:535915495927:web:71f899ea2876ee129c2ef2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    window.quizFirebaseUid = null;
+
+    function readPending() {
+      try { return JSON.parse(localStorage.getItem('quiz_pending_points') || '{}'); } catch { return {}; }
+    }
+    function writePending(data) {
+      localStorage.setItem('quiz_pending_points', JSON.stringify(data));
+    }
+
+    // Єдине правило для історії: нові бали збільшують і довічний, і тижневий рейтинг.
+    // Firebase є джерелом правди; localStorage лише тимчасово тримає прогрес до входу.
+
+    async function addPoints(points) {
+      if (!points) return;
+      const uid = window.quizFirebaseUid;
+      if (!uid) {
+        const pending = readPending();
+        pending.total = (pending.total || 0) + points;
+        writePending(pending);
+        return;
+      }
+      const userRef = ref(database, 'users/' + uid);
+      await runTransaction(userRef, data => {
+        data = data || {};
+        data.name = data.name || (auth.currentUser && auth.currentUser.displayName) || 'Учень';
+        data.role = data.role || 'student';
+        data.score = (Number(data.score) || 0) + points;
+        data.week_score = (Number(data.week_score) || 0) + points;
+        return data;
+      });
+    }
+
+    async function flushPending() {
+      const pending = readPending();
+      const points = Number(pending.total) || 0;
+      if (!points || !window.quizFirebaseUid) return;
+      try {
+        await addPoints(points);
+        writePending({});
+      } catch (e) {
+        console.error('Firebase sync error:', e);
+      }
+    }
+
+    window.syncQuizPoint = addPoints;
+    onAuthStateChanged(auth, user => {
+      window.quizFirebaseUid = user ? user.uid : null;
+      if (user) flushPending();
+    });
+  </script>
+
 </body>
 </html>
