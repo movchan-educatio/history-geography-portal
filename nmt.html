@@ -37,258 +37,22 @@
     .nmt-person-body { padding:14px; }
     .nmt-monument img { width:100%; height:170px; object-fit:cover; border-radius:10px; margin-bottom:10px; background:#e2e8f0; }
     .nmt-section-label { font-size:20px; font-weight:800; color:#0f172a; margin:24px 0 12px; }
-
-    /* ================= НМТ: КНОПКИ ТЕСТІВ ================= */
-    .nmt-test-buttons {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:18px;
-      margin:25px 0 35px;
-    }
-    .nmt-test-button {
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:18px;
-      padding:22px 25px;
-      border-radius:18px;
-      text-decoration:none;
-      color:#fff;
-      overflow:hidden;
-      transition:transform .25s ease,box-shadow .25s ease;
-      box-shadow:0 8px 22px rgba(15,23,42,.12);
-    }
-    .nmt-test-button:hover {
-      transform:translateY(-4px);
-      box-shadow:0 14px 30px rgba(15,23,42,.18);
-    }
-    .nmt-test-button .nmt-test-icon { font-size:42px; flex-shrink:0; }
-    .nmt-test-button .nmt-test-text { display:flex; flex-direction:column; gap:5px; }
-    .nmt-test-button strong { font-size:19px; line-height:1.2; }
-    .nmt-test-button span { font-size:13px; opacity:.9; }
-    .nmt-history-button { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
-    .nmt-geography-button { background:linear-gradient(135deg,#059669,#047857); }
-    @media (max-width:650px) {
-      .nmt-test-buttons { grid-template-columns:1fr; }
-      .nmt-test-button { padding:18px 20px; }
-    }
     @media (max-width:600px){ .nmt-library{padding:16px;} .nmt-person img,.nmt-monument img{height:150px;} }
 
-    /* =========================================================
-       НМТ — ОНОВЛЕНИЙ ДИЗАЙН
-       Змінено лише оформлення та розташування кнопок.
-       Навчальний матеріал, запитання, відповіді та скрипти не змінюються.
-       ========================================================= */
-    body {
-      background:
-        radial-gradient(circle at 8% 8%, rgba(37,99,235,.07), transparent 24%),
-        radial-gradient(circle at 92% 18%, rgba(5,150,105,.06), transparent 22%),
-        #f5f7fb;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(14px);
-      background: rgba(15,23,42,.96);
-      box-shadow: 0 8px 24px rgba(15,23,42,.18);
-    }
-
-    .hero-banner {
-      position: relative;
-      isolation: isolate;
-      min-height: 470px;
-      margin: 0 auto 34px;
-      padding: 62px clamp(20px, 5vw, 72px);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 18px 45px rgba(15,23,42,.18);
-      background: linear-gradient(135deg,#0f172a 0%,#172554 43%,#0f766e 100%) !important;
-    }
-
-    .hero-banner::before,
-    .hero-banner::after {
-      content: '';
-      position: absolute;
-      z-index: -1;
-      border-radius: 50%;
-      filter: blur(2px);
-      pointer-events: none;
-    }
-    .hero-banner::before {
-      width: 430px;
-      height: 430px;
-      right: -120px;
-      top: -170px;
-      background: radial-gradient(circle, rgba(96,165,250,.34), transparent 68%);
-      animation: nmtGlow 7s ease-in-out infinite;
-    }
-    .hero-banner::after {
-      width: 360px;
-      height: 360px;
-      left: -140px;
-      bottom: -190px;
-      background: radial-gradient(circle, rgba(52,211,153,.25), transparent 68%);
-      animation: nmtGlow 9s ease-in-out infinite reverse;
-    }
-
-    .hero-text {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      text-align: center;
-      color: #fff;
-      position: relative;
-      z-index: 2;
-    }
-    .hero-text::before {
-      content: '🎓  ПІДГОТОВКА ДО НМТ';
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 15px;
-      margin-bottom: 17px;
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 999px;
-      background: rgba(255,255,255,.10);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      animation: nmtFloat 4s ease-in-out infinite;
-    }
-    .hero-text h1 {
-      margin: 0 auto 15px;
-      max-width: 900px;
-      font-size: clamp(32px, 5vw, 64px);
-      line-height: .98;
-      letter-spacing: -.035em;
-      text-shadow: 0 6px 24px rgba(0,0,0,.28);
-    }
-    .hero-text h1 span {
-      color: #fbbf24;
-      text-shadow: 0 0 28px rgba(251,191,36,.30);
-    }
-    .hero-text .subtitle {
-      max-width: 850px;
-      margin: 0 auto 12px;
-      color: rgba(255,255,255,.88);
-      font-size: clamp(15px, 2vw, 19px);
-      line-height: 1.55;
-    }
-    .hero-text .quote {
-      margin: 0 auto 28px;
-      color: #fde68a;
-      font-weight: 800;
-      font-size: clamp(15px, 2vw, 18px);
-    }
-
-    /* Кнопки тестів тепер безпосередньо на банері */
-    .hero-text .nmt-test-buttons {
-      width: min(850px, 100%);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .hero-text .nmt-test-button {
-      min-height: 82px;
-      padding: 17px 20px;
-      border: 1px solid rgba(255,255,255,.20);
-      border-radius: 18px;
-      background: rgba(255,255,255,.10);
-      box-shadow: 0 12px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.13);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #fff;
-    }
-    .hero-text .nmt-test-button:hover {
-      transform: translateY(-4px) scale(1.015);
-      box-shadow: 0 18px 36px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.18);
-    }
-    .hero-text .nmt-history-button {
-      background: linear-gradient(135deg, rgba(37,99,235,.92), rgba(29,78,216,.72));
-    }
-    .hero-text .nmt-geography-button {
-      background: linear-gradient(135deg, rgba(5,150,105,.92), rgba(4,120,87,.72));
-    }
-    .hero-text .nmt-test-button .nmt-test-icon {
-      font-size: 34px;
-    }
-    .hero-text .nmt-test-button strong {
-      font-size: 17px;
-    }
-
-    /* Фото автора більше не перекриває банер */
-    .hero-author { display: none !important; }
-
-    .main-container {
-      position: relative;
-    }
-    .main-container > .nmt-test-buttons {
-      display: none !important;
-    }
-
-    .export-container {
-      background: linear-gradient(135deg, #eff6ff, #ecfdf5);
-      border: 1px solid #bfdbfe;
-      border-radius: 20px;
-      box-shadow: 0 10px 28px rgba(15,23,42,.07);
-    }
-    .btn-export {
-      border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(5,150,105,.22);
-    }
-
-    .global-test-container {
-      background: linear-gradient(180deg,#ffffff,#f8fafc);
-      border-radius: 22px;
-      padding: clamp(18px, 3vw, 30px);
-      box-shadow: 0 12px 34px rgba(15,23,42,.08);
-      scroll-margin-top: 95px;
-    }
-    .quiz-card {
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(15,23,42,.06);
-    }
-    .quiz-options label {
-      border-radius: 12px;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
-    }
-    .quiz-options label:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 5px 14px rgba(15,23,42,.07);
-    }
-
-    .section-title {
-      box-shadow: 0 8px 18px rgba(15,23,42,.08);
-      font-weight: 800;
-    }
-
-    .info-card, .nmt-card {
-      box-shadow: 0 8px 22px rgba(15,23,42,.05);
-    }
-
-    @keyframes nmtGlow {
-      0%,100% { transform: translate3d(0,0,0) scale(1); opacity: .75; }
-      50% { transform: translate3d(16px,10px,0) scale(1.08); opacity: 1; }
-    }
-    @keyframes nmtFloat {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-
-    @media (max-width: 700px) {
-      .hero-banner { min-height: auto; padding: 42px 16px 38px; }
-      .hero-text .nmt-test-buttons { grid-template-columns: 1fr; }
-      .hero-text .nmt-test-button { min-height: 70px; }
-      .hero-text h1 { font-size: clamp(30px, 10vw, 46px); }
-    }
+  
+    /* ================= КНОПКИ ТЕСТІВ НА БАНЕРІ НМТ ================= */
+    .nmt-hero-test-buttons { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:18px; }
+    .nmt-hero-test-button { display:inline-flex; align-items:center; gap:9px; padding:12px 18px; border-radius:12px; color:#fff; text-decoration:none; font-weight:800; font-size:14px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.14); box-shadow:0 6px 18px rgba(0,0,0,.18); backdrop-filter:blur(5px); transition:transform .2s ease,background .2s ease,box-shadow .2s ease; }
+    .nmt-hero-test-button:hover { transform:translateY(-2px); background:rgba(255,255,255,.24); box-shadow:0 9px 22px rgba(0,0,0,.24); }
+    .nmt-hero-test-button.history { border-color:rgba(147,197,253,.7); }
+    .nmt-hero-test-button.geography { border-color:rgba(110,231,183,.7); }
+    .nmt-hero-test-button .icon { font-size:21px; line-height:1; }
+    @media (max-width:600px) { .nmt-hero-test-buttons { flex-direction:column; align-items:stretch; } .nmt-hero-test-button { justify-content:center; } }
 
   </style>
+  <link rel="stylesheet" href="modern-theme.css?v=300">
+<link rel="stylesheet" href="site-modern.css?v=1">
+<link rel="stylesheet" href="redesign.css?v=5">
 </head>
 <body>
 
@@ -305,6 +69,7 @@
         <li><a href="geography.html">Географія</a></li>
         <li><a href="nmt.html" class="active">НМТ</a></li>
         <li><a href="methodology.html">Методична скарбничка</a></li>
+      <li><a href="dashboard.html">Мій кабінет</a></li>
       </ul>
     </nav>
   </header>
@@ -315,26 +80,14 @@
       <h1>МЕГА-ДОВІДНИК ТА ТЕСТИ <span>НМТ</span></h1>
       <p class="subtitle">200 ключових матеріалів у довіднику + великі інтерактивні тести з історії та географії (1 питання = 1 бал)</p>
       <p class="quote">“Системність і практика — твій шлях до 200 балів!”</p>
-
-      <!-- Швидкий доступ до тестів НМТ — кнопки розташовані на банері -->
-      <div class="nmt-test-buttons">
-        <a href="#history-nmt-test" class="nmt-test-button nmt-history-button">
-          <div class="nmt-test-icon">📜</div>
-          <div class="nmt-test-text">
-            <strong>Пройти тест з історії</strong>
-            <span>30 запитань • Історія України та світу</span>
-          </div>
-        </a>
-        <a href="#geography-nmt-test" class="nmt-test-button nmt-geography-button">
-          <div class="nmt-test-icon">🌍</div>
-          <div class="nmt-test-text">
-            <strong>Пройти тест з географії</strong>
-            <span>30 запитань • Географія України та світу</span>
-          </div>
-        </a>
+      <div class="nmt-hero-test-buttons">
+        <a href="#history-nmt-test" class="nmt-hero-test-button history"><span class="icon">📜</span><span>Пройти тест з історії</span></a>
+        <a href="#geography-nmt-test" class="nmt-hero-test-button geography"><span class="icon">🌍</span><span>Пройти тест з географії</span></a>
       </div>
     </div>
-    <!-- Фото автора навмисно не використовується в банері, щоб не перекривати його. -->
+    <div class="hero-author">
+      <img src="author-photo.jpeg" alt="Сергій Мовчан">
+    </div>
   </section>
 
   <!-- РОЗШИРЕНИЙ ДОВІДНИК НМТ: одразу під банером -->
@@ -2382,24 +2135,11 @@
         const delta = best - oldBest;
 
         data.name = data.name || currentUser.displayName || 'Учень';
-        data.email = data.email || currentUser.email || '';
-        data.role = currentUser.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' ? 'teacher' : 'student';
         data[key] = best;
         data[totalKey] = Number(total) || 0;
         data.nmt_total_score = Number(data.nmt_history_score || 0) + Number(data.nmt_geography_score || 0);
-        if (delta > 0) {
-          data.score = Number(data.score || 0) + delta;
-          const weeklyKey = type === 'history' ? 'week_nmt_history_score' : 'week_nmt_geography_score';
-          data[weeklyKey] = (Number(data[weeklyKey]) || 0) + delta;
-        } else {
-          data.score = Number(data.score || 0);
-        }
-        data.week_score =
-          (Number(data.week_history_points) || 0) +
-          (Number(data.week_geography_points) || 0) +
-          (Number(data.week_nmt_history_score) || 0) +
-          (Number(data.week_nmt_geography_score) || 0) +
-          (Number(data.week_truth_or_lie_points) || 0);
+        if (delta > 0) data.score = Number(data.score || 0) + delta;
+        else data.score = Number(data.score || 0);
         return data;
       });
 
@@ -2433,5 +2173,10 @@
   });
 </script>
 
+<footer><p>© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p><p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p></footer>
+<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
+<script>
+(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
+</script>
 </body>
 </html>

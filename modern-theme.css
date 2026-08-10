@@ -161,21 +161,3 @@ footer a:hover{transform:translateY(-3px)!important}
 }
 @keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-
-
-/* === FINAL BANNER EDGE FIX ===
-   Банери порталу мають залишатися прямокутними на ПК та мобільних.
-   Це правило має пріоритет над попередніми темами. */
-.mountain-banner,
-.hero-banner,
-.page-banner,
-.page-hero,
-.nmt-hero,
-.nmt200-hero,
-.portal-hero,
-.nmt-library-banner,
-.methodology-banner,
-.banner,
-[class*="banner"] {
-  border-radius: 0 !important;
-}

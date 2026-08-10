@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Підключення іконок -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=18">
+  <link rel="stylesheet" href="style.css?v=16">
   
   <style>
     html {
@@ -497,6 +497,9 @@
     .virtual-tour-card .icon { font-size: 38px; margin-bottom: 10px; }
     .virtual-tour-card span { font-size: 14px; font-weight: 700; color: #1e293b; }
   </style>
+  <link rel="stylesheet" href="modern-theme.css?v=300">
+<link rel="stylesheet" href="site-modern.css?v=1">
+<link rel="stylesheet" href="redesign.css?v=5">
 </head>
 <body>
 
@@ -593,7 +596,8 @@
         <h3><i class="fas fa-medal" style="color: #2563eb;"></i> Рейтинг активності учнів</h3>
         <span id="weekResetTimer" class="reset-timer-badge">🔄 Оновлення тижня...</span>
         <div class="user-login-bar" id="authBox">
-          <button class="user-login-btn" onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Увійти через Google</button>
+          <input type="text" id="studentNameInput" class="user-login-input" placeholder="Введіть ваше ПІБ..." maxlength="25">
+          <button class="user-login-btn" onclick="registerStudent()">Увійти</button>
         </div>
       </div>
       <div id="leaderboardList" class="leaderboard-list"></div>
@@ -700,6 +704,7 @@
       <a href="https://www.facebook.com/share/1ETNyD3yDX/?mibextid=wwXIfr" target="_blank" title="Facebook" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877f2; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;"><i class="fa-brands fa-facebook-f"></i></a>
     </div>
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
+  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
   </footer>
 
   <div class="modal-overlay" id="info-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
@@ -710,7 +715,7 @@
     </div>
   </div>
 
-  <!-- FIREBASE SCRIPTS: єдиний realtime-шар рейтингу та чату -->
+  <!-- FIREBASE SCRIPTS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1527,5 +1532,9 @@
 
     window.addEventListener('DOMContentLoaded', initPageData);
   </script>
+<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
+<script>
+(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
+</script>
 </body>
 </html>

@@ -174,6 +174,9 @@
       background: #334155;
     }
   </style>
+  <link rel="stylesheet" href="modern-theme.css?v=300">
+<link rel="stylesheet" href="site-modern.css?v=1">
+<link rel="stylesheet" href="redesign.css?v=5">
 </head>
 <body>
 
@@ -190,6 +193,7 @@
         <li><a href="geography.html" class="active">Географія</a></li>
         <li><a href="nmt.html">НМТ</a></li>
         <li><a href="methodology.html">Методична скарбничка</a></li>
+      <li><a href="dashboard.html">Мій кабінет</a></li>
       </ul>
     </nav>
   </header>
@@ -726,6 +730,7 @@
   <!-- Футер -->
   <footer style="background: #1e293b; color: #ffffff; padding: 30px 20px; text-align: center; margin-top: 40px; border-top: 4px solid #059669;">
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній портал «Історія і географія БЕЗ МЕЖ»</p>
+  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
   </footer>
 
   <!-- JavaScript для акордеона та тестів -->
@@ -1121,18 +1126,23 @@
       renderQuiz(themeId);
     }
 
-    // Зберігаємо результат конкретної теми.
-    // Рейтинг рахується ТІЛЬКИ у Firebase: localStorage більше не підсумовує бали.
+    // Збереження найкращого результату кожної теми + синхронізація з Firebase
     function saveGeographyQuizScore(themeId, score) {
-      const safeScore = Math.max(0, Number(score) || 0);
-      if (window.syncGeographyQuizThemeToFirebase) {
-        window.syncGeographyQuizThemeToFirebase(themeId, safeScore);
+      let geoScores = JSON.parse(localStorage.getItem('geography_quiz_scores') || '{}');
+      const oldScore = Number(geoScores[themeId]) || 0;
+      const bestScore = Math.max(oldScore, Number(score) || 0);
+
+      geoScores[themeId] = bestScore;
+      localStorage.setItem('geography_quiz_scores', JSON.stringify(geoScores));
+
+      const totalGeoPoints = Object.values(geoScores).reduce((a, b) => a + (Number(b) || 0), 0);
+      localStorage.setItem('total_geography_points', totalGeoPoints);
+
+      window.dispatchEvent(new CustomEvent('geographyScoreChanged'));
+      if (window.syncGeographyQuizToFirebase) {
+        window.syncGeographyQuizToFirebase(totalGeoPoints);
       } else {
-        try {
-          const pending = JSON.parse(localStorage.getItem('geography_quiz_pending_results') || '{}');
-          pending[themeId] = Math.max(Number(pending[themeId]) || 0, safeScore);
-          localStorage.setItem('geography_quiz_pending_results', JSON.stringify(pending));
-        } catch (e) { console.error('Не вдалося зберегти очікуваний результат:', e); }
+        window.pendingGeographyQuizScore = totalGeoPoints;
       }
     }
 
@@ -1169,98 +1179,58 @@
   const database = getDatabase(app);
   let currentUser = null;
 
-  // V2: localStorage більше НЕ є джерелом балів рейтингу.
-  // Він використовується лише як коротка черга, якщо Firebase ще не авторизував учня.
-  const MIGRATION_KEY = 'geography_rating_v2_initialized';
-  if (localStorage.getItem(MIGRATION_KEY) !== '1') {
-    localStorage.removeItem('geography_quiz_scores');
-    localStorage.removeItem('total_geography_points');
-    localStorage.removeItem('geography_quiz_pending_results');
-    localStorage.setItem(MIGRATION_KEY, '1');
-  }
-
-  function readPendingResults() {
-    try { return JSON.parse(localStorage.getItem('geography_quiz_pending_results') || '{}'); }
-    catch { return {}; }
-  }
-  function writePendingResults(data) {
-    localStorage.setItem('geography_quiz_pending_results', JSON.stringify(data));
-  }
-
-  async function syncThemeScore(themeId, score) {
-    const safeThemeId = String(themeId || '');
-    const safeScore = Math.max(0, Number(score) || 0);
-    if (!safeThemeId || !safeScore) return;
-
-    if (!currentUser) {
-      const pending = readPendingResults();
-      pending[safeThemeId] = Math.max(Number(pending[safeThemeId]) || 0, safeScore);
-      writePendingResults(pending);
-      return;
-    }
+  async function syncScore(totalPoints) {
+    const localTotal = Number(totalPoints) || 0;
+    window.pendingGeographyQuizScore = localTotal;
+    if (!currentUser || localTotal < 0) return;
 
     try {
       const userRef = ref(database, 'users/' + currentUser.uid);
       await runTransaction(userRef, (data) => {
         data = data || {};
-        const themeScores = data.geography_quiz_scores || {};
-        const oldScore = Number(themeScores[safeThemeId]) || 0;
+        const savedTotal = Number(data.total_geography_points) || 0;
+        const currentScore = Number(data.score) || 0;
+        const currentOther = Number(data.total_history_points) || 0;
 
-        // Кожна тема має власний найкращий результат. Повторне проходження
-        // додає тільки різницю, якщо новий результат кращий.
-        if (safeScore > oldScore) {
-          const delta = safeScore - oldScore;
-          themeScores[safeThemeId] = safeScore;
-          data.geography_quiz_scores = themeScores;
-          data.total_geography_points = (Number(data.total_geography_points) || 0) + delta;
-          data.score = (Number(data.score) || 0) + delta;
-          data.week_geography_points = (Number(data.week_geography_points) || 0) + delta;
-        } else if (!data.geography_quiz_scores) {
-          data.geography_quiz_scores = themeScores;
+        // Нараховуємо лише нові бали. Значення total ніколи не зменшуємо.
+        if (localTotal > savedTotal) {
+          data.name = data.name || currentUser.displayName || 'Учень';
+          data.total_geography_points = localTotal;
+          data.score = currentScore + (localTotal - savedTotal);
+        } else if (!data.total_geography_points) {
+          data.total_geography_points = savedTotal;
         }
 
-        data.name = data.name || currentUser.displayName || 'Учень';
-        data.email = data.email || currentUser.email || '';
-        data.role = currentUser.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' ? 'teacher' : 'student';
-        if (data.total_history_points === undefined) data.total_history_points = 0;
-        if (data.total_geography_points === undefined) data.total_geography_points = 0;
-        if (data.week_history_points === undefined) data.week_history_points = 0;
-        if (data.week_geography_points === undefined) data.week_geography_points = 0;
-        if (data.nmt_history_score === undefined) data.nmt_history_score = 0;
-        if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
-        if (data.week_nmt_history_score === undefined) data.week_nmt_history_score = 0;
-        if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = 0;
-        if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = 0;
-
-        data.week_score =
-          (Number(data.week_history_points) || 0) +
-          (Number(data.week_geography_points) || 0) +
-          (Number(data.week_nmt_history_score) || 0) +
-          (Number(data.week_nmt_geography_score) || 0) +
-          (Number(data.week_truth_or_lie_points) || 0);
+        if (data.total_history_points === undefined) data.total_history_points = currentOther;
         return data;
       });
-      console.log('Geography: Firebase прийняв результат', safeThemeId, safeScore);
+      console.log('Географія: синхронізація OK', localTotal);
     } catch (error) {
-      console.error('Geography: помилка синхронізації', error);
+      console.error('Географія: помилка синхронізації', error);
     }
   }
 
-  async function flushPendingResults() {
-    if (!currentUser) return;
-    const pending = readPendingResults();
-    const entries = Object.entries(pending);
-    if (!entries.length) return;
-    for (const [themeId, score] of entries) await syncThemeScore(themeId, score);
-    writePendingResults({});
-  }
+  window.syncGeographyQuizToFirebase = syncScore;
 
-  window.syncGeographyQuizThemeToFirebase = syncThemeScore;
-  onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, (user) => {
     currentUser = user;
-    if (user) await flushPendingResults();
+    if (user && window.pendingGeographyQuizScore !== undefined) {
+      syncScore(window.pendingGeographyQuizScore);
+    }
+    if (user) {
+      const localTotal = Number(localStorage.getItem('total_geography_points')) || 0;
+      if (localTotal >= 0) syncScore(localTotal);
+    }
+  });
+
+  window.addEventListener('focus', () => {
+    if (currentUser) syncScore(Number(localStorage.getItem('total_geography_points')) || 0);
   });
 </script>
 
+<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
+<script>
+(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
+</script>
 </body>
 </html>

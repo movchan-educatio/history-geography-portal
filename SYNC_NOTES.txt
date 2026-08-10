@@ -1,7 +1,1 @@
-RATING FIX V2
-
-History and Geography quiz results are stored per theme in Firebase.
-localStorage is no longer used to calculate total/rating points.
-A retake only adds the difference when the new result is higher than the previous best for that theme.
-The first V2 load removes old local quiz-total caches to prevent stale scores from the previous buggy system.
-Design and lesson content were not intentionally changed.
+Бали: історія/географія/НМТ — за правильні відповіді; гра Правда чи брехня — 1 бал; факти та інші головні посилання — 0 балів. НМТ синхронізує nmt_history_score/nmt_geography_score, щоб головна не дублювала бали.
