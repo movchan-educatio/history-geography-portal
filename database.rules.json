@@ -1,40 +1,11 @@
 {
   "rules": {
-    "users": {
-      ".read": "auth != null",
-      "$uid": {
-        ".write": "auth != null && (auth.uid === $uid || auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2')"
-      }
-    },
-    "lessons": {
-      ".read": "auth != null",
-      "$id": {
-        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'"
-      }
-    },
-    "assignments": {
-      ".read": "auth != null",
-      "$id": {
-        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'"
-      }
-    },
-    "resources": {
-      ".read": "auth != null",
-      "$id": {
-        ".write": "auth != null && (!data.exists() ? newData.child('ownerUid').val() === auth.uid : data.child('ownerUid').val() === auth.uid)"
-      }
-    },
-    "submissions": {
-      ".read": "auth != null",
-      "$id": {
-        ".write": "auth != null && (!data.exists() ? newData.child('studentUid').val() === auth.uid : (data.child('studentUid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'teacher'))"
-      }
-    },
-    "grades": {
-      ".read": "auth != null",
-      "$id": {
-        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'"
-      }
-    }
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "users": { "$uid": { ".write": "auth != null && auth.uid === $uid" } },
+    "submissions": { "$id": { ".write": "auth != null && (!data.exists() ? newData.child('studentUid').val() === auth.uid : (data.child('studentUid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'teacher'))" } },
+    "grades": { "$id": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" } },
+    "lessons": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" },
+    "assignments": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" }
   }
 }
