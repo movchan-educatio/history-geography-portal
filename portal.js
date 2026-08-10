@@ -7,6 +7,7 @@ const firebaseConfig={apiKey:'AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw',authDomai
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),storage=getStorage(app),provider=new GoogleAuthProvider();
 // Власник порталу: цей Google-акаунт автоматично отримує роль teacher.
 const PORTAL_OWNER_UID='LGw3zPR7w4SdN8zvi4LWExYTfFh2';
+const PORTAL_OWNER_NAME='сергій мовчан';
 let user=null, profile=null, lessons={}, assignments={}, resources={}, submissions={}, grades={};
 const $=id=>document.getElementById(id); const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
@@ -16,7 +17,18 @@ window.portalLogin=login;window.portalLogout=logout;
 function toast(msg){const n=$('toast');if(n){n.textContent=msg;n.classList.remove('hidden');setTimeout(()=>n.classList.add('hidden'),2800)}}
 function cacheProfile(){if(user&&profile){try{localStorage.setItem('portal_profile_'+user.uid,JSON.stringify(profile))}catch(e){}}}
 function getCachedProfile(u){try{const x=localStorage.getItem('portal_profile_'+u.uid);return x?JSON.parse(x):null}catch(e){return null}}
-function setRoleUI(){const teacher=profile?.role==='teacher'; document.querySelectorAll('[data-teacher-only]').forEach(e=>e.classList.toggle('hidden',!teacher)); document.querySelectorAll('[data-student-only]').forEach(e=>e.classList.toggle('hidden',teacher)); const role=$('roleText'); if(role) role.textContent=teacher?'Вчитель':'Учень';}
+function setRoleUI(){
+  const teacher=profile?.role==='teacher';
+  document.querySelectorAll('[data-teacher-only]').forEach(e=>e.classList.toggle('hidden',!teacher));
+  document.querySelectorAll('[data-student-only]').forEach(e=>e.classList.toggle('hidden',teacher));
+  const role=$('roleText');
+  if(role) role.textContent=teacher?'Вчитель':'Учень';
+  const authRole=$('authRoleText');
+  if(authRole){
+    authRole.textContent=teacher?'ВЧИТЕЛЬ':'УЧЕНЬ';
+    authRole.classList.toggle('teacher-role',teacher);
+  }
+}
 function renderAll(){renderLessons();renderAssignments();renderResources();renderGrades();renderSubmissions();setRoleUI()}
 function renderLessons(){const box=$('lessonsList');const arr=Object.entries(lessons).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));box.innerHTML=arr.length?arr.map(([id,x])=>`<article class="item"><div class="item-head"><div><span class="pill">${esc(x.subject||'Урок')}</span><h3>${esc(x.title)}</h3></div><span class="pill">${esc(x.grade||'')}</span></div><p>${esc(x.topic||x.description||'')}</p>${x.homework?`<p><b>Д/з:</b> ${esc(x.homework)}</p>`:''}${x.videoUrl?`<p>🎥 <a href="${esc(x.videoUrl)}" target="_blank" rel="noopener">Відео до уроку</a></p>`:''}${x.presentationUrl?`<p>📊 <a href="${esc(x.presentationUrl)}" target="_blank" rel="noopener">Презентація</a></p>`:''}</article>`).join(''):'<div class="empty">Поки що уроків немає. Створіть перший урок у режимі вчителя.</div>'}
 function renderAssignments(){const box=$('assignmentsList');const arr=Object.entries(assignments).sort((a,b)=>(a[1].dueAt||'').localeCompare(b[1].dueAt||''));box.innerHTML=arr.length?arr.map(([id,x])=>`<article class="item"><div class="item-head"><div><span class="pill">Д/З</span><h3>${esc(x.title)}</h3></div><span class="pill">до ${esc(x.dueAt||'—')}</span></div><p>${esc(x.description||'')}</p>${x.resourceUrl?`<p>📎 <a href="${esc(x.resourceUrl)}" target="_blank">Матеріал до завдання</a></p>`:''}<div class="form-actions"><button class="btn-primary" onclick="openSubmission('${id}')">${profile?.role==='teacher'?'Переглянути роботи':'Здати роботу'}</button></div></article>`).join(''):'<div class="empty">Домашніх завдань ще немає.</div>'}
@@ -37,8 +49,10 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 
 async function loadProfile(u){
-  // Власник порталу: роль визначається локально за UID і не залежить від швидкості Firebase.
-  if(u.uid===PORTAL_OWNER_UID){
+  // Власник порталу та авторський Google-профіль отримують роль учителя одразу.
+  // Це прибирає зависання на "Перевірка ролі..." навіть коли Firebase відповідає повільно.
+  const isPortalTeacher = u.uid===PORTAL_OWNER_UID || (u.displayName||'').trim().toLowerCase()===PORTAL_OWNER_NAME;
+  if(isPortalTeacher){
     profile={displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid};
     cacheProfile(); setRoleUI();
     update(ref(db,'users/'+u.uid),{displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid}).catch(err=>console.warn('Синхронізація ролі:',err));
@@ -73,15 +87,20 @@ onAuthStateChanged(auth,async u=>{
 
   // Показуємо кабінет одразу, а не після довгого читання профілю.
   $('privateArea').classList.remove('hidden');
+  const immediateTeacher = u.uid===PORTAL_OWNER_UID || (u.displayName||'').trim().toLowerCase()===PORTAL_OWNER_NAME;
+  const immediateRole = $('roleText');
+  if(immediateRole) immediateRole.textContent = immediateTeacher ? 'Вчитель' : 'Учень';
   $('authArea').innerHTML=`<div class="user-chip"><img src="${esc(u.photoURL||'logo.png')}" alt=""><div><b>${esc(u.displayName||'Користувач')}</b><small class="role-badge" id="authRoleText">Вхід виконано</small></div><button id="logoutBtn" class="btn-secondary">Вийти</button></div>`;
   $('logoutBtn').onclick=logout;
 
-  if(u.uid===PORTAL_OWNER_UID){
+  const isPortalTeacher = u.uid===PORTAL_OWNER_UID || (u.displayName||'').trim().toLowerCase()===PORTAL_OWNER_NAME;
+  if(isPortalTeacher){
     profile={displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid};
     setRoleUI();
   }else{
     const cached=getCachedProfile(u);
-    const role=$('roleText'); if(role) role.textContent=cached?.role==='teacher'?'Вчитель':cached?.role==='student'?'Учень':'Визначення доступу…';
+    const role=$('roleText');
+    if(role) role.textContent=cached?.role==='teacher'?'Вчитель':'Учень';
     await loadProfile(u);
   }
 

@@ -2,10 +2,29 @@
   "rules": {
     ".read": "auth != null",
     ".write": "auth != null",
-    "users": { "$uid": { ".write": "auth != null && auth.uid === $uid" } },
-    "submissions": { "$id": { ".write": "auth != null && (!data.exists() ? newData.child('studentUid').val() === auth.uid : (data.child('studentUid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'teacher'))" } },
-    "grades": { "$id": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" } },
-    "lessons": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" },
-    "assignments": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" }
+    "users": {
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "submissions": {
+      "$id": {
+        ".write": "auth != null && (!data.exists() ? newData.child('studentUid').val() === auth.uid : (data.child('studentUid').val() === auth.uid || auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher'))"
+      }
+    },
+    "grades": {
+      "$id": {
+        ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
+      }
+    },
+    "lessons": {
+      ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
+    },
+    "assignments": {
+      ".write": "auth != null && (auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' || root.child('users').child(auth.uid).child('role').val() === 'teacher')"
+    },
+    "resources": {
+      ".write": "auth != null"
+    }
   }
 }
