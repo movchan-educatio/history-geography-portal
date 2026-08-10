@@ -605,13 +605,13 @@
       <div class="info-card">
         <h4>📜 Історичний факт</h4>
         <p id="event-content">Завантаження...</p>
-        <button onclick="openModal('event'); addPoints(5);" class="btn-link">Детальніше → (+5 балів)</button>
+        <button onclick="openModal('event');" class="btn-link">Детальніше →</button>
       </div>
 
       <div class="info-card">
         <h4>🌍 Цікаво про географію</h4>
         <p id="geo-content">Завантаження...</p>
-        <button onclick="openModal('geo'); addPoints(5);" class="btn-link">Читати більше → (+5 балів)</button>
+        <button onclick="openModal('geo');" class="btn-link">Читати більше →</button>
       </div>
 
       <div class="info-card" style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -631,15 +631,15 @@
 
     <div class="section-title">Віртуальні екскурсії та медіа</div>
     <div class="grid-3-tours">
-      <a href="tours.html" target="_blank" class="virtual-tour-card" onclick="addPoints(5)">
+      <a href="tours.html" target="_blank" class="virtual-tour-card" >
         <div class="icon">🗺️</div>
         <span>AUDIO & 3D Тури</span>
       </a>
-      <a href="https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" target="_blank" class="virtual-tour-card" onclick="addPoints(5)">
+      <a href="https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" target="_blank" class="virtual-tour-card" >
         <div class="icon" style="color: #ff0000;"><i class="fa-brands fa-youtube"></i></div>
         <span>Реальна історія</span>
       </a>
-      <a href="artifacts.html" target="_blank" class="virtual-tour-card" onclick="addPoints(5)">
+      <a href="artifacts.html" target="_blank" class="virtual-tour-card" >
         <div class="icon">🏺</div>
         <span>3D Артефакти</span>
       </a>
@@ -756,7 +756,7 @@
           if (!snapshot.exists()) {
             set(userRef, {
               name: user.displayName,
-              score: 5 + totalTestPoints,
+              score: totalTestPoints,
               total_history_points: historyTestPoints,
               total_geography_points: geographyTestPoints
             });
@@ -961,16 +961,32 @@
     let dinoAnimationId;
     let speedInterval = null;
 
+    // Персонаж гри: Сергій Мовчан замість динозаврика
+    const teacherRunner = new Image();
+    teacherRunner.src = 'teacher-runner.png';
+    let teacherRunnerReady = false;
+    teacherRunner.onload = () => { teacherRunnerReady = true; };
+
     function drawDino(x, y) {
-      ctx.fillStyle = '#2563eb';
-      ctx.fillRect(x + 8, y + 10, 18, 20);
-      ctx.fillRect(x + 22, y + 2, 12, 12);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(x + 29, y + 5, 2, 2);
-      ctx.fillStyle = '#2563eb';
-      ctx.fillRect(x, y + 14, 10, 6);
-      ctx.fillRect(x + 10, y + 30, 4, 6);
-      ctx.fillRect(x + 20, y + 30, 4, 6);
+      if (!teacherRunnerReady) {
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x + 8, y + 10, 18, 20);
+        ctx.fillRect(x + 22, y + 2, 12, 12);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 29, y + 5, 2, 2);
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x, y + 14, 10, 6);
+        ctx.fillRect(x + 10, y + 30, 4, 6);
+        ctx.fillRect(x + 20, y + 30, 4, 6);
+        return;
+      }
+
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      // Фото-персонаж масштабується під висоту гри та стоїть на тій самій лінії,
+      // де раніше знаходився динозаврик.
+      ctx.drawImage(teacherRunner, x - 5, y - 48, 46, 51);
+      ctx.restore();
     }
 
     let dinoHighScore = parseInt(localStorage.getItem('dino_high_score')) || 0;
@@ -1370,8 +1386,8 @@
       if (userAnswer === gameItem.isTrue) {
         resultElem.style.background = '#dcfce7';
         resultElem.style.color = '#15803d';
-        resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +5 балів!';
-        addPoints(5);
+        resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +1 бал!';
+        addPoints(1);
       } else {
         resultElem.style.background = '#fee2e2';
         resultElem.style.color = '#b91c1c';
@@ -1414,5 +1430,3 @@
   </script>
 </body>
 </html>
-
-Головна
