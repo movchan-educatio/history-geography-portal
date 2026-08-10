@@ -1198,7 +1198,9 @@
           data.name = data.name || currentUser.displayName || 'Учень';
           data.total_geography_points = localTotal;
           data.score = currentScore + (localTotal - savedTotal);
-        } else if (!data.total_geography_points) {
+           data.week_score = (Number(data.week_score) || 0) + (localTotal - savedTotal);
+        } else if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
+         if (!data.total_geography_points) {
           data.total_geography_points = savedTotal;
         }
 
