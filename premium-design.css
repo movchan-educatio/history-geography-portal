@@ -143,3 +143,73 @@ footer{background:#06192d!important;color:#fff!important;border-top:3px solid va
     line-height:1.75!important;
   }
 }
+
+/* FINAL CONTRAST FIX — NMT DIRECTORY */
+.nmt200-hero h1,
+.nmt200-hero h2,
+.nmt200-hero p,
+.nmt200-hero .nmt200-badge {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+.nmt200-hero h1,
+.nmt200-hero h2 {
+  text-shadow: none !important;
+}
+.nmt200-hero p {
+  text-shadow: none !important;
+}
+
+
+/* =========================================================
+   FINAL DESIGN LOCK — RECTANGULAR BANNERS / CENTERED FOOTER
+   Версія v3. Тільки візуальні зміни.
+   ========================================================= */
+
+/* УСІ основні банери — прямокутні на ПК та мобільних. */
+.mountain-banner,
+.hero-banner,
+.nmt200-hero{
+  border-radius:0!important;
+}
+
+/* Не дозволяємо старим mobile-правилам повернути заокруглення. */
+@media (max-width:900px){
+  .mountain-banner,
+  .hero-banner,
+  .nmt200-hero{
+    border-radius:0!important;
+  }
+}
+
+@media (max-width:520px){
+  .mountain-banner,
+  .hero-banner,
+  .nmt200-hero{
+    border-radius:0!important;
+  }
+}
+
+/* Футер: весь текст однаково по центру на всіх сторінках і екранах. */
+footer{
+  text-align:center!important;
+}
+footer p,
+footer h3,
+footer .footer-teacher-line{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+footer .footer-teacher-line{
+  display:block!important;
+}
+
+/* «Поетичне слово про рідний ліцей» — білим. */
+.poetry-card h3,
+.poetry-card h3 i,
+.poetry-card h3 *{
+  color:#fff!important;
+}

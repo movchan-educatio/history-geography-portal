@@ -1,3 +1,1 @@
-OLD COOL DESIGN + WORKING RATING/FIREBASE LOGIC
-Design source: FULL-EDU-v3-clean-redesign
-Functional module source: RATING-V2-FIX
+Premium design v3 — rectangular banners, centered footer, white poetry title. Visual-only changes; functionality preserved.
