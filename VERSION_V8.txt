@@ -1,4 +1,9 @@
 HISTORY-GEOGRAPHY-PORTAL V8
-Firebase realtime rating unified
+Content quality and code cleanup
 
-Design patch v4: final text contrast hard-lock; existing files only.
+- Corrected Ukrainian spelling, apostrophes, obvious Russianisms, typos and grammar.
+- Corrected the 1989 founding year of Народний Рух України.
+- Corrected several malformed historical/geographical question formulations.
+- Unified premium-design.css cache version to v8 across all HTML pages.
+- Preserved existing functionality and design; no new buttons added.
+- Main-hero search remains removed from the HTML.

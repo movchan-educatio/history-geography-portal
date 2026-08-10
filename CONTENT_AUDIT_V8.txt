@@ -1,0 +1,17 @@
+V8 CONTENT AUDIT
+=================
+Corrected:
+- Russian-specific letters / transliteration: Чатир-Даг, Олександр фон Гумбольдт, Олександр Македонський, Олександр Сабуров, В'ячеслав Чорновіл, Лук'яненко.
+- Apostrophes: об'єднання, з'єднання, прем'єра.
+- Typographical errors: коралових, могутнє, могутніми, тероризму, з-за, заслання.
+- Grammar: "Яке інтеграційне об'єднання...", "Як називалася плеяда...", "Як називалася спроба...", "після смерті Шептицького".
+- Historical wording: Народний Рух України — 1989, not 1889.
+- Question/answer consistency for the 1930 SVU trial: city answer is "Харків".
+- Improved several awkward question formulations without changing test logic.
+
+Technical checks:
+- JavaScript syntax: OK (portal.js, script.js).
+- CSS brace balance: OK for all CSS files.
+- HTML structure: one html/head/body per page.
+- Local relative references: no missing static file references detected (apart from intentional JS template "${item.url}").
+- premium-design.css cache version unified to v8.
