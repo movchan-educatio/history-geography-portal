@@ -50,3 +50,96 @@ footer{background:#06192d!important;color:#fff!important;border-top:3px solid va
 .event-card-full{background:#fffdfa!important;border:1px solid var(--hg-line)!important;border-radius:22px!important;box-shadow:var(--hg-shadow)!important}.event-badge{background:#f3e7dc!important;color:var(--hg-brown)!important}.event-title{color:var(--hg-brown)!important}
 @media(max-width:900px){header{position:relative!important;padding:10px 14px!important;flex-wrap:wrap!important;gap:8px!important}header .logo-group{flex:1 1 auto!important;min-width:180px!important}header nav{order:3!important;width:100%!important;margin:0!important}header nav ul{justify-content:flex-start!important;overflow-x:auto!important;flex-wrap:nowrap!important;scrollbar-width:none!important;padding-bottom:3px!important}header nav ul::-webkit-scrollbar{display:none!important}header nav a{font-size:12px!important;padding:9px 11px!important}.main-container{width:min(100% - 24px,1200px)!important;padding-top:24px!important}.mountain-banner{min-height:430px!important;padding:54px 22px!important;border-radius:0 0 22px 22px!important}.hero-banner{min-height:460px!important;padding:45px 22px!important;align-items:flex-start!important}.hero-banner .hero-text h1{font-size:43px!important}.hero-author{display:none!important}.nmt-hero-test-buttons{flex-direction:column!important;gap:10px!important}.nmt-hero-test-button{width:100%!important;justify-content:center!important}.section-title{font-size:22px!important}.info-card,.audience-card,.accordion-card{border-radius:16px!important}}
 @media(max-width:520px){.logo-img{width:39px!important;height:39px!important}.logo-text{font-size:12px!important}.logo-text span{font-size:8px!important}.mountain-banner h1{font-size:39px!important}.hero-banner .hero-text h1{font-size:38px!important}.hero-banner .subtitle{font-size:15px!important}.nmt-hero-test-button{font-size:14px!important;min-height:50px!important}}
+
+
+/* =========================================================
+   FINAL VISUAL FIXES — requested corrections
+   Тільки дизайн. Функціонал і JS не змінюються.
+   ========================================================= */
+
+/* 1. Головний банер: прибираємо нижнє світіння/градієнт та тінь. */
+.mountain-banner::before,
+.mountain-banner::after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+.mountain-banner{
+  box-shadow:none!important;
+}
+
+/* 2. Фото автора прибране з банера НМТ. Залишаємо правило як страховку. */
+.hero-banner .hero-author{
+  display:none!important;
+}
+
+/* 3. Усі тексти банера НМТ — білим кольором і з високим контрастом. */
+.hero-banner .hero-text,
+.hero-banner .hero-text h1,
+.hero-banner .hero-text h1 span,
+.hero-banner .hero-text .subtitle,
+.hero-banner .hero-text .quote{
+  color:#fff!important;
+}
+.hero-banner .hero-text h1{
+  text-shadow:0 2px 8px rgba(0,0,0,.30)!important;
+}
+
+/* 4. Заголовок і опис «Методичної скарбнички» — читабельні на світлому фоні. */
+.page-header h1{
+  color:#2b1711!important;
+}
+.page-header p{
+  color:#5f504a!important;
+  opacity:1!important;
+  font-size:16px!important;
+  line-height:1.65!important;
+}
+
+/* 5. Вірш: темний преміальний фон + білий текст, без низького контрасту. */
+.poetry-card{
+  background:linear-gradient(135deg,#32150d 0%,#5a2a1c 100%)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+}
+.poetry-card h3{
+  color:#fff!important;
+}
+.poetry-card h3 i{
+  color:#f5b51b!important;
+}
+.poetry-card div[style*="white-space"]{
+  color:#fff!important;
+  opacity:1!important;
+  font-size:17px!important;
+  line-height:1.85!important;
+  text-shadow:none!important;
+}
+.poetry-card p{
+  color:#f4e9e4!important;
+}
+.poetry-card hr{
+  border-top-color:rgba(255,255,255,.20)!important;
+}
+
+/* 6. Нижній великий довідник НМТ: заголовок і опис гарантовано білі. */
+.nmt200-hero h2,
+.nmt200-hero h1,
+.nmt200-hero p{
+  color:#fff!important;
+  opacity:1!important;
+}
+.nmt200-hero h2{
+  text-shadow:0 2px 8px rgba(0,0,0,.18)!important;
+}
+.nmt200-stats span{
+  color:#173b9e!important;
+}
+
+@media(max-width:700px){
+  .poetry-card div[style*="white-space"]{
+    font-size:15px!important;
+    line-height:1.75!important;
+  }
+}
