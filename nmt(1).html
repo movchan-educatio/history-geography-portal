@@ -2132,6 +2132,8 @@
         const delta = best - oldBest;
 
         data.name = data.name || currentUser.displayName || 'Учень';
+        data.email = data.email || currentUser.email || '';
+        data.role = currentUser.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2' ? 'teacher' : 'student';
         data[key] = best;
         data[totalKey] = Number(total) || 0;
         data.nmt_total_score = Number(data.nmt_history_score || 0) + Number(data.nmt_geography_score || 0);

@@ -4,7 +4,10 @@
     ".write": "auth != null",
     "users": {
       "$uid": {
-        ".write": "auth != null && auth.uid === $uid"
+        ".write": "auth != null && auth.uid === $uid",
+        "role": {
+          ".validate": "newData.val() != 'teacher' || auth.uid === 'LGw3zPR7w4SdN8zvi4LWExYTfFh2'"
+        }
       }
     },
     "submissions": {

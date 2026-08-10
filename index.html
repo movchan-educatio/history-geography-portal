@@ -775,10 +775,13 @@
             update(userRef, {
               name: currentData.name || user.displayName || 'Учень',
               email: currentData.email || user.email || '',
-              role: user.uid === PORTAL_OWNER_UID ? 'teacher' : (currentData.role || 'student')
+              role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student'
             });
-            if (user.uid === PORTAL_OWNER_UID && currentData.role !== 'teacher') {
-              update(userRef, { role: 'teacher', name: user.displayName, email: user.email || '' });
+            // Роль визначається UID, а не старим значенням у базі:
+            // тільки власник порталу є вчителем. Старі помилкові teacher у учнів виправляємо.
+            const fixedRole = user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student';
+            if (currentData.role !== fixedRole) {
+              update(userRef, { role: fixedRole });
             }
             const currentScore = currentData.score || 0;
             const savedHistPoints = currentData.total_history_points || 0;
@@ -897,10 +900,9 @@
           }))
           .filter(student => {
             // Учитель не потрапляє до рейтингу.
-            const role = String(student.role || '').trim().toLowerCase();
-            return role !== 'teacher' &&
-                   student.uid !== PORTAL_OWNER_UID &&
-                   (student.name || student.email || student.uid);
+            // Не довіряємо старому полю role: єдиний teacher — PORTAL_OWNER_UID.
+            return student.uid !== PORTAL_OWNER_UID &&
+                   (student.name || student.displayName || student.email || student.uid);
           })
           .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
 
@@ -936,8 +938,7 @@
         const idx = list.findIndex(x => x.uid === user.uid);
 
         // Якщо це учень — гарантуємо його наявність у рейтингу.
-        const role = String(normalized.role || '').trim().toLowerCase();
-        const isStudent = role !== 'teacher' && user.uid !== PORTAL_OWNER_UID;
+        const isStudent = user.uid !== PORTAL_OWNER_UID;
 
         if (isStudent) {
           if (idx >= 0) list[idx] = normalized;
@@ -1001,7 +1002,7 @@
         data = data || {};
         data.name = data.name || window.currentStudent || 'Учень';
         data.email = data.email || '';
-        data.role = data.role || (window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student');
+        data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
 
         const currentTruth = Number(data.truth_or_lie_points) || 0;
         const currentScore = Number(data.score) || 0;
@@ -1040,7 +1041,7 @@
             data.score = (Number(data.score) || 0) + delta;
           }
           data.name = data.name || window.currentStudent || 'Учень';
-          data.role = data.role || (window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student');
+          data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
           return data;
         }));
     };
@@ -1295,7 +1296,7 @@
 
       // У рейтингу показуємо тільки учнів. Учительський акаунт не займає місце в рейтингу.
       const students = (window.studentsData || [])
-        .filter(student => student && student.uid !== PORTAL_OWNER_UID && String(student.role || '').trim().toLowerCase() !== 'teacher' && (student.name || student.email || student.uid))
+        .filter(student => student && student.uid !== PORTAL_OWNER_UID && (student.name || student.displayName || student.email || student.uid))
         .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
 
       listContainer.innerHTML = '';
@@ -1322,7 +1323,7 @@
             <div class="student-info">
               <span class="student-rank ${rankClass}">#${index + 1}</span>
               <div>
-                <span>${student.name || 'Учень'} ${isMe ? '(Ви)' : ''}</span>
+                <span>${student.name || student.displayName || student.email || 'Учень'} ${isMe ? '(Ви)' : ''}</span>
                 <div style="font-size:11px;color:#64748b;margin-top:3px;">
                   Іст. ${hist} • Геогр. ${geo} • НМТ ${nmtHist + nmtGeo} • Гра ${truth} • 🦖 ${dino}
                 </div>
