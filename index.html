@@ -499,6 +499,7 @@
   </style>
   <link rel="stylesheet" href="modern-theme.css?v=300">
 <link rel="stylesheet" href="site-modern.css?v=1">
+<link rel="stylesheet" href="redesign.css?v=5">
 </head>
 <body>
 
@@ -704,6 +705,7 @@
       <a href="https://www.facebook.com/share/1ETNyD3yDX/?mibextid=wwXIfr" target="_blank" title="Facebook" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877f2; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;"><i class="fa-brands fa-facebook-f"></i></a>
     </div>
     <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
+  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
   </footer>
 
   <div class="modal-overlay" id="info-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
@@ -1438,5 +1440,9 @@
 
     window.addEventListener('DOMContentLoaded', initPageData);
   </script>
+<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
+<script>
+(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
+</script>
 </body>
 </html>
