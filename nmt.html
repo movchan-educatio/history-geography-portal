@@ -37,6 +37,41 @@
     .nmt-person-body { padding:14px; }
     .nmt-monument img { width:100%; height:170px; object-fit:cover; border-radius:10px; margin-bottom:10px; background:#e2e8f0; }
     .nmt-section-label { font-size:20px; font-weight:800; color:#0f172a; margin:24px 0 12px; }
+
+    /* ================= НМТ: КНОПКИ ТЕСТІВ ================= */
+    .nmt-test-buttons {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+      margin:25px 0 35px;
+    }
+    .nmt-test-button {
+      position:relative;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:22px 25px;
+      border-radius:18px;
+      text-decoration:none;
+      color:#fff;
+      overflow:hidden;
+      transition:transform .25s ease,box-shadow .25s ease;
+      box-shadow:0 8px 22px rgba(15,23,42,.12);
+    }
+    .nmt-test-button:hover {
+      transform:translateY(-4px);
+      box-shadow:0 14px 30px rgba(15,23,42,.18);
+    }
+    .nmt-test-button .nmt-test-icon { font-size:42px; flex-shrink:0; }
+    .nmt-test-button .nmt-test-text { display:flex; flex-direction:column; gap:5px; }
+    .nmt-test-button strong { font-size:19px; line-height:1.2; }
+    .nmt-test-button span { font-size:13px; opacity:.9; }
+    .nmt-history-button { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
+    .nmt-geography-button { background:linear-gradient(135deg,#059669,#047857); }
+    @media (max-width:650px) {
+      .nmt-test-buttons { grid-template-columns:1fr; }
+      .nmt-test-button { padding:18px 20px; }
+    }
     @media (max-width:600px){ .nmt-library{padding:16px;} .nmt-person img,.nmt-monument img{height:150px;} }
 
   </style>
@@ -77,6 +112,24 @@
 
   <!-- Основний контент -->
   <main class="main-container">
+
+    <!-- ================= ШВИДКИЙ ДОСТУП ДО ТЕСТІВ НМТ ================= -->
+    <div class="nmt-test-buttons">
+      <a href="#history-nmt-test" class="nmt-test-button nmt-history-button">
+        <div class="nmt-test-icon">📜</div>
+        <div class="nmt-test-text">
+          <strong>Пройти тест з історії</strong>
+          <span>30 запитань • Історія України та світу</span>
+        </div>
+      </a>
+      <a href="#geography-nmt-test" class="nmt-test-button nmt-geography-button">
+        <div class="nmt-test-icon">🌍</div>
+        <div class="nmt-test-text">
+          <strong>Пройти тест з географії</strong>
+          <span>30 запитань • Географія України та світу</span>
+        </div>
+      </a>
+    </div>
 
     <!-- КНОПКА ЕКСПОРТУ ЗБЕРЕЖЕННЯ МАТЕРІАЛУ -->
     <div class="export-container">
@@ -293,7 +346,7 @@
 
     <!-- ================= БЛОК 3: ІНТЕРАКТИВНИЙ ТЕСТ З ІСТОРІЇ (30 ЗАПИТАНЬ) ================= -->
 
-    <div class="global-test-container" style="border-color: #2563eb;">
+    <div id="history-nmt-test" class="global-test-container" style="border-color: #2563eb;">
       <h2 style="color: #2563eb; text-align: center; margin-bottom: 10px;">📜 ІНТЕРАКТИВНИЙ ТЕСТ З ІСТОРІЇ (30 ЗАПИТАНЬ)</h2>
       <p style="text-align: center; font-size: 14px; color: #475569; margin-bottom: 25px;">Питання з'являються по одному. Оберіть відповідь, щоб перейти до наступного! (Максимум: 30 балів)</p>
 
@@ -306,7 +359,7 @@
 
 
     <!-- ================= БЛОК 4: ІНТЕРАКТИВНИЙ ТЕСТ З ГЕОГРАФІЇ (30 ЗАПИТАНЬ) ================= -->
-    <div class="global-test-container" style="border-color: #059669;">
+    <div id="geography-nmt-test" class="global-test-container" style="border-color: #059669;">
       <h2 style="color: #059669; text-align: center; margin-bottom: 10px;">🌍 ІНТЕРАКТИВНИЙ ТЕСТ З ГЕОГРАФІЇ (30 ЗАПИТАНЬ)</h2>
       <p style="text-align: center; font-size: 14px; color: #475569; margin-bottom: 25px;">Питання з'являються по одному. Оберіть відповідь, щоб перейти до наступного! (Максимум: 30 балів)</p>
 
