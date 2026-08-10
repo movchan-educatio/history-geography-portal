@@ -1,0 +1,163 @@
+/* =========================================================
+   MODERN REDESIGN v3 — ІСТОРІЯ І ГЕОГРАФІЯ БЕЗ МЕЖ
+   VISUAL ONLY: existing HTML/JS/content are preserved.
+   ========================================================= */
+:root{
+  --bg:#fbf8f5;--surface:#fffdfb;--surface2:#f7eee9;--ink:#29120c;--muted:#795b50;
+  --brown:#351107;--brown2:#5a2317;--rose:#f1d9d7;--rose2:#f8ebe8;--line:#eadbd4;
+  --blue:#1689c9;--blue2:#0b5e91;--gold:#d29a2e;--shadow:0 22px 65px rgba(53,17,7,.10);
+  --soft:0 10px 30px rgba(53,17,7,.07);--r:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{
+  margin:0!important;background:
+  radial-gradient(circle at 80% 0%,#f6e1de 0,transparent 30%),
+  radial-gradient(circle at 8% 45%,#f5ebe5 0,transparent 28%),
+  linear-gradient(180deg,#fffdfb 0%,#fbf7f3 52%,#f5eee9 100%)!important;
+  color:var(--ink)!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.16;background-image:radial-gradient(#5a2317 .55px,transparent .55px);background-size:24px 24px}
+
+/* ---------- TOP NAV ---------- */
+header{
+  position:sticky!important;top:0!important;z-index:10000!important;width:100%!important;min-height:70px!important;
+  display:flex!important;align-items:center!important;gap:28px!important;padding:10px clamp(18px,7vw,110px)!important;
+  background:rgba(255,253,251,.91)!important;border:0!important;border-bottom:1px solid rgba(234,219,212,.9)!important;
+  box-shadow:0 8px 28px rgba(53,17,7,.06)!important;backdrop-filter:blur(18px)!important;
+}
+.logo-group{display:flex!important;align-items:center!important;gap:11px!important;text-decoration:none!important;color:var(--ink)!important;flex-shrink:0}
+.logo-img{width:39px!important;height:39px!important;border-radius:12px!important;object-fit:cover!important;box-shadow:0 6px 18px rgba(53,17,7,.12)!important;border:1px solid var(--line)!important}
+.logo-text{font-size:14px!important;line-height:1.05!important;font-weight:850!important;color:var(--ink)!important}
+.logo-text span{display:block!important;margin-top:4px!important;font-size:9px!important;letter-spacing:1.4px!important;color:#a06f5e!important}
+nav{margin-left:5px!important;flex:1!important}
+nav ul{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:4px!important;margin:0!important;padding:0!important;list-style:none!important;flex-wrap:wrap!important}
+nav a{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:10px 14px!important;border-radius:999px!important;border:1px solid transparent!important;color:#704b40!important;text-decoration:none!important;font-size:13px!important;font-weight:650!important;transition:.2s ease!important}
+nav a:hover{background:#f7e9e5!important;color:var(--brown)!important;transform:translateY(-1px)!important}
+nav a.active{background:var(--brown)!important;color:#fff!important;box-shadow:0 8px 20px rgba(53,17,7,.18)!important}
+.traveler-container{display:none!important}
+
+/* ---------- HOME HERO / BANNER ---------- */
+.mountain-banner{
+  position:relative!important;min-height:500px!important;margin:0!important;padding:74px clamp(22px,8vw,130px) 80px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;overflow:hidden!important;
+  background-image:linear-gradient(90deg,rgba(25,9,5,.82) 0%,rgba(25,9,5,.60) 42%,rgba(25,9,5,.25) 72%,rgba(25,9,5,.40) 100%),url('hero-banner.jpeg')!important;
+  background-position:center!important;background-size:cover!important;border-radius:0!important;box-shadow:inset 0 -35px 70px rgba(0,0,0,.16)!important;
+}
+.mountain-banner:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:90px;background:linear-gradient(to top,rgba(251,248,245,1),rgba(251,248,245,0));pointer-events:none}
+.hero-text-content{position:relative!important;z-index:2!important;width:min(680px,100%)!important;max-width:680px!important;text-align:left!important;margin:0!important;animation:heroIn .65s ease both}
+.hero-text-content h1{margin:0 0 18px!important;font-size:clamp(38px,5.2vw,72px)!important;line-height:.98!important;letter-spacing:-2.8px!important;font-weight:950!important;color:#fff!important;text-shadow:0 8px 35px rgba(0,0,0,.28)!important}
+.hero-text-content h1 span{color:#29b9f1!important}
+.hero-text-content .subtitle{margin:0 0 12px!important;font-size:clamp(18px,2vw,26px)!important;font-weight:700!important;color:#fff!important}
+.hero-text-content .quote{margin:0 0 28px!important;font-size:17px!important;color:#f5dfd8!important;font-style:italic!important}
+.search-wrapper{width:min(650px,100%)!important;margin:0!important}
+.search-bar-box{height:60px!important;border-radius:18px!important;background:#fff!important;border:1px solid rgba(255,255,255,.75)!important;box-shadow:0 15px 35px rgba(0,0,0,.18)!important;display:flex!important;align-items:center!important;padding:0 20px!important}
+.search-bar-box i{font-size:20px!important;color:#65758c!important;margin-right:13px!important}
+.search-input-field{width:100%!important;border:0!important;outline:0!important;background:transparent!important;font-size:16px!important;color:#2c211e!important}
+.search-input-field::placeholder{color:#8d8885!important}
+.search-results-dropdown{border-radius:16px!important;overflow:hidden!important}
+
+/* ---------- GENERAL LAYOUT ---------- */
+.main-container{width:min(1240px,calc(100% - 36px))!important;max-width:none!important;margin:0 auto!important;padding:38px 0 0!important}
+main,.content-container,.page-container,.container{font-family:inherit!important}
+.section-title{font-size:28px!important;line-height:1.1!important;font-weight:900!important;color:var(--ink)!important;margin:42px 0 18px!important;letter-spacing:-.6px!important}
+.section-title:after{content:"";display:block;width:52px;height:4px;margin-top:10px;border-radius:5px;background:linear-gradient(90deg,var(--brown),#c48670)}
+
+/* ---------- HOME AUDIENCE ---------- */
+.target-audience-section,.leaderboard-section,.kids-club-section{
+  background:rgba(255,253,251,.90)!important;border:1px solid var(--line)!important;border-radius:var(--r)!important;box-shadow:var(--shadow)!important;
+}
+.target-audience-section{padding:32px!important;margin:10px 0 30px!important}
+.target-audience-section h3{margin:0 0 22px!important;font-size:29px!important;letter-spacing:-.7px!important;color:var(--ink)!important}
+.target-audience-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
+.audience-card{padding:22px!important;border:1px solid #e5d6cf!important;border-radius:20px!important;background:linear-gradient(145deg,#fffdfb,#faf2ed)!important;transition:.22s ease!important}
+.audience-card:hover{transform:translateY(-5px)!important;box-shadow:var(--soft)!important;border-color:#d8bbb0!important}
+.audience-card h4{font-size:17px!important;margin:0 0 13px!important;color:var(--ink)!important}
+.audience-card ul{margin:0!important;padding-left:20px!important;color:#5e514c!important;line-height:1.65!important;font-size:14px!important}
+
+/* ---------- CARDS / INFO ---------- */
+.grid-3,.grid-3-tours{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+.info-card,.virtual-tour-card{background:rgba(255,253,251,.94)!important;border:1px solid var(--line)!important;border-radius:22px!important;box-shadow:var(--soft)!important;transition:.23s ease!important}
+.info-card{padding:24px!important;min-height:205px!important}
+.info-card:hover,.virtual-tour-card:hover{transform:translateY(-5px)!important;box-shadow:0 18px 42px rgba(53,17,7,.12)!important;border-color:#d9beb3!important}
+.info-card h4{margin:0 0 12px!important;font-size:18px!important;color:var(--ink)!important}
+.info-card p{color:#6d5a53!important;line-height:1.65!important;font-size:14px!important}
+.btn-link{border:0!important;background:transparent!important;color:#9a5947!important;font-weight:800!important;cursor:pointer!important;padding:8px 0!important}
+.btn-link:hover{text-decoration:underline!important}
+.grid-3 .info-card button[onclick*="checkCountryGame"]{border-radius:12px!important;padding:10px!important}
+.grid-3 .info-card button[onclick*="checkCountryGame"]:first-child{background:#2d8a67!important}
+.grid-3 .info-card button[onclick*="checkCountryGame"]:last-child{background:#b74b4b!important}
+
+/* ---------- TOURS ---------- */
+.grid-3-tours{margin-bottom:28px!important}
+.virtual-tour-card{min-height:125px!important;padding:23px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:14px!important;text-decoration:none!important;color:var(--ink)!important;font-weight:800!important;font-size:15px!important;background:linear-gradient(135deg,#fffdfb,#f8efea)!important}
+.virtual-tour-card .icon{font-size:34px!important;animation:none!important}
+
+/* ---------- LEADERBOARD ---------- */
+.leaderboard-section{padding:25px!important;margin:24px 0!important}
+.leaderboard-header{display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important}
+.leaderboard-header h3{margin:0!important;font-size:20px!important;color:var(--ink)!important}
+.reset-timer-badge{background:var(--rose2)!important;color:#895848!important;border:1px solid #e7cfc9!important;border-radius:999px!important;padding:7px 11px!important;font-size:11px!important}
+.user-login-bar{margin-left:auto!important;display:flex!important;gap:8px!important}
+.user-login-input{border:1px solid var(--line)!important;border-radius:12px!important;padding:10px 12px!important;background:#fff!important;outline:none!important}
+.user-login-btn{border:0!important;border-radius:12px!important;padding:10px 16px!important;background:var(--brown)!important;color:#fff!important;font-weight:800!important;cursor:pointer!important;animation:none!important}
+.leaderboard-list{margin-top:16px!important}
+
+/* ---------- CLUB / GAMES ---------- */
+.kids-club-section{padding:27px!important;margin:34px 0!important;background:linear-gradient(135deg,#fffdfb,#f7efea)!important}
+.kids-club-header{display:flex!important;gap:12px!important;align-items:center!important;margin-bottom:18px!important}
+.kids-club-header h3{margin:0!important;font-size:23px!important;color:var(--ink)!important}
+.kids-club-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:18px!important}
+.chat-box,.dino-game-card{background:#fff!important;border:1px solid var(--line)!important;border-radius:20px!important;padding:18px!important;box-shadow:0 8px 26px rgba(53,17,7,.06)!important}
+.chat-messages{border-radius:14px!important;background:#faf5f1!important;border:1px solid #eee0da!important}
+.chat-input-group{display:flex!important;gap:8px!important;margin-top:10px!important}
+.chat-input-group input{border:1px solid var(--line)!important;border-radius:12px!important;padding:10px 12px!important;flex:1!important;outline:none!important}
+.chat-input-group button{border:0!important;border-radius:12px!important;background:var(--brown)!important;color:#fff!important;font-weight:750!important;padding:10px 15px!important}
+.dino-game-card{background:linear-gradient(145deg,#fffdfb,#f3eee9)!important}
+#dinoCanvas{width:100%!important;height:auto!important;max-height:220px!important;border-radius:15px!important;background:#1b1a19!important}
+#dinoStartBtn{background:var(--brown)!important;border-radius:12px!important;cursor:pointer!important}
+
+/* ---------- INTERNAL PAGES ---------- */
+body:not(:has(.mountain-banner)) main{width:min(1240px,calc(100% - 36px))!important;margin:0 auto!important;padding:42px 0 70px!important}
+body:not(:has(.mountain-banner)) .hero,.page-hero,.history-hero,.geography-hero{border-radius:28px!important;box-shadow:var(--shadow)!important;overflow:hidden!important}
+body:not(:has(.mountain-banner)) section{border-radius:24px}
+body:not(:has(.mountain-banner)) h1{color:var(--ink)!important;letter-spacing:-1.5px!important;font-weight:900!important}
+body:not(:has(.mountain-banner)) h2{color:var(--ink)!important;font-weight:850!important}
+body:not(:has(.mountain-banner)) .card,.topic-card,.content-card,.lesson-card,.test-card,.quiz-card,.nmt-card,.material-card,.method-card{background:rgba(255,253,251,.95)!important;border:1px solid var(--line)!important;border-radius:22px!important;box-shadow:var(--soft)!important;transition:.22s ease!important}
+body:not(:has(.mountain-banner)) .card:hover,.topic-card:hover,.content-card:hover,.lesson-card:hover,.test-card:hover,.quiz-card:hover,.nmt-card:hover,.material-card:hover,.method-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)!important}
+button{font-family:inherit!important}
+body:not(:has(.mountain-banner)) button:not(.btn-link){border-radius:12px!important;font-weight:800!important}
+
+/* ---------- NMT ---------- */
+.nmt-library,.nmt-tools{border-radius:28px!important}
+.nmt-card{padding:22px!important}
+.nmt-card:hover{border-color:#d9b9af!important}
+
+/* ---------- MODALS / DROPDOWNS ---------- */
+.modal-overlay{backdrop-filter:blur(8px)!important;background:rgba(34,16,11,.48)!important}
+.modal-card{border:1px solid var(--line)!important;border-radius:24px!important;box-shadow:0 30px 90px rgba(0,0,0,.25)!important}
+.search-results-dropdown{box-shadow:0 18px 40px rgba(0,0,0,.15)!important}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--brown)!important;color:#fff!important;border-top:0!important;padding:42px 20px!important;margin-top:55px!important}
+footer a{transition:.2s!important}
+footer a:hover{transform:translateY(-3px)!important}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:900px){
+  header{padding:10px 16px!important;gap:10px!important;flex-wrap:wrap!important}
+  nav{width:100%!important;order:3!important;overflow-x:auto!important;padding-bottom:2px!important}
+  nav ul{flex-wrap:nowrap!important;width:max-content!important}
+  .mountain-banner{min-height:520px!important;padding:55px 24px 70px!important;background-position:62% center!important}
+  .hero-text-content h1{font-size:43px!important;letter-spacing:-1.7px!important}
+  .target-audience-grid,.grid-3,.grid-3-tours,.kids-club-grid{grid-template-columns:1fr!important}
+  .user-login-bar{margin-left:0!important;width:100%!important}.user-login-input{flex:1!important}
+}
+@media(max-width:560px){
+  .main-container,body:not(:has(.mountain-banner)) main{width:min(100% - 24px,1240px)!important}
+  .mountain-banner{min-height:500px!important;padding:45px 18px 70px!important;background-position:65% center!important}
+  .hero-text-content h1{font-size:35px!important}.hero-text-content .subtitle{font-size:17px!important}.hero-text-content .quote{font-size:14px!important}
+  .search-bar-box{height:54px!important}.target-audience-section,.leaderboard-section,.kids-club-section{padding:20px!important}
+}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
