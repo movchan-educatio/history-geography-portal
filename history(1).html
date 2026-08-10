@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Історія — Освітній портал Сергія Мовчана</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css?v=3">
+  <style>
+    /* Стилі для інтерактивних панелей (акордеона) */
+    .accordion-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .accordion-header {
+      padding: 22px 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+    .accordion-header:hover {
+      background-color: #f8fafc;
+    }
+    .accordion-header h3 {
+      font-size: 20px;
+      color: #1e293b;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .accordion-icon {
+      font-size: 16px;
+      color: #64748b;
+      transition: transform 0.3s ease;
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+      padding: 0 30px;
+      background: #ffffff;
+    }
+    .accordion-card.active .accordion-content {
+      max-height: 5000px;
+      padding: 0 30px 30px 30px;
+      transition: max-height 0.6s ease-in, padding 0.4s ease-in;
+    }
+    .accordion-card.active .accordion-icon {
+      transform: rotate(180deg);
+      color: #2563eb;
+    }
+    /* Адаптивний контейнер для відео з YouTube */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-top: 20px;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Інтерактивний блок тесту */
+    .quiz-container {
+      margin-top: 25px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .quiz-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quiz-progress {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2563eb;
+      background: #eff6ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .quiz-question-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .quiz-option-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+    .quiz-option-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .quiz-option-btn.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+    .quiz-next-btn, .quiz-restart-btn {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .quiz-next-btn:hover, .quiz-restart-btn:hover {
+      background: #1d4ed8;
+    }
+    .quiz-next-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    .quiz-result-box {
+      text-align: center;
+      padding: 20px;
+    }
+    .quiz-result-score {
+      font-size: 28px;
+      font-weight: 800;
+      color: #10b981;
+      margin-bottom: 10px;
+    }
+
+    /* Мобільна адаптивність */
+    @media (max-width: 600px) {
+      .accordion-header {
+        padding: 16px 20px;
+      }
+      .accordion-header h3 {
+        font-size: 16px;
+      }
+      .accordion-content {
+        padding: 0 15px;
+      }
+      .accordion-card.active .accordion-content {
+        padding: 0 15px 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Навігаційна шапка -->
+  <header>
+    <a href="index.html" class="logo-group">
+      <img src="logo.png" alt="Логотип Освітній Портал" class="logo-img">
+      <div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Головна</a></li>
+        <li><a href="history.html" class="active">Історія</a></li>
+        <li><a href="geography.html">Географія</a></li>
+        <li><a href="nmt.html">НМТ</a></li>
+        <li><a href="methodology.html">Методична скарбничка</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Основний контент -->
+  <main class="main-container" style="padding: 40px 20px; max-width: 1100px; margin: 0 auto;">
+    
+    <!-- Великий заголовок по центру -->
+    <h1 style="text-align: center; font-size: 36px; font-weight: 800; color: #1e293b; margin-bottom: 10px;">
+      📜 Історія: від теорії до захопливих епох
+    </h1>
+    <p style="color: #64748b; text-align: center; font-size: 16px; margin-bottom: 40px;">
+      Пізнаємо минуле — будуємо майбутнє! Навчальні матеріали, глибока теорія, практичні завдання та подорож століттями. Натискайте на теми, щоб розгорнути матеріали.
+    </p>
+
+    <!-- БАЗОВІ ТЕОРЕТИЧНІ БЛОКИ -->
+
+    <!-- Тема 1: Що таке історія, історичний час, історичний простір -->
+    <div class="info-card" style="border-top: 5px solid #2563eb; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 40px;">
+      <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <span>⏳</span> Що таке історія, історичний час, історичний простір
+      </h2>
+      <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        <strong>Історія</strong> — це фундаментальна наука, яка вивчає минуле людства у всьому його різноманітті, еволюцію суспільних відносин, закономірності розвитку цивілізацій, видатні події та діяльність окремих особистостей від найдавніших часів до сьогодення. Щоб науково та системно орієнтуватися у безперервному потоці подій, історики використовують базові категорії — <em>історичний час</em> та <em>історичний простір</em>. Вони дозволяють локалізувати будь-яку подію за принципом «де це сталося?» та «коли це сталося?».
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+          <h3 style="font-size: 16px; color: #1e293b; margin-bottom: 8px;">🗺️ Історичний простір</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5;">Конкретна географічна територія (регіон, держава, континент або весь світ), у межах якої розгорталися історичні процеси, формувалися етноси, відбувалися міграції та взаємодіяли різні культури.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #10b981;">
+          <h3 style="font-size: 16px; color: #1e293b; margin-bottom: 8px;">⌛ Історичний час</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5;">Неперервна послідовність історичних подій, об'єднана причинно-наслідковими зв'язками. Вимірюється за допомогою спеціальних одиниць: років, десятиліть, століть (віків), тисячоліть та великих епох.</p>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+      <h3 style="font-size: 20px; color: #1e293b; margin-bottom: 15px;">📊 Як влаштована Лінія часу та Ери</h3>
+      <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 20px;">
+        Для зручності відліку часу людство виокремило умовну точку відліку — народження Ісуса Христа. Час, що передував цій події, називається періодом <strong>до нашої ери (до н.е.)</strong>, а час після — <strong>нашою ерою (н.е.)</strong>. Унікальність шкали до нашої ери полягає в тому, що роки відраховуються у зворотному напрямку до нуля (чим більша цифра, тим давніша подія).
+      </p>
+      <div style="background: #f1f5f9; padding: 25px 15px; border-radius: 10px; margin-bottom: 30px; text-align: center;">
+        <div style="font-weight: 700; color: #334155; margin-bottom: 15px;">ХРОНОЛОГІЧНА ШКАЛА (ЛІНІЯ ЧАСУ)</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; position: relative; margin: 20px 10px; border-top: 4px solid #2563eb;">
+          <div style="position: absolute; left: 0; top: -10px; transform: translateY(-50%); text-align: left;">
+            <span style="background: #ef4444; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">До н. е.</span>
+            <div style="font-size: 12px; color: #64748b; margin-top: 5px;">Час іде назад (← до нуля)</div>
+          </div>
+          <div style="position: absolute; left: 50%; top: -10px; transform: translate(-50%, -50%); text-align: center;">
+            <div style="width: 16px; height: 16px; background: #1e293b; border-radius: 50%; margin: 0 auto 5px auto; border: 2px solid white;"></div>
+            <span style="background: #1e293b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap;">0 рік</span>
+          </div>
+          <div style="position: absolute; right: 0; top: -10px; transform: translateY(-50%); text-align: right;">
+            <span style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Наша ера (н.е.)</span>
+            <div style="font-size: 12px; color: #64748b; margin-top: 5px;">Час іде вперед (0 → сьогодення)</div>
+          </div>
+        </div>
+        <div style="height: 30px;"></div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+      <h3 style="font-size: 20px; color: #1e293b; margin-bottom: 15px;">💡 Золоті правила: Як визначити століття за роком?</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px;">
+        <div style="background: #eff6ff; padding: 20px; border-radius: 8px; border: 1px solid #bfdbfe;">
+          <h4 style="color: #1d4ed8; margin-bottom: 8px; font-size: 15px;">📌 Правило 1 (Закінчується на два нулі)</h4>
+          <p style="font-size: 14px; color: #334155; line-height: 1.5;">Якщо рік закінчується двома нулями, просто відкиньте їх, і ви отримаєте номер століття римськими цифрами (наприклад, 1700 рік — XVII століття).</p>
+        </div>
+        <div style="background: #eff6ff; padding: 20px; border-radius: 8px; border: 1px solid #bfdbfe;">
+          <h4 style="color: #1d4ed8; margin-bottom: 8px; font-size: 15px;">📌 Правило 2 (Не закінчується на нулі)</h4>
+          <p style="font-size: 14px; color: #334155; line-height: 1.5;">Якщо в кінці є інші цифри, відкиньте дві останні і до числа, що залишилося, додайте одиницю (+1). Наприклад, 19<b>91</b> рік: відкидаємо 91, залишається 19, додаємо 1 = XX століття.</p>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+      <h3 style="font-size: 20px; color: #1e293b; margin-bottom: 15px;">🧮 Практикум: Розв'язання історичних задач</h3>
+      <div style="background: #f8fafc; padding: 18px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #f59e0b;">
+        <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 6px;">✍️ Задача 1 (В межах однієї ери):</h4>
+        <p style="font-size: 14px; color: #475569; margin-bottom: 6px;"><strong>Умова:</strong> Видатну першу друковану книгу «Апостол» Івана Федоровича було видано у 1574 році. Скільки років минуло відтоді до 2026 року?</p>
+        <p style="font-size: 14px; color: #1e293b;"><strong>Розв'язання:</strong> Оскільки обидві дати належать до однієї ери, віднімаємо від більшого менше: 2026 - 1574 = 452 роки.</p>
+      </div>
+      <div style="background: #f8fafc; padding: 18px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #f59e0b;">
+        <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 6px;">✍️ Задача 2 (Події у різних ерах):</h4>
+        <p style="font-size: 14px; color: #475569; margin-bottom: 6px;"><strong>Умова:</strong> Місто Рим було засноване у 753 році до нашої ери, а падіння Західної Римської імперії відбулося у 476 році нашої ери. Яка тривалість цього проміжку?</p>
+        <p style="font-size: 14px; color: #1e293b;"><strong>Розв'язання:</strong> Оскільки події відбувалися в різних ерах, числа додаються одне до одного: 753 + 476 = 1229 років.</p>
+      </div>
+    </div>
+
+    <!-- Тема 2: Джерела історичної пам'яті -->
+    <div class="info-card" style="border-top: 5px solid #10b981; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 40px;">
+      <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <span>🏛️</span> Джерела історичної пам'яті
+      </h2>
+      <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        <strong>Історичні джерела</strong> — це матеріальні та духовні сліди минулого, створені людською діяльністю, завдяки яким сучасна наука відтворює об'єктивну картину життя попередніх поколінь. Без джерел історія як наука не могла б існувати, адже вони слугують єдиним доказовим фундаментом для дослідників.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-top: 3px solid #2563eb;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">🏺 Речові джерела</h4>
+          <p style="font-size: 13px; color: #64748b;">Знаряддя праці, зброя, елементи одягу, монети, посуд, руїни фортець, житла, ювелірні вироби та скарби.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-top: 3px solid #10b981;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">📜 Писемні джерела</h4>
+          <p style="font-size: 13px; color: #64748b;">Літописи, стародавні закони, державні грамоти, міжнародні договори, приватні листи, щоденники, книги та пергаменти.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-top: 3px solid #f59e0b;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">🗣️ Усні джерела</h4>
+          <p style="font-size: 13px; color: #64748b;">Народні пісні, легенди, перекази, думи, казкові мотиви, приказки, прислів'я та живі спогади очевидців подій.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-top: 3px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">🖼️ Візуальні та аудіо</h4>
+          <p style="font-size: 13px; color: #64748b;">Живописні полотна, старі фотографії, плакати епохи, архітектурні макети, кінохроніка та автентичні аудіозаписи.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Тема 3: Історична карта та простір -->
+    <div class="info-card" style="border-top: 5px solid #f59e0b; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 40px;">
+      <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <span>🗺️</span> Історична карта та простір
+      </h2>
+      <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        <strong>Історична карта</strong> — це особливий тип географічної карти, яка за допомогою умовних позначок відображає події, процеси або цілі епохи, що відбувалися на Землі в минулому. Вона виступає своерідним «мостом» між простором і часом, дозволяючи побачити, як змінювалися кордони держав, де перетиналися інтереси імперій і де пролягали шляхи визвольних рухів.
+      </p>
+      <div style="background: #fffbeb; padding: 20px; border-radius: 8px; border: 1px solid #fde68a; margin-bottom: 20px;">
+        <h4 style="color: #92400e; margin-bottom: 10px; font-size: 16px;">🔍 Ключові елементи читання історичної карти:</h4>
+        <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: #78350f; line-height: 1.6;">
+          <li><strong>Легенда карти:</strong> ключ до всіх використаних символів, кольорів, геометричних фігур та штриховок.</li>
+          <li><strong>Масштабне співвідношення:</strong> показник того, наскільки зменшено реальні земні відстані на площині.</li>
+          <li><strong>Географічні орієнтири:</strong> збережені назви річок, гір та морів, які допомагають співвіднести минуле з сучасністю.</li>
+          <li><strong>Динамічні стрілки:</strong> графічні лінії зі стрілками, що демонструють напрямки військових ударів, походів чи міграцій.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Тема 4: Дослідники історії та науки-помічниці -->
+    <div class="info-card" style="border-top: 5px solid #8b5cf6; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 40px;">
+      <h2 style="font-size: 24px; color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+        <span>👑</span> Дослідники історії та науки-помічниці
+      </h2>
+      <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        Пізнання минулого — це багатогранна праця цілої спільноти фахівців. Головними фігурами тут є <strong>історики</strong>, які досліджують текстові документи, аналізують причини подій та пишуть наукові праці, а також <strong>археологи</strong>, які проводять розкопки та вилучають із культурних шарів землі безмовні свідчення минулих століть.
+      </p>
+      <div style="background: #f5f3ff; padding: 20px; border-radius: 8px; border: 1px solid #ddd6fe; margin-bottom: 25px;">
+        <h4 style="color: #6d28d9; margin-bottom: 8px; font-size: 16px;">🔍 Як працюють науковці-дослідники?</h4>
+        <p style="font-size: 14px; color: #4b5563; line-height: 1.6; margin: 0;">
+          Робота історика схожа на розслідування складного детективу: він зіставляє дані з різних архівів, перевіряє їх на справжність та відкидає міфи. Археологи ж діють надзвичайно кропітко — кожна знахідка фіксується за допомогою креслень і координат, щоб не втратити контекст її знаходження.
+        </p>
+      </div>
+      <h3 style="font-size: 18px; color: #1e293b; margin-bottom: 15px;">🧪 Спеціальні історичні науки-помічниці:</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px;">
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">⛏️ Археологія</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0;">Вивчає речові скарби та культури минулого за допомогою розкопок.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">🪙 Нумізматика</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0;">Досліджує стародавні монети, грошові системи та медалі.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">🛡️ Геральдика</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0;">Аналізує герби, родові знаки та символіку міст і держав.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">👥 Етнографія</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0;">Вивчає побут, традиції, вірування та культуру народів.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">📜 Топоніміка</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0;">Досліджує походження та значення географічних назв.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+          <h4 style="font-size: 15px; color: #1e293b; margin-bottom: 5px;">⏳ Хронологія</h4>
+          <p style="font-size: 13px; color: #64748b; margin: 0;">Визначає точну послідовність історичних подій у часі.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- РОЗДІЛ І: ДАВНЯ ТА СЕРЕДНЬОВІЧНА ІСТОРІЯ (10 тем) -->
+    <!-- ========================================== -->
+    <div style="margin: 50px 0 25px 0;">
+      <h2 style="font-size: 26px; color: #1e293b; border-bottom: 3px solid #2563eb; padding-bottom: 10px;">
+        🏛️ Давня та Середньовічна історія
+      </h2>
+    </div>
+
+    <!-- Тема 1 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-1">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🏺</span> Первісні стоянки та найдавніше населення на українських землях</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Захоплива мандрівка у найдавніші епохи українських земель розпочинається з появою перших людських колективів у період раннього палеоліту. Дослідження унікальної багатошарової стоянки поблизу села Королево на Закарпатті переконливо доводять проживання архантропів на цих територіях понад 1 мільйон років тому, що робить українські землі одним із найдавніших осередків розселення людини у Європі. Подальший розвиток супроводжувався появою мустьєрських стоянок та розквітом пізньопалеолітичних поселень, серед яких всесвітньо відомими є Кирилівська стоянка в Києві та унікальне мисливське поселення в селі Межиріч на Черкащині. У Межиричах давні люди зводили монументальні житла з кісток мамонтів, що свідчит про високий ступінь адаптації до суворих умов льодовикового періоду, колективну організацію праці, зачатки архітектури та складний духовний світ наших предків.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/7gfUl8bTy3U" 
+            title="Основні стоянки та пам'ятки первісних людей на території України" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <!-- Контейнер для інтерактивного тесту -->
+        <div class="quiz-container" data-theme-id="hist_theme_1"></div>
+      </div>
+    </div>
+
+    <!-- Тема 2 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-2">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌾</span> Трипільська культура та її протоміста (V–IV тисячоліття до нашої ери)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Трипільська культура є однією з найяскравіших і найзагадковіших землеробських цивілізацій епохи енеоліту (мідно-кам'яного віку), яка розквітла у V–IV тисячоліттях до нашої ери на межиріччі Дніпра і Дністра. Носії цієї культури створили унікальну високорозвинену цивілізацію, яка набагато випередила свій час завдяки появі небачених за масштабами протоміст-гігантів, таких як Майданецьке, Тальянки чи Доброводи на Черкащині, де населення сягало від 10 до 20 тисяч осіб. Трипільці досконало володіли мистецтвом обробки міді, будували складні дво- та триповерхові житла з дерев'яним каркасом і глиняною обмазкою, практикували масове спалення поселень раз на кілька десятиліть і залишили по собі видатні зразки керамічного мистецтва. Їхній розписний посуд із зображенням спіральних орнаментів, антропоморфні та зооморфні статуетки відображають глибоку міфологічну систему, аграрний календар і культ Великої Матері-Землі.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/N2xe1p4UrJQ" 
+            title="Трипільська культура та її протоміста" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_2"></div>
+      </div>
+    </div>
+
+    <!-- Тема 3 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-3">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🐎</span> Ранні кочовики у Північному Причорномор'ї: кімерійці, скіфи, сармати</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Протягом цілого тисячоліття (від початку І тисячоліття до н. е. до перших століть нашої ери) українські степи відігравали роль глобального транзитного коридору, де змінювалися потужні й войовничі об'єднання кочових племен. Першим народом Північного Причорномор'я, чиє ім'я зафіксували писемні джерела (зокрема античні автори та Біблія), були кімерійці, які славилися майстерним кінним військовим мистецтвом та ранньою металургією заліза. Згодом їх витіснили скіфи, які створили могутьнє об'єднання — Велику Скіфію. Скіфи вели активну торгівлю з грецькими колоніями, воювали з перським царем Дарієм I та залишили по собі величні кургани-цар-могили з незліченними скарбами, серед яких всесвітньо відома золота пектораль із кургану Товста Могила. На зміну скіфам у III столітті до нашої ери прийшли сармати, які принесли з собой нові військові традиції, високий статус жінок у племінній ієрархії та унікальний «звіриний» стиль ювелірного мистецтва.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/g4wr_Kq_wic" 
+            title="Кіммерійці, скіфи, сармати" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_3"></div>
+      </div>
+    </div>
+
+    <!-- Тема 4 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-4">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🏛️</span> Античні міста-держави Північного Причорномор'я</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          У період із VII по VI століття до нашої ери у результаті масштабної грецької колонізації на узбережжі Чорного та Азовського морів виникли видатні античні міста-поліси, які стали форпостами еллінської цивілізації на українських землях. Найбільшими центрами стали Тіра (у гирлі Дністра), Ольвія (на Буго-Дніпровському лимані), Херсонес (на території сучасного Севастополя), Феодосія та Пантікапей (на Керченському півострові), який згодом очолив потужне Боспорське царство. Ці міста жили за законами класичної грецької демократії чи олігархії, вели інтенсивну торгівлю зерном, вином і рибою з місцевими племенами, карбували власні золоті та мідні монети, розвивали театр, архітектуру та писемність. Взаємодія античних міст із місцевим скіфсько-сарматським та пізніше слов'янським населенням сприяла взаємозбагаченню культур та інтеграції українського регіону в європейський античний простір.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/YaZhs6FfAO8" 
+            title="Античні міста-держави Північного Причорномор'я. Боспорське царство" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_4"></div>
+      </div>
+    </div>
+
+    <!-- Тема 5 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-5">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>⚔️</span> Велике розселення слов'ян та утворення східнослов'янських племінних союзів</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Епоха Великого переселення народів у IV–VII століттях докорінно змінила етнічну карту Європи та стала ключовим етапом у процесі формування слов'янських народів. Виділившись із єдиного германо-балтсько-слов'янського масиву, праслов'янські племена (склавини та анти) розпочали активне розселення Центральною, Східною та Південною Європою. На території сучасної України цей процес привів до консолідації та утворення потужних східнослов'янських племінних союзів, які детально описані в літописах: поляни (що мешкали навколо Києва), древляни, сіверяни, волиняни (дуліби), хорвати, тиверці та уличі. Основу їхнього господарства становило орне землеробство, скотарство, мисливство, бортництво та численні ремесла. Вони створювали укріплені городища та племінні центри, які згодом трансформувалися в міста, ставши безпосереднім фундаментом для створення майбутньої середньовічної державності.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/XsNs1CVMWP4" 
+            title="16. Велике розселення слов'ян" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_5"></div>
+      </div>
+    </div>
+
+    <!-- Тема 6 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-6">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>👑</span> Утворення Русі-України та перші князі (IX–X століття)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Процес утворення давньоруської державності був тривалою еволюцією об'єднання східнослов'янських земель навколо київського политичного центру. Завдяки вигідному географічному положенню на трансконтинентальному торговельному шляху «з варяг у греки», Київ перетворився на центр притягання для навколишніх племен. Перші князі — Аскольд, Олег Віщий, Ігор та мудра княгиня Ольга — заклали підвалини військової та политичної могутності держави. Княгиня Ольга після трагічної загибелі чоловіка провела першу в історії країни системну адміністративну реформу: ліквідувала племінну автономію древлян, встановила чіткі норми збору данини («уроки») та визначила місця її надходження («погости»). Її історичний візит до Константинополя та прийняття християнства підкреслили європейський вектор розвитку руської еліти й підготували ґрунт для остаточної християнізації всього суспільства.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/S2VlYh_laRY" 
+            title="ПЕРШІ КНЯЗІ РУСІ: Рюрик, Олег, Ігор. Між легендою та історією" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_6"></div>
+      </div>
+    </div>
+
+    <!-- Тема 7 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-7">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>📜</span> Князювання Володимира Великого та хрещення Русі-України (980–1015 роки)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Доба правління князя Володимира Великого стала періодом грандіозних державотворчих реформ, які назавжди змінили цивілізаційний код східнослов'янського світу. Володимир успішно завершив об'єднання всіх східнослов'янських земель у єдині кордони, розбудував потужну систему оборонних рубежів (Змієві вали) для захисту від нападів печенігів та розпочав карбування перших руських монет — златників і срібників із зображенням тризуба. Однак найважливішим кроком стало прийняття християнства у <strong>988 році</strong> як державної релігії. Цей цивілізаційний вибір вивів Русь-Україну на один рівень із провідними європейськими монархіями, уможливив рівноправні династичні зв'язкі, дав потужний поштовх розвитку кам'яної архітектури (спорудження Десятинної церкви), писемності, шкільної освіти та створення перших писемних пам'ятка.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/g9JMI_8fXs0" 
+            title="Князювання Володимира Великого та хрещення Русі" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_7"></div>
+      </div>
+    </div>
+
+    <!-- Тема 8 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-8">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>📚</span> Розквіт Русі-України за Ярослава Мудрого (1019–1054 роки)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Період правління Ярослава Мудрого заслужено вважається «золотим віком» Русі-України, коли держава досягла максимального територіального розширення, економічного піднесення та небаченого міжнародного авторитету. Ярослав остаточно розгромив печенізькі племена у 1036 році під стінами Києва, на честь чого звів величний Софійський собор — шедевр світової архітектури та монументального живопису. Він дбав про поширення освіти, заснував першу державну бібліотеку при Софійському соборі та сприяв упорядкуванню першого зводу законів «Руська Правда», який захищав права вільних людей і регулював суспільні відносини. Завдяки шлюбній дипломатії самого князя та його дітей (Анна Ярославна стала королевою Франції), Русь-Україна стала повноправним центром європейської політики, а сам Київ суперничав у багатстві та величі з Константинополем.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/NKXqpoa03zc" 
+            title="Розквіт Русі-України за Ярослава Мудрого" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_8"></div>
+      </div>
+    </div>
+
+    <!-- Тема 9 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-9">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🛡️</span> Галицько-Волинська держава (Королівство Руське) та доба Данила Галицького (XII–XIV століття)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Після розпаду Русі-України на окремі удільні князівства саме західні землі — Галичина та Волинь — зуміли об'єднатися в потужну Галицько-Волинську державу (Королівство Руське), яка стала прямою спадкоємицею руських традицій та державності. В умовах страшної монгольської навали середини XIII століття, яка знищила більшість руських земель, князь <strong>Данило Галицький</strong> проявив себе як геніальний політичний стратег і полководець. Він подолав внутрішню опозицію бояр, відновив єдність країни, заснував чимало нових міст (зокрема Львів) та обрав прозахідний політичний вектор. Його історична коронація у <strong>1253 році</strong> в місті Дорогочині папським легатом наголосила на європейському статусі держави, перетворивши її на Королівство Руське, яке відігравало ключову роль у геополітиці Східної та Центральної Європи.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/UphjfSIFYc4" 
+            title="КОРОЛІВСТВО РУСЬКЕ: Данило Галицький, боротьба з Ордою та розквіт держави" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_9"></div>
+      </div>
+    </div>
+
+    <!-- Тема 10 -->
+    <div class="accordion-card" style="border-top: 4px solid #3b82f6;" id="theme-10">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>⚔️</span> Козацька доба та Національно-визвольна війна (XVI–XVII століття)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Козацька доба — це один із найгероїчніших і найвизначніших періодів української історії, пов'язаний із зародженням козацтва на Дикому Полі та створенням легендарної Запорозької Січі як неперевершеного зразка військової демократії. В умовах жорстокого соціального, національного та релігійного гноблення з боку Речі Посполитої український народ піднявся на боротьбу. Кульмінацією цього процесу стала Національно-визвольна війна <strong>1648–1657 років</strong> під проводом видатного гетьмана і полководця <strong>Богдана Хмельницького</strong>. Серія блискучих перемог козацького війська у битві під Жовтими Водами, Корсунем, Пилявцями та Зборовом призвела до руйнування старого польсько-шляхетського порядку та народження нової суверенної української козацької держави — Війська Запорозького (Гетьманщини), яка мала власну територію, армію, судочинство та дипломатичний корпус.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/55NzhWqRx0I" 
+            title="Усе про козаків для НМТ з історії" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_10"></div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- РОЗДІЛ ІІ: НОВА ТА НОВІТНЯ ІСТОРІЯ (10 тем) -->
+    <!-- ========================================== -->
+    <div style="margin: 50px 0 25px 0;">
+      <h2 style="font-size: 26px; color: #1e293b; border-bottom: 3px solid #8b5cf6; padding-bottom: 10px;">
+        🚀 Нова та Новітня історія
+      </h2>
+    </div>
+
+    <!-- Тема 11 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-11">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>📖</span> Українські землі у складі сусідніх імперій у XVIII–XIX століттях</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Драматична епоха XVIII–XIX століть позначена втратою української державності та остаточним розділом українських територій між двома могутьніми імперіями — Російською та Австрійською (згодом Австро-Угорською). Російське самодержавство поступово ліквідувало козацьку автономію, запровадило жорстоке кріпацтво на Лівобережжі та Слобожанщині й остаточно зруйнувало Запорозьку Січ за наказом імператриці Катерини II у 1775 році. На західноукраїнських землях під владою Габсбургів ситуація також супроводжувалася національним гнітом, проте тут у першій половині XIX століття розпочалося національне відродження (діяльність «Руської трійці» на чолі з Маркіяном Шашкевичем). У підросійській Україні символом духовного прозріння нації стала творчість геніального поета і пророка <strong>Тараса Шевченка</strong>, чий безсмертний «Кобзар» пробудив історичну пам'ять українців і заклав незламний фундамент для сучасної національної ідентичності.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/nxX-xvuqhcg" 
+            title="Українські землі у складі сусідніх імперій у XVIII–XIX століттях" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_11"></div>
+      </div>
+    </div>
+
+    <!-- Тема 12 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-12">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>⭐</span> Українська революція та доба національного державотворення (1917–1921 роки)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Українська революція 1917–1921 років стала грандіозним сплеском національно-визвольної боротьби, спричиненим падінням Російської та Австро-Угорської імперій під час Першої світової війни. У березні 1917 року в Києві було створено Українську Центральну Раду на чолі з видатним істориком Михайлом Грушевським, яка пройшла шлях від вимог національно-культурної автономії до проголошення повної незалежності <strong>Української Народної Республіки (УНР)</strong> Четвертим Універсалом у січні 1918 року. Цей період охоплює драматичні сторінки державотворення: героїчний чин українського студентства під Крутами у боротьбі проти більшовицької агресії, консервативну гетьманську державу Павла Скоропадського, соборницьке об'єднання УНР і ЗУНР у січні 1919 року та запеклу збройну боротьбу Директорії проти численних ворогів в умовах міжнародної ізоляції та військової поразки.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/1CWfT7Pw-eY" 
+            title="Українська революція 1917–1921 років" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_12"></div>
+      </div>
+    </div>
+
+    <!-- Тема 13 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-13">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌾</span> Тоталітарний режим у міжвоєнний період: індустріалізація, колективізація, Голодомор</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          У міжвоєнний період радянська Україна опинилася під владою жорстокого сталінського тоталітарного режиму, який здійснив корінну ломку традиційного устрою життя українського суспільства. Політика коренізації та «українізації» 1920-х років була згорнута, а натомість розпочалися масові репресії проти української інтелігенції, що увійшли в історію як доба «розстріляного відродження». Форсована індустріалізація супроводжувалася надзвичайною експлуатацією людських ресурсів, але найбільшою трагедією стала насильницька колективізація сільського господарства. Вона призвела до штучно організованого комуністичним режимом <strong>Голодомору 1932–1933 років</strong> — страшного геноциду українського народу, внаслідок якого голодною смертю загинули мільйони безвинних селян, що стало найбільшою гуманітарною катастрофою в нашій історії.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/gmUN0FF0BKY" 
+            title="Тоталітарний режим у міжвоєнний період: індустріалізація, колективізація, Голодомор" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_13"></div>
+      </div>
+    </div>
+
+    <!-- Тема 14 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-14">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🌍</span> Україна в роки Другої світової війни та рух опору (1939–1945 роки)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Друга світова війна стала найстрашнішим випробуванням для українського народу, адже українські землі перетворилися на головне поле кривавого зіткнення двох найдеструктивніших тоталітарних диктатур світу — нацистської Німеччини та сталінського СРСР. Війна принесла колосальні руйнування міст і сіл, масові страти мирного населення, Голокост (знищення єврейського народу), примусове вивезення молоді на каторжні роботи до Німеччини (остарбайтери) та мільйонні втрати на фронтах. В умовах подвійної окупації розгорнувся небачений за масштабами рух опору: українці воювали в лавах Червоної армії, створювали потужні підрозділи Української повстанської армії (УПА), вели підпільну боротьбу ОУН та діяли в радянських партизанських з'єднаннях. Зробивши вирішальний внесок у розгром нацизму, Україна заплатила за це життям кожного п'ятого свого мешканця.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/wC6xTRJeQdI" 
+            title="Україна в роки Другої світової війни та рух опору (1939–1945 роки)" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_14"></div>
+      </div>
+    </div>
+
+    <!-- Тема 15 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-15">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🏭</span> Післявоєнна відбудова та радянська Україна в епоху «відлиги» (1945–1960-ті роки)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Після завершення бойових дій радянська Україна розпочала складний процес відновлення зруйнованої економіки в умовах збереження жорсткого ідеологічного контролю та нових хвиль репресій. Смерть Сталіна та початок хрущовської «відлиги» у середині 1950-х років принесли певне пом'якшення політичного режиму, реабілітацію незаконно засуджених та повернення із заслання тисяч людей. На цьому сприятливому культурному тлі виникає блискуча генерація української творчої молоді — <strong>шістдесятники</strong> (Василь Стус, Ліна Костенко, Алла Горська, Іван Світличний, Євген Сверстюк), які своєю поезією, мистецькими вечорами та правозахисною діяльністю кинули виклик бюрократичній цензурі й русифікації. Період завершився глибокою системною кризою комуністичної системи, кульмінацією якої стала техногенна та екологічна катастрофа планетарного масштабу — <strong>аварія на Чорнобильській АЕС у квітні 1986 року</strong>, яка остаточно підірвала довіру суспільства до партійного керівництва.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/df24ZGCQ7mY" 
+            title="Післявоєнна відбудова та радянська Україна в епоху «відлиги» (1945–1960-ті роки)" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_15"></div>
+      </div>
+    </div>
+
+    <!-- Тема 16 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-16">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>✊</span> Дисидентський рух та боротьба за права людини в УРСР</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Дисидентський рух в УРСР став мужнім правозахисним та національно-визвольним рухом 1960–1980-х років проти тоталітарної комуністичної системи, репресивних методологій управління та політики насильницької русифікації. Представники цього руху відкрито виступали на захист свободи слова, совісті та національних прав українців. Видатну роль у цьому відіграла діяльність Української Гельсінської групи, заснованої такими постатями, як В'ячеслав Чорновіл, Левко Лук'яненко, Оксана Пахльовська, Микола Руденко та Петро Григоренко. Попри арешти, жорстокі политичні табори мордовських і пермських лісів, психотропні лікарняні репресії та тиск КДБ, дисиденти створювали самвидав, розповсюджували правдиву інформацію про стан суспільства та наближали неминучий крах імперії.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/Lp39nENKTP8" 
+            title="Дисидентський рух та боротьба за права людини в УРСР" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_16"></div>
+      </div>
+    </div>
+
+    <!-- Тема 17 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-17">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>⚡</span> Чорнобильська катастрофа та її наслідки для України та світу (1986 рік)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Аварія на Чорнобильській атомній електростанції, що сталася 26 квітня 1986 року, перетворилася на найбільшу техногенну, екологічну та гуманітарну катастрофу в історії людства. Вибух четвертого енергоблоку викинув у атмосферу колосальну масу радіоактивних речовин, які забруднили величезні території України, Білорусі, Росії та поширилися на всю Європу. Злочинна спроба радянського керівництва приховати масштаб трагедії викликала обурення в суспільстві. Подвиг пожежників, ліквідаторів та військових урятував континент від ще страшніших наслідків, а самі події прискорили розпад радянської тоталітарної системи.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/YMUUZudtWvE" 
+            title="Чорнобильська катастрофа та її наслідки для України та світу (1986 рік)" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_17"></div>
+      </div>
+    </div>
+
+    <!-- Тема 18 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-18">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🇺🇦</span> Відновлення незалежності України (1991 рік)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Наприкінці 1980-х років політика «перебудови» та «гласності» спричинила потужне піднесення національно-визвольного руху в Україні. Заснування Народного Руху України (1989 р.), студентська «Революція на граніті» у жовтні 1990 року та прийняття Верховною Радою УРСР Декларації про державний суверенітет (16 липня 1990 р.) заклали юридичний та суспільний фундамент для демонтажу радянського ладу. Кульмінацією цього процесу після провалу серпневого путчу в Москві стало прийняття <strong>24 серпня 1991 року</strong> доленосного <strong>Акта проголошення незалежності України</strong>, авторства Левка Лук'яненка. Всеукраїнський референдум <strong>1 грудня 1991 року</strong>, де понад 90% громадян підтвердили це рішення, остаточно ліквідував СРСР і відкрив нову еру розбудови суверенної, демократичної та правової української держави.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/Un070qdM95A" 
+            title="Відновлення незалежності України 1991 року" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_18"></div>
+      </div>
+    </div>
+
+    <!-- Тема 19 -->
+    <div class="accordion-card" style="border-top: 4px solid #8b5cf6;" id="theme-19">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3><span>🛡️</span> Російсько-українська війна: від Революції Гідності до повномасштабного вторгнення (2014–2026 роки)</h3>
+        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+      </div>
+      <div class="accordion-content">
+        <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-top: 0;">
+          Перемога Революції Гідності у лютому 2014 року підтвердила непохитний європейський вибір українського народу. Прагнучи знищити українську державність, Російська Федерація у лютому–березні 2014 року здійснила підлу анексію Автономної Республіки Крим та розв'язала гібридну війну на Донбасі (Антитерористична операція / Операція об'єднаних сил). Отримавши рішучу відсіч від відроджених Збройних Сил України та волонтерського руху, <strong>24 лютого 2022 року</strong> кремлівський режим розпочав підле <strong>повномасштабне вторгнення</strong>. Героїчна оборона Києва, Харкова, Чернігова, Маріуполя, блискучий слобожанський контрнаступ і звільнення Херсона показали світові безпрецедентну мужність української нації. Боротьба проти агресора, яка триває і дотепер у 2026 році, перетворилася на глобальну війну за свободу, збереження суверенітету, відновлення територіальної цілісності України в міжнародно визнаних кордонах 1991 року та цивілізаційне майбутнє всієї Європи.
+        </p>
+
+        <!-- Вставлений відеоурок YouTube -->
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/nlIxzm3VCbo" 
+            title="Російсько-українська війна 2014–2026 років" 
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="quiz-container" data-theme-id="hist_theme_19"></div>
+      </div>
+    </div>
+
+  </main>
+
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+    authDomain: "movchan-portal.firebaseapp.com",
+    databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "movchan-portal",
+    storageBucket: "movchan-portal.firebasestorage.app",
+    messagingSenderId: "535915495927",
+    appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
+    measurementId: "G-8XBVKRZRS1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
+
+  async function syncScore(totalPoints) {
+    const localTotal = Number(totalPoints) || 0;
+    window.pendingHistoryQuizScore = localTotal;
+    if (!currentUser || localTotal < 0) return;
+
+    try {
+      const userRef = ref(database, 'users/' + currentUser.uid);
+      await runTransaction(userRef, (data) => {
+        data = data || {};
+        const savedTotal = Number(data.total_history_points) || 0;
+        const currentScore = Number(data.score) || 0;
+        const currentOther = Number(data.total_geography_points) || 0;
+
+        // Нараховуємо лише нові бали. Значення total ніколи не зменшуємо.
+        if (localTotal > savedTotal) {
+          data.name = data.name || currentUser.displayName || 'Учень';
+          data.total_history_points = localTotal;
+          data.score = currentScore + (localTotal - savedTotal);
+        } else if (!data.total_history_points) {
+          data.total_history_points = savedTotal;
+        }
+
+        if (data.total_geography_points === undefined) data.total_geography_points = currentOther;
+        return data;
+      });
+      console.log('Історія: синхронізація OK', localTotal);
+    } catch (error) {
+      console.error('Історія: помилка синхронізації', error);
+    }
+  }
+
+  window.syncHistoryQuizToFirebase = syncScore;
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    if (user && window.pendingHistoryQuizScore !== undefined) {
+      syncScore(window.pendingHistoryQuizScore);
+    }
+    if (user) {
+      const localTotal = Number(localStorage.getItem('total_history_points')) || 0;
+      if (localTotal >= 0) syncScore(localTotal);
+    }
+  });
+
+  window.addEventListener('focus', () => {
+    if (currentUser) syncScore(Number(localStorage.getItem('total_history_points')) || 0);
+  });
+</script>
+
+<script>
+    function toggleAccordion(header) {
+      const card = header.parentElement;
+      card.classList.toggle('active');
+    }
+
+    // ==========================================
+    // ДИНАМІЧНІ ТЕСТИ ТА СИНХРОНІЗАЦІЯ БАЛІВ
+    // ==========================================
+
+    // База запитань за темами історії
+    const historyQuestionBank = {
+      hist_theme_1: [
+        { q: "Де знаходиться найдавніша відома стоянка архантропів в Україні?", a: ["Королево на Закарпатті", "Кирилівська в Києві", "Межиріч на Черкащині", "Мізин на Чернігівщині"], c: 0 },
+        { q: "Яке поселення відоме житлами з кісток мамонтів?", a: ["Межиріч", "Королево", "Ольвія", "Трипілля"], c: 0 },
+        { q: "До якого періоду належить стоянка Королево?", a: ["Ранній палеоліт", "Мезоліт", "Неоліт", "Енеоліт"], c: 0 },
+        { q: "Хто першим заселив українські землі понад 1 млн років тому?", a: ["Архантропи", "Неандертальці", "Кроманьйонці", "Трипільці"], c: 0 },
+        { q: "Яке знаряддя праці було основним у найдавнішої людини?", a: ["Ручне рубило", "Залізний плуг", "Бронзовий сокира", "Глиняний посуд"], c: 0 },
+        { q: "Яка відома стоянка пізнього палеоліту розташована в Києві?", a: ["Кирилівська", "Королево", "Тальянки", "Тіра"], c: 0 },
+        { q: "Що було основою життєзабезпечення людей за пізнього палеоліту?", a: ["Полювання на великих тварин", "Орне землеробство", "Скотарство", "Торгівля"], c: 0 },
+        { q: "Який тип людини з'явився у період пізнього палеоліту (Homo sapiens)?", a: ["Кроманьйонець", "Архантроп", "Австралопітек", "Питекантроп"], c: 0 },
+        { q: "Яка стоянка славиться браслетом із меандровим орнаментом з кістки мамонта?", a: ["Мізинська", "Кирилівська", "Королево", "Майданецьке"], c: 0 },
+        { q: "Чим відрізняється період мезоліту у веденні господарства?", a: ["Винаходом лука і стріл", "Винаходом заліза", "Будівництвом протоміст", "Появою монетної системи"], c: 0 },
+        { q: "Що таке «неолітична революція»?", a: ["Перехід від привласнювального до відтворювального господарства", "Початок обробки заліза", "Виникнення писемності", "Перші війни"], c: 0 },
+        { q: "Яка стоянка належить до мустьєрської епохи (неандертальців)?", a: ["Киїк-Коба в Криму", "Королево", "Межиріч", "Тальянки"], c: 0 }
+      ],
+      hist_theme_2: [
+        { q: "У який історичний період існувала Трипільська культура?", a: ["V–IV тис. до н.е. (Енеоліт)", "I тис. н.е.", "II тис. до н.е.", "Залізний вік"], c: 0 },
+        { q: "Хто відкрив Трипільську культуру наприкінці XIX століття?", a: ["Вікентій Хвойка", "Борис Мозолевський", "Михайло Грушевський", "Ярослав Пастернак"], c: 0 },
+        { q: "Як називаються величезні поселення трипільців?", a: ["Протоміста", "Поліси", "Городища", "Фортеці"], c: 0 },
+        { q: "Які були найбільші протоміста трипільців на Черкащині?", a: ["Тальянки, Майданецьке", "Київ, Чернігів", "Ольвія, Херсонес", "Галич, Володимир"], c: 0 },
+        { q: "Який метал першим почали обробляти трипільці?", a: ["Мідь", "Залізо", "Бронза", "Срібло"], c: 0 },
+        { q: "Чим особливий трипільський керамічний посуд?", a: ["Розписним спіральним орнаментом", "Чорним кольором без малюнків", "Відсутністю обпалювання", "Карбуванням золотом"], c: 0 },
+        { q: "Яка обрядова традиція трипільців дивує дослідників?", a: ["Спалення поселень раз на 50-80 років", "Будівництво пірамід", "Поховання у курганах", "Морські походи"], c: 0 },
+        { q: "Яка релігійна культова фігура була найпоширенішою у трипільців?", a: ["Статуетки Великої Матері-Землі", "Культ Перуна", "Статуетки скіфських вершників", "Грецькі боги"], c: 0 },
+        { q: "Яким було основне заняття трипільців?", a: ["Орне землеробство і скотарство", "Кочове конярство", "Морська торгівля", "Військові набіги"], c: 0 },
+        { q: "З чого будували свої будинки трипільці?", a: ["Дерев'яний каркас, обмазаний глиною", "Тесаний камінь", "Цегла", "Бетонні блоки"], c: 0 },
+        { q: "Скільки поверхів могли мати житла трипільців?", a: ["1–2 поверхи", "До 5 поверхів", "Завжди підземні", "Лише на деревах"], c: 0 },
+        { q: "Яке межиріччя охоплювала територія Трипільської культури?", a: ["Дністра, Південного Бугу та Дніпра", "Волги та Дону", "Дунаю та Рейну", "Тигру та Євфрату"], c: 0 }
+      ],
+      hist_theme_3: [
+        { q: "Який народ був першим кочовим народом на території України, зафіксованим у писемних джерелах?", a: ["Кімерійці", "Скіфи", "Сармати", "Гуни"], c: 0 },
+        { q: "Яку видатну ювелірну пам'ятку знайшли в кургані Товста Могила?", a: ["Золоту пектораль", "Срібну чашу", "Бронзовий шолом", "Меч-акінак"], c: 0 },
+        { q: "Хто очолював розкопки кургану Товста Могила у 1971 році?", a: ["Борис Мозолевський", "Вікентій Хвойка", "Микола Реріх", "Дмитро Яворницький"], c: 0 },
+        { q: "З яким перським царем воювали скіфи у 513 р. до н.е.?", a: ["Дарій I", "Ксеркс", "Кір II", "Александр Македонський"], c: 0 },
+        { q: "Який стильовий напрям притаманний ювелірному мистецтву скіфів та сарматів?", a: ["«Звіриний» стиль", "Геометричний абстракціонізм", "Готика", "Бароко"], c: 0 },
+        { q: "Який короткий залізний меч використовували скіфи?", a: ["Акінак", "Шабля", "Рапіра", "Гладіус"], c: 0 },
+        { q: "Яке племя заступило скіфів у Північному Причорномор'ї у III ст. до н.е.?", a: ["Сармати", "Кімерійці", "Печеніги", "Половці"], c: 0 },
+        { q: "У чому полягала особливість суспільної ролі жінок у сарматів?", a: ["Жінки брали участь у війнах і мали високий статус", "Жінки не мали жодних прав", "Вони керували флотом", "Вони жили окремо в містах"], c: 0 },
+        { q: "Як називалися величні насипи над похованнями скіфських царів?", a: ["Кургани", "Дольмени", "Зіккурати", "Піраміди"], c: 0 },
+        { q: "Який античний історик залишив найдетальніший опис Скіфії?", a: ["Геродот", "Страбон", "Тацит", "Пліній Старший"], c: 0 },
+        { q: "З чого кімерійці першими на українських землях почали виготовляти зброю?", a: ["Із заліза", "З бронзи", "З міді", "З дерева"], c: 0 },
+        { q: "Які три групи описував Геродот серед скіфів?", a: ["Скіфи-орачі, скіфи-землероби, царі/кочовики", "Спартанці, афіняни, корінні", "Дворяни, селяни, духівництво", "Воїни, жреці, ремісники"], c: 0 }
+      ],
+      hist_theme_4: [
+        { q: "Яке з античних міст-держав розташовувалося в гирлі річки Дністер?", a: ["Тіра", "Ольвія", "Херсонес", "Пантікапей"], c: 0 },
+        { q: "Місто Ольвія було засноване вихідцями з якого грецького міста?", a: ["Мілет", "Афіни", "Спарта", "Коринф"], c: 0 },
+        { q: "Яке античне місто стало столицею Боспорського царства?", a: ["Пантікапей", "Херсонес", "Тіра", "Керкінітида"], c: 0 },
+        { q: "Яке місто розташовувалося на території сучасного Севастополя?", a: ["Херсонес", "Ольвія", "Феодосія", "Тіра"], c: 0 },
+        { q: "Що було основним предметом експорту грецьких колоній Причорномор'я?", a: ["Зерно, риба, хутро", "Шовк, прянощі", "Папірус, слонова кістка", "Зброя, залізо"], c: 0 },
+        { q: "Яку форму правління мав Херсонес Таврійський?", a: ["Демократична республіка", "Абсолютна монархія", "Військова диктатура", "Теократія"], c: 0 },
+        { q: "Коли розпочалася Велика грецька колонізація Північного Причорномор'я?", a: ["VII–VI ст. до н. е.", "X–IX ст. до н. е.", "III–II ст. до н. е.", "I–II ст. н. е."], c: 0 },
+        { q: "Які товари греки завозили до Причорномор'я для обміну з місцевими племенами?", a: ["Оливкову олію, вино, кераміку", "Пшеницю, жито", "Зерно, худобу", "Деревину, руду"], c: 0 },
+        { q: "Яка обітниця є унікальною писемною пам'яткою Херсонеса?", a: ["Присяга громадян Херсонеса", "Закони Магдебурзького права", "Руська Правда", "Декларація прав"], c: 0 },
+        { q: "Під чию залежність потрапили античні міста Причорномор'я у I ст. до н.е.?", a: ["Римської імперії", "Перської імперії", "Арабського халіфату", "Візантії"], c: 0 },
+        { q: "Яка племінна навала у IV ст. н.е. знищила більшість античних міст-держав?", a: ["Навала гунів", "Набіг печенігів", "Монгольська навала", "Похід персів"], c: 0 },
+        { q: "Яке античне місто розміщувалося на Буго-Дніпровському лимані?", a: ["Ольвія", "Тіра", "Пантікапей", "Феодосія"], c: 0 }
+      ],
+      hist_theme_5: [
+        { q: "Протягом яких століть тривало Велике розселення слов'ян?", a: ["V–VII ст. н.е.", "I–III ст. н.е.", "IX–XI ст. н.е.", "II–I ст. до н.е."], c: 0 },
+        { q: "Які два основні угруповання східних слов'ян описують ранньовізантійські автори?", a: ["Анти та склавини", "Кімерійці та скіфи", "Гуни та авари", "Печеніги та половці"], c: 0 },
+        { q: "Який племінний союз східних слов'ян розселився навколо Києва?", a: ["Поляни", "Древляни", "Сіверяни", "Волиняни"], c: 0 },
+        { q: "Хто є автором літопису «Повість минулих літ», що описує слов'янські племена?", a: ["Нестор Літописець", "Іларіон", "Сильвестр", "Володимир Мономах"], c: 0 },
+        { q: "Яке слов'янське племя мешкало у лісах Полісся з центром у місті Іскоростень?", a: ["Древляни", "Поляни", "Уличі", "Тиверці"], c: 0 },
+        { q: "Яким було основне заняття східнослов'янських племен?", a: ["Орне землеробство", "Кочове скотарство", "Морське піратство", "Гірнича справа"], c: 0 },
+        { q: "Як називалося збирання меду диких бджіл у слов'ян?", a: ["Бортництво", "Забродництво", "Пасічництво", "Промисел"], c: 0 },
+        { q: "Яке племя мешкало вздовж річок Десна, Сейм та Сула?", a: ["Сіверяни", "Древляни", "Білі хорвати", "Волиняни"], c: 0 },
+        { q: "Як називалися укріплені слов'янські поселення, що перетворювалися на міста?", a: ["Городища", "Поліси", "Станиці", "Погости"], c: 0 },
+        { q: "Яка язичницька верховна сутність вважалася богом грому та блискавки у слов'ян?", a: ["Перун", "Дажбог", "Велес", "Стрибог"], c: 0 },
+        { q: "Які племена мешкали в передгір'ях Карпат?", a: ["Білі хорвати", "Уличі", "Сіверяни", "Поляни"], c: 0 },
+        { q: "Як називалася община у східних слов'ян?", a: ["Верв", "Верш", "Племя", "Цех"], c: 0 }
+      ],
+      hist_theme_6: [
+        { q: "У якому році за літописною традицією князь Олег захопив Київ?", a: ["882 рік", "911 рік", "945 рік", "988 рік"], c: 0 },
+        { q: "Який князь здійснив успішний похід на Константинополь у 907 році й прибив свій щит на ворота Царгорода?", a: ["Олег", "Аскольд", "Ігор", "Святослав"], c: 0 },
+        { q: "Князь Аскольд здійснив перший відомий похід на Візантію та прийняв хрещення у якому році?", a: ["860 рік", "882 рік", "912 рік", "941 рік"], c: 0 },
+        { q: "Під час збору данини (полюддя) у землі якого племені загинув князь Ігор у 945 році?", a: ["Древлян", "Полян", "Сіверян", "Уличів"], c: 0 },
+        { q: "Яку реформу провела княгиня Ольга після загибелі чоловіка?", a: ["Встановила чіткі норми данини (уроки) та місця її збору (погости)", "Запровадила християнство", "Заборонила торгівлю з Візантією", "Створила звід законів «Руська Правда»"], c: 0 },
+        { q: "Який князь увійшов у історію своїми висловами «Іду на ви!» та провів все життя у військових походах?", a: ["Святослав Хоробрий", "Олег", "Ігор", "Володимир"], c: 0 },
+        { q: "Яку державу розгромив князь Святослав у 965 році?", a: ["Хозарський каганат", "Візантійську імперію", "Волзьку Булгарію", "Печенізький союз"], c: 0 },
+        { q: "Де загинув князь Святослав у 972 році в бою з печенігами?", a: ["Біля дніпровських порогів", "Під Іскоростенем", "Під Доростолом", "У Дорогичині"], c: 0 },
+        { q: "Як називався щорічний обїзд князем підвладних земель для збору данини?", a: ["Полюддя", "Урок", "Панщина", "Погост"], c: 0 },
+        { q: "Який торговельний шлях пролягав через Київ і зєднував Балтійське та Чорне моря?", a: ["«З варяг у греки»", "Шовковий шлях", "Бурштиновий шлях", "Соляний шлях"], c: 0 },
+        { q: "У якому році княгиня Ольга здійснила дипломатичний візит до Константинополя?", a: ["957 рік", "945 рік", "988 рік", "911 рік"], c: 0 },
+        { q: "Як звали печенізького хана, який за переказами зробив чашу з черепа Святослава?", a: ["Куря", "Боняк", "Шарукан", "Котя"], c: 0 }
+      ],
+      hist_theme_7: [
+        { q: "У якому році відбулося Хрещення Русі-України князем Володимиром?", a: ["988 рік", "980 рік", "1015 рік", "957 рік"], c: 0 },
+        { q: "Яку назву мала перша кам'яна церква в Києві, збудована за Володимира Великого?", a: ["Десятинна церква", "Софійський собор", "Михайлівський собор", "Успенський собор"], c: 0 },
+        { q: "Який знак карбувався на монетах (златниках і срібниках) князя Володимира?", a: ["Тризуб", "Двоголовий орел", "Хрест і меч", "Лев"], c: 0 },
+        { q: "Як називалася система оборонних земляних валів для захисту від кочовиків за Володимира?", a: ["Змієві вали", "Татарський вал", "Лінія Мажино", "Київський форпост"], c: 0 },
+        { q: "З якою метою Володимир Великий здійснював династичні шлюби своїх дітей?", a: ["Для зміцнення міжнародного авторитету та союзів", "Для розширення торгівлі шовком", "Для передачі земель іноземцям", "Для створення найманого війська"], c: 0 },
+        { q: "Яке місто стало центром хрещення самого князя Володимира перед хрещенням Киян?", a: ["Херсонес (Корсунь)", "Константинополь", "Чернігів", "Новгород"], c: 0 },
+        { q: "Як називалася візантійська принцеса, що стала дружиною Володимира Великого?", a: ["Анна", "Ольга", "Ірина", "Євпраксія"], c: 0 },
+        { q: "Які кочові племена були головною зовнішньою загрозою для Русі за Володимира?", a: ["Печеніги", "Половці", "Монголи", "Хозари"], c: 0 },
+        { q: "Яку адміністративну реформу провів Володимир Великий?", a: ["Посадив у найважливіших містах і землях своїх синів", "Ліквідував князівську владу", "Запровадив виборне віче", "Передав владу боярам"], c: 0 },
+        { q: "Які перші руські монети почали карбувати за князя Володимира?", a: ["Златники та срібники", "Дукати та талери", "Гривні та карбованці", "Денарії та статери"], c: 0 },
+        { q: "Як називали князя Володимира у народних переказах та билинах?", a: ["Володимир Красне Сонечко", "Володимир Грозний", "Володимир Законодавець", "Володимир Завойовник"], c: 0 },
+        { q: "Яку частку князівських доходів Володимир виділив на будівництво першої кам'яної церкви?", a: ["Десяту частину (десятину)", "Половину", "П'яту частину", "Третю частину"], c: 0 }
+      ],
+      hist_theme_8: [
+        { q: "У якому році Ярослав Мудрий остаточно розгромив печенігів під стінами Києва?", a: ["1036 рік", "1019 рік", "1054 рік", "1024 рік"], c: 0 },
+        { q: "На честь перемоги над печенігами у Києві було зведено:", a: ["Софійський собор", "Десятинну церкву", "Золоті ворота", "Печерську лавру"], c: 0 },
+        { q: "Як називається перший писемний звід законів Русі, укладений за Ярослава?", a: ["«Руська Правда»", "«Повчання дітям»", "«Статут Великого князівства»", "«Повість минулих літ»"], c: 0 },
+        { q: "Яке прізвисько отримав князь Ярослав за свою дипломатію та родинні зв'язки з європейськими дворами?", a: ["«Тесть Європи»", "«Завойовник»", "«Об'єднувач»", "«Миротворець»"], c: 0 },
+        { q: "Хто з дочок Ярослава Мудрого стала королевою Франції?", a: ["Анна Ярославна", "Єлизавета", "Анастасія", "Добронега"], c: 0 },
+        { q: "Де за Ярослава Мудрого було створено першу відому бібліотеку та скрипторій?", a: ["При Софійському соборі у Києві", "У Києво-Печерському монастирі", "У Чернігові", "У Галичі"], c: 0 },
+        { q: "Хто став першим митрополитом з-поміж русинів, призначеним Ярославом у 1051 році?", a: ["Іларіон", "Нестор", "Феодосій", "Петро Могила"], c: 0 },
+        { q: "З яким своїм братом Ярослав ділив Русь по Дніпру до 1036 року?", a: ["Мстиславом Володимировичем", "Святополком Окаянним", "Борисом", "Глібом"], c: 0 },
+        { q: "Які величні парадні ворота Києва були збудовані за Ярослава Мудрого?", a: ["Золоті ворота", "Львівські ворота", "Лядські ворота", "Софійські ворота"], c: 0 },
+        { q: "Який видатний богословський твір написав митрополит Іларіон?", a: ["«Слово про закон і благодать»", "«Повчання дітям»", "«Києво-Печерський патерик»", "«Задонщина»"], c: 0 },
+        { q: "Який монастир, що став осередком чернецтва, було засновано у 1051 році?", a: ["Києво-Печерський монастир", "Видубицький монастир", "Почаївська лавра", "Михайлівський монастир"], c: 0 },
+        { q: "У якому році помер князь Ярослав Мудрий, залишивши заповіт синам?", a: ["1054 рік", "1036 рік", "1019 рік", "1068 рік"], c: 0 }
+      ],
+      hist_theme_9: [
+        { q: "У якому році об'єдналися Галицьке і Волинське князівства під владою Романа Мстиславича?", a: ["1199 рік", "1238 рік", "1253 рік", "1240 рік"], c: 0 },
+        { q: "У якому році Данило Романович (Галицький) прийняв королівську корону від Папи Римського?", a: ["1253 рік", "1238 рік", "1240 рік", "1264 рік"], c: 0 },
+        { q: "Яке місто було засноване Данилом Галицьким і назване на честь його сина?", a: ["Львів", "Холм", "Галич", "Володимир"], c: 0 },
+        { q: "У якій битві 1238 року Данило Галицький розгромив добжинських хрестоносців?", a: ["Битва під Дорогочином", "Битва на Калці", "Битва під Ярославом", "Битва під Синіми Водами"], c: 0 },
+        { q: "Яке місто зробив своєю головною столицею Данило Галицький?", a: ["Холм", "Львів", "Галич", "Перемишль"], c: 0 },
+        { q: "У якому році відбулася перша битва руських князів із монголами на річці Калка?", a: ["1223 рік", "1240 рік", "1238 рік", "1199 рік"], c: 0 },
+        { q: "Хто очолював монгольське військо, яке захопило та зруйнувало Київ у грудні 1240 року?", a: ["Хан Батий", "Чингісхан", "Мамай", "Тохтамиш"], c: 0 },
+        { q: "У битві під яким містом у 1245 році Данило Романович остаточно подолав боярів та угорсько-польських інтервентів?", a: ["Під Ярославом", "Під Дорогочином", "Під Галичем", "Під Луцьком"], c: 0 },
+        { q: "Хто з наступників Данила Галицького об'єднав усі землі й уживав титул «король Русі, князь Володимирії»?", a: ["Юрій I Львович", "Лев Данилович", "Шварно", "Юрій II Болеслав"], c: 0 },
+        { q: "Яка подія 1340 року призвела до припинення існування Галицько-Волинської держави?", a: ["Отруєння Юрія II Болеслава та вигасання династії", "Захоплення Києва монголами", "Битва під Дорогочином", "Підписання Кревської унії"], c: 0 },
+        { q: "Який митрополичий центр було створено в Галичі у 1303 році за Юрія I?", a: ["Галицька митрополія", "Київська екзархія", "Волинське єпископство", "Львівський патріархат"], c: 0 },
+        { q: "З яким Папою Римським листувався Данило Галицький щодо організації хрестового походу проти монголів?", a: ["Іннокентій IV", "Урбан II", "Григорій VII", "Климент V"], c: 0 }
+      ],
+      hist_theme_10: [
+        { q: "У якому році вважається заснованою перша Запорозька Січ на острові Мала Хортиця Дмитром Вишневецьким?", a: ["1556 рік", "1648 рік", "1569 рік", "1596 рік"], c: 0 },
+        { q: "Хто очолив Національно-визвольну війну українського народу проти Речі Посполитої у 1648 році?", a: ["Богдан Хмельницький", "Петро Конашевич-Сагайдачний", "Іван Мазепа", "Северин Наливайко"], c: 0 },
+        { q: "У травні 1648 року відбулися перші переможні битви козаків під проводом Б. Хмельницького під:", a: ["Жовтими Водами та Корсунем", "Пилявцями та Зборовом", "Берестечком та Батогом", "Жванцем та Веною"], c: 0 },
+        { q: "Як називалася нова українська козацька держава, утворена в ході Національно-визвольної війни?", a: ["Військо Запорозьке (Гетьманщина)", "Королівство Руське", "Велике князівство Руське", "Українська Республіка"], c: 0 },
+        { q: "Який видатний козацький гетьман здобув славу морськими походами на Османську імперію та сприяв відновленню православної ієрархії 1620 р.?", a: ["Петро Конашевич-Сагайдачний", "Дмитро Вишневецький", "Іван Сірко", "Богдан Хмельницький"], c: 0 },
+        { q: "У якому році було підписано Березневі статті з московським царем?", a: ["1654 рік", "1648 рік", "1649 рік", "1657 рік"], c: 0 },
+        { q: "Яка битва 1651 року стала найбільшою і найдраматичнішою в ході війни через зраду татарського хана?", a: ["Битва під Берестечком", "Битва під Батогом", "Битва під Пилявцями", "Битва під Жовтими Водами"], c: 0 },
+        { q: "Яка битва 1652 року була названа «козацьким реваншем» за поразку під Берестечком?", a: ["Битва під Батогом", "Битва під Зборовом", "Битва під Охматовом", "Битва під Жванцем"], c: 0 },
+        { q: "Як називався вищий орган самоврядування на Запорозькій Січі?", a: ["Загальна (Військова) рада", "Гетьманський уряд", "Сейм", "Старшинська рада"], c: 0 },
+        { q: "Який документ 1649 року вперше офіційно визнав козацьку автономію з реєстром у 40 тис. осіб?", a: ["Зборівський договір", "Білоцерківський договір", "Гадяцький договір", "Переяславська угода"], c: 0 },
+        { q: "Як називалися козацькі клейноди, що символізували владу гетьмана?", a: ["Булава та корогва", "Печатка та бунчук", "Скіпетр та держава", "Трон та корона"], c: 0 },
+        { q: "Яке місто було столицею Гетьманщини за правління Богдана Хмельницького?", a: ["Чигирин", "Батурин", "Глухів", "Київ"], c: 0 }
+      ],
+      hist_theme_11: [
+        { q: "У якому році за наказом Катерини II було остаточно зруйновано Запорозьку Січ?", a: ["1775 рік", "1764 рік", "1783 рік", "1709 рік"], c: 0 },
+        { q: "Хто був останнім гетьманом України у 1750–1764 роках?", a: ["Кирило Розумовський", "Іван Мазепа", "Пилип Орлик", "Павло Полуботок"], c: 0 },
+        { q: "У якому році видатний поет Тарас Шевченко вперше видав збірку «Кобзар»?", a: ["1840 рік", "1861 рік", "1847 рік", "1838 рік"], c: 0 },
+        { q: "Як називалося культурно-просвітницьке гурткове об'єднання у Львові 1830-х рр. на чолі з М. Шашкевичем?", a: ["«Руська трійця»", "Кирило-Мефодіївське товариство", "Громада", "«Південне товариство»"], c: 0 },
+        { q: "Як називався альманах, виданий «Руською трійцею» у Буді 1837 року?", a: ["«Русалка Дністровая»", "«Кобзар»", "«Запорозька старовина»", "«Галичанин»"], c: 0 },
+        { q: "У якому році було скасовано кріпацтво в Австрійській імперії (зокрема в Галичині)?", a: ["1848 рік", "1861 рік", "1806 рік", "1831 рік"], c: 0 },
+        { q: "У якому році було скасовано кріпацтво в Російській імперії?", a: ["1861 рік", "1848 рік", "1876 рік", "1800 рік"], c: 0 },
+        { q: "Який таємний царський документ 1876 року заборонив друкування книжок та ввезення літератури українською мовою?", a: ["Емський указ", "Валуєвський циркуляр", "Цензурний статут", "Октябрський маніфест"], c: 0 },
+        { q: "Яка перша українська політична організація виникла у Львові 1890 року?", a: ["Русько-українська радикальна партія (РУРП)", "Революційна українська партія (РУП)", "УНДП", "УСДП"], c: 0 },
+        { q: "Хто очолював Кирило-Мефодіївське товариство, створене у Києві 1845–1846 рр.?", a: ["М. Костомаров, В. Білозерський, М. Гулак", "Т. Шевченко, І. Франко, М. Драгоманов", "М. Шашкевич, І. Вагилевич, Я. Головацький", "П. Куліш, В. Антонович"], c: 0 },
+        { q: "У якому році відбулася битва під Полтавою, де Іван Мазепа виступив проти Петра I?", a: ["1709 рік", "1708 рік", "1711 рік", "1720 рік"], c: 0 },
+        { q: "Хто є автором першої вітчизняної Конституції 1710 року?", a: ["Пилип Орлик", "Іван Мазепа", "Павло Полуботок", "Данило Апостол"], c: 0 }
+      ],
+      hist_theme_12: [
+        { q: "Коли у Києві було засновано Українську Центральну Раду?", a: ["Березень 1917 року", "Квітень 1918 року", "Листопад 1917 року", "Січень 1918 року"], c: 0 },
+        { q: "Хто очолив Українську Центральну Раду?", a: ["Михайло Грушевський", "Володимир Винниченко", "Симон Петлюра", "Павло Скоропадський"], c: 0 },
+        { q: "Яким Універсалом Центральна Рада проголосила повну незалежність УНР?", a: ["IV Універсалом (22 січня 1918 р.)", "I Універсалом", "III Універсалом", "II Універсалом"], c: 0 },
+        { q: "Яка подія відбулася 29 січня 1918 року під залізничною станцією Крути?", a: ["Бій київських студентів та юнаків проти більшовицького війська Муравйова", "Бій між гетьманцями та військами Директорії", "Підписання Берестейського миру", "Анексія Києва денікінцями"], c: 0 },
+        { q: "Хто став Гетманом Української Держави після перевороту 29 квітня 1918 року?", a: ["Павло Скоропадський", "Симон Петлюра", "Євген Петрушевич", "Нестор Махно"], c: 0 },
+        { q: "Коли відбулося урочисте проголошення Акта Злуки УНР та ЗУНР у Києві?", a: ["22 січня 1919 року", "1 листопада 1918 року", "22 січня 1918 року", "14 грудня 1918 року"], c: 0 },
+        { q: "Хто очолив Західноукраїнську Народну Республіку (ЗУНР)?", a: ["Євген Петрушевич", "Кость Левицький", "Дмитро Вітовський", "Михайло Омлянович-Павленко"], c: 0 },
+        { q: "Як називалося військове формування ЗУНР?", a: ["Українська Галицька Армія (УГА)", "Українські Січові Стрільці (УСС)", "Революційна армія Махна", "Військо УНР"], c: 0 },
+        { q: "Хто очолював Директорію УНР з лютого 1919 року?", a: ["Симон Петлюра", "Володимир Винниченко", "Михайло Грушевський", "Павло Скоропадський"], c: 0 },
+        { q: "Як називався збройний виступ у Львові 1 листопада 1918 р., що привів до утворення ЗУНР?", a: ["Листопадовий чин (дерево)", "Січневе повстання", "Київська катастрофа", "Перший Зимовий похід"], c: 0 },
+        { q: "Як називався перший мирний договір у Першій світовій війні, підписаний УНР 9 лютого 1918 р.?", a: ["Берестейський мир", "Версальський мир", "Варшавський договір", "Ризький мир"], c: 0 },
+        { q: "Яка подія сталася в грудні 1919 — травні 1920 рр. за участю військ УНР?", a: ["Перший Зимовий похід", "Другий Зимовий похід", "Битва під Мотовилівкою", "Чортківська офензива"], c: 0 }
+      ],
+      hist_theme_13: [
+        { q: "У яких роках в Україні тривав штучно організований сталінським режимом Голодомор-геноцид?", a: ["1932–1933 роки", "1921–1923 роки", "1946–1947 роки", "1928–1929 роки"], c: 0 },
+        { q: "Як називалася репресивна постанова від 7 серпня 1932 року, що передбачала розстріл за розкрадання колгоспного майна?", a: ["«Закон про п'ять колосків»", "Постанова про чорні дошки", "Директива про розкулачування", "Указ про продрозкладку"], c: 0 },
+        { q: "Як називалося знищення радянським тоталітарним режимом генерації українських діячів культури та науки у 1930-х рр.?", a: ["«Розстріляне відродження»", "«Шістдесятництво»", "«Коренізація»", "«Дисидентство»"], c: 0 },
+        { q: "Що передбачала політика «коренізації» (українізації), розпочата у 1923 році?", a: ["Залучення українців до радянського будівництва та розвиток української мови", "Повне вилучення зерна", "Примусову колективізацію", "Ліквідацію приватної власності"], c: 0 },
+        { q: "Як називався процес насильницького об'єднання одноосібних селянських господарств у колгоспи?", a: ["Колективізація", "Індустріалізація", "Продекспертиза", "Коренізація"], c: 0 },
+        { q: "Що таке «чорні дошки» під час Голодомору?", a: ["Занесення сіл до спеціальних списків ізоляції з вилученням усіх продуктів та блокуванням", "Навчальні дошки в школах", "Списки репресованих письменників", "Програми індустріалізації"], c: 0 },
+        { q: "У якому місті у 1930 році відбувся фабрикований судовий процес над українською інтелігенцією (СВУ)?", a: ["У Харківському операційному театрі", "У Києві", "У Москві", "У Дніпропетровську"], c: 0 },
+        { q: "Який видатний український письменник закликав «Геть від Москви! Даєш Європу!» у літературній дискусії 1925–1928 рр.?", a: ["Микола Хвильовий", "Микола Куліш", "Лесь Курбас", "Валер'ян Підмогильний"], c: 0 },
+        { q: "Яка подія 1934 року змінила столицю УРСР з Харкова на Київ?", a: ["Перенесення столиці УРСР до Києва", "Проголошення суверенітету", "Приєднання Західної України", "Утворення СРСР"], c: 0 },
+        { q: "Як називалася політика форсованого будівництва великих промислових підприємств у СРСР?", a: ["Індустріалізація", "Колективізація", "НЕП", "Мілітаризація"], c: 0 },
+        { q: "Яке угруповання інноваційного театру заснував Лесь Курбас у Києві та Харкові?", a: ["Театр «Березіль»", "Театр ім. Франка", "Театр корифеїв", "МХАТ"], c: 0 },
+        { q: "У якому урочищі в Карелії у 1937 році було масово розстріляно цвіт української інтелігенції?", a: ["Сандармох", "Биківня", "Бабин Яр", "Вінниця"], c: 0 }
+      ],
+      hist_theme_14: [
+        { q: "У який день розпочалася Друга світова війна нападом Німеччини на Польщу?", a: ["1 вересня 1939 року", "22 червня 1941 року", "17 вересня 1939 року", "24 серпня 1939 року"], c: 0 },
+        { q: "Коли Червона армія розпочала Вторгнення у Західну Україну за пактом Молотова-Ріббентропа?", a: ["17 вересня 1939 року", "1 вересня 1939 року", "22 червня 1941 року", "22 січня 1940 року"], c: 0 },
+        { q: "Коли нацистська Німеччина напала на СРСР (початок німецько-радянської війни)?", a: ["22 червня 1941 року", "1 вересня 1939 року", "17 вересня 1939 року", "9 травня 1945 року"], c: 0 },
+        { q: "У якому році нацистами було створено Українську повстанську армію (УПА) під проводом ОУН(Б)?", a: ["14 жовтня 1942 року", "22 червня 1941 року", "30 червня 1941 року", "9 травня 1945 року"], c: 0 },
+        { q: "Хто очолював Головний військовий штаб УПА з 1943 по 1950 рік?", a: ["Роман Шухевич (Тарас Чупринка)", "Степан Бандера", "Андрій Мельник", "Євген Коновалець"], c: 0 },
+        { q: "Де у Львові 30 червня 1941 року ОУН(Б) проголосила Акт відновлення Української Держави?", a: ["У Львові", "У Києві", "У Луцьку", "У Рівному"], c: 0 },
+        { q: "Як називалося масове вивезення цивільного населення (переважно молоді) на примусові роботи до Німеччини?", a: ["Остарбайтери", "Евакуйовані", "Депортовані", "Репатріанти"], c: 0 },
+        { q: "У якому урочищі в Києві нацисти розстріляли понад 100 тисяч мирних жителів та євреїв?", a: ["Бабин Яр", "Сандармох", "Биківня", "Сирець"], c: 0 },
+        { q: "Коли відбулося повне звільнення території України від нацистських загарбників?", a: ["28 жовтня 1944 року", "6 листопада 1943 року", "9 травня 1945 року", "22 червня 1944 року"], c: 0 },
+        { q: "Яка депортація кримськотатарського народу була здійснена сталінським режимом у травні 1944 року?", a: ["Насильницьке виселення кримських татар до Центральної Азії", "Евакуація населення", "Трудова мобілізація", "Виселення німців"], c: 0 },
+        { q: "Хто очолював найбільше радянське партизанське зєднання в Україні?", a: ["Сидір Ковпак", "Олексій Федоров", "Микола Кузнецов", "Александр Сабуров"], c: 0 },
+        { q: "Яке місто було визволене військами в ході форсування Дніпра у листопаді 1943 року?", a: ["Київ", "Харків", "Одеса", "Львів"], c: 0 }
+      ],
+      hist_theme_15: [
+        { q: "Як називалася операція зі збройної депортації українського населення Закерзоння у 1947 році польською владою?", a: ["Операція «Вісла»", "Операція «Захід»", "Операція «Барбаросса»", "Операція «Ураган»"], c: 0 },
+        { q: "У якому році Кримську область було передано зі складу РРФСР до складу УРСР?", a: ["1954 рік", "1945 рік", "1960 рік", "1986 рік"], c: 0 },
+        { q: "Як називався плеяда молодих митців та поетичної інтелігенції, яка виникла у період «відлиги» 1950–1960-х рр.?", a: ["Шістдесятники", "Дисиденти", "Кирило-мефодіївці", "Розстріляне відродження"], c: 0 },
+        { q: "Хто був одним із найяскравіших поетів-шістдесятників, автором поезій «Ти знаєш, що ти — людина?»", a: ["Василь Симоненко", "Василь Стус", "Вячеслав Чорновіл", "Левко Лукяненко"], c: 0 },
+        { q: "Який сталінський ідеологічний кампанійний тиск супроводжував післявоєнні роки в культурі?", a: ["Ждановщина", "Лисенківщина", "Волобуєвщина", "Коренізація"], c: 0 },
+        { q: "Як називався сфабрикований радянський церковний собор 1946 року у Львові?", a: ["Львівський псевдособор з ліквідації УГКЦ", "Берестейська унія", "Харківський собор", "Київський собор"], c: 0 },
+        { q: "Хто з видатних релігійних діячів УГКЦ провів у радянських таборах 18 років і очолив церкву після смерть Шептицького?", a: ["Йосиф Сліпий", "Андрей Шептицький", "Любомир Гузар", "Климентій Шептицький"], c: 0 },
+        { q: "Яка депортація населення Західної України до Сибіру відбулася у жовтні 1947 року?", a: ["Операція «Захід»", "Операція «Вісла»", "Операція «Троянда»", "Операція «Північ»"], c: 0 },
+        { q: "Яке неформальне обєднання творчої молоді виникло у Києві 1959–1960 рр. на чолі з Лесем Танюком?", a: ["Клуб творчої молоді «Сучасник»", "Рух за перебудову", "Українська Гельсінська група", "Товариство Лева"], c: 0 },
+        { q: "Хто є автором знаменитої поеми «Маруся Чурай» та видатним поетом-шістдесятником?", a: ["Ліна Костенко", "Алла Горська", "Оксана Пахльовська", "Олена Теліга"], c: 0 },
+        { q: "У якому році Україна стала однією з держав-засновниць Організації Обєднаних Націй (ООН)?", a: ["1945 рік", "1954 рік", "1991 рік", "1939 рік"], c: 0 },
+        { q: "Який видатний фільм Сергія Параджанова 1964 року здобув світове визнання?", a: ["«Тіні забутих предків»", "«Камінний хрест»", "«Вавилон XX»", "«Захар Беркут»"], c: 0 }
+      ],
+      hist_theme_16: [
+        { q: "У якому році було засновано Українську Гельсінську групу (УГГ)?", a: ["1976 рік", "1965 рік", "1980 рік", "1991 рік"], c: 0 },
+        { q: "Хто став головою та засновником Української Гельсінської групи?", a: ["Микола Руденко", "Вячеслав Чорновіл", "Левко Лукяненко", "Василь Стус"], c: 0 },
+        { q: "Як називалися самвидавчий журнал, заснований Вячеславом Чорноволом у 1970 році?", a: ["«Український вісник»", "«Сучасність»", "«Український голос»", "«Дніпро»"], c: 0 },
+        { q: "Як називалося підпільне або неофіційне виготовлення та розповсюдження забороненої літератури в СРСР?", a: ["Самвидав", "Тамвидав", "Цензура", "Держвидав"], c: 0 },
+        { q: "Який видатний поет, дисидент і правозахисник загинув у радянському таборі Перм-36 у 1985 році?", a: ["Василь Стус", "Вячеслав Чорновіл", "Микола Руденко", "Василь Симоненко"], c: 0 },
+        { q: "Хто розробив проект «Запеклого союзу» та був засуджений до розстрілу (замінено на 15 років) у 1961 році?", a: ["Левко Лукяненко", "Вячеслав Чорновіл", "Петро Григоренко", "Іван Дзюба"], c: 0 },
+        { q: "Яка праця Івана Дзюби 1965 року стала маніфестом проти русифікації України?", a: ["«Інтернаціоналізм чи русифікація?»", "«Лихо з розуму»", "«Правосуддя чи рецидиви лероризму?»", "«Загладне слово»"], c: 0 },
+        { q: "Який радянський генерал виступив на захист дисидентів та права кримських татар на повернення на батьківщину?", a: ["Петро Григоренко", "Микола Руденко", "Олесь Бердник", "Михайло Горинь"], c: 0 },
+        { q: "Яку каральну методологію використовував КДБ проти дисидентів, оголошуючи їх божевільними?", a: ["Каральна психотерапія / каральна психіатрія", "Трудова адаптація", "Заสлання за кордон", "Позбавлення пенсій"], c: 0 },
+        { q: "Які події вересня 1965 року в кінотеатрі «Україна» стали першим відкритим протестом проти арештів інтелігенції?", a: ["Премєра фільму «Тіні забутих предків»", "Збори Спілки письменників", "Мітинг у Бабиному Яру", "Тарасова гора"], c: 0 },
+        { q: "Як називалася збірка Вячеслава Чорновола про арештованих дисидентів 1967 року?", a: ["«Лихо з розуму»", "«Інтернаціоналізм чи русифікація?»", "«Палімпсести»", "«Беркут»"], c: 0 },
+        { q: "Хто з художниць-дисиденток була трагічно вбита за нез'ясованих обставин у 1970 році?", a: ["Алла Горська", "Ліна Костенко", "Оксана Пахльовська", "Надія Світлична"], c: 0 }
+      ],
+      hist_theme_17: [
+        { q: "Коли сталася техногенна аварія на Чорнобильській АЕС?", a: ["26 квітня 1986 року", "24 серпня 1991 року", "19 травня 1985 року", "11 березня 1989 року"], c: 0 },
+        { q: "Який енергоблок Чорнобильської АЕС вибухнув під час випробувань?", a: ["Четвертий енергоблок", "Перший енергоблок", "Третій енергоблок", "Другий енергоблок"], c: 0 },
+        { q: "Яке місто супутника Чорнобильської АЕС було повністю евакуйоване й перетворилося на місто-привид?", a: ["Прип'ять", "Славутич", "Чорнобиль", "Іванків"], c: 0 },
+        { q: "Як називалася захисна споруда, зведена над зруйнованим 4-м блоком у 1986 році?", a: ["Об'єкт «Укриття» (Саркофаг)", "Сфера безпеки", "Бетонний купол", "Новий конфайнмент"], c: 0 },
+        { q: "Яке спеціально засноване місто збудували для персоналу ЧАЕС після евакуації Прип'яті?", a: ["Славутич", "Прип'ять", "Українка", "Вишгород"], c: 0 },
+        { q: "Яка була перша реакція радянського керівництва на трагедію у Чорнобилі?", a: ["Замовчування масштабу трагедії та приховування небезпеки від громадян", "Негайна евакуація всієї Європи", "Звернення по допомогу до ООН", "Оголошення воєнного стану"], c: 0 },
+        { q: "Яка площа навколо ЧАЕС була оголошена зоною відчуження?", a: ["30-кілометрова зона", "10-кілометрова зона", "100-кілометрова зона", "50-кілометрова зона"], c: 0 },
+        { q: "Як називали людей, які брали участь у ліквідації наслідків аварії на ЧАЕС?", a: ["Ліквідатори", "Остарбайтери", "Волонтери", "Чорнобильці"], c: 0 },
+        { q: "Яка нова ізоляційна арка (Арка НБК) була насунута на саркофаг у листопаді 2016 року?", a: ["Новий безпечний конфайнмент (НБК)", "Купол-2", "Арка миру", "Щит Чорнобиля"], c: 0 },
+        { q: "Як Чорнобильська катастрофа вплинула на політичну ситуацію в СРСР?", a: ["Підірвала довіру суспільства до комуністичної партії та прискорила розпад СРСР", "Укріпила авторитет КПРС", "Призупинила перебудову", "Призвела до скасування гласності"], c: 0 },
+        { q: "Яка екологічна організація отримала потужний поштовх для розвитку в Україні після 1986 р.?", a: ["«Зелений світ»", "«Народний рух»", "«Меморіал»", "«Просвіта»"], c: 0 },
+        { q: "У якому році Чорнобильську АЕС було остаточно зупинено й знято з експлуатації?", a: ["15 грудня 2000 року", "26 квітня 1986 року", "1 грудня 1991 року", "24 лютого 2022 року"], c: 0 }
+      ],
+      hist_theme_18: [
+        { q: "Коли Верховна Рада УРСР прийняла Акт проголошення незалежності України?", a: ["24 серпня 1991 року", "16 липня 1990 року", "1 грудня 1991 року", "28 червня 1996 року"], c: 0 },
+        { q: "Коли відбувся Всеукраїнський референдум, що підтвердив Акт проголошення незалежності?", a: ["1 грудня 1991 року", "24 серпня 1991 року", "16 липня 1990 року", "25 грудня 1991 року"], c: 0 },
+        { q: "Хто став першим Всенародно обраним Президентом України 1 грудня 1991 року?", a: ["Леонід Кравчук", "В'ячеслав Чорновіл", "Леонід Кучма", "Левко Лук'яненко"], c: 0 },
+        { q: "Хто є автором тексту Акта проголошення незалежності України?", a: ["Левко Лук'яненко", "В'ячеслав Чорновіл", "Леонід Кравчук", "Михайло Горинь"], c: 0 },
+        { q: "Яку назву мала масова громадсько-політична організація, заснована у 1889 р., що очолила визвольний рух?", a: ["Народний Рух України", "Українська Гельсінська спілка", "«Просвіта»", "«Меморіал»"], c: 0 },
+        { q: "Коли було прийнято Декларацію про державний суверенітет України?", a: ["16 липня 1990 року", "24 серпня 1991 року", "1 грудня 1991 року", "28 червня 1996 року"], c: 0 },
+        { q: "Як називалися студенські протести та голодування у Києві на майдані Незалежності у жовтні 1990 року?", a: ["«Революція на граніті»", "Помаранчева революція", "Революція Гідності", "Мовний майдан"], c: 0 },
+        { q: "Який відсоток громадян підтримав Незалежність України на референдумі 1 грудня 1991 року?", a: ["Понад 90%", "51%", "75%", "99%"], c: 0 },
+        { q: "Як називався спроба державного перевороту в Москві 19–21 серпня 1991 р., що прискорила розпад СРСР?", a: ["Серпневий путч (Державний комітет з надзвичайного стану / ДКНС)", "Корніловський заколот", "Карибська криза", "Октябрський переворот"], c: 0 },
+        { q: "Яка угода від 8 грудня 1991 року констатувала припинення існування СРСР та створення СНД?", a: ["Біловезька угода", "Будапештський меморандум", "Варшавська угода", "Ялтинська угода"], c: 0 },
+        { q: "Хто очолював Народний Рух України та посів друге місце на президентських виборах 1991 року?", a: ["В'ячеслав Чорновіл", "Левко Лук'яненко", "Ігор Юхновський", "Олесь Бердник"], c: 0 },
+        { q: "У якому році було прийнято Конституцію суверенної України?", a: ["28 червня 1996 року", "24 серпня 1991 року", "1 грудня 1991 року", "24 серпня 1995 року"], c: 0 }
+      ],
+      hist_theme_19: [
+        { q: "У якому році відбулася Революція Гідності в Україні?", a: ["листопад 2013 — лютий 2014 року", "2004 рік", "2010 рік", "2022 рік"], c: 0 },
+        { q: "Коли Російська Федерація розпочала підлу анексію АР Крим?", a: ["Лютий–березень 2014 року", "24 лютого 2022 року", "16 грудня 2013 року", "12 квітня 2014 року"], c: 0 },
+        { q: "Коли Росія розпочала повномасштабне військове вторгнення в Україну?", a: ["24 лютого 2022 року", "20 лютого 2014 року", "18 березня 2014 року", "24 серпня 2021 року"], c: 0 },
+        { q: "Як називалася військово-оборонна операція України на Донбасі з квітня 2014 року?", a: ["Антитерористична операція (АТО) / ООС", "Операція «Вісла»", "Операція «Захід»", "Миротворча місія"], c: 0 },
+        { q: "Яких героїчних захисників Донецького аеропорту (2014–2015 рр.) прозвали за незламність?", a: ["«Кіборги»", "«Титани»", "«Козаки»", "«Спартанці»"], c: 0 },
+        { q: "Який безпековий документ 1994 року гарантував Україні суверенітет у обмін на відмову від ядерної зброї?", a: ["Будапештський меморандум", "Мінські угоди", "Харківські угоди", "Акт про незалежність"], c: 0 },
+        { q: "Яку назву отримав масовий суспільний рух допомоги армії та біженцям, що виник із 2014 року?", a: ["Волонтерський рух", "Дисидентський рух", "Шістдесятництво", "Страйковий комітет"], c: 0 },
+        { q: "Яке місто-герой стало символом надлюдської стійкості та трагедії у лютому–травні 2022 року?", a: ["Маріуполь (Азовсталь)", "Херсон", "Вінниця", "Полтава"], c: 0 },
+        { q: "У якому місяці 2022 року відбувся блискавичний Слобожанський контрнаступ та деокупація Харківщини?", a: ["Вересень 2022 року", "Лютий 2022 року", "Травень 2022 року", "Грудень 2022 року"], c: 0 },
+        { q: "Коли було деокуповано єдиний обласний центр, захоплений з 24 лютого 2022 року — місто Херсон?", a: ["11 листопада 2022 року", "24 серпня 2022 року", "1 вересня 2022 року", "31 грудня 2022 року"], c: 0 },
+        { q: "Який статус отримала Україна 23 червня 2022 року у відносинах із Європейським Союзом?", a: ["Кандидат на членство в ЄС", "Повноправний член ЄС", "Спостерігач", "Член асоціації НАТО"], c: 0 },
+        { q: "Які державні кордони України визнані міжнародним співтовариством та є метою відновлення суверенітету?", a: ["Кордони 1991 року", "Лінія розмежування 2014 року", "Кордони 1939 року", "Кордони 1954 року"], c: 0 }
+      ]
+    };
+
+    // Алгоритм випадкового перемішування (Fisher-Yates Shuffle)
+    function shuffleArray(arr) {
+      const array = [...arr];
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Стан тестів
+    const activeQuizzes = {};
+
+    function initQuiz(themeId) {
+      const bank = historyQuestionBank[themeId] || historyQuestionBank['hist_theme_1'];
+      // Перемішуємо запитання і вибираємо 12 унікальних
+      const shuffledQuestions = shuffleArray(bank).slice(0, 12).map(qObj => {
+        // Також перемішуємо варіанти відповідей всередині питання
+        const optionsWithIndex = qObj.a.map((opt, idx) => ({ text: opt, isCorrect: idx === qObj.c }));
+        const shuffledOptions = shuffleArray(optionsWithIndex);
+        return {
+          question: qObj.q,
+          options: shuffledOptions.map(o => o.text),
+          correctIndex: shuffledOptions.findIndex(o => o.isCorrect)
+        };
+      });
+
+      activeQuizzes[themeId] = {
+        questions: shuffledQuestions,
+        currentIndex: 0,
+        score: 0,
+        selectedOption: null,
+        completed: false
+      };
+    }
+
+    function renderQuiz(themeId) {
+      const container = document.querySelector(`.quiz-container[data-theme-id="${themeId}"]`);
+      if (!container) return;
+
+      const state = activeQuizzes[themeId];
+
+      if (state.completed) {
+        container.innerHTML = `
+          <div class="quiz-result-box">
+            <div class="quiz-title">🏁 Тест завершено!</div>
+            <div class="quiz-result-score">${state.score} / 12 балів</div>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">Ваш результат збережено та додано до загальної кількості балів навчальної активності.</p>
+            <button class="quiz-restart-btn" onclick="restartQuiz('${themeId}')">🔄 Пройти ще раз</button>
+          </div>
+        `;
+        return;
+      }
+
+      const q = state.questions[state.currentIndex];
+
+      container.innerHTML = `
+        <div class="quiz-title">📝 Інтерактивний перевірочний тест</div>
+        <div class="quiz-progress">Запитання ${state.currentIndex + 1} з 12</div>
+        <div class="quiz-question-text">${q.question}</div>
+        <div class="quiz-options">
+          ${q.options.map((opt, idx) => `
+            <button class="quiz-option-btn ${state.selectedOption === idx ? 'selected' : ''}" onclick="selectQuizOption('${themeId}', ${idx})">
+              ${['А', 'Б', 'В', 'Г'][idx]}) ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <button class="quiz-next-btn" ${state.selectedOption === null ? 'disabled' : ''} onclick="nextQuizQuestion('${themeId}')">
+          ${state.currentIndex === 11 ? 'Завершити тест' : 'Наступне запитання ➔'}
+        </button>
+      `;
+    }
+
+    function selectQuizOption(themeId, optIndex) {
+      activeQuizzes[themeId].selectedOption = optIndex;
+      renderQuiz(themeId);
+    }
+
+    function nextQuizQuestion(themeId) {
+      const state = activeQuizzes[themeId];
+      if (state.selectedOption === null) return;
+
+      const q = state.questions[state.currentIndex];
+      if (state.selectedOption === q.correctIndex) {
+        state.score += 1;
+      }
+
+      state.selectedOption = null;
+
+      if (state.currentIndex < 11) {
+        state.currentIndex += 1;
+      } else {
+        state.completed = true;
+        saveQuizScore(themeId, state.score);
+      }
+
+      renderQuiz(themeId);
+    }
+
+    function restartQuiz(themeId) {
+      initQuiz(themeId);
+      renderQuiz(themeId);
+    }
+
+    // Збереження найкращого результату кожної теми + синхронізація з Firebase
+    function saveQuizScore(themeId, score) {
+      let historyScores = JSON.parse(localStorage.getItem('history_quiz_scores') || '{}');
+      const oldScore = Number(historyScores[themeId]) || 0;
+      const bestScore = Math.max(oldScore, Number(score) || 0);
+
+      historyScores[themeId] = bestScore;
+      localStorage.setItem('history_quiz_scores', JSON.stringify(historyScores));
+
+      const totalHistoryPoints = Object.values(historyScores).reduce((a, b) => a + (Number(b) || 0), 0);
+      localStorage.setItem('total_history_points', totalHistoryPoints);
+
+      if (window.syncHistoryQuizToFirebase) {
+        window.syncHistoryQuizToFirebase(totalHistoryPoints);
+      } else {
+        window.pendingHistoryQuizScore = totalHistoryPoints;
+      }
+    }
+
+    // Ініціалізація всіх тестів при завантаженні сторінки
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.quiz-container').forEach(container => {
+        const themeId = container.getAttribute('data-theme-id');
+        if (themeId) {
+          initQuiz(themeId);
+          renderQuiz(themeId);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -37,289 +37,19 @@
     .nmt-person-body { padding:14px; }
     .nmt-monument img { width:100%; height:170px; object-fit:cover; border-radius:10px; margin-bottom:10px; background:#e2e8f0; }
     .nmt-section-label { font-size:20px; font-weight:800; color:#0f172a; margin:24px 0 12px; }
-
-    /* ================= НМТ: КНОПКИ ТЕСТІВ ================= */
-    .nmt-test-buttons {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:18px;
-      margin:25px 0 35px;
-    }
-    .nmt-test-button {
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:18px;
-      padding:22px 25px;
-      border-radius:18px;
-      text-decoration:none;
-      color:#fff;
-      overflow:hidden;
-      transition:transform .25s ease,box-shadow .25s ease;
-      box-shadow:0 8px 22px rgba(15,23,42,.12);
-    }
-    .nmt-test-button:hover {
-      transform:translateY(-4px);
-      box-shadow:0 14px 30px rgba(15,23,42,.18);
-    }
-    .nmt-test-button .nmt-test-icon { font-size:42px; flex-shrink:0; }
-    .nmt-test-button .nmt-test-text { display:flex; flex-direction:column; gap:5px; }
-    .nmt-test-button strong { font-size:19px; line-height:1.2; }
-    .nmt-test-button span { font-size:13px; opacity:.9; }
-    .nmt-history-button { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
-    .nmt-geography-button { background:linear-gradient(135deg,#059669,#047857); }
-    @media (max-width:650px) {
-      .nmt-test-buttons { grid-template-columns:1fr; }
-      .nmt-test-button { padding:18px 20px; }
-    }
     @media (max-width:600px){ .nmt-library{padding:16px;} .nmt-person img,.nmt-monument img{height:150px;} }
 
   
-    /* ================================================================
-       НМТ — ОНОВЛЕНИЙ ЖИВИЙ ДИЗАЙН
-       Тільки візуальний шар: матеріали та логіка тестів не змінюються.
-       ================================================================ */
-    html { scroll-behavior: smooth; }
-    body {
-      background:
-        radial-gradient(circle at 10% 0%, rgba(37,99,235,.08), transparent 28%),
-        radial-gradient(circle at 90% 12%, rgba(5,150,105,.08), transparent 25%),
-        #f6f9fc;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(14px);
-      background: rgba(255,255,255,.92) !important;
-      box-shadow: 0 8px 30px rgba(15,23,42,.08);
-      border-bottom: 1px solid rgba(148,163,184,.18);
-    }
-    .logo-img { transition: transform .25s ease; }
-    .logo-group:hover .logo-img { transform: rotate(-3deg) scale(1.03); }
+    /* ================= КНОПКИ ТЕСТІВ НА БАНЕРІ НМТ ================= */
+    .nmt-hero-test-buttons { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:18px; }
+    .nmt-hero-test-button { display:inline-flex; align-items:center; gap:9px; padding:12px 18px; border-radius:12px; color:#fff; text-decoration:none; font-weight:800; font-size:14px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.14); box-shadow:0 6px 18px rgba(0,0,0,.18); backdrop-filter:blur(5px); transition:transform .2s ease,background .2s ease,box-shadow .2s ease; }
+    .nmt-hero-test-button:hover { transform:translateY(-2px); background:rgba(255,255,255,.24); box-shadow:0 9px 22px rgba(0,0,0,.24); }
+    .nmt-hero-test-button.history { border-color:rgba(147,197,253,.7); }
+    .nmt-hero-test-button.geography { border-color:rgba(110,231,183,.7); }
+    .nmt-hero-test-button .icon { font-size:21px; line-height:1; }
+    @media (max-width:600px) { .nmt-hero-test-buttons { flex-direction:column; align-items:stretch; } .nmt-hero-test-button { justify-content:center; } }
 
-    .nmt-hero {
-      position: relative;
-      isolation: isolate;
-      min-height: 610px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      background-image: url('hero-banner.jpeg') !important;
-      background-size: cover !important;
-      background-position: center !important;
-      border-radius: 0 0 34px 34px;
-      box-shadow: 0 20px 55px rgba(15,23,42,.20);
-    }
-    .nmt-hero-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        linear-gradient(90deg, rgba(2,6,23,.90) 0%, rgba(2,6,23,.70) 40%, rgba(2,6,23,.18) 72%, rgba(2,6,23,.38) 100%),
-        linear-gradient(180deg, rgba(30,64,175,.18), rgba(2,6,23,.34));
-    }
-    .nmt-hero-content {
-      width: min(1220px, calc(100% - 42px));
-      margin: 0 auto;
-      min-height: 610px;
-      display: grid;
-      grid-template-columns: minmax(0,1.1fr) minmax(330px,.9fr);
-      align-items: center;
-      gap: 20px;
-      position: relative;
-    }
-    .nmt-hero-copy { color: #fff; position: relative; z-index: 4; padding: 35px 0; }
-    .nmt-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.13);
-      border: 1px solid rgba(255,255,255,.28);
-      box-shadow: 0 8px 25px rgba(0,0,0,.14);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      margin-bottom: 16px;
-    }
-    .nmt-hero h1 {
-      font-size: clamp(38px, 5.2vw, 72px) !important;
-      line-height: .98 !important;
-      letter-spacing: -.045em;
-      margin: 0 0 20px !important;
-      text-shadow: 0 8px 30px rgba(0,0,0,.28);
-    }
-    .nmt-hero h1 span {
-      display: inline-block;
-      color: #fbbf24 !important;
-      background: linear-gradient(90deg,#fbbf24,#fde68a);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .nmt-hero .subtitle {
-      max-width: 690px;
-      color: rgba(255,255,255,.93) !important;
-      font-size: clamp(15px,1.6vw,20px) !important;
-      line-height: 1.55;
-      margin-bottom: 12px !important;
-    }
-    .nmt-hero .quote {
-      color: #fde68a !important;
-      font-size: clamp(16px,1.8vw,22px) !important;
-      font-weight: 800;
-      margin-bottom: 24px !important;
-    }
-    .nmt-hero-actions {
-      display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 12px;
-      max-width: 760px;
-    }
-    .nmt-hero-button {
-      min-height: 78px;
-      display: grid;
-      grid-template-columns: 45px 1fr 24px;
-      align-items: center;
-      gap: 11px;
-      padding: 13px 16px;
-      color: #fff !important;
-      text-decoration: none !important;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.25);
-      box-shadow: 0 12px 30px rgba(0,0,0,.22);
-      backdrop-filter: blur(10px);
-      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
-    }
-    .nmt-hero-button:hover {
-      transform: translateY(-5px) scale(1.015);
-      box-shadow: 0 18px 38px rgba(0,0,0,.30);
-      filter: brightness(1.06);
-    }
-    .nmt-hero-history { background: linear-gradient(135deg,rgba(37,99,235,.96),rgba(29,78,216,.82)); }
-    .nmt-hero-geography { background: linear-gradient(135deg,rgba(5,150,105,.96),rgba(4,120,87,.82)); }
-    .nmt-hero-button-icon {
-      width: 45px; height: 45px; display: grid; place-items: center;
-      border-radius: 14px; background: rgba(255,255,255,.15); font-size: 25px;
-    }
-    .nmt-hero-button span:nth-child(2) { display:flex; flex-direction:column; gap:4px; }
-    .nmt-hero-button strong { font-size: 15px; line-height: 1.2; }
-    .nmt-hero-button small { font-size: 11px; opacity: .86; }
-    .nmt-hero-button > b { font-size: 25px; opacity: .85; transition: transform .2s ease; }
-    .nmt-hero-button:hover > b { transform: translateX(4px); }
-
-    .nmt-hero-visual {
-      position: relative;
-      height: 100%;
-      min-height: 610px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-    .nmt-hero-glow {
-      position: absolute;
-      width: 430px; height: 430px;
-      right: 8%; top: 18%;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(251,191,36,.30), rgba(37,99,235,.12) 48%, transparent 70%);
-      filter: blur(8px);
-      animation: nmtGlow 5s ease-in-out infinite alternate;
-    }
-    .nmt-hero-author {
-      position: relative;
-      z-index: 2;
-      width: min(560px, 48vw);
-      max-height: 590px;
-      object-fit: cover;
-      object-position: center top;
-      align-self: end;
-      border-radius: 38% 38% 0 0 / 25% 25% 0 0;
-      filter: drop-shadow(0 25px 28px rgba(0,0,0,.38));
-      mask-image: linear-gradient(to bottom, #000 87%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, #000 87%, transparent 100%);
-    }
-    .nmt-hero-runner {
-      position: absolute;
-      z-index: 3;
-      width: 145px;
-      right: -10px;
-      bottom: 24px;
-      filter: drop-shadow(0 12px 12px rgba(0,0,0,.35));
-      animation: nmtRunner 3.2s ease-in-out infinite;
-    }
-    @keyframes nmtGlow { from { transform: scale(.94); opacity:.7; } to { transform: scale(1.06); opacity:1; } }
-    @keyframes nmtRunner { 0%,100% { transform: translate3d(0,0,0) rotate(0); } 50% { transform: translate3d(-8px,-8px,0) rotate(-2deg); } }
-
-    .main-container { position: relative; z-index: 2; }
-    .export-container {
-      background: linear-gradient(135deg,#ffffff,#eff6ff) !important;
-      border: 1px solid #bfdbfe !important;
-      border-radius: 20px !important;
-      box-shadow: 0 14px 35px rgba(37,99,235,.09) !important;
-    }
-    .btn-export { border-radius: 13px !important; transition: transform .2s ease, box-shadow .2s ease !important; }
-    .btn-export:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(5,150,105,.22) !important; }
-
-    .section-title {
-      box-shadow: 0 8px 20px rgba(15,23,42,.08);
-      border-radius: 14px !important;
-      position: relative;
-      overflow: hidden;
-    }
-    .section-title::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
-      transform: translateX(-100%);
-      animation: nmtShine 7s infinite;
-    }
-    @keyframes nmtShine { 0%,55% { transform:translateX(-100%); } 70%,100% { transform:translateX(100%); } }
-
-    .info-card {
-      border-radius: 18px !important;
-      box-shadow: 0 10px 28px rgba(15,23,42,.055) !important;
-      border: 1px solid #e2e8f0 !important;
-    }
-    .info-card > div > div {
-      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-    }
-    .info-card > div > div:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 18px rgba(15,23,42,.08);
-      background: #fff !important;
-    }
-    .nmt-test-panel {
-      border-radius: 22px !important;
-      background: linear-gradient(145deg,#ffffff,#f8fafc) !important;
-      box-shadow: 0 18px 45px rgba(15,23,42,.09) !important;
-      scroll-margin-top: 95px;
-      overflow: hidden;
-    }
-    .nmt-test-panel h2 { font-size: clamp(22px,3vw,32px); }
-
-    @media (max-width: 850px) {
-      .nmt-hero { min-height: 720px; border-radius: 0 0 24px 24px; }
-      .nmt-hero-content { min-height: 720px; grid-template-columns: 1fr; padding-top: 35px; }
-      .nmt-hero-copy { padding-top: 10px; }
-      .nmt-hero-visual { position:absolute; right:-8%; bottom:-10px; width:62%; min-height:430px; opacity:.48; pointer-events:none; }
-      .nmt-hero-author { width:100%; max-height:460px; }
-      .nmt-hero-runner { width:95px; right:0; bottom:20px; }
-      .nmt-hero-overlay { background: linear-gradient(90deg,rgba(2,6,23,.94),rgba(2,6,23,.78)); }
-    }
-    @media (max-width: 650px) {
-      .nmt-hero { min-height: 780px; }
-      .nmt-hero-content { width:min(100% - 28px,1220px); min-height:780px; }
-      .nmt-hero h1 { font-size: clamp(34px,12vw,52px) !important; }
-      .nmt-hero-actions { grid-template-columns:1fr; }
-      .nmt-hero-button { min-height:72px; }
-      .nmt-hero-visual { width:78%; right:-15%; opacity:.28; }
-      .nmt-hero-runner { width:82px; }
-    }
-
-</style>
+  </style>
 </head>
 <body>
 
@@ -341,34 +71,18 @@
   </header>
 
   <!-- Банер НМТ -->
-  <section class="hero-banner nmt-hero">
-    <div class="nmt-hero-overlay"></div>
-    <div class="nmt-hero-content">
-      <div class="nmt-hero-copy">
-        <div class="nmt-badge">🎓 ПІДГОТОВКА ДО НМТ</div>
-        <h1>МЕГА-ДОВІДНИК ТА ТЕСТИ <span>НМТ</span></h1>
-        <p class="subtitle">200 ключових матеріалів у довіднику + великі інтерактивні тести з історії та географії</p>
-        <p class="quote">“Системність і практика — твій шлях до 200 балів!”</p>
-
-        <div class="nmt-hero-actions" aria-label="Швидкий доступ до тестів НМТ">
-          <a href="#history-nmt-test" class="nmt-hero-button nmt-hero-history">
-            <span class="nmt-hero-button-icon">📜</span>
-            <span><strong>Пройти тест з історії</strong><small>30 запитань • 30 балів</small></span>
-            <b>→</b>
-          </a>
-          <a href="#geography-nmt-test" class="nmt-hero-button nmt-hero-geography">
-            <span class="nmt-hero-button-icon">🌍</span>
-            <span><strong>Пройти тест з географії</strong><small>30 запитань • 30 балів</small></span>
-            <b>→</b>
-          </a>
-        </div>
+  <section class="hero-banner" style="background: linear-gradient(180deg, #d97706 0%, #b45309 60%, #1e293b 100%);">
+    <div class="hero-text">
+      <h1>МЕГА-ДОВІДНИК ТА ТЕСТИ <span>НМТ</span></h1>
+      <p class="subtitle">200 ключових матеріалів у довіднику + великі інтерактивні тести з історії та географії (1 питання = 1 бал)</p>
+      <p class="quote">“Системність і практика — твій шлях до 200 балів!”</p>
+      <div class="nmt-hero-test-buttons">
+        <a href="#history-nmt-test" class="nmt-hero-test-button history"><span class="icon">📜</span><span>Пройти тест з історії</span></a>
+        <a href="#geography-nmt-test" class="nmt-hero-test-button geography"><span class="icon">🌍</span><span>Пройти тест з географії</span></a>
       </div>
-
-      <div class="nmt-hero-visual">
-        <div class="nmt-hero-glow"></div>
-        <img src="author-photo.jpeg" alt="Сергій Мовчан — учитель історії та географії" class="nmt-hero-author">
-        <img src="teacher-runner.png" alt="" class="nmt-hero-runner" aria-hidden="true">
-      </div>
+    </div>
+    <div class="hero-author">
+      <img src="author-photo.jpeg" alt="Сергій Мовчан">
     </div>
   </section>
 
