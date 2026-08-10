@@ -374,6 +374,7 @@
     .student-rank.top-2 { color: #94a3b8; }
     .student-rank.top-3 { color: #b45309; }
     .student-score { background: #2563eb; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px; }
+    .home-score-badge { background:#e0f2fe; color:#0369a1; padding:4px 9px; border-radius:999px; font-weight:800; font-size:12px; white-space:nowrap; }
 
     /* Спеціальний блок: КЛУБ ДОСЛІДНИКІВ */
     .kids-club-section {
@@ -844,7 +845,7 @@
     onValue(leaderboardRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        window.studentsData = Object.values(data);
+        window.studentsData = Object.entries(data || {}).map(([uid, profile]) => ({ ...(profile || {}), uid, score: Number(profile?.score) || 0 }));
         renderLeaderboard();
       } else {
         window.studentsData = [];
