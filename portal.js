@@ -14,6 +14,8 @@ async function login(){try{await signInWithPopup(auth,provider)}catch(e){alert('
 async function logout(){await signOut(auth)}
 window.portalLogin=login;window.portalLogout=logout;
 function toast(msg){const n=$('toast');if(n){n.textContent=msg;n.classList.remove('hidden');setTimeout(()=>n.classList.add('hidden'),2800)}}
+function cacheProfile(){if(user&&profile){try{localStorage.setItem('portal_profile_'+user.uid,JSON.stringify(profile))}catch(e){}}}
+function getCachedProfile(u){try{const x=localStorage.getItem('portal_profile_'+u.uid);return x?JSON.parse(x):null}catch(e){return null}}
 function setRoleUI(){const teacher=profile?.role==='teacher'; document.querySelectorAll('[data-teacher-only]').forEach(e=>e.classList.toggle('hidden',!teacher)); document.querySelectorAll('[data-student-only]').forEach(e=>e.classList.toggle('hidden',teacher)); const role=$('roleText'); if(role) role.textContent=teacher?'Вчитель':'Учень';}
 function renderAll(){renderLessons();renderAssignments();renderResources();renderGrades();renderSubmissions();setRoleUI()}
 function renderLessons(){const box=$('lessonsList');const arr=Object.entries(lessons).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));box.innerHTML=arr.length?arr.map(([id,x])=>`<article class="item"><div class="item-head"><div><span class="pill">${esc(x.subject||'Урок')}</span><h3>${esc(x.title)}</h3></div><span class="pill">${esc(x.grade||'')}</span></div><p>${esc(x.topic||x.description||'')}</p>${x.homework?`<p><b>Д/з:</b> ${esc(x.homework)}</p>`:''}${x.videoUrl?`<p>🎥 <a href="${esc(x.videoUrl)}" target="_blank" rel="noopener">Відео до уроку</a></p>`:''}${x.presentationUrl?`<p>📊 <a href="${esc(x.presentationUrl)}" target="_blank" rel="noopener">Презентація</a></p>`:''}</article>`).join(''):'<div class="empty">Поки що уроків немає. Створіть перший урок у режимі вчителя.</div>'}
@@ -35,15 +37,16 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 
 async function loadProfile(u){
-  // Власник порталу визначається ЛОКАЛЬНО за UID — без очікування Firebase.
-  // Це прибирає зависання «Перевірка ролі…» навіть при повільному DB/Rules.
+  // Власник порталу: роль визначається локально за UID і не залежить від швидкості Firebase.
   if(u.uid===PORTAL_OWNER_UID){
     profile={displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid};
-    setRoleUI();
-    // Синхронізуємо роль у Firebase у фоні, але НЕ блокуємо інтерфейс.
-    update(ref(db,'users/'+u.uid),{displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid}).catch(err=>console.warn('Не вдалося синхронізувати роль власника:',err));
+    cacheProfile(); setRoleUI();
+    update(ref(db,'users/'+u.uid),{displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid}).catch(err=>console.warn('Синхронізація ролі:',err));
     return;
   }
+  // Якщо роль уже відома на цьому пристрої — показуємо її одразу.
+  const cached=getCachedProfile(u);
+  if(cached?.role){ profile={...cached,uid:u.uid}; setRoleUI(); }
   try{
     const snap=await get(ref(db,'users/'+u.uid));
     if(snap.exists()) profile={...snap.val(),uid:u.uid};
@@ -52,13 +55,11 @@ async function loadProfile(u){
       await set(ref(db,'users/'+u.uid),profile);
     }
   }catch(err){
-    // Якщо Firebase тимчасово недоступний, учень все одно отримує робочий кабінет.
     console.warn('Профіль тимчасово недоступний:',err);
-    profile={displayName:u.displayName||'Користувач',email:u.email||'',role:'student',uid:u.uid};
+    if(!profile) profile={displayName:u.displayName||'Користувач',email:u.email||'',role:'student',uid:u.uid};
   }
-  setRoleUI();
+  cacheProfile(); setRoleUI();
 }
-
 onAuthStateChanged(auth,async u=>{
   user=u;
   if(!u){
@@ -79,7 +80,8 @@ onAuthStateChanged(auth,async u=>{
     profile={displayName:u.displayName||'Сергій Мовчан',email:u.email||'',role:'teacher',uid:u.uid};
     setRoleUI();
   }else{
-    const role=$('roleText'); if(role) role.textContent='Завантаження…';
+    const cached=getCachedProfile(u);
+    const role=$('roleText'); if(role) role.textContent=cached?.role==='teacher'?'Вчитель':cached?.role==='student'?'Учень':'Визначення доступу…';
     await loadProfile(u);
   }
 

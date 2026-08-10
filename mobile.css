@@ -1,0 +1,165 @@
+/* =========================================================
+   HISTORY & GEOGRAPHY — MOBILE / RESPONSIVE V6
+   Повноцінна мобільна версія для iPhone та Android.
+   Не стискає десктоп — перебудовує інтерфейс.
+   ========================================================= */
+
+html{overflow-x:hidden;scroll-behavior:smooth}
+body{overflow-x:hidden;-webkit-text-size-adjust:100%;text-rendering:optimizeLegibility}
+img,video,iframe{max-width:100%}
+button,a,input,select,textarea{touch-action:manipulation}
+
+/* Прибираємо декоративне світіння з головного банера */
+.mountain-banner::before,.mountain-banner::after{display:none!important;content:none!important}
+.mountain-banner{box-shadow:none!important}
+
+/* НМТ: контраст */
+.hero-banner .hero-text,.hero-banner .hero-text h1,.hero-banner .hero-text h1 span,
+.hero-banner .hero-text .subtitle,.hero-banner .hero-text .quote{color:#fff!important}
+.hero-banner::before,.hero-banner::after{display:none!important;content:none!important}
+
+/* ---------- Загальна навігація ---------- */
+.mobile-menu-toggle{display:none}
+
+@media(max-width:900px){
+  header{position:relative!important;z-index:1000!important;padding:10px 14px!important;display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important;background:#fff!important}
+  header .logo-group{display:flex!important;align-items:center!important;min-width:0!important;flex:1!important}
+  header .logo-img{width:44px!important;height:44px!important;flex:0 0 44px!important}
+  header .logo-text{font-size:13px!important;line-height:1.05!important;white-space:normal!important;overflow:hidden!important}
+  header .logo-text span{display:block!important;font-size:9px!important;letter-spacing:.08em!important}
+  header nav{order:3!important;width:100%!important;overflow:visible!important}
+  header nav ul{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:6px!important;padding:3px 1px 5px!important;margin:0!important;scrollbar-width:none!important}
+  header nav ul::-webkit-scrollbar{display:none!important}
+  header nav li{flex:0 0 auto!important}
+  header nav a{font-size:12px!important;padding:9px 12px!important;min-height:38px!important;white-space:nowrap!important}
+
+  /* Кабінетна шапка */
+  .portal-nav{position:sticky!important;top:0!important;z-index:2000!important}
+  .portal-nav-inner{padding:9px 12px!important;display:grid!important;grid-template-columns:1fr auto!important;gap:8px!important}
+  .portal-brand{min-width:0!important}
+  .portal-brand img{width:40px!important;height:40px!important}
+  .portal-brand span{font-size:12px!important;line-height:1.05!important}
+  .portal-brand small{font-size:8px!important}
+  .portal-links{grid-column:1/-1!important;display:flex!important;overflow-x:auto!important;gap:6px!important;padding-bottom:2px!important;scrollbar-width:none!important}
+  .portal-links::-webkit-scrollbar{display:none!important}
+  .portal-links a{flex:0 0 auto!important;font-size:12px!important;padding:9px 11px!important;white-space:nowrap!important}
+  .portal-nav #authArea{justify-self:end!important;max-width:180px!important}
+  .user-chip{max-width:180px!important}
+  .user-chip>div{min-width:0!important}
+  .user-chip b{display:block!important;max-width:80px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  .user-chip .role-badge{font-size:8px!important}
+  .user-chip .btn-secondary{padding:8px 11px!important}
+
+  /* Контейнери */
+  .main-container,.container,.portal-shell{width:calc(100% - 24px)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important}
+  .main-container{margin-top:18px!important}
+  .section,.section-block{margin-top:20px!important;margin-bottom:22px!important}
+
+  /* Головний банер */
+  .mountain-banner{min-height:540px!important;padding:58px 20px 38px!important;justify-content:flex-start!important;align-items:flex-start!important;background-position:70% center!important;border-radius:0 0 24px 24px!important}
+  .hero-text-content{width:100%!important;max-width:100%!important;text-align:left!important;margin:0!important}
+  .hero-text-content h1{font-size:clamp(34px,10vw,48px)!important;line-height:.98!important;letter-spacing:-1.8px!important;margin-bottom:18px!important}
+  .hero-text-content .subtitle{font-size:18px!important;line-height:1.35!important;max-width:330px!important}
+  .hero-text-content .quote{font-size:15px!important;line-height:1.45!important;margin-bottom:20px!important}
+  .search-wrapper{width:100%!important;max-width:100%!important}
+  .search-bar-box{width:100%!important;height:58px!important;padding:0 15px!important;border-radius:17px!important;font-size:15px!important}
+  .search-bar-box input{font-size:16px!important;min-width:0!important}
+
+  /* Загальні hero / НМТ */
+  .hero-banner{min-height:460px!important;padding:52px 20px 40px!important;border-radius:0 0 24px 24px!important}
+  .hero-text{width:100%!important;max-width:100%!important;text-align:left!important}
+  .hero-text h1{font-size:clamp(36px,10vw,54px)!important;line-height:.98!important;letter-spacing:-1.6px!important}
+  .hero-text .subtitle{font-size:16px!important;line-height:1.45!important}
+  .hero-text .quote{font-size:14px!important}
+  .hero-author{display:none!important}
+  .nmt-hero-test-buttons{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;width:100%!important}
+  .nmt-hero-test-button{width:100%!important;justify-content:center!important;min-height:48px!important}
+
+  /* НМТ довідник */
+  .nmt-library{margin:20px 0!important;padding:16px!important;border-radius:18px!important}
+  .nmt-library-grid{grid-template-columns:1fr!important}
+  .nmt-tools{display:grid!important;grid-template-columns:1fr!important}
+  .nmt-search,.nmt-filter{width:100%!important;min-width:0!important}
+  .nmt200-hero{padding:26px 18px!important;border-radius:22px!important}
+  .nmt200-hero h2{font-size:32px!important;line-height:1.05!important}
+  .nmt200-hero p{font-size:16px!important}
+  .nmt200-hero button,.nmt200-hero a{width:100%!important;margin:5px 0!important}
+
+  /* Картки та акордеони */
+  .grid-3,.grid-3-tours,.target-audience-grid,.kids-club-grid,.dashboard-grid{grid-template-columns:1fr!important}
+  .info-card,.category-card,.accordion-card,.quiz-container,.panel,.item,.dash-card{border-radius:18px!important}
+  .info-card{padding:20px!important}
+  .accordion-header{padding:16px 17px!important}
+  .accordion-content{padding:16px!important;overflow-wrap:anywhere!important}
+  .quiz-container{padding:16px!important}
+  .quiz-option-btn,.quiz-options label{width:100%!important;text-align:left!important;min-height:46px!important}
+
+  /* Методична скарбничка — контраст */
+  .page-header{padding:26px 20px!important;border-radius:20px!important;background:linear-gradient(135deg,#4b1f13,#7b4a3a)!important;color:#fff!important}
+  .page-header h1{font-size:32px!important;line-height:1.08!important;color:#fff!important}
+  .page-header p{font-size:15px!important;color:#fff!important;opacity:.92!important}
+  .poetry-card{background:linear-gradient(135deg,#2b120b,#5b2d1f)!important;color:#fff!important;padding:24px 20px!important}
+  .poetry-card h2,.poetry-card p,.poetry-card .poetry-text,.poetry-card .poetry-note{color:#fff!important}
+  .poetry-card .poetry-text{font-size:16px!important;line-height:1.85!important;text-align:center!important}
+  .poetry-card .poetry-signature{text-align:center!important;color:#f7c9b8!important}
+
+  /* Кабінет */
+  .portal-hero{grid-template-columns:1fr!important;padding:24px 18px!important;border-radius:22px!important}
+  .portal-hero h1{font-size:clamp(34px,10vw,50px)!important;line-height:1!important}
+  .portal-hero p{font-size:16px!important;line-height:1.55!important}
+  .hero-actions{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+  .hero-actions a{width:100%!important;text-align:center!important}
+  .hero-visual{min-height:210px!important;margin-top:4px!important}
+  .hero-visual img{height:210px!important;border-radius:18px!important}
+  .float-card{font-size:11px!important;padding:9px 11px!important}
+  .fc1{right:4px!important;top:8px!important}.fc2{left:4px!important;bottom:8px!important}
+  .section-head{display:block!important}
+  .section-head h2{font-size:25px!important}
+  .portal-tabs{display:flex!important;overflow-x:auto!important;flex-wrap:nowrap!important;gap:7px!important;padding-bottom:5px!important;scrollbar-width:none!important}
+  .portal-tabs::-webkit-scrollbar{display:none!important}
+  .tab-btn{flex:0 0 auto!important;min-height:44px!important;padding:10px 15px!important;font-size:13px!important}
+  .panel{padding:17px!important}
+  .form-grid{grid-template-columns:1fr!important}
+  .field.full{grid-column:auto!important}
+  .field input,.field textarea,.field select{font-size:16px!important}
+  .form-actions{display:grid!important;grid-template-columns:1fr!important}
+  .form-actions button{width:100%!important;min-height:46px!important}
+  .item-head{display:block!important}
+  .item-head>.pill,.item-head>.grade{margin-top:8px!important}
+  .item p{overflow-wrap:anywhere!important}
+
+  /* Таблиці/вбудовані матеріали */
+  table{display:block!important;overflow-x:auto!important;max-width:100%!important;-webkit-overflow-scrolling:touch}
+  iframe{width:100%!important;max-width:100%!important}
+  .video-container{width:100%!important;aspect-ratio:16/9!important;height:auto!important}
+  .video-container iframe{height:100%!important}
+
+  footer{padding:24px 14px!important;text-align:center!important}
+  footer p{font-size:12px!important;line-height:1.5!important}
+}
+
+@media(max-width:430px){
+  .main-container,.container,.portal-shell{width:calc(100% - 16px)!important}
+  header .logo-img{width:40px!important;height:40px!important;flex-basis:40px!important}
+  header .logo-text{font-size:12px!important}
+  header nav a{font-size:11px!important;padding:8px 10px!important}
+  .mountain-banner{min-height:535px!important;padding:48px 17px 30px!important;background-position:68% center!important}
+  .hero-text-content h1{font-size:36px!important}
+  .hero-text-content .subtitle{font-size:17px!important}
+  .hero-banner{min-height:440px!important;padding:45px 17px 30px!important}
+  .hero-text h1{font-size:36px!important}
+  .page-header h1{font-size:29px!important}
+  .portal-shell{margin-top:16px!important}
+  .portal-hero{padding:22px 16px!important}
+  .portal-hero h1{font-size:34px!important}
+}
+
+@media(max-width:360px){
+  .mountain-banner{min-height:510px!important}
+  .hero-text-content h1,.hero-text h1{font-size:32px!important}
+  .hero-text-content .subtitle{font-size:16px!important}
+  .portal-brand span{font-size:11px!important}
+  .tab-btn{font-size:12px!important;padding-left:12px!important;padding-right:12px!important}
+}
+/* NMT — заголовки банерів завжди читабельні */
+.hero-banner .hero-text h1,.hero-banner .hero-text h1 span,.hero-banner .hero-text .subtitle,.hero-banner .hero-text .quote{color:#fff!important;text-shadow:0 2px 10px rgba(0,0,0,.35)!important}
