@@ -231,3 +231,19 @@ footer .footer-teacher-line{
 .poetry-card h3 i{
   color:#fff !important;
 }
+
+
+/* V5 — only requested change: rounded brown NMT directory banner */
+.nmt200-hero {
+  border-radius: 30px !important;
+}
+
+/* V6 — only requested change: hide search from the main hero.
+   Search functionality remains intact elsewhere. */
+.hero .hero-search,
+.hero-banner .hero-search,
+.hero .search-box,
+.hero-banner .search-box,
+.hero-search {
+  display: none !important;
+}
