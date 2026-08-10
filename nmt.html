@@ -72,6 +72,19 @@
     </div>
   </section>
 
+    <section class="nmt-library" id="nmt-library">
+      <h2>🎓 Великий довідник НМТ</h2>
+      <p class="nmt-library-sub">Дати, терміни, поняття, історичні постаті та пам’ятки. Матеріали збережені окремо від тестів — тести й синхронізація не змінені.</p>
+      <div class="nmt-tools">
+        <input id="nmt-search" class="nmt-search" type="search" placeholder="🔎 Пошук: Мазепа, 1648, бароко, Софія..." oninput="renderNmtLibrary()">
+        <select id="nmt-filter" class="nmt-filter" onchange="renderNmtLibrary()">
+          <option value="all">Усе</option><option value="dates">📅 Дати</option><option value="terms">📖 Терміни</option><option value="people">👤 Постать + фото</option><option value="monuments">🏛️ Пам’ятки + фото</option>
+        </select>
+      </div>
+      <div id="nmt-library-count" class="nmt-count"></div>
+      <div id="nmt-library-content"></div>
+    </section>
+
   <!-- Основний контент -->
   <main class="main-container">
 
@@ -290,18 +303,7 @@
 
     <!-- ================= БЛОК 3: ІНТЕРАКТИВНИЙ ТЕСТ З ІСТОРІЇ (30 ЗАПИТАНЬ) ================= -->
 
-    <section class="nmt-library" id="nmt-library">
-      <h2>🎓 Великий довідник НМТ</h2>
-      <p class="nmt-library-sub">Дати, терміни, поняття, історичні постаті та пам’ятки. Матеріали збережені окремо від тестів — тести й синхронізація не змінені.</p>
-      <div class="nmt-tools">
-        <input id="nmt-search" class="nmt-search" type="search" placeholder="🔎 Пошук: Мазепа, 1648, бароко, Софія..." oninput="renderNmtLibrary()">
-        <select id="nmt-filter" class="nmt-filter" onchange="renderNmtLibrary()">
-          <option value="all">Усе</option><option value="dates">📅 Дати</option><option value="terms">📖 Терміни</option><option value="people">👤 Постать + фото</option><option value="monuments">🏛️ Пам’ятки + фото</option>
-        </select>
-      </div>
-      <div id="nmt-library-count" class="nmt-count"></div>
-      <div id="nmt-library-content"></div>
-    </section>
+
 
     <div class="global-test-container" style="border-color: #2563eb;">
       <h2 style="color: #2563eb; text-align: center; margin-bottom: 10px;">📜 ІНТЕРАКТИВНИЙ ТЕСТ З ІСТОРІЇ (30 ЗАПИТАНЬ)</h2>
