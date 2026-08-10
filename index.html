@@ -771,6 +771,11 @@
             });
           } else {
             const currentData = snapshot.val();
+            update(userRef, {
+              name: currentData.name || user.displayName || 'Учень',
+              email: currentData.email || user.email || '',
+              role: user.uid === PORTAL_OWNER_UID ? 'teacher' : (currentData.role || 'student')
+            });
             if (user.uid === PORTAL_OWNER_UID && currentData.role !== 'teacher') {
               update(userRef, { role: 'teacher', name: user.displayName, email: user.email || '' });
             }
@@ -890,19 +895,56 @@
     };
 
     window.addPointsToFirebase = function(points) {
-      if (!window.currentUserUid) return alert('Увійдіть у систему за допомогою Google, щоб зберігати бали!');
-      
+      if (!window.currentUserUid) {
+        alert('Увійдіть у систему за допомогою Google, щоб зберігати бали!');
+        return;
+      }
+
+      const safePoints = Math.max(0, Number(points) || 0);
+      if (!safePoints) return;
+
       const userRef = ref(database, 'users/' + window.currentUserUid);
       get(userRef).then((snapshot) => {
-        let currentScore = 0;
-        if (snapshot.exists()) {
-          currentScore = snapshot.val().score || 0;
-        }
-        update(userRef, {
-          name: window.currentStudent,
-          score: currentScore + points
+        const data = snapshot.exists() ? (snapshot.val() || {}) : {};
+        const currentScore = Number(data.score) || 0;
+        const currentTruth = Number(data.truth_or_lie_points) || 0;
+
+        return update(userRef, {
+          name: data.name || window.currentStudent || 'Учень',
+          email: data.email || '',
+          role: data.role || (window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student'),
+          truth_or_lie_points: currentTruth + safePoints,
+          score: currentScore + safePoints
         });
+      }).catch(error => {
+        console.error('Правда чи Брехня: Firebase:', error);
       });
+    };
+
+    // Окремо синхронізуємо найкращий результат Dino Runner.
+    // У загальний рейтинг потрапляє тільки приріст від нового рекорду,
+    // щоб повторний запуск гри не накручував бали.
+    window.syncDinoScoreToFirebase = function(points) {
+      if (!window.currentUserUid) return;
+
+      const best = Math.max(0, Number(points) || 0);
+      if (!best) return;
+
+      const userRef = ref(database, 'users/' + window.currentUserUid);
+      return import('https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js')
+        .then(({ runTransaction }) => runTransaction(userRef, (data) => {
+          data = data || {};
+          const oldBest = Number(data.dino_best_score) || 0;
+          const delta = Math.max(0, best - oldBest);
+
+          if (best > oldBest) {
+            data.dino_best_score = best;
+            data.score = (Number(data.score) || 0) + delta;
+          }
+          data.name = data.name || window.currentStudent || 'Учень';
+          data.role = data.role || (window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student');
+          return data;
+        }));
     };
   </script>
 
@@ -1098,6 +1140,12 @@
         dinoGameRunning = false;
         if (speedInterval) clearInterval(speedInterval);
 
+        if (typeof window.syncDinoScoreToFirebase === 'function') {
+          window.syncDinoScoreToFirebase(dinoScore).catch(error => {
+            console.error('Dino Runner: Firebase:', error);
+          });
+        }
+
         if (dinoScore > dinoHighScore) {
           dinoHighScore = dinoScore;
           localStorage.setItem('dino_high_score', dinoHighScore);
@@ -1144,20 +1192,45 @@
     window.studentsData = window.studentsData || [];
 
     function renderLeaderboard() {
-      window.studentsData.sort((a, b) => b.score - a.score);
       const listContainer = document.getElementById('leaderboardList');
       if (!listContainer) return;
+
+      // У рейтингу показуємо тільки учнів. Учительський акаунт не займає місце в рейтингу.
+      const students = (window.studentsData || [])
+        .filter(student => student && student.role !== 'teacher' && (student.name || student.email))
+        .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+
       listContainer.innerHTML = '';
-      window.studentsData.forEach((student, index) => {
-        let rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
-        const isMe = student.name === window.currentStudent ? 'current-user' : '';
+
+      if (!students.length) {
+        listContainer.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Поки що немає результатів учнів.</span></div></div>';
+        return;
+      }
+
+      students.forEach((student, index) => {
+        const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
+        const isMe = student.uid === window.currentUserUid ||
+          (student.name && student.name === window.currentStudent);
+        const score = Number(student.score) || 0;
+        const hist = Number(student.total_history_points) || 0;
+        const geo = Number(student.total_geography_points) || 0;
+        const nmtHist = Number(student.nmt_history_score) || 0;
+        const nmtGeo = Number(student.nmt_geography_score) || 0;
+        const truth = Number(student.truth_or_lie_points) || 0;
+        const dino = Number(student.dino_best_score) || 0;
+
         listContainer.innerHTML += `
-          <div class="leaderboard-item ${isMe}">
+          <div class="leaderboard-item ${isMe ? 'current-user' : ''}">
             <div class="student-info">
               <span class="student-rank ${rankClass}">#${index + 1}</span>
-              <span>${student.name} ${isMe ? '(Ви)' : ''}</span>
+              <div>
+                <span>${student.name || 'Учень'} ${isMe ? '(Ви)' : ''}</span>
+                <div style="font-size:11px;color:#64748b;margin-top:3px;">
+                  Іст. ${hist} • Геогр. ${geo} • НМТ ${nmtHist + nmtGeo} • Гра ${truth} • 🦖 ${dino}
+                </div>
+              </div>
             </div>
-            <span class="student-score">${student.score} балів</span>
+            <span class="student-score">${score} балів</span>
           </div>
         `;
       });

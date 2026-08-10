@@ -557,3 +557,21 @@ button,a,input,select,textarea{touch-action:manipulation}
   body:not(.portal) header nav li:nth-child(5) a,
   body:not(.portal) header nav li:nth-child(6) a{font-size:11.5px!important}
 }
+
+
+/* === FINAL BANNER EDGE FIX ===
+   Банери порталу мають залишатися прямокутними на ПК та мобільних.
+   Це правило має пріоритет над попередніми темами. */
+.mountain-banner,
+.hero-banner,
+.page-banner,
+.page-hero,
+.nmt-hero,
+.nmt200-hero,
+.portal-hero,
+.nmt-library-banner,
+.methodology-banner,
+.banner,
+[class*="banner"] {
+  border-radius: 0 !important;
+}

@@ -288,3 +288,21 @@ header nav ul::-webkit-scrollbar{display:none}
   footer{padding:28px 14px!important;text-align:center!important}
   footer p{font-size:13px!important;line-height:1.5!important}
 }
+
+
+/* === FINAL BANNER EDGE FIX ===
+   Банери порталу мають залишатися прямокутними на ПК та мобільних.
+   Це правило має пріоритет над попередніми темами. */
+.mountain-banner,
+.hero-banner,
+.page-banner,
+.page-hero,
+.nmt-hero,
+.nmt200-hero,
+.portal-hero,
+.nmt-library-banner,
+.methodology-banner,
+.banner,
+[class*="banner"] {
+  border-radius: 0 !important;
+}

@@ -184,3 +184,21 @@ body.portal .portal-shell{max-width:1240px!important}
 .hero-text-content,.info-card,.leaderboard-section,.virtual-tour-card,.kids-club-section,.target-audience-section{animation:none!important}
 .user-login-btn{animation:none!important}
 .v4-build-badge{display:inline-block;margin-left:8px;padding:4px 7px;border-radius:999px;background:#eef4ff;color:#1d4ed8;font-size:10px;letter-spacing:.08em;font-weight:900}
+
+
+/* === FINAL BANNER EDGE FIX ===
+   Банери порталу мають залишатися прямокутними на ПК та мобільних.
+   Це правило має пріоритет над попередніми темами. */
+.mountain-banner,
+.hero-banner,
+.page-banner,
+.page-hero,
+.nmt-hero,
+.nmt200-hero,
+.portal-hero,
+.nmt-library-banner,
+.methodology-banner,
+.banner,
+[class*="banner"] {
+  border-radius: 0 !important;
+}
