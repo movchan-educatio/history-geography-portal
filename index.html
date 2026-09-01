@@ -973,9 +973,93 @@
       renderRealtimeLeaderboard();
     });
 
-    // Синхронізація тижня: не видаляємо учнів і не втрачаємо загальні бали.
+    // Тижневий цикл: у неділю 12:00 фіксуємо переможця і одноразово видаємо +2
+    // до бонусних балів для журналу. У понеділок 00:00 відкривається новий тиждень.
+    async function finalizeSundayWinner() {
+      const now = new Date();
+      if (now.getDay() !== 0 || now.getHours() < 12) return;
+
+      const currentWeek = getWeekKey(now);
+      const winnerRef = ref(database, `weeklyWinners/${currentWeek}`);
+      const existingWinner = await get(winnerRef);
+      if (existingWinner.exists() && existingWinner.val()?.bonusAwarded) return;
+
+      const usersSnap = await get(ref(database, 'users'));
+      const users = usersSnap.val() || {};
+      const students = Object.entries(users)
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher')
+        .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
+        .filter(p => p.name || p.displayName || p.email)
+        .sort((a, b) => b.week_score - a.week_score);
+      const winner = students[0];
+      if (!winner || winner.week_score <= 0) return;
+
+      let claimed = false;
+      const tx = await runTransaction(winnerRef, old => {
+        if (old && old.bonusAwarded) {
+          claimed = false;
+          return old;
+        }
+        claimed = true;
+        return {
+          uid: winner.uid,
+          name: winner.name || winner.displayName || winner.email || 'Учень',
+          points: winner.week_score,
+          bonus: 2,
+          bonusAwarded: true,
+          savedAt: Date.now()
+        };
+      });
+
+      if (tx.committed && claimed) {
+        // +2 — реальний бонус до оцінки в журналі. Він видається лише один раз
+        // за конкретний тиждень; повторне відкриття сайту його не дублює.
+        const updates = {};
+        updates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
+        updates[`users/${winner.uid}/journal_bonus_points`] = (Number(winner.journal_bonus_points) || 0) + 2;
+        updates[`users/${winner.uid}/weekly_bonus_history/${currentWeek}`] = {
+          points: 2,
+          reason: 'Переможець тижневого рейтингу',
+          week: currentWeek,
+          awardedAt: Date.now()
+        };
+        await update(ref(database), updates);
+      }
+    }
+
+    function updateSundayWinnerPanelFromSaved() {
+      const panel = document.getElementById('weeklyWinnerPanel');
+      const nameEl = document.getElementById('weeklyWinnerName');
+      const pointsEl = document.getElementById('weeklyWinnerPoints');
+      if (!panel || !nameEl || !pointsEl) return;
+      const now = new Date();
+      if (now.getDay() !== 0 || now.getHours() < 12) {
+        panel.style.display = 'none';
+        return;
+      }
+      get(ref(database, `weeklyWinners/${getWeekKey(now)}`)).then(snap => {
+        const winner = snap.val();
+        if (!winner || !winner.uid) {
+          panel.style.display = 'none';
+          return;
+        }
+        nameEl.textContent = `🥇 ${winner.name || 'Учень'}`;
+        pointsEl.textContent = `${Number(winner.points) || 0} балів за цей тиждень • ⭐ +2 до оцінки в журналі`;
+        panel.style.display = 'block';
+      }).catch(() => {});
+    }
+
+    // Виконуємо фіксацію переможця при відкритті та регулярно перевіряємо недільне вікно.
+    finalizeSundayWinner().then(updateSundayWinnerPanelFromSaved).catch(error => console.error('Переможець тижня:', error));
+    setInterval(() => {
+      finalizeSundayWinner().then(updateSundayWinnerPanelFromSaved).catch(error => console.error('Переможець тижня:', error));
+    }, 60000);
+
+    // Після завершення неділі починається новий тиждень. Переможець попереднього
+    // тижня вже зафіксований у weeklyWinners і повторно бонус не отримує.
     async function ensureCurrentWeek() {
-      const currentWeek = getWeekKey();
+      const now = new Date();
+      const currentWeek = getWeekKey(now);
       const systemRef = ref(database, 'system/currentWeek');
       const snap = await get(systemRef);
       const stored = snap.exists() ? snap.val() : null;
@@ -985,24 +1069,53 @@
       }
       if (stored === currentWeek) return;
 
-      // Переходимо на новий тиждень тільки через один transaction-прапорець.
-      const claim = await runTransaction(systemRef, old => old === stored ? currentWeek : old);
-      if (!claim.committed || claim.snapshot.val() !== currentWeek) return;
-
+      // Якщо сайт відкрили вже в новому тижні, спочатку гарантуємо фіксацію
+      // переможця попереднього тижня, а потім обнуляємо тільки тижневі поля.
       const usersSnap = await get(ref(database, 'users'));
       const users = usersSnap.val() || {};
+      const previousWeek = stored;
       const students = Object.entries(users)
         .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher')
         .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
         .sort((a, b) => b.week_score - a.week_score);
       const winner = students[0];
-      const previousWeek = stored;
-      const updates = {};
 
       if (winner && winner.week_score > 0) {
-        updates[`weeklyWinners/${previousWeek}`] = { uid: winner.uid, name: winner.name || 'Учень', points: winner.week_score, bonus: 2, savedAt: Date.now() };
-        updates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
+        const winnerRef = ref(database, `weeklyWinners/${previousWeek}`);
+        let claimed = false;
+        const tx = await runTransaction(winnerRef, old => {
+          if (old && old.bonusAwarded) {
+            claimed = false;
+            return old;
+          }
+          claimed = true;
+          return {
+            uid: winner.uid,
+            name: winner.name || winner.displayName || winner.email || 'Учень',
+            points: winner.week_score,
+            bonus: 2,
+            bonusAwarded: true,
+            savedAt: Date.now()
+          };
+        });
+        if (tx.committed && claimed) {
+          const bonusUpdates = {};
+          bonusUpdates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
+          bonusUpdates[`users/${winner.uid}/journal_bonus_points`] = (Number(winner.journal_bonus_points) || 0) + 2;
+          bonusUpdates[`users/${winner.uid}/weekly_bonus_history/${previousWeek}`] = {
+            points: 2,
+            reason: 'Переможець тижневого рейтингу',
+            week: previousWeek,
+            awardedAt: Date.now()
+          };
+          await update(ref(database), bonusUpdates);
+        }
       }
+
+      const claim = await runTransaction(systemRef, old => old === stored ? currentWeek : old);
+      if (!claim.committed || claim.snapshot.val() !== currentWeek) return;
+
+      const updates = {};
       Object.keys(users).forEach(uid => {
         if (uid !== PORTAL_OWNER_UID && users[uid]) {
           updates[`users/${uid}/week_score`] = 0;
