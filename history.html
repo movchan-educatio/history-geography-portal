@@ -190,8 +190,7 @@
   <link rel="stylesheet" href="modern-theme.css?v=300">
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
-  <link rel="stylesheet" href="premium-design.css?v=8">
-  <script type="module" src="portal-score.js"></script>
+  <link rel="stylesheet" href="premium-design.css?v=20260902">
 </head>
 <body>
 
@@ -900,7 +899,73 @@
   </main>
 
   
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+    authDomain: "movchan-portal.firebaseapp.com",
+    databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "movchan-portal",
+    storageBucket: "movchan-portal.firebasestorage.app",
+    messagingSenderId: "535915495927",
+    appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
+    measurementId: "G-8XBVKRZRS1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
+
+  function getCurrentWeekKey() {
+    const d = new Date(); const day = d.getDay() || 7;
+    d.setDate(d.getDate() + 4 - day);
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+  }
+
+  window.awardHistoryQuizScore = async function(themeId, score) {
+    const target = Math.max(0, Number(score) || 0);
+    if (!currentUser || !themeId || target <= 0) return false;
+    try {
+      await runTransaction(ref(database, 'users/' + currentUser.uid), data => {
+        data = data || {}; data.name = data.name || currentUser.displayName || 'Учень';
+        let globalMap = data.history_quiz_best_by_theme || {};
+        const oldTotal = Number(data.total_history_points) || 0;
+        if (Object.keys(globalMap).length === 0 && oldTotal > 0) globalMap.__legacy = oldTotal;
+        const oldGlobal = Number(globalMap[themeId]) || 0;
+        const globalBest = Math.max(oldGlobal, target);
+        const globalDelta = globalBest - oldGlobal; globalMap[themeId] = globalBest;
+        const currentWeek = getCurrentWeekKey();
+        let weekMap = data.week_history_quiz_best_by_theme || {};
+        if (data.history_quiz_week_key !== currentWeek) weekMap = {};
+        const oldWeek = Number(weekMap[themeId]) || 0;
+        const weekBest = Math.max(oldWeek, target);
+        const weekDelta = weekBest - oldWeek; weekMap[themeId] = weekBest;
+        data.history_quiz_best_by_theme = globalMap; data.week_history_quiz_best_by_theme = weekMap; data.history_quiz_week_key = currentWeek;
+        data.total_history_points = Object.values(globalMap).reduce((sum, v) => sum + (Number(v) || 0), 0);
+        data.score = (Number(data.score) || 0) + globalDelta;
+        data.week_history_points = (Number(data.week_history_points) || 0) + weekDelta;
+        data.week_score = (Number(data.week_history_points)||0)+(Number(data.week_geography_points)||0)+(Number(data.week_nmt_history_score)||0)+(Number(data.week_nmt_geography_score)||0)+(Number(data.week_truth_or_lie_points)||0);
+        return data;
+      });
+      console.log('Історія: тест зараховано', themeId, target); return true;
+    } catch (error) { console.error('Історія: помилка нарахування тесту', error); return false; }
+  };
+
+  async function waitForHistoryAuthAndAward(themeId, score) {
+    for (let i=0; i<24 && !currentUser; i++) await new Promise(r=>setTimeout(r,250));
+    if (!currentUser) { console.warn('Історія: учень не авторизований.'); return false; }
+    return window.awardHistoryQuizScore(themeId, score);
+  }
+
+  onAuthStateChanged(auth, user => { currentUser = user; });
+
+</script>
 
 <script>
     function toggleAccordion(header) {
@@ -1286,13 +1351,21 @@
       renderQuiz(themeId);
     }
 
-    // Кожне завершене проходження додає весь отриманий результат.
+    // Збереження найкращого результату кожної теми + синхронізація з Firebase
     function saveQuizScore(themeId, score) {
-      const points = Math.max(0, Number(score) || 0);
-      let historyTotal = Number(localStorage.getItem('total_history_points') || 0);
-      historyTotal += points;
-      localStorage.setItem('total_history_points', historyTotal);
-      window.awardHistoryQuizScore(themeId, points);
+      let historyScores = JSON.parse(localStorage.getItem('history_quiz_scores') || '{}');
+      const oldScore = Number(historyScores[themeId]) || 0;
+      const bestScore = Math.max(oldScore, Number(score) || 0);
+
+      historyScores[themeId] = bestScore;
+      localStorage.setItem('history_quiz_scores', JSON.stringify(historyScores));
+
+      const totalHistoryPoints = Object.values(historyScores).reduce((a, b) => a + (Number(b) || 0), 0);
+      localStorage.setItem('total_history_points', totalHistoryPoints);
+
+      // Нараховуємо саме результат завершеної теми у Firebase.
+      // Не покладаємося лише на localStorage/загальний total.
+      waitForHistoryAuthAndAward(themeId, Number(score) || 0);
     }
 
     // Ініціалізація всіх тестів при завантаженні сторінки

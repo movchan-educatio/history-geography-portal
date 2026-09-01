@@ -1,249 +1,212 @@
-/* PREMIUM EDUCATIONAL REDESIGN — VISUAL ONLY. Content, JS and Firebase are preserved. */
-:root{--hg-navy:#06192d;--hg-navy2:#0a263e;--hg-ink:#171d2d;--hg-brown:#3b1c12;--hg-gold:#f3ad16;--hg-blue:#1687df;--hg-cream:#f7f1ea;--hg-paper:#fffdf9;--hg-line:#eaded3;--hg-muted:#746b66;--hg-shadow:0 14px 38px rgba(52,31,20,.10)}
-html{scroll-behavior:smooth;background:var(--hg-cream)!important}
-body{background:radial-gradient(circle at 8% 20%,rgba(222,195,175,.20),transparent 26%),radial-gradient(circle at 92% 70%,rgba(236,210,191,.18),transparent 25%),linear-gradient(180deg,#fffdfa 0%,#f8f2ec 52%,#f4eee8 100%)!important;color:var(--hg-ink)!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;overflow-x:hidden}
-body:before{display:none!important}
-header{position:sticky!important;top:0!important;z-index:10000!important;width:100%!important;min-height:72px!important;padding:9px clamp(16px,6vw,86px)!important;display:flex!important;align-items:center!important;gap:26px!important;background:rgba(4,20,36,.97)!important;border-bottom:1px solid rgba(255,255,255,.10)!important;box-shadow:0 8px 28px rgba(0,0,0,.20)!important;backdrop-filter:blur(14px)!important}
-.logo-group{display:flex!important;align-items:center!important;gap:11px!important;color:#fff!important;text-decoration:none!important;flex-shrink:0!important}
-.logo-img{width:45px!important;height:45px!important;border-radius:12px!important;border:1px solid rgba(255,255,255,.24)!important;box-shadow:none!important;filter:none!important}
-.logo-img:hover{transform:none!important;box-shadow:none!important}
-.logo-text{color:#fff!important;font-size:14px!important;line-height:1.05!important;font-weight:850!important}
-.logo-text span{color:#cfd7df!important;display:block!important;margin-top:4px!important;font-size:9px!important;letter-spacing:1.4px!important}
-nav{margin-left:auto!important;flex:0 1 auto!important}
-nav ul{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:3px!important;margin:0!important;padding:0!important;list-style:none!important}
-nav a{display:block!important;padding:10px 13px!important;border-radius:10px!important;color:#f2f5f8!important;background:transparent!important;font-size:14px!important;font-weight:700!important;text-decoration:none!important;white-space:nowrap!important;transition:background .18s,color .18s!important}
-nav a:hover{background:rgba(255,255,255,.09)!important;color:#fff!important;transform:none!important}
-nav a.active{color:#fff!important;background:rgba(255,255,255,.08)!important;box-shadow:inset 0 -2px 0 var(--hg-gold)!important}
-.traveler-container,.traveler-svg{display:none!important}
-.main-container{width:min(1200px,calc(100% - 40px))!important;margin:0 auto!important;padding-top:34px!important;padding-bottom:40px!important}
-.section-title{color:var(--hg-brown)!important;background:transparent!important;font-weight:850!important;font-size:24px!important;text-align:left!important;padding:0!important;margin:30px 0 16px!important;letter-spacing:-.025em!important}
-.mountain-banner{position:relative!important;min-height:480px!important;margin:0 0 34px!important;padding:74px clamp(24px,7vw,100px)!important;border-radius:0 0 28px 28px!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;background:linear-gradient(90deg,rgba(3,19,34,.96) 0%,rgba(3,19,34,.86) 40%,rgba(3,19,34,.42) 72%,rgba(3,19,34,.20) 100%),url("hero-banner.jpeg") center/cover no-repeat!important;box-shadow:0 18px 45px rgba(22,25,28,.18)!important}
-.mountain-banner .hero-text-content{position:relative!important;z-index:2!important;max-width:720px!important;margin-left:0!important}
-.mountain-banner h1{color:#fff!important;font-size:clamp(42px,6vw,76px)!important;line-height:.97!important;letter-spacing:-.045em!important;margin:0 0 16px!important;text-shadow:0 3px 12px rgba(0,0,0,.30)!important}
-.mountain-banner h1 span{color:#f5b51b!important}.mountain-banner .subtitle,.mountain-banner .quote{color:#f4f5f6!important;text-shadow:0 2px 6px rgba(0,0,0,.35)!important}
-.search-bar-box{max-width:620px!important;margin-top:24px!important;background:rgba(255,255,255,.96)!important;border:1px solid rgba(255,255,255,.75)!important;border-radius:15px!important;box-shadow:0 12px 28px rgba(0,0,0,.18)!important}
-.search-bar-box:focus-within{transform:none!important;box-shadow:0 12px 28px rgba(0,0,0,.20)!important}
-.hero-banner{position:relative!important;min-height:398px!important;margin:0!important;padding:50px clamp(28px,7vw,115px)!important;border-radius:0 0 28px 28px!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:space-between!important;background:linear-gradient(90deg,rgba(2,18,31,.98) 0%,rgba(2,18,31,.90) 43%,rgba(2,18,31,.56) 70%,rgba(2,18,31,.26) 100%),url("hero-banner.jpeg") center/cover no-repeat!important;box-shadow:0 12px 34px rgba(0,0,0,.18)!important}
-.hero-banner .hero-text{position:relative!important;z-index:3!important;max-width:720px!important}
-.hero-banner .hero-text h1{color:#fff!important;font-size:clamp(38px,5vw,62px)!important;line-height:.94!important;letter-spacing:-.035em!important;margin:0 0 16px!important;text-shadow:0 3px 10px rgba(0,0,0,.25)!important}
-.hero-banner .hero-text h1 span{color:#ffb20e!important;display:block!important}.hero-banner .subtitle{color:#f7f7f7!important;max-width:650px!important;font-size:18px!important;line-height:1.35!important}.hero-banner .quote{color:#f1f1f1!important}
-.hero-author{position:relative!important;z-index:3!important;margin-right:clamp(0px,2vw,35px)!important;flex:0 0 auto!important}.hero-author img{width:205px!important;height:205px!important;object-fit:cover!important;border-radius:50%!important;border:5px solid #fff!important;box-shadow:0 12px 30px rgba(0,0,0,.30)!important}
-.nmt-hero-test-buttons{display:flex!important;gap:16px!important;flex-wrap:wrap!important;margin-top:26px!important}
-.nmt-hero-test-button{min-height:54px!important;padding:0 25px!important;border-radius:13px!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:none!important;font-size:16px!important;font-weight:800!important;transition:transform .18s,filter .18s!important}
-.nmt-hero-test-button:hover{transform:translateY(-1px)!important;filter:brightness(1.05)!important}
-.info-card,.audience-card,.leaderboard-section,.virtual-tour-card,.dino-game-card,.quiz-card,.methodology-card,.section-card,.content-card,.section-block,.accordion-card,.page-header,.nmt-library,.nmt-results-widget,.export-container{background:rgba(255,253,249,.96)!important;border:1px solid var(--hg-line)!important;border-radius:20px!important;box-shadow:var(--hg-shadow)!important}
-.info-card h1,.info-card h2,.info-card h3,.info-card h4,.audience-card h3,.audience-card h4,.page-header h1,.page-header h2{color:var(--hg-brown)!important}
-.info-card p,.info-card li,.audience-card p,.audience-card li{color:#5e5651!important}
-.grid-3,.grid-3-tours,.target-audience-grid,.kids-club-grid{gap:18px!important}
-.virtual-tour-card{min-height:130px!important;transition:transform .18s,box-shadow .18s!important}.virtual-tour-card:hover{transform:translateY(-2px)!important;box-shadow:0 16px 36px rgba(52,31,20,.13)!important}
-.leaderboard-section{overflow:hidden!important}.leaderboard-header{background:linear-gradient(135deg,#fffaf5,#f5e9df)!important;border-bottom:1px solid var(--hg-line)!important}.leaderboard-header h3{color:var(--hg-brown)!important}
-.user-login-input{background:#fff!important;border:1px solid #ddcec3!important;border-radius:11px!important}.user-login-btn{background:#152d43!important;color:#fff!important;border-radius:11px!important;box-shadow:none!important}
-button,.btn,.btn-link,.modal-close-btn,.btn-export{border-radius:11px!important;box-shadow:none!important;transition:transform .16s,filter .16s,background .16s!important}
-button:hover,.btn:hover,.btn-link:hover,.modal-close-btn:hover,.btn-export:hover{transform:translateY(-1px)!important;filter:brightness(1.03)!important}
-main.main-container>h1{color:var(--hg-brown)!important;letter-spacing:-.035em!important}main.main-container>p{color:var(--hg-muted)!important}
-.accordion-card{border-top:4px solid #b87a36!important;overflow:hidden!important}.accordion-header{background:transparent!important;color:var(--hg-brown)!important;padding:22px 24px!important}.accordion-content{background:#fffdfa!important}
-.page-header{padding:30px!important;margin-bottom:30px!important;background:linear-gradient(120deg,rgba(255,250,244,.98),rgba(247,234,224,.90))!important}
-blockquote{background:#f5eee8!important;border-left-color:var(--hg-gold)!important;color:#4c3b34!important}
-.export-container{margin-bottom:24px!important}.btn-export{background:#132b42!important;color:#fff!important}
-footer{background:#06192d!important;color:#fff!important;border-top:3px solid var(--hg-gold)!important}
-.modal-card{border:1px solid var(--hg-line)!important;border-radius:18px!important;box-shadow:0 22px 70px rgba(0,0,0,.22)!important}
-.event-card-full{background:#fffdfa!important;border:1px solid var(--hg-line)!important;border-radius:22px!important;box-shadow:var(--hg-shadow)!important}.event-badge{background:#f3e7dc!important;color:var(--hg-brown)!important}.event-title{color:var(--hg-brown)!important}
-@media(max-width:900px){header{position:relative!important;padding:10px 14px!important;flex-wrap:wrap!important;gap:8px!important}header .logo-group{flex:1 1 auto!important;min-width:180px!important}header nav{order:3!important;width:100%!important;margin:0!important}header nav ul{justify-content:flex-start!important;overflow-x:auto!important;flex-wrap:nowrap!important;scrollbar-width:none!important;padding-bottom:3px!important}header nav ul::-webkit-scrollbar{display:none!important}header nav a{font-size:12px!important;padding:9px 11px!important}.main-container{width:min(100% - 24px,1200px)!important;padding-top:24px!important}.mountain-banner{min-height:430px!important;padding:54px 22px!important;border-radius:0 0 22px 22px!important}.hero-banner{min-height:460px!important;padding:45px 22px!important;align-items:flex-start!important}.hero-banner .hero-text h1{font-size:43px!important}.hero-author{display:none!important}.nmt-hero-test-buttons{flex-direction:column!important;gap:10px!important}.nmt-hero-test-button{width:100%!important;justify-content:center!important}.section-title{font-size:22px!important}.info-card,.audience-card,.accordion-card{border-radius:16px!important}}
-@media(max-width:520px){.logo-img{width:39px!important;height:39px!important}.logo-text{font-size:12px!important}.logo-text span{font-size:8px!important}.mountain-banner h1{font-size:39px!important}.hero-banner .hero-text h1{font-size:38px!important}.hero-banner .subtitle{font-size:15px!important}.nmt-hero-test-button{font-size:14px!important;min-height:50px!important}}
-
-
 /* =========================================================
-   FINAL VISUAL FIXES — requested corrections
-   Тільки дизайн. Функціонал і JS не змінюються.
+   HISTORY & GEOGRAPHY PORTAL — PREMIUM UI REDESIGN
+   Visual layer only: existing structure and functionality stay.
    ========================================================= */
+:root{
+  --hg-navy:#071b31;
+  --hg-navy-2:#0d2a47;
+  --hg-blue:#2563eb;
+  --hg-gold:#d99a18;
+  --hg-gold-2:#f3c35b;
+  --hg-cream:#f7f3ed;
+  --hg-card:#fffdf9;
+  --hg-ink:#17283c;
+  --hg-muted:#66778b;
+  --hg-line:#dbe3eb;
+  --hg-shadow:0 14px 38px rgba(9,28,48,.09);
+  --hg-radius:22px;
+}
 
-/* 1. Головний банер: прибираємо нижнє світіння/градієнт та тінь. */
-.mountain-banner::before,
-.mountain-banner::after{
-  display:none!important;
-  content:none!important;
-  background:none!important;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:linear-gradient(180deg,#f8f5ef 0%,#f3f0eb 100%)!important;
+  color:var(--hg-ink)!important;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+}
+
+/* ---------- TOP NAV ---------- */
+header{
+  position:sticky!important;top:0!important;z-index:1000!important;
+  min-height:76px!important;
+  padding:0 clamp(16px,4vw,52px)!important;
+  display:flex!important;align-items:center!important;gap:26px!important;
+  background:rgba(7,27,49,.96)!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:0 8px 28px rgba(2,15,29,.18)!important;
+  backdrop-filter:blur(14px)!important;
+}
+.logo-group{display:flex!important;align-items:center!important;gap:11px!important;min-width:max-content!important;text-decoration:none!important}
+.logo-img{width:42px!important;height:42px!important;object-fit:contain!important}
+.logo-text{color:#fff!important;font-weight:850!important;font-size:15px!important;line-height:1.05!important;letter-spacing:-.02em!important}
+.logo-text span{display:block!important;color:var(--hg-gold-2)!important;font-size:9px!important;letter-spacing:.14em!important;margin-top:3px!important}
+header nav{margin-left:auto!important}
+header nav ul{display:flex!important;align-items:center!important;gap:4px!important;list-style:none!important;margin:0!important;padding:0!important}
+header nav a{
+  display:block!important;padding:10px 12px!important;border-radius:10px!important;
+  color:#dce7f2!important;text-decoration:none!important;font-size:13px!important;font-weight:700!important;
+  transition:.2s ease!important;
+}
+header nav a:hover,header nav a.active{background:rgba(255,255,255,.10)!important;color:#fff!important}
+.traveler-container{opacity:.75!important}
+
+/* ---------- HERO ---------- */
+.mountain-banner,.hero-banner{
+  position:relative!important;overflow:hidden!important;
+  min-height:420px!important;margin:0!important;
+  padding:64px clamp(22px,7vw,100px)!important;
+  display:flex!important;align-items:center!important;
+  background:
+    linear-gradient(90deg,rgba(4,19,34,.97) 0%,rgba(4,19,34,.91) 42%,rgba(4,19,34,.56) 72%,rgba(4,19,34,.18) 100%),
+    url("hero-banner.jpeg") center/cover no-repeat!important;
+  border-radius:0 0 30px 30px!important;
+  box-shadow:0 18px 42px rgba(8,28,47,.16)!important;
+}
+.mountain-banner:after,.hero-banner:after{
+  content:"";position:absolute;inset:auto 0 0;height:5px;
+  background:linear-gradient(90deg,var(--hg-gold),var(--hg-gold-2),transparent)!important;
+}
+.hero-text-content,.hero-banner .hero-text{position:relative!important;z-index:2!important;max-width:760px!important}
+.mountain-banner h1,.hero-banner .hero-text h1{
+  color:#fff!important;font-size:clamp(40px,6vw,72px)!important;
+  line-height:.98!important;letter-spacing:-.055em!important;margin:0 0 17px!important;
+  text-shadow:0 5px 18px rgba(0,0,0,.28)!important;
+}
+.mountain-banner h1 span,.hero-banner .hero-text h1 span{color:var(--hg-gold-2)!important}
+.mountain-banner .subtitle,.mountain-banner .quote,.hero-banner .subtitle,.hero-banner .quote{color:#f1f5f8!important}
+.mountain-banner .subtitle{font-size:19px!important;line-height:1.45!important}
+.mountain-banner .quote{font-size:15px!important;margin-top:18px!important;opacity:.92!important}
+
+/* ---------- MAIN WIDTH ---------- */
+.main-container{max-width:1240px!important;padding-left:22px!important;padding-right:22px!important}
+
+/* ---------- COMMON CARDS ---------- */
+.target-audience-section,.leaderboard-section,.kids-club-section,.info-card,.virtual-tour-card{
+  border:1px solid var(--hg-line)!important;
+  border-radius:var(--hg-radius)!important;
+  background:rgba(255,253,249,.94)!important;
+  box-shadow:var(--hg-shadow)!important;
+}
+.target-audience-section,.leaderboard-section,.kids-club-section{padding:25px!important}
+.target-audience-section{margin-top:30px!important}
+.target-audience-section h3,.kids-club-header h3{color:var(--hg-ink)!important;font-weight:850!important}
+.target-audience-grid{gap:14px!important}
+.audience-card{
+  background:#fff!important;border:1px solid #e5e9ee!important;border-radius:17px!important;
+  padding:20px!important;box-shadow:none!important;
+}
+.audience-card h4{color:var(--hg-navy)!important;font-size:16px!important;margin-top:0!important}
+.audience-card li{color:#607184!important;font-size:13px!important;line-height:1.65!important}
+
+/* ---------- SECTION TITLES ---------- */
+.section-title{
+  color:var(--hg-navy)!important;background:none!important;border:0!important;
+  font-size:25px!important;font-weight:900!important;letter-spacing:-.035em!important;
+  padding:0!important;margin:34px 0 15px!important;text-align:left!important;
+}
+.section-title:after{content:"";display:block!important;width:46px!important;height:4px!important;margin-top:9px!important;border-radius:99px!important;background:var(--hg-gold)!important}
+
+/* ---------- QUICK ACCESS ---------- */
+.grid-3,.grid-3-tours{gap:14px!important}
+.info-card{
+  padding:20px!important;min-height:185px!important;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;
+}
+.info-card:hover,.virtual-tour-card:hover{transform:translateY(-3px)!important;box-shadow:0 18px 40px rgba(9,28,48,.12)!important;border-color:#cbd7e3!important}
+.info-card h4{color:var(--hg-navy)!important;font-size:17px!important;margin:0 0 11px!important}
+.info-card p{color:#647487!important;line-height:1.6!important}
+.btn-link{color:var(--hg-blue)!important;font-weight:800!important;text-decoration:none!important}
+
+/* ---------- LEADERBOARD ---------- */
+.leaderboard-section{padding:0!important;overflow:hidden!important;margin-top:28px!important}
+.leaderboard-header{
+  display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;
+  padding:20px 22px!important;
+  background:linear-gradient(135deg,#061a30,#0c2b49)!important;
+  border:0!important;
+}
+.leaderboard-header h3{color:#fff!important;margin:0!important;font-size:21px!important;font-weight:900!important}
+.leaderboard-header h3 i{color:var(--hg-gold-2)!important}
+.reset-timer-badge{margin-left:auto!important;color:#f9e2ad!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:999px!important;padding:8px 12px!important;font-size:12px!important;font-weight:750!important}
+.user-login-bar{margin-left:0!important}
+.user-login-btn{
+  background:#fff!important;color:var(--hg-navy)!important;border:0!important;border-radius:11px!important;
+  padding:10px 14px!important;font-weight:850!important;box-shadow:0 4px 12px rgba(0,0,0,.10)!important;
+}
+.user-login-btn:hover{background:#f5f7fa!important}
+.leaderboard-list{padding:12px 16px 16px!important;margin:0!important;background:#fbfcfd!important}
+.leaderboard-item{
+  min-height:66px!important;margin:7px 0!important;padding:13px 14px!important;
+  border:1px solid #e2e8ef!important;border-radius:14px!important;background:#fff!important;
   box-shadow:none!important;
 }
-.mountain-banner{
-  box-shadow:none!important;
-}
+.leaderboard-item.current-user{background:#fff9e9!important;border-color:#eed28a!important}
+.leaderboard-item:first-child{border-color:#efd38c!important;background:linear-gradient(90deg,#fff8df,#fff)!important}
+.student-info strong,.student-info .student-name{color:var(--hg-navy)!important}
+.student-info small,.student-info span{color:#708095!important}
+.score-badge,.total-score,.leaderboard-score{background:var(--hg-blue)!important;color:#fff!important;border-radius:999px!important;font-weight:900!important}
 
-/* 2. Фото автора прибране з банера НМТ. Залишаємо правило як страховку. */
-.hero-banner .hero-author{
-  display:none!important;
-}
+/* ---------- TOUR CARDS ---------- */
+.virtual-tour-card{padding:20px!important;text-decoration:none!important;min-height:105px!important;display:flex!important;align-items:center!important;gap:13px!important}
+.virtual-tour-card .icon{font-size:30px!important}
+.virtual-tour-card span{color:var(--hg-navy)!important;font-weight:850!important;font-size:14px!important}
 
-/* 3. Усі тексти банера НМТ — білим кольором і з високим контрастом. */
-.hero-banner .hero-text,
-.hero-banner .hero-text h1,
-.hero-banner .hero-text h1 span,
-.hero-banner .hero-text .subtitle,
-.hero-banner .hero-text .quote{
-  color:#fff!important;
-}
-.hero-banner .hero-text h1{
-  text-shadow:0 2px 8px rgba(0,0,0,.30)!important;
-}
+/* ---------- KIDS / FUN ZONE ---------- */
+.kids-club-section{background:linear-gradient(135deg,#f9fcff,#fffdf9)!important}
+.kids-club-header{border-bottom:1px solid #e5ebf1!important;padding-bottom:15px!important}
+.chat-box,.dino-game-card{background:#fff!important;border:1px solid #e1e8ef!important;border-radius:16px!important;box-shadow:none!important}
 
-/* 4. Заголовок і опис «Методичної скарбнички» — читабельні на світлому фоні. */
-.page-header h1{
-  color:#2b1711!important;
-}
-.page-header p{
-  color:#5f504a!important;
-  opacity:1!important;
-  font-size:16px!important;
-  line-height:1.65!important;
-}
+/* ---------- FOOTER ---------- */
+footer{background:var(--hg-navy)!important;color:#dce7f2!important;margin-top:50px!important}
 
-/* 5. Вірш: темний преміальний фон + білий текст, без низького контрасту. */
-.poetry-card{
-  background:linear-gradient(135deg,#32150d 0%,#5a2a1c 100%)!important;
-  color:#fff!important;
-  border:1px solid rgba(255,255,255,.14)!important;
-}
-.poetry-card h3{
-  color:#fff!important;
-}
-.poetry-card h3 i{
-  color:#f5b51b!important;
-}
-.poetry-card div[style*="white-space"]{
-  color:#fff!important;
-  opacity:1!important;
-  font-size:17px!important;
-  line-height:1.85!important;
-  text-shadow:none!important;
-}
-.poetry-card p{
-  color:#f4e9e4!important;
-}
-.poetry-card hr{
-  border-top-color:rgba(255,255,255,.20)!important;
-}
+/* ---------- BUTTONS ---------- */
+button{font-family:inherit!important}
 
-/* 6. Нижній великий довідник НМТ: заголовок і опис гарантовано білі. */
-.nmt200-hero h2,
-.nmt200-hero h1,
-.nmt200-hero p{
-  color:#fff!important;
-  opacity:1!important;
-}
-.nmt200-hero h2{
-  text-shadow:0 2px 8px rgba(0,0,0,.18)!important;
-}
-.nmt200-stats span{
-  color:#173b9e!important;
-}
+/* ---------- MOBILE ---------- */
+@media(max-width:800px){
+  header{min-height:66px!important;padding:0 14px!important;gap:10px!important}
+  .logo-img{width:36px!important;height:36px!important}
+  .logo-text{font-size:12px!important}
+  header nav{width:100%!important;overflow-x:auto!important;scrollbar-width:none!important;margin:0!important}
+  header nav::-webkit-scrollbar{display:none}
+  header nav ul{width:max-content!important}
+  header nav a{font-size:11px!important;padding:8px 9px!important}
+  .traveler-container{display:none!important}
 
-@media(max-width:700px){
-  .poetry-card div[style*="white-space"]{
-    font-size:15px!important;
-    line-height:1.75!important;
+  .mountain-banner,.hero-banner{
+    min-height:365px!important;padding:48px 20px 54px!important;
+    background-position:62% center!important;border-radius:0 0 22px 22px!important;
   }
+  .mountain-banner h1,.hero-banner .hero-text h1{font-size:40px!important;max-width:620px!important}
+  .mountain-banner .subtitle{font-size:16px!important}
+  .main-container{padding:0 14px!important}
+  .target-audience-section,.leaderboard-section,.kids-club-section{border-radius:18px!important;padding:16px!important}
+  .target-audience-section{margin-top:20px!important}
+  .target-audience-grid,.grid-3,.grid-3-tours,.kids-club-grid{grid-template-columns:1fr 1fr!important}
+  .audience-card{padding:15px!important}
+  .audience-card ul{padding-left:17px!important}
+  .audience-card li{font-size:12px!important}
+  .section-title{font-size:22px!important;margin-top:27px!important}
+  .info-card{min-height:165px!important;padding:16px!important}
+  .info-card h4{font-size:15px!important}
+  .leaderboard-header{padding:16px!important}
+  .leaderboard-header h3{font-size:17px!important;width:100%!important}
+  .reset-timer-badge{margin-left:0!important;order:3!important}
+  .user-login-bar{margin-left:auto!important}
+  .leaderboard-item{padding:11px!important}
 }
 
-/* FINAL CONTRAST FIX — NMT DIRECTORY */
-.nmt200-hero h1,
-.nmt200-hero h2,
-.nmt200-hero p,
-.nmt200-hero .nmt200-badge {
-  color: #ffffff !important;
-  opacity: 1 !important;
-}
-.nmt200-hero h1,
-.nmt200-hero h2 {
-  text-shadow: none !important;
-}
-.nmt200-hero p {
-  text-shadow: none !important;
-}
-
-
-/* =========================================================
-   FINAL DESIGN LOCK — RECTANGULAR BANNERS / CENTERED FOOTER
-   Версія v3. Тільки візуальні зміни.
-   ========================================================= */
-
-/* УСІ основні банери — прямокутні на ПК та мобільних. */
-.mountain-banner,
-.hero-banner,
-.nmt200-hero{
-  border-radius:0!important;
-}
-
-/* Не дозволяємо старим mobile-правилам повернути заокруглення. */
-@media (max-width:900px){
-  .mountain-banner,
-  .hero-banner,
-  .nmt200-hero{
-    border-radius:0!important;
-  }
-}
-
-@media (max-width:520px){
-  .mountain-banner,
-  .hero-banner,
-  .nmt200-hero{
-    border-radius:0!important;
-  }
-}
-
-/* Футер: весь текст однаково по центру на всіх сторінках і екранах. */
-footer{
-  text-align:center!important;
-}
-footer p,
-footer h3,
-footer .footer-teacher-line{
-  width:100%!important;
-  max-width:none!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-  text-align:center!important;
-}
-footer .footer-teacher-line{
-  display:block!important;
-}
-
-/* «Поетичне слово про рідний ліцей» — білим. */
-.poetry-card h3,
-.poetry-card h3 i,
-.poetry-card h3 *{
-  color:#fff!important;
-}
-
-
-/* FINAL TEXT COLOR HARD LOCK v4 */
-.nmt200-hero h2,
-.nmt200-hero h2 *,
-.nmt200-hero p,
-.nmt200-hero p *,
-.nmt200-hero .nmt200-badge,
-.nmt200-hero .nmt200-badge *{
-  color:#fff !important;
-  opacity:1 !important;
-  text-shadow:none !important;
-}
-.poetry-card h3,
-.poetry-card h3 *,
-.poetry-card h3 i{
-  color:#fff !important;
-}
-
-
-/* V5 — only requested change: rounded brown NMT directory banner */
-.nmt200-hero {
-  border-radius: 30px !important;
-}
-
-/* V6 — only requested change: hide search from the main hero.
-   Search functionality remains intact elsewhere. */
-.hero .hero-search,
-.hero-banner .hero-search,
-.hero .search-box,
-.hero-banner .search-box,
-.hero-search {
-  display: none !important;
+@media(max-width:520px){
+  header{flex-wrap:wrap!important;padding-top:8px!important;padding-bottom:8px!important}
+  header nav{order:3!important;width:100%!important}
+  .logo-group{flex:1!important}
+  .mountain-banner,.hero-banner{min-height:330px!important}
+  .mountain-banner h1,.hero-banner .hero-text h1{font-size:34px!important}
+  .mountain-banner .quote{font-size:13px!important}
+  .target-audience-grid,.grid-3,.grid-3-tours,.kids-club-grid{grid-template-columns:1fr!important}
+  .leaderboard-header{align-items:flex-start!important}
+  .user-login-bar{width:100%!important;margin-left:0!important}
+  .user-login-btn{width:100%!important}
+  .reset-timer-badge{width:100%!important;text-align:center!important}
+  .leaderboard-item{min-height:62px!important}
 }

@@ -53,8 +53,7 @@
   <link rel="stylesheet" href="modern-theme.css?v=300">
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
-  <link rel="stylesheet" href="premium-design.css?v=8">
-  <script type="module" src="portal-score.js"></script>
+  <link rel="stylesheet" href="premium-design.css?v=20260902">
 </head>
 <body>
 
@@ -2061,14 +2060,13 @@
       const isCorrect = state.selectedAnswer === 'correct';
       if (isCorrect) {
         state.score++;
+        // ВАЖЛИВО: один правильний вибір = рівно один бал.
+        await awardNmtPoint(type, state.score, state.shuffled.length);
       }
 
       state.currentIndex++;
       state.selectedAnswer = null;
       state.answerLocked = false;
-      if (state.currentIndex >= state.shuffled.length) {
-        await window.awardNmtPoint(type, state.score, state.shuffled.length);
-      }
       renderQuestion(type);
     }
 
@@ -2093,7 +2091,112 @@
     window.onload = renderTests;
   </script>
 
-  
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {apiKey:"AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",authDomain:"movchan-portal.firebaseapp.com",databaseURL:"https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",projectId:"movchan-portal",storageBucket:"movchan-portal.firebasestorage.app",messagingSenderId:"535915495927",appId:"1:535915495927:web:71f899ea2876ee129c2ef2"};
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  let currentUser = null;
+  const pending = { history: 0, geography: 0 };
+
+  function pendingKey(type) { return `nmt_pending_${type}`; }
+  function loadPending(type) { return Math.max(0, Number(localStorage.getItem(pendingKey(type)) || 0)); }
+  function savePending(type, value) { localStorage.setItem(pendingKey(type), String(Math.max(0, value))); }
+
+  function getCurrentWeekKey() {
+    const d = new Date(); const day = d.getDay() || 7;
+    d.setDate(d.getDate() + 4 - day);
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+  }
+
+  // Надійна модель: у Firebase зберігаємо найкращий результат НМТ,
+  // а в users/UID/score додаємо тільки різницю до попереднього найкращого.
+  // Тому одна й та сама правильна відповідь фізично не може бути зарахована двічі.
+  async function awardNmtPoint(type, newScore, total) {
+    const target = Math.max(0, Number(newScore) || 0);
+    if (!total || target <= 0) return;
+
+    if (!currentUser) {
+      pending[type] = Math.max(pending[type], target);
+      savePending(type, pending[type]);
+      const status = document.getElementById(`${type}-sync-status`);
+      if (status) status.textContent = '⏳ Бал буде синхронізовано після входу через Google.';
+      return;
+    }
+
+    try {
+      await runTransaction(ref(database, 'users/' + currentUser.uid), data => {
+        data = data || {};
+        const key = `nmt_${type}_score`;
+        const totalKey = `nmt_${type}_total`;
+        const weekKey = type === 'history' ? 'week_nmt_history_score' : 'week_nmt_geography_score';
+        const weekBestKey = type === 'history' ? 'week_nmt_history_best' : 'week_nmt_geography_best';
+        const weekDateKey = type === 'history' ? 'nmt_history_quiz_week_key' : 'nmt_geography_quiz_week_key';
+        const oldBest = Math.max(0, Number(data[key] || 0));
+        const best = Math.min(Number(total) || target, Math.max(oldBest, target));
+        const delta = best - oldBest;
+
+        const currentWeek = getCurrentWeekKey();
+        const oldWeekBest = data[weekDateKey] === currentWeek ? Math.max(0, Number(data[weekBestKey] || 0)) : 0;
+        const newWeekBest = Math.max(oldWeekBest, target);
+        const weekDelta = newWeekBest - oldWeekBest;
+
+        data.name = data.name || currentUser.displayName || 'Учень';
+        data[key] = best;
+        data[totalKey] = Number(total) || 0;
+        data.nmt_total_score = Number(data.nmt_history_score || 0) + Number(data.nmt_geography_score || 0);
+        data.score = Number(data.score || 0) + delta;
+        data[weekKey] = (Number(data[weekKey]) || 0) + weekDelta;
+        data[weekBestKey] = newWeekBest;
+        data[weekDateKey] = currentWeek;
+        data.week_score =
+          (Number(data.week_history_points) || 0) +
+          (Number(data.week_geography_points) || 0) +
+          (Number(data.week_nmt_history_score) || 0) +
+          (Number(data.week_nmt_geography_score) || 0) +
+          (Number(data.week_truth_or_lie_points) || 0);
+        return data;
+      });
+
+      pending[type] = 0;
+      savePending(type, 0);
+      const status = document.getElementById(`${type}-sync-status`);
+      if (status) status.textContent = '✅ Бал синхронізовано';
+    } catch (error) {
+      console.error('НМТ Firebase:', error);
+      pending[type] = Math.max(pending[type], target);
+      savePending(type, pending[type]);
+      const status = document.getElementById(`${type}-sync-status`);
+      if (status) status.textContent = '⚠️ Не вдалося синхронізувати. Спробуйте ще раз.';
+    }
+  }
+
+  window.awardNmtPoint = awardNmtPoint;
+
+  onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    window.currentUserUid = user ? user.uid : null;
+    if (!user) return;
+
+    for (const type of ['history', 'geography']) {
+      // Після входу зараховуємо лише результат, який реально був отриманий
+      // під час цього проходження до моменту готовності Firebase Auth.
+      // Старий рекорд з localStorage не можна повторно зараховувати як новий
+      // тижневий бал.
+      const queued = loadPending(type);
+      if (queued > 0) {
+        const total = Math.max(0, Number(localStorage.getItem(`nmt_${type}_total`) || 30));
+        await awardNmtPoint(type, queued, total);
+      }
+    }
+  });
+</script>
 
 <footer><p>© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p><p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p></footer>
 <button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
