@@ -589,11 +589,19 @@
         <h3><i class="fas fa-medal" style="color: #2563eb;"></i> Рейтинг активності учнів</h3>
         <span id="weekResetTimer" class="reset-timer-badge">🔄 Оновлення тижня...</span>
         <div class="user-login-bar" id="authBox">
-          <input type="text" id="studentNameInput" class="user-login-input" placeholder="Введіть ваше ПІБ..." maxlength="25">
-          <button class="user-login-btn" onclick="registerStudent()">Увійти</button>
+          <!-- Кнопка Google відображається одразу, ще до завершення Firebase Auth. -->
+          <button id="googleLoginBtn" type="button" class="user-login-btn" style="display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px;visibility:visible!important;opacity:1!important;">
+            <i class="fa-brands fa-google"></i> Увійти через Google
+          </button>
         </div>
       </div>
       <div id="leaderboardList" class="leaderboard-list"></div>
+      <div id="weeklyWinnerPanel" style="display:none;margin-top:16px;padding:18px 20px;border:2px solid #e8d2c5;border-radius:16px;background:linear-gradient(135deg,#fffaf6,#f7eee8);text-align:center;box-shadow:0 6px 20px rgba(91,31,14,.08);">
+        <div style="font-size:13px;font-weight:800;color:#9a604a;text-transform:uppercase;letter-spacing:.04em;">🏆 Переможець тижня</div>
+        <div id="weeklyWinnerName" style="font-size:24px;font-weight:900;color:#5b1f0e;margin-top:6px;"></div>
+        <div id="weeklyWinnerPoints" style="font-size:15px;font-weight:700;color:#64748b;margin-top:4px;"></div>
+        <div style="font-size:12px;color:#8b6b5d;margin-top:8px;">Підсумок тижня • неділя 12:00–24:00</div>
+      </div>
     </div>
 
     <div class="section-title" style="margin-top: 30px;">Що цікавого сьогодні</div>
@@ -737,9 +745,24 @@
     window.studentsData = [];
     window.chatData = [];
 
-    window.loginWithGoogle = function () {
-      signInWithPopup(auth, provider).catch(error => alert('Помилка входу: ' + error.message));
+    window.loginWithGoogle = async function () {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error('Google Auth:', error);
+        // На iPhone/Safari popup інколи блокується. У такому випадку
+        // переходимо на redirect-вхід, щоб кнопка все одно працювала.
+        if (error && error.code === 'auth/popup-blocked') {
+          const { signInWithRedirect } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+          await signInWithRedirect(auth, provider);
+          return;
+        }
+        alert('Помилка входу через Google: ' + (error?.message || error));
+      }
     };
+
+    const googleLoginBtn = document.getElementById('googleLoginBtn');
+    if (googleLoginBtn) googleLoginBtn.addEventListener('click', () => window.loginWithGoogle());
 
     window.logoutGoogle = function () {
       signOut(auth);
@@ -772,6 +795,9 @@
     }
     updateWeekTimer();
     setInterval(updateWeekTimer, 1000);
+    setInterval(() => {
+      if (window.studentsData) renderSundayWinner(Object.fromEntries(window.studentsData.map(p => [p.uid, p])));
+    }, 30000);
 
     async function ensureUserProfile(user) {
       if (!user) return;
@@ -789,12 +815,25 @@
         if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
         if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
 
-        // ЄДИНЕ джерело правди для поточного тижня. Старі записи мігруємо один раз.
-        if (data.week_history_points === undefined) data.week_history_points = Number(data.total_history_points) || 0;
-        if (data.week_geography_points === undefined) data.week_geography_points = Number(data.total_geography_points) || 0;
-        if (data.week_nmt_history_score === undefined) data.week_nmt_history_score = Number(data.nmt_history_score) || 0;
-        if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = Number(data.nmt_geography_score) || 0;
-        if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = Number(data.truth_or_lie_points) || 0;
+        // Поточний тиждень. Перший запуск старих профілів зберігає вже нараховані тижневі поля.
+        // Нові профілі стартують з нуля. Надалі week_key захищає від перенесення старих балів у новий тиждень.
+        const currentWeek = getWeekKey();
+        if (data.week_key === undefined) {
+          if (data.week_history_points === undefined) data.week_history_points = 0;
+          if (data.week_geography_points === undefined) data.week_geography_points = 0;
+          if (data.week_nmt_history_score === undefined) data.week_nmt_history_score = 0;
+          if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = 0;
+          if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = 0;
+          data.week_key = currentWeek;
+        } else if (data.week_key !== currentWeek) {
+          data.week_history_points = 0;
+          data.week_geography_points = 0;
+          data.week_nmt_history_score = 0;
+          data.week_nmt_geography_score = 0;
+          data.week_truth_or_lie_points = 0;
+          data.week_score = 0;
+          data.week_key = currentWeek;
+        }
         data.week_score =
           (Number(data.week_history_points) || 0) +
           (Number(data.week_geography_points) || 0) +
@@ -845,9 +884,37 @@
       if (badge) badge.textContent = `${Number(score) || 0} балів`;
     }
 
+    function renderSundayWinner(rawUsers) {
+      const panel = document.getElementById('weeklyWinnerPanel');
+      const nameEl = document.getElementById('weeklyWinnerName');
+      const pointsEl = document.getElementById('weeklyWinnerPoints');
+      if (!panel || !nameEl || !pointsEl) return;
+
+      const now = new Date();
+      const isSundayFinalWindow = now.getDay() === 0 && now.getHours() >= 12 && now.getHours() < 24;
+      if (!isSundayFinalWindow) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      const students = Object.entries(rawUsers || {})
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher' && (p.name || p.displayName || p.email))
+        .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
+        .sort((a,b) => b.week_score - a.week_score);
+      const winner = students[0];
+      if (!winner || winner.week_score <= 0) {
+        panel.style.display = 'none';
+        return;
+      }
+      nameEl.textContent = `🥇 ${winner.name || winner.displayName || winner.email || 'Учень'}`;
+      pointsEl.textContent = `${winner.week_score} балів за цей тиждень`;
+      panel.style.display = 'block';
+    }
+
     // ЄДИНИЙ realtime-слухач. Firebase сам надсилає зміни без перезавантаження.
     onValue(ref(database, 'users'), snapshot => {
       const raw = snapshot.val() || {};
+      renderSundayWinner(raw);
       window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
         .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
       renderRealtimeLeaderboard();
@@ -876,7 +943,11 @@
 
       const authBox = document.getElementById('authBox');
       if (!user) {
-        if (authBox) authBox.innerHTML = '<button class="user-login-btn" onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Увійти через Google</button>';
+        if (authBox) {
+          authBox.innerHTML = '<button id="googleLoginBtn" type="button" class="user-login-btn" style="display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px;visibility:visible!important;opacity:1!important;"><i class="fa-brands fa-google"></i> Увійти через Google</button>';
+          const btn = document.getElementById('googleLoginBtn');
+          if (btn) btn.addEventListener('click', () => window.loginWithGoogle());
+        }
         renderRealtimeLeaderboard();
         return;
       }
@@ -940,6 +1011,7 @@
           updates[`users/${uid}/week_nmt_history_score`] = 0;
           updates[`users/${uid}/week_nmt_geography_score`] = 0;
           updates[`users/${uid}/week_truth_or_lie_points`] = 0;
+          updates[`users/${uid}/week_key`] = currentWeek;
         }
       });
       if (Object.keys(updates).length) await update(ref(database), updates);
