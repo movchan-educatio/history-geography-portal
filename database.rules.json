@@ -6,6 +6,12 @@
     "submissions": { "$id": { ".write": "auth != null && (!data.exists() ? newData.child('studentUid').val() === auth.uid : (data.child('studentUid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'teacher'))" } },
     "grades": { "$id": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" } },
     "lessons": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" },
-    "assignments": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" }
+    "assignments": { ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'" },
+    "presence": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
   }
 }

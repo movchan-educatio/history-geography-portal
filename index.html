@@ -547,7 +547,8 @@
     /* --- ГРА З ПРАПОРАМИ --- */
     .flags-activity-card { background:linear-gradient(135deg,#fffaf6,#fff); border:1px solid #ead7cc; border-radius:16px; padding:16px; min-height:270px; box-sizing:border-box; }
     .flags-task { margin-top:8px; font-size:13px; font-weight:700; color:#475569; }
-    #flagsDisplay { margin:12px auto; min-height:90px; display:flex; align-items:center; justify-content:center; font-size:76px; line-height:1; background:#fff; border-radius:14px; border:1px solid #f0e1d8; box-shadow:0 5px 16px rgba(91,31,14,.08); }
+    #flagsDisplay { margin:12px auto; min-height:120px; display:flex; align-items:center; justify-content:center; background:#fff; border-radius:14px; border:1px solid #f0e1d8; box-shadow:0 5px 16px rgba(91,31,14,.08); overflow:hidden; }
+#flagsDisplay .flag-image { display:block; width:min(86%, 260px); height:112px; object-fit:contain; image-rendering:auto; }
     .flags-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
     .flags-option { border:1px solid #ead0c2; background:#fff; color:#5b1f0e; border-radius:10px; padding:9px 8px; font-weight:800; cursor:pointer; }
     .flags-option:hover:not(:disabled) { transform:translateY(-1px); background:#fff7f2; }
@@ -559,6 +560,33 @@
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
   <link rel="stylesheet" href="premium-design.css?v=8">
+
+<style id="online-presence-styles">
+.online-presence-panel{margin:12px 0 16px;padding:12px 16px;border:1px solid #dbe7df;border-radius:14px;background:linear-gradient(135deg,#f7fff9,#eefaf2);box-shadow:0 4px 14px rgba(34,197,94,.06)}
+.online-presence-title{font-weight:900;color:#166534;font-size:14px;margin-bottom:4px}
+.online-presence-text{font-weight:700;color:#334155;font-size:13px}
+.online-presence-names{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.online-person{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;background:#fff;border:1px solid #d9e7dd;color:#334155;font-size:12px;font-weight:700}
+.online-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 2px #dcfce7}
+.online-presence-empty{font-size:12px;color:#64748b}
+</style>
+
+
+<style id="boss-presence-extra">
+.online-presence-panel.boss-online{
+  border-color:#d6b06a!important;
+  background:linear-gradient(135deg,#fff9e8,#fff3c4)!important;
+  box-shadow:0 6px 20px rgba(180,120,20,.14)!important;
+}
+.online-presence-panel.boss-online .online-presence-title{
+  color:#8a4b08!important;
+  font-size:15px!important;
+}
+.online-presence-panel.boss-online .online-presence-text{
+  color:#5b3a12!important;
+}
+</style>
+
 </head>
 <body>
 
@@ -653,6 +681,11 @@
             <i class="fa-brands fa-google"></i> Увійти через Google
           </button>
         </div>
+      </div>
+      <div id="onlinePresencePanel" class="online-presence-panel" aria-live="polite">
+        <div id="onlinePresenceTitle" class="online-presence-title">🟢 Зараз на сайті</div>
+        <div id="onlinePresenceText" class="online-presence-text">Перевіряємо, хто зараз онлайн…</div>
+        <div id="onlinePresenceNames" class="online-presence-names"></div>
       </div>
       <div id="leaderboardList" class="leaderboard-list"></div>
       <div id="weeklyWinnerPanel" style="display:none;margin-top:16px;padding:18px 20px;border:2px solid #e8d2c5;border-radius:16px;background:linear-gradient(135deg,#fffaf6,#f7eee8);text-align:center;box-shadow:0 6px 20px rgba(91,31,14,.08);">
@@ -826,7 +859,7 @@
     import "./portal-score.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, get, set, update, onValue, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
@@ -1107,11 +1140,129 @@
       renderChat();
     }, error => console.error('Firebase чат:', error));
 
+    // Онлайн-присутність: Firebase Realtime Database + onDisconnect.
+    // Кожен авторизований користувач публікує лише власний статус.
+    let presenceStartedUid = null;
+    let presenceUnsubscribe = null;
+
+    function escapePresenceName(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[ch]));
+    }
+
+    function renderOnlinePresence(raw) {
+      const text = document.getElementById('onlinePresenceText');
+      const names = document.getElementById('onlinePresenceNames');
+      if (!text || !names) return;
+
+      const users = Object.entries(raw || {})
+        .filter(([uid, p]) => p && p.online === true)
+        .map(([uid, p]) => ({ uid, ...p }))
+        .filter(p => p.uid !== window.currentUserUid && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher')
+        .sort((a,b) => String(a.name || '').localeCompare(String(b.name || ''), 'uk'));
+
+      const teacherOnline = !!(raw && raw[PORTAL_OWNER_UID] && raw[PORTAL_OWNER_UID].online === true);
+      const isTeacher = window.currentUserRole === 'teacher';
+
+      const panel = document.getElementById('onlinePresencePanel');
+      const title = document.getElementById('onlinePresenceTitle');
+
+      if (panel) panel.classList.toggle('boss-online', isTeacher || teacherOnline);
+      if (title) {
+        title.textContent = (isTeacher || teacherOnline)
+          ? '👑 БОС НА САЙТІ'
+          : '🟢 Зараз на сайті';
+      }
+
+      if (isTeacher) {
+        text.textContent = `👑 БОС НА САЙТІ 😎 • Учнів онлайн: ${users.length}`;
+      } else if (teacherOnline) {
+        text.textContent = `👑 БОС ЗАРАЗ НА САЙТІ! 😎 • Учнів онлайн: ${users.length}`;
+      } else {
+        text.textContent = users.length
+          ? `Учнів онлайн: ${users.length}`
+          : 'Поки що інших учнів онлайн немає.';
+      }
+
+      if (!users.length) {
+        names.innerHTML = teacherOnline && !isTeacher
+          ? '<span class="online-presence-empty">Ви зараз одні з учителем на сайті 🙂</span>'
+          : '<span class="online-presence-empty">Зайдіть у гру — хтось обов’язково приєднається! 🚀</span>';
+        return;
+      }
+
+      names.innerHTML = users.map(p =>
+        `<span class="online-person"><span class="online-dot"></span>${escapePresenceName(p.name || 'Учень')}</span>`
+      ).join('');
+    }
+
+    function stopPresence() {
+      if (presenceUnsubscribe) {
+        try { presenceUnsubscribe(); } catch (_) {}
+        presenceUnsubscribe = null;
+      }
+      presenceStartedUid = null;
+    }
+
+    async function startPresence(user) {
+      if (!user) return;
+      if (presenceStartedUid === user.uid) return;
+      presenceStartedUid = user.uid;
+
+      const myPresenceRef = ref(database, 'presence/' + user.uid);
+      try {
+        await onDisconnect(myPresenceRef).set({
+          online: false,
+          name: user.displayName || 'Учень',
+          role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student',
+          lastSeen: serverTimestamp()
+        });
+        await set(myPresenceRef, {
+          online: true,
+          name: user.displayName || 'Учень',
+          role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student',
+          lastSeen: serverTimestamp()
+        });
+      } catch (e) {
+        console.error('Онлайн-присутність:', e);
+      }
+
+      if (presenceUnsubscribe) {
+        try { presenceUnsubscribe(); } catch (_) {}
+      }
+      presenceUnsubscribe = onValue(ref(database, 'presence'), snapshot => {
+        renderOnlinePresence(snapshot.val() || {});
+      }, error => {
+        console.error('Онлайн-присутність Firebase:', error);
+        const text = document.getElementById('onlinePresenceText');
+        if (text) text.textContent = 'Не вдалося отримати список онлайн.';
+      });
+    }
+
+    // Якщо вкладку закрили/перезавантажили, onDisconnect Firebase автоматично
+    // позначить користувача офлайн. Для звичайного виходу також прибираємо статус.
+    window.addEventListener('beforeunload', () => {
+      if (window.currentUserUid) {
+        try {
+          set(ref(database, 'presence/' + window.currentUserUid + '/online'), false);
+        } catch (_) {}
+      }
+    });
+
     onAuthStateChanged(auth, async user => {
       window.currentStudent = user ? (user.displayName || 'Учень') : null;
       window.currentUserUid = user ? user.uid : null;
       window.currentUserRole = user ? (user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student') : null;
+      if (!user) {
+        stopPresence();
+        const text = document.getElementById('onlinePresenceText');
+        const names = document.getElementById('onlinePresenceNames');
+        if (text) text.textContent = 'Увійдіть через Google, щоб бачити, хто зараз онлайн.';
+        if (names) names.innerHTML = '';
+      }
       if (user) {
+        startPresence(user);
         loadDinoLeaderboard();
       } else {
         dinoLeaderboardData = [];
@@ -1135,6 +1286,16 @@
         await ensureUserProfile(user);
         const profileSnap = await get(ref(database, 'users/' + user.uid));
         const profileData = profileSnap.val() || {};
+        try {
+          await update(ref(database, 'presence/' + user.uid), {
+            online: true,
+            name: profileData.name || user.displayName || 'Учень',
+            role: window.currentUserRole,
+            lastSeen: serverTimestamp()
+          });
+        } catch (presenceErr) {
+          console.warn('Оновлення імені в online-присутності:', presenceErr);
+        }
         restoreTruthOrLieLock(profileData.truth_or_lie_locked_until ? { until: profileData.truth_or_lie_locked_until } : null);
         if (profileData.dino_unlocked === true) unlockDinoGame();
       } catch (e) {
@@ -4316,7 +4477,24 @@
       flagsPreviousIndex = idx;
       flagsCurrent = flagsCountries[idx];
       flagsAnswered = false;
-      display.textContent = flagsCurrent[0];
+
+      // На Windows/старих версіях Chrome прапори-emoji можуть відображатися
+      // як дві літери (наприклад, "SA"). Тому показуємо справжній кольоровий
+      // прапор через Twemoji SVG, а emoji залишаємо як fallback.
+      const flagEmoji = flagsCurrent[0];
+      const codepoints = Array.from(flagEmoji)
+        .map(ch => ch.codePointAt(0).toString(16))
+        .join('-');
+      display.innerHTML = '';
+      const flagImg = document.createElement('img');
+      flagImg.className = 'flag-image';
+      flagImg.alt = `Прапор ${flagsCurrent[1]}`;
+      flagImg.src = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${codepoints}.svg`;
+      flagImg.onerror = () => {
+        display.textContent = flagEmoji;
+      };
+      display.appendChild(flagImg);
+      display.setAttribute('aria-label', `Прапор ${flagsCurrent[1]}`);
       options.innerHTML = '';
 
       const wrong = flagsShuffle(flagsCountries.filter((_, i) => i !== idx)).slice(0, 3);
