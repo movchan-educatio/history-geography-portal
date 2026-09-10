@@ -752,7 +752,6 @@
           <div class="map-task" id="mapTask">Завантаження завдання...</div>
           <div id="worldMap"></div>
           <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
-          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
         </div>
 
         <!-- Блок 4: Історична хронологія -->
@@ -3037,7 +3036,6 @@
       document.getElementById('mapStatus').textContent = 'Натисніть на карту там, де розташована потрібна країна.';
       document.getElementById('mapStatus').style.background = '#f8fafc';
       document.getElementById('mapStatus').style.color = '#475569';
-      document.getElementById('mapQuestionNumber').textContent = mapQuestionNumber;
       if (mapMarker) { mapMarker.remove(); mapMarker = null; }
     }
 
@@ -3076,9 +3074,15 @@
           nextMapQuestion();
         }, 900);
       } else {
-        status.textContent = `❌ Не зовсім. Правильне розташування: ${q.country}.`;
+        status.textContent = `❌ Не влучили. Наступна країна завантажується…`;
         status.style.background = '#fee2e2'; status.style.color = '#b91c1c';
-        L.marker([q.lat,q.lng]).addTo(worldMap).bindPopup(`📍 ${q.country}`).openPopup();
+        L.marker([q.lat,q.lng]).addTo(worldMap).bindPopup(`📍 Правильне розташування: ${q.country}`).openPopup();
+        // Помилка також завершує спробу: через коротку паузу автоматично показуємо нову країну.
+        const answeredIndex = mapQuestionIndex;
+        setTimeout(() => {
+          if (mapQuestionIndex !== answeredIndex || !mapAnswered) return;
+          nextMapQuestion();
+        }, 900);
       }
     }
 
@@ -3109,7 +3113,6 @@
       }
       mapPreviousIndex = previousIndex;
       mapQuestionIndex = nextIndex;
-      mapQuestionNumber = mapQuestionNumber >= 10 ? 1 : mapQuestionNumber + 1;
       renderMapQuestion();
       if (worldMap) setTimeout(() => worldMap.invalidateSize(), 50);
       return true;
