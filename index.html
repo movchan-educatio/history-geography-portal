@@ -783,7 +783,7 @@
   <!-- FIREBASE SCRIPTS -->
   <script type="module">
     import "./portal-score.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
@@ -798,7 +798,10 @@
       measurementId: "G-8XBVKRZRS1"
     };
 
-    const app = initializeApp(firebaseConfig);
+    // portal-score.js може ініціалізувати Firebase раніше за цей модуль.
+    // Використовуємо вже існуючий DEFAULT app, щоб не отримати
+    // "Firebase App named '[DEFAULT]' already exists".
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
