@@ -3021,6 +3021,12 @@
 
     function initMapActivity() {
       if (!window.L || !document.getElementById('worldMap')) return;
+      // Не створюємо карту повторно: подвійна ініціалізація Leaflet могла
+      // залишати старий обробник click і ламати перехід після кількох питань.
+      if (worldMap) {
+        setTimeout(() => worldMap.invalidateSize(), 50);
+        return;
+      }
       worldMap = L.map('worldMap', { minZoom:1, maxZoom:6, worldCopyJump:true }).setView([25, 10], 1.7);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap contributors' }).addTo(worldMap);
       worldMap.on('click', handleMapClick);
@@ -3084,14 +3090,32 @@
     }
 
     function nextMapQuestion() {
-      if (!mapAnswered) return;
-      mapPreviousIndex = mapQuestionIndex;
-      mapQuestionIndex = chooseFromShuffledBag(mapQuestions.length, 'portal_last_map_question', mapQuestionIndex);
+      const nextButton = document.getElementById('mapNextBtn');
+      // Перехід дозволяємо лише після відповіді. Після першого кліку одразу
+      // блокуємо кнопку, щоб подвійний клік не перескочив через питання.
+      if (!mapAnswered) return false;
+      mapAnswered = false;
+      if (nextButton) nextButton.disabled = true;
+
+      const previousIndex = mapQuestionIndex;
+      let nextIndex;
+      try {
+        nextIndex = chooseFromShuffledBag(mapQuestions.length, 'portal_last_map_question', previousIndex);
+      } catch (e) {
+        nextIndex = Math.floor(Math.random() * mapQuestions.length);
+        if (mapQuestions.length > 1 && nextIndex === previousIndex) {
+          nextIndex = (previousIndex + 1) % mapQuestions.length;
+        }
+      }
+      if (mapQuestions.length > 1 && nextIndex === previousIndex) {
+        nextIndex = (previousIndex + 1) % mapQuestions.length;
+      }
+      mapPreviousIndex = previousIndex;
+      mapQuestionIndex = nextIndex;
       mapQuestionNumber = mapQuestionNumber >= 10 ? 1 : mapQuestionNumber + 1;
       renderMapQuestion();
-      if (worldMap) {
-        setTimeout(() => worldMap.invalidateSize(), 50);
-      }
+      if (worldMap) setTimeout(() => worldMap.invalidateSize(), 50);
+      return true;
     }
     // Кнопка викликається з HTML, тому функцію потрібно зробити глобальною.
     window.nextMapQuestion = nextMapQuestion;
