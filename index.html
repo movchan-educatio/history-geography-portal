@@ -514,6 +514,22 @@
     .dino-leaderboard-title { padding:6px 9px; font-size:12px; font-weight:900; color:#0369a1; background:#e0f2fe; }
     .dino-leader-row { display:flex; justify-content:space-between; align-items:center; padding:5px 9px; font-size:11px; border-top:1px solid #e2e8f0; }
     .dino-leader-row strong { color:#2563eb; }
+    .history-activity-card {
+      background:#ffffff; border:1px solid #e7c9b8; border-radius:14px; padding:15px;
+      display:flex; flex-direction:column; gap:10px; min-height:320px;
+      grid-column:2;
+    }
+    .map-activity-card { grid-column:1; }
+    @media (max-width:700px) { .map-activity-card, .history-activity-card { grid-column:auto; } }
+    .history-task { font-size:13px; font-weight:800; color:#6b2f1f; line-height:1.35; }
+    .history-question { font-size:15px; font-weight:900; color:#3b241c; line-height:1.35; min-height:42px; }
+    .history-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .history-option { border:1px solid #e7c9b8; background:#fffaf7; color:#5b2c1f; border-radius:9px; padding:9px 7px; font-weight:800; cursor:pointer; }
+    .history-option:hover { background:#f8eee8; }
+    .history-option:disabled { opacity:.55; cursor:not-allowed; }
+    .history-status { min-height:32px; padding:7px 9px; border-radius:8px; font-size:12px; font-weight:700; background:#f8fafc; color:#475569; }
+    .history-next { width:100%; border:0; border-radius:8px; padding:8px 10px; font-weight:800; cursor:pointer; background:#6b2f1f; color:#fff; }
+    .history-next:disabled { opacity:.5; cursor:not-allowed; }
     @media (max-width:700px) { #worldMap { height:190px; } .dino-game-card { height:auto; min-height:420px; } }
 </style>
   <link rel="stylesheet" href="modern-theme.css?v=300">
@@ -599,6 +615,7 @@
             <li>Відкривайте для себе щодня цікаві історичні факти, інтерактивні вікторини та віртуальні екскурсії.</li>
           </ul>
         </div>
+
       </div>
     </section>
 
@@ -728,6 +745,17 @@
           </div>
           <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
         </div>
+
+        <!-- Блок 4: Історична хронологія -->
+        <div class="history-activity-card">
+          <div style="font-weight:900;color:#6b2f1f;font-size:14px;">📜 Історичний хронолог</div>
+          <div class="history-task">Оберіть правильний рік історичної події</div>
+          <div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
+          <div class="history-options" id="historyActivityOptions"></div>
+          <div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
+          <button class="history-next" id="historyActivityNext" onclick="nextHistoryActivityQuestion()" disabled>Наступне питання</button>
+          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
+        </div>
       </div>
     </section>
 
@@ -851,6 +879,7 @@
         if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
         if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
         if (data.map_activity_points === undefined) data.map_activity_points = 0;
+        if (data.history_activity_points === undefined) data.history_activity_points = 0;
 
         // Поточний тиждень. Перший запуск старих профілів зберігає вже нараховані тижневі поля.
         // Нові профілі стартують з нуля. Надалі week_key захищає від перенесення старих балів у новий тиждень.
@@ -862,6 +891,7 @@
           if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = 0;
           if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = 0;
           if (data.week_map_activity_points === undefined) data.week_map_activity_points = 0;
+          if (data.week_history_activity_points === undefined) data.week_history_activity_points = 0;
           data.week_key = currentWeek;
         } else if (data.week_key !== currentWeek) {
           data.week_history_points = 0;
@@ -870,6 +900,7 @@
           data.week_nmt_geography_score = 0;
           data.week_truth_or_lie_points = 0;
           data.week_map_activity_points = 0;
+          data.week_history_activity_points = 0;
           data.week_score = 0;
           data.week_key = currentWeek;
         }
@@ -879,7 +910,8 @@
           (Number(data.week_nmt_history_score) || 0) +
           (Number(data.week_nmt_geography_score) || 0) +
           (Number(data.week_truth_or_lie_points) || 0) +
-           (Number(data.week_map_activity_points) || 0);
+           (Number(data.week_map_activity_points) || 0) +
+           (Number(data.week_history_activity_points) || 0);
         return data;
       });
     }
@@ -1166,6 +1198,7 @@
           updates[`users/${uid}/week_nmt_geography_score`] = 0;
           updates[`users/${uid}/week_truth_or_lie_points`] = 0;
           updates[`users/${uid}/week_map_activity_points`] = 0;
+          updates[`users/${uid}/week_history_activity_points`] = 0;
           updates[`users/${uid}/week_key`] = currentWeek;
         }
       });
@@ -1195,7 +1228,8 @@
           (Number(data.week_nmt_history_score) || 0) +
           (Number(data.week_nmt_geography_score) || 0) +
           (Number(data.week_truth_or_lie_points) || 0) +
-           (Number(data.week_map_activity_points) || 0);
+           (Number(data.week_map_activity_points) || 0) +
+           (Number(data.week_history_activity_points) || 0);
         return data;
       });
     };
@@ -1731,12 +1765,30 @@
       });
     }
 
+    function chooseDifferentRandomIndex(length, storageKey, currentIndex = -1) {
+      if (!length) return 0;
+      const saved = Number(sessionStorage.getItem(storageKey));
+      let previous = Number.isInteger(saved) ? saved : currentIndex;
+      let next = Math.floor(Math.random() * length);
+      if (length > 1) {
+        while (next === previous) next = Math.floor(Math.random() * length);
+      }
+      sessionStorage.setItem(storageKey, String(next));
+      return next;
+    }
+
     function initPageData() {
       setupTravelerAnimation();
       updateDinoHighScoreUI();
       renderDinoLeaderboard();
       loadDinoLeaderboard();
       setupSiteSearch();
+
+      // Кожне завантаження сторінки починає активності з іншого випадкового завдання.
+      mapQuestionIndex = chooseDifferentRandomIndex(mapQuestions.length, 'portal_last_map_question');
+      historyActivityIndex = chooseDifferentRandomIndex(historyActivityQuestions.length, 'portal_last_history_activity_question');
+      mapQuestionNumber = 1;
+      historyActivityNumber = 1;
 
       // Завантаження випадкового факту історії
       const randomHist = keyEvents[Math.floor(Math.random() * keyEvents.length)];
@@ -1862,7 +1914,7 @@
       { country:'Аргентина', lat:-38.4, lng:-63.6 },
       { country:'Норвегія', lat:64.5, lng:17.5 }
     ];
-    let worldMap = null, mapMarker = null, mapQuestionIndex = 0, mapAnswered = false, mapScore = 0;
+    let worldMap = null, mapMarker = null, mapQuestionIndex = 0, mapAnswered = false, mapScore = 0, mapPreviousIndex = -1, mapQuestionNumber = 1;
 
     function initMapActivity() {
       if (!window.L || !document.getElementById('worldMap')) return;
@@ -1879,12 +1931,12 @@
       document.getElementById('mapStatus').textContent = 'Натисніть на карту там, де розташована потрібна країна.';
       document.getElementById('mapStatus').style.background = '#f8fafc';
       document.getElementById('mapStatus').style.color = '#475569';
-      document.getElementById('mapQuestionNumber').textContent = mapQuestionIndex + 1;
+      document.getElementById('mapQuestionNumber').textContent = mapQuestionNumber;
       document.getElementById('mapNextBtn').disabled = true;
       if (mapMarker) { mapMarker.remove(); mapMarker = null; }
     }
 
-    function handleMapClick(e) {
+    async function handleMapClick(e) {
       if (mapAnswered) return;
       const q = mapQuestions[mapQuestionIndex];
       const dLat = e.latlng.lat - q.lat;
@@ -1897,7 +1949,16 @@
         status.textContent = '🎉 Правильно! +1 бал. Ви потрапили в межі країни або дуже близько до неї.';
         status.style.background = '#dcfce7'; status.style.color = '#15803d';
         mapScore++;
-        saveMapPointToFirebase();
+        status.textContent = '⏳ Правильно! Зберігаємо +1 бал у загальному рейтингу…';
+        status.style.background = '#fef3c7'; status.style.color = '#92400e';
+        const saved = await saveMapPointToFirebase();
+        if (saved) {
+          status.textContent = '🎉 Правильно! +1 бал додано до загального та тижневого рейтингу.';
+          status.style.background = '#dcfce7'; status.style.color = '#15803d';
+        } else {
+          status.textContent = '⚠️ Відповідь правильна, але бал не збережено. Перевірте, чи виконано вхід через Google.';
+          status.style.background = '#fef3c7'; status.style.color = '#92400e';
+        }
       } else {
         status.textContent = `❌ Не зовсім. Правильне розташування: ${q.country}.`;
         status.style.background = '#fee2e2'; status.style.color = '#b91c1c';
@@ -1906,9 +1967,9 @@
       document.getElementById('mapNextBtn').disabled = false;
     }
 
-    function saveMapPointToFirebase() {
-      if (!window.currentUserUid) return;
-      runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
+    async function saveMapPointToFirebase() {
+      if (!window.currentUserUid) return false;
+      return await runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
         data = data || {};
         data.name = data.name || window.currentStudent || 'Учень';
         data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
@@ -1921,15 +1982,124 @@
           (Number(data.week_nmt_history_score) || 0) +
           (Number(data.week_nmt_geography_score) || 0) +
           (Number(data.week_truth_or_lie_points) || 0) +
-          (Number(data.week_map_activity_points) || 0);
+          (Number(data.week_map_activity_points) || 0) +
+          (Number(data.week_history_activity_points) || 0);
         return data;
-      }).catch(error => console.error('Бал за карту:', error));
+      }).then(() => true).catch(error => {
+        console.error('Бал за карту:', error);
+        return false;
+      });
     }
 
     function nextMapQuestion() {
-      mapQuestionIndex = (mapQuestionIndex + 1) % mapQuestions.length;
+      if (!mapAnswered) return;
+      mapPreviousIndex = mapQuestionIndex;
+      mapQuestionIndex = chooseDifferentRandomIndex(mapQuestions.length, 'portal_last_map_question', mapQuestionIndex);
+      mapQuestionNumber = mapQuestionNumber >= 10 ? 1 : mapQuestionNumber + 1;
       renderMapQuestion();
+      if (worldMap) {
+        setTimeout(() => worldMap.invalidateSize(), 50);
+      }
     }
+    // Кнопка викликається з HTML, тому функцію потрібно зробити глобальною.
+    window.nextMapQuestion = nextMapQuestion;
+
+    /* --- ІСТОРИЧНИЙ ХРОНОЛОГ --- */
+    const historyActivityQuestions = [
+      { event:'Хрещення Русі за князя Володимира Великого', correct:'988', options:['882','988','1019','1240'] },
+      { event:'Берестейська церковна унія', correct:'1596', options:['1569','1596','1648','1710'] },
+      { event:'Люблінська унія', correct:'1569', options:['1385','1569','1596','1654'] },
+      { event:'Конституція Пилипа Орлика', correct:'1710', options:['1648','1659','1710','1781'] },
+      { event:'Початок Першої світової війни', correct:'1914', options:['1905','1914','1917','1939'] },
+      { event:'Початок Української революції', correct:'1917', options:['1905','1914','1917','1921'] },
+      { event:'Проголошення Акта Злуки УНР і ЗУНР', correct:'1919', options:['1917','1918','1919','1921'] },
+      { event:'Проголошення незалежності України', correct:'1991', options:['1989','1990','1991','1996'] },
+      { event:'Прийняття Конституції України', correct:'1996', options:['1991','1994','1996','2004'] },
+      { event:'Початок Революції Гідності', correct:'2013', options:['2004','2008','2013','2014'] }
+    ];
+    let historyActivityIndex = 0;
+    let historyActivityAnswered = false;
+    let historyActivityPreviousIndex = -1;
+    let historyActivityNumber = 1;
+
+    function renderHistoryActivityQuestion() {
+      const q = historyActivityQuestions[historyActivityIndex];
+      historyActivityAnswered = false;
+      const question = document.getElementById('historyActivityQuestion');
+      const options = document.getElementById('historyActivityOptions');
+      const status = document.getElementById('historyActivityStatus');
+      const next = document.getElementById('historyActivityNext');
+      const number = document.getElementById('historyActivityNumber');
+      if (!question || !options || !status || !next || !number) return;
+      question.textContent = q.event;
+      number.textContent = historyActivityNumber;
+      status.textContent = 'Оберіть один із варіантів.';
+      status.style.background = '#f8fafc';
+      status.style.color = '#475569';
+      next.disabled = true;
+      options.innerHTML = q.options.map(year => `<button class="history-option" type="button" onclick="answerHistoryActivity('${year}')">${year}</button>`).join('');
+    }
+
+    async function saveHistoryActivityPoint() {
+      if (!window.currentUserUid) {
+        alert('Увійдіть через Google, щоб бал зберігся у рейтингу.');
+        return false;
+      }
+      try {
+        await runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
+          data = data || {};
+          data.name = data.name || window.currentStudent || 'Учень';
+          data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
+          data.score = (Number(data.score) || 0) + 1;
+          data.history_activity_points = (Number(data.history_activity_points) || 0) + 1;
+          data.week_history_activity_points = (Number(data.week_history_activity_points) || 0) + 1;
+          data.week_score =
+            (Number(data.week_history_points) || 0) +
+            (Number(data.week_geography_points) || 0) +
+            (Number(data.week_nmt_history_score) || 0) +
+            (Number(data.week_nmt_geography_score) || 0) +
+            (Number(data.week_truth_or_lie_points) || 0) +
+            (Number(data.week_map_activity_points) || 0) +
+            (Number(data.week_history_activity_points) || 0);
+          return data;
+        });
+        return true;
+      } catch (error) {
+        console.error('Бал за історичну активність:', error);
+        return false;
+      }
+    }
+
+    async function answerHistoryActivity(year) {
+      if (historyActivityAnswered) return;
+      const q = historyActivityQuestions[historyActivityIndex];
+      if (!q) return;
+      historyActivityAnswered = true;
+      document.querySelectorAll('#historyActivityOptions .history-option').forEach(btn => btn.disabled = true);
+      const status = document.getElementById('historyActivityStatus');
+      const next = document.getElementById('historyActivityNext');
+      if (String(year) === q.correct) {
+        status.textContent = '🎉 Правильно! +1 бал.';
+        status.style.background = '#dcfce7';
+        status.style.color = '#15803d';
+        await saveHistoryActivityPoint();
+      } else {
+        status.textContent = `❌ Неправильно. Правильна відповідь: ${q.correct} рік.`;
+        status.style.background = '#fee2e2';
+        status.style.color = '#b91c1c';
+      }
+      if (next) next.disabled = false;
+    }
+
+    function nextHistoryActivityQuestion() {
+      if (!historyActivityAnswered) return;
+      historyActivityPreviousIndex = historyActivityIndex;
+      historyActivityIndex = chooseDifferentRandomIndex(historyActivityQuestions.length, 'portal_last_history_activity_question', historyActivityIndex);
+      historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
+      renderHistoryActivityQuestion();
+    }
+    window.answerHistoryActivity = answerHistoryActivity;
+    window.nextHistoryActivityQuestion = nextHistoryActivityQuestion;
 
     function openModal(type) {
       const modal = document.getElementById('info-modal');
@@ -1960,7 +2130,12 @@
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-  window.addEventListener('DOMContentLoaded', () => { setTimeout(initMapActivity, 100); });
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      initMapActivity();
+      renderHistoryActivityQuestion();
+    }, 100);
+  });
 </script>
 </body>
 </html>
