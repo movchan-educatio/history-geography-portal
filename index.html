@@ -753,7 +753,7 @@
           <div id="worldMap"></div>
           <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
           <div class="map-actions">
-            <button class="map-next" id="mapNextBtn" onclick="nextMapQuestion()" disabled>Наступне питання</button>
+            <button class="map-next" id="mapNextBtn" type="button" disabled>Наступне питання</button>
           </div>
           <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
         </div>
@@ -765,7 +765,7 @@
           <div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
           <div class="history-options" id="historyActivityOptions"></div>
           <div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
-          <button class="history-next" id="historyActivityNext" onclick="nextHistoryActivityQuestion()" disabled>Наступне питання</button>
+          <button class="history-next" id="historyActivityNext" type="button" disabled>Наступне питання</button>
           <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
         </div>
       </div>
@@ -4142,71 +4142,83 @@
       const status = document.getElementById('historyActivityStatus');
       const next = document.getElementById('historyActivityNext');
       if (String(year) === q.correct) {
-        status.textContent = '🎉 Правильно! +1 бал.';
-        status.style.background = '#dcfce7';
-        status.style.color = '#15803d';
-        const saved = await saveHistoryActivityPoint();
-        if (saved && window.currentUserUid) {
-          const mine = await get(ref(database, 'users/' + window.currentUserUid));
-          if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
+        // Кнопку переходу вмикаємо одразу. Збереження в Firebase не повинно
+        // блокувати перехід до наступного питання.
+        if (next) next.disabled = false;
+        if (status) {
+          status.textContent = '🎉 Правильно! +1 бал. Натисніть «Наступне питання».';
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
         }
+        saveHistoryActivityPoint().then(async saved => {
+          if (saved && window.currentUserUid) {
+            try {
+              const mine = await get(ref(database, 'users/' + window.currentUserUid));
+              if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
+            } catch (e) {
+              console.warn('Не вдалося оновити індикатор балів:', e);
+            }
+          }
+        }).catch(error => console.error('Помилка збереження бала хронолога:', error));
       } else {
-        status.textContent = `❌ Неправильно. Правильна відповідь: ${q.correct} рік.`;
-        status.style.background = '#fee2e2';
-        status.style.color = '#b91c1c';
+        if (status) {
+          status.textContent = `❌ Неправильно. Правильна відповідь: ${q.correct} рік.`;
+          status.style.background = '#fee2e2';
+          status.style.color = '#b91c1c';
+        }
+        if (next) next.disabled = false;
       }
-      if (next) next.disabled = false;
     }
 
     function nextHistoryActivityQuestion() {
-      const next = document.getElementById('historyActivityNext');
       if (!historyActivityAnswered) return false;
+      const previousIndex = historyActivityIndex;
       try {
-        historyActivityPreviousIndex = historyActivityIndex;
-        const previousIndex = historyActivityIndex;
-        historyActivityIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question', previousIndex);
-        if (historyActivityIndex === previousIndex && historyActivityQuestions.length > 1) {
-          historyActivityIndex = (previousIndex + 1) % historyActivityQuestions.length;
+        let nextIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question', previousIndex);
+        if (historyActivityQuestions.length > 1 && nextIndex === previousIndex) {
+          nextIndex = (previousIndex + 1) % historyActivityQuestions.length;
         }
-        historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
-        renderHistoryActivityQuestion();
-        return true;
+        historyActivityIndex = nextIndex;
       } catch (error) {
-        console.error('Помилка переходу до наступного питання хронолога:', error);
-        // Навіть якщо браузер заблокував sessionStorage, гра повинна продовжуватися.
+        console.warn('Сховище стану хронолога недоступне, використовуємо випадковий перехід:', error);
         if (historyActivityQuestions.length > 1) {
-          historyActivityIndex = (historyActivityIndex + 1) % historyActivityQuestions.length;
+          let nextIndex = Math.floor(Math.random() * historyActivityQuestions.length);
+          while (nextIndex === previousIndex) nextIndex = Math.floor(Math.random() * historyActivityQuestions.length);
+          historyActivityIndex = nextIndex;
         }
-        historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
-        renderHistoryActivityQuestion();
-        if (next) next.disabled = false;
-        return true;
       }
+      historyActivityPreviousIndex = previousIndex;
+      historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
+      renderHistoryActivityQuestion();
+      return true;
     }
     window.answerHistoryActivity = answerHistoryActivity;
     window.nextHistoryActivityQuestion = nextHistoryActivityQuestion;
 
-    // Надійний обробник кнопки «Наступне питання» без залежності від inline onclick.
-    document.addEventListener('DOMContentLoaded', () => {
+    // Єдиний обробник кнопок переходу. Inline onclick навмисно не використовуємо,
+    // щоб одна відповідь не викликала перехід двічі.
+    function bindActivityNextButtons() {
       const historyNextButton = document.getElementById('historyActivityNext');
-      if (historyNextButton) {
+      if (historyNextButton && !historyNextButton.dataset.bound) {
+        historyNextButton.dataset.bound = '1';
         historyNextButton.type = 'button';
         historyNextButton.addEventListener('click', (event) => {
           event.preventDefault();
-          event.stopPropagation();
-          nextHistoryActivityQuestion();
+          if (!historyNextButton.disabled) nextHistoryActivityQuestion();
         });
       }
       const mapNextButton = document.getElementById('mapNextBtn');
-      if (mapNextButton) {
+      if (mapNextButton && !mapNextButton.dataset.bound) {
+        mapNextButton.dataset.bound = '1';
         mapNextButton.type = 'button';
         mapNextButton.addEventListener('click', (event) => {
           event.preventDefault();
-          event.stopPropagation();
-          nextMapQuestion();
+          if (!mapNextButton.disabled) nextMapQuestion();
         });
       }
-    });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindActivityNextButtons, {once:true});
+    else bindActivityNextButtons();
     // Ці функції викликаються нижче після завантаження Leaflet.
     // Оскільки основний код працює в type=module, робимо їх доступними глобально.
     window.initMapActivity = initMapActivity;
