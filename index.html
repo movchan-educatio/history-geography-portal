@@ -1083,14 +1083,14 @@
         const avatarUrl = student.photoURL || student.googlePhotoURL || '';
         const initials = String(name).trim().charAt(0).toUpperCase() || 'У';
         const avatarHtml = avatarUrl
-          ? `<img class="leaderboard-avatar" src="${esc(avatarUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="leaderboard-avatar-fallback" style="display:none">${esc(initials)}</span>`
-          : `<span class="leaderboard-avatar-fallback">${esc(initials)}</span>`;
+          ? `<img class="leaderboard-avatar" src="${escapeHtml(avatarUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="leaderboard-avatar-fallback" style="display:none">${escapeHtml(initials)}</span>`
+          : `<span class="leaderboard-avatar-fallback">${escapeHtml(initials)}</span>`;
         return `<div class="leaderboard-item clickable-student ${isMe ? 'current-user' : ''}" onclick="showStudentDetails('${student.uid}')" title="Відкрити детальну статистику">
           <div class="student-info">
             <span class="student-rank ${rankClass}">#${index + 1}</span>
             <span class="leaderboard-avatar-wrap">${avatarHtml}</span>
             <div>
-              <span>${esc(name)}${isMe ? ' (Ви)' : ''}</span>
+              <span>${escapeHtml(name)}${isMe ? ' (Ви)' : ''}</span>
               <div style="font-size:11px;color:#64748b;margin-top:3px;line-height:1.55;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology}</div>
             </div>
           </div>
