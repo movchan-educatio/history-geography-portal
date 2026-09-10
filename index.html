@@ -625,8 +625,8 @@
         </div>
         <div>
           <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-            <button onclick="checkCountryGame(true)" style="flex: 1; background: #16a34a; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">✅ Правда</button>
-            <button onclick="checkCountryGame(false)" style="flex: 1; background: #dc2626; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">❌ Брехня</button>
+            <button data-country-game-answer onclick="checkCountryGame(true)" style="flex: 1; background: #16a34a; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">✅ Правда</button>
+            <button data-country-game-answer onclick="checkCountryGame(false)" style="flex: 1; background: #dc2626; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">❌ Брехня</button>
           </div>
           <div id="country-game-result" style="font-size: 12px; padding: 6px; border-radius: 6px; display: none;"></div>
         </div>
@@ -1662,10 +1662,29 @@
       }
     }
 
+    // Захист гри: одне питання можна відповісти лише один раз.
+    // Після першого натискання обидві кнопки блокуються до появи нового питання.
+    let countryGameAnswered = false;
+    let countryGameNextTimer = null;
+
+    function setCountryGameButtonsDisabled(disabled) {
+      const buttons = document.querySelectorAll('[data-country-game-answer]');
+      buttons.forEach(button => {
+        button.disabled = disabled;
+        button.style.opacity = disabled ? '0.65' : '1';
+        button.style.cursor = disabled ? 'not-allowed' : 'pointer';
+      });
+    }
+
     function checkCountryGame(userAnswer) {
+      // Повторний клік/автоклікер на те саме питання нічого не дає.
+      if (countryGameAnswered) return;
+      countryGameAnswered = true;
+      setCountryGameButtonsDisabled(true);
+
       const gameItem = countriesGameData[currentCountryGameIndex];
       const resultElem = document.getElementById('country-game-result');
-      if (!resultElem) return;
+      if (!resultElem || !gameItem) return;
 
       resultElem.style.display = 'block';
       if (userAnswer === gameItem.isTrue) {
@@ -1679,7 +1698,8 @@
         resultElem.innerHTML = '❌ Неправильно! Спробуйте ще раз.';
       }
 
-      setTimeout(() => {
+      if (countryGameNextTimer) clearTimeout(countryGameNextTimer);
+      countryGameNextTimer = setTimeout(() => {
         currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
         const nextItem = countriesGameData[currentCountryGameIndex];
         const gameTextElem = document.getElementById('country-game-text');
@@ -1687,6 +1707,8 @@
           gameTextElem.innerHTML = `🏳️ <strong>${nextItem.country}:</strong> ${nextItem.text}`;
         }
         resultElem.style.display = 'none';
+        countryGameAnswered = false;
+        setCountryGameButtonsDisabled(false);
       }, 3000);
     }
 
