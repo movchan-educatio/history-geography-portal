@@ -3056,53 +3056,73 @@
       if (mapMarker) { mapMarker.remove(); mapMarker = null; }
     }
 
-    async function handleMapClick(e) {
+    function handleMapClick(e) {
       if (mapAnswered) return;
+
       const q = mapQuestions[mapQuestionIndex];
+      if (!q || !worldMap) return;
+
       const dLat = e.latlng.lat - q.lat;
       const dLng = (e.latlng.lng - q.lng) * Math.cos(q.lat * Math.PI / 180);
       const distance = Math.sqrt(dLat*dLat + dLng*dLng);
+      const isCorrect = distance <= 6.5;
+
+      // Відповідь фіксуємо одразу. Перехід до нового завдання НЕ чекає Firebase.
       mapAnswered = true;
+      const answeredIndex = mapQuestionIndex;
+
       mapMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(worldMap);
       const status = document.getElementById('mapStatus');
-      if (distance <= 6.5) {
-        status.textContent = '🎉 Правильно! +1 бал. Ви потрапили в межі країни або дуже близько до неї.';
-        status.style.background = '#dcfce7'; status.style.color = '#15803d';
+
+      if (isCorrect) {
         mapScore++;
-        status.textContent = '⏳ Правильно! Зберігаємо +1 бал у загальному рейтингу…';
-        status.style.background = '#fef3c7'; status.style.color = '#92400e';
-        const saved = await saveMapPointToFirebase();
-        if (saved) {
-          // Миттєво оновлюємо локальне відображення; Firebase realtime-слухач підтвердить значення.
-          if (window.currentUserUid) {
-            const mine = await get(ref(database, 'users/' + window.currentUserUid));
-            if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
-          }
-          status.textContent = '🎉 Правильно! +1 бал додано до загального та тижневого рейтингу. Наступна країна завантажується…';
-          status.style.background = '#dcfce7'; status.style.color = '#15803d';
-        } else {
-          status.textContent = '⚠️ Відповідь правильна, але бал не збережено. Перевірте, чи виконано вхід через Google.';
-          status.style.background = '#fef3c7'; status.style.color = '#92400e';
+        if (status) {
+          status.textContent = '🎉 Правильно! +1 бал. Наступна країна завантажується…';
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
         }
-        // Правильна карта розблоковує Динорейсер. Розблокування також зберігається у Firebase.
-        unlockDinoAfterActivity();
-        // Без кнопки: після правильної відповіді автоматично показуємо нову країну.
-        const answeredIndex = mapQuestionIndex;
-        setTimeout(() => {
-          if (mapQuestionIndex !== answeredIndex || !mapAnswered) return;
-          nextMapQuestion();
-        }, 900);
+
+        // Запис бала та розблокування Динорейсера запускаємо у фоні.
+        // Навіть якщо Firebase відповідає повільно, гра продовжує працювати.
+        Promise.resolve(saveMapPointToFirebase()).then(saved => {
+          if (!saved) {
+            console.warn('Карта: бал буде повторно синхронізовано після готовності Firebase/Auth.');
+            return;
+          }
+          if (window.currentUserUid && typeof get === 'function' && typeof ref === 'function') {
+            get(ref(database, 'users/' + window.currentUserUid))
+              .then(mine => {
+                if (mine.exists() && typeof updateCurrentScoreBadge === 'function') {
+                  updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
+                }
+              })
+              .catch(err => console.warn('Карта: не вдалося оновити індикатор бала:', err));
+          }
+        }).catch(err => console.error('Карта: помилка фонового збереження бала:', err));
+
+        if (typeof unlockDinoAfterActivity === 'function') {
+          Promise.resolve(unlockDinoAfterActivity()).catch(err =>
+            console.warn('Карта: не вдалося зберегти розблокування Динорейсера:', err)
+          );
+        }
       } else {
-        status.textContent = `❌ Не влучили. Наступна країна завантажується…`;
-        status.style.background = '#fee2e2'; status.style.color = '#b91c1c';
-        L.marker([q.lat,q.lng]).addTo(worldMap).bindPopup(`📍 Правильне розташування: ${q.country}`).openPopup();
-        // Помилка також завершує спробу: через коротку паузу автоматично показуємо нову країну.
-        const answeredIndex = mapQuestionIndex;
-        setTimeout(() => {
-          if (mapQuestionIndex !== answeredIndex || !mapAnswered) return;
-          nextMapQuestion();
-        }, 900);
+        if (status) {
+          status.textContent = '❌ Не влучили. Наступна країна завантажується…';
+          status.style.background = '#fee2e2';
+          status.style.color = '#b91c1c';
+        }
+        L.marker([q.lat, q.lng])
+          .addTo(worldMap)
+          .bindPopup(`📍 Правильне розташування: ${q.country}`)
+          .openPopup();
       }
+
+      // ЄДИНИЙ таймер переходу. Він запускається одразу після відповіді
+      // і не залежить від швидкості Firebase, await або мережі.
+      setTimeout(() => {
+        if (mapQuestionIndex !== answeredIndex || !mapAnswered) return;
+        nextMapQuestion();
+      }, isCorrect ? 900 : 900);
     }
 
     async function saveMapPointToFirebase() {
