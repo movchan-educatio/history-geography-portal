@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Підключення іконок -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="style.css?v=16">
   
   <style>
@@ -496,7 +497,25 @@
     }
     .virtual-tour-card .icon { font-size: 38px; margin-bottom: 10px; }
     .virtual-tour-card span { font-size: 14px; font-weight: 700; color: #1e293b; }
-  </style>
+  
+    /* --- НОВА АКТИВНІСТЬ: ГЕОГРАФІЧНИЙ ДЕТЕКТИВ --- */
+    .map-activity-card {
+      background:#ffffff; border:1px solid #bae6fd; border-radius:14px; padding:15px;
+      display:flex; flex-direction:column; gap:10px; min-height:320px;
+    }
+    #worldMap { width:100%; height:210px; border-radius:10px; overflow:hidden; border:1px solid #cbd5e1; }
+    .map-task { font-size:13px; font-weight:800; color:#0369a1; line-height:1.35; }
+    .map-status { min-height:32px; padding:7px 9px; border-radius:8px; font-size:12px; font-weight:700; background:#f8fafc; color:#475569; }
+    .map-actions { display:flex; gap:8px; }
+    .map-actions button { flex:1; border:0; border-radius:8px; padding:7px 10px; font-weight:800; cursor:pointer; }
+    .map-next { background:#0284c7; color:#fff; }
+    .map-next:disabled { opacity:.5; cursor:not-allowed; }
+    .dino-leaderboard { width:100%; margin-top:8px; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden; background:#f8fafc; }
+    .dino-leaderboard-title { padding:6px 9px; font-size:12px; font-weight:900; color:#0369a1; background:#e0f2fe; }
+    .dino-leader-row { display:flex; justify-content:space-between; align-items:center; padding:5px 9px; font-size:11px; border-top:1px solid #e2e8f0; }
+    .dino-leader-row strong { color:#2563eb; }
+    @media (max-width:700px) { #worldMap { height:190px; } .dino-game-card { height:auto; min-height:420px; } }
+</style>
   <link rel="stylesheet" href="modern-theme.css?v=300">
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
@@ -691,6 +710,23 @@
           </div>
 
           <button id="dinoStartBtn" onclick="startDinoGame()" disabled style="background: #94a3b8; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: not-allowed; font-size: 12px; width: 100%;">Старт / Стрибок (Пробіл або Тап)</button>
+
+          <div class="dino-leaderboard">
+            <div class="dino-leaderboard-title">🏆 Лідери Динозаврика-Ранера • усі учні</div>
+            <div id="dinoLeaderboardList"></div>
+          </div>
+        </div>
+
+        <!-- Блок 3: Робота з картою -->
+        <div class="map-activity-card">
+          <div style="font-weight:900;color:#0369a1;font-size:14px;">🗺️ Географічний детектив</div>
+          <div class="map-task" id="mapTask">Завантаження завдання...</div>
+          <div id="worldMap"></div>
+          <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
+          <div class="map-actions">
+            <button class="map-next" id="mapNextBtn" onclick="nextMapQuestion()" disabled>Наступне питання</button>
+          </div>
+          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
         </div>
       </div>
     </section>
@@ -814,6 +850,7 @@
         if (data.nmt_history_score === undefined) data.nmt_history_score = 0;
         if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
         if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
+        if (data.map_activity_points === undefined) data.map_activity_points = 0;
 
         // Поточний тиждень. Перший запуск старих профілів зберігає вже нараховані тижневі поля.
         // Нові профілі стартують з нуля. Надалі week_key захищає від перенесення старих балів у новий тиждень.
@@ -824,6 +861,7 @@
           if (data.week_nmt_history_score === undefined) data.week_nmt_history_score = 0;
           if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = 0;
           if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = 0;
+          if (data.week_map_activity_points === undefined) data.week_map_activity_points = 0;
           data.week_key = currentWeek;
         } else if (data.week_key !== currentWeek) {
           data.week_history_points = 0;
@@ -831,6 +869,7 @@
           data.week_nmt_history_score = 0;
           data.week_nmt_geography_score = 0;
           data.week_truth_or_lie_points = 0;
+          data.week_map_activity_points = 0;
           data.week_score = 0;
           data.week_key = currentWeek;
         }
@@ -839,7 +878,8 @@
           (Number(data.week_geography_points) || 0) +
           (Number(data.week_nmt_history_score) || 0) +
           (Number(data.week_nmt_geography_score) || 0) +
-          (Number(data.week_truth_or_lie_points) || 0);
+          (Number(data.week_truth_or_lie_points) || 0) +
+           (Number(data.week_map_activity_points) || 0);
         return data;
       });
     }
@@ -863,6 +903,7 @@
         const geo = Number(student.week_geography_points) || 0;
         const nmt = (Number(student.week_nmt_history_score) || 0) + (Number(student.week_nmt_geography_score) || 0);
         const truth = Number(student.week_truth_or_lie_points) || 0;
+        const map = Number(student.week_map_activity_points) || 0;
         const isMe = student.uid === window.currentUserUid;
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const name = student.name || student.displayName || student.email || 'Учень';
@@ -871,7 +912,7 @@
             <span class="student-rank ${rankClass}">#${index + 1}</span>
             <div>
               <span>${name}${isMe ? ' (Ви)' : ''}</span>
-              <div style="font-size:11px;color:#64748b;margin-top:3px;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth}</div>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map}</div>
             </div>
           </div>
           <span class="student-score">${score} балів</span>
@@ -1124,6 +1165,7 @@
           updates[`users/${uid}/week_nmt_history_score`] = 0;
           updates[`users/${uid}/week_nmt_geography_score`] = 0;
           updates[`users/${uid}/week_truth_or_lie_points`] = 0;
+          updates[`users/${uid}/week_map_activity_points`] = 0;
           updates[`users/${uid}/week_key`] = currentWeek;
         }
       });
@@ -1152,7 +1194,8 @@
           (Number(data.week_geography_points) || 0) +
           (Number(data.week_nmt_history_score) || 0) +
           (Number(data.week_nmt_geography_score) || 0) +
-          (Number(data.week_truth_or_lie_points) || 0);
+          (Number(data.week_truth_or_lie_points) || 0) +
+           (Number(data.week_map_activity_points) || 0);
         return data;
       });
     };
@@ -1271,6 +1314,61 @@
       ctx.restore();
     }
 
+    // Загальна таблиця лідерів Динозаврика з Firebase.
+    // Для кожного учня зберігаємо лише найкращий результат.
+    let dinoLeaderboardData = [];
+
+    function renderDinoLeaderboard(board = dinoLeaderboardData) {
+      const box = document.getElementById('dinoLeaderboardList');
+      if (!box) return;
+      const cleanBoard = (Array.isArray(board) ? board : [])
+        .filter(p => p && p.name && Number.isFinite(Number(p.score)))
+        .sort((a,b) => Number(b.score) - Number(a.score))
+        .slice(0, 10);
+      if (!cleanBoard.length) {
+        box.innerHTML = '<div class="dino-leader-row"><span>Поки що немає результатів</span><span>—</span></div>';
+        return;
+      }
+      box.innerHTML = cleanBoard.map((p,i) => {
+        const me = p.uid === window.currentUserUid ? ' (Ви)' : '';
+        return `<div class="dino-leader-row"><span>${i+1}. ${escapeHtml(p.name)}${me}</span><strong>${Math.floor(Number(p.score))}</strong></div>`;
+      }).join('');
+    }
+
+    function loadDinoLeaderboard() {
+      if (typeof database === 'undefined') return;
+      onValue(ref(database, 'dinoLeaderboard'), snapshot => {
+        const raw = snapshot.val() || {};
+        dinoLeaderboardData = Object.entries(raw).map(([uid, value]) => ({
+          uid,
+          name: value && value.name ? value.name : 'Гравець',
+          score: Number(value && value.score) || 0
+        }));
+        renderDinoLeaderboard();
+      }, error => {
+        console.error('Таблиця Динозаврика:', error);
+        renderDinoLeaderboard([]);
+      });
+    }
+
+    async function saveDinoLeaderboard(score) {
+      if (!Number.isFinite(score) || score <= 0 || !window.currentUserUid) return;
+      const uid = window.currentUserUid;
+      const name = (window.currentStudent || 'Гравець').trim().slice(0, 30) || 'Гравець';
+      const playerRef = ref(database, 'dinoLeaderboard/' + uid);
+      try {
+        await runTransaction(playerRef, current => {
+          current = current || {};
+          const oldScore = Number(current.score) || 0;
+          const newScore = Math.floor(score);
+          if (newScore <= oldScore) return current;
+          return { name, score: newScore, updatedAt: Date.now() };
+        });
+      } catch (e) {
+        console.error('Збереження рекорду Динозаврика:', e);
+      }
+    }
+
     let dinoHighScore = parseInt(localStorage.getItem('dino_high_score')) || 0;
     let isGameUnlocked = false;
 
@@ -1367,6 +1465,7 @@
         dinoGameRunning = false;
         if (speedInterval) clearInterval(speedInterval);
 
+        saveDinoLeaderboard(dinoScore);
         if (dinoScore > dinoHighScore) {
           dinoHighScore = dinoScore;
           localStorage.setItem('dino_high_score', dinoHighScore);
@@ -1635,6 +1734,8 @@
     function initPageData() {
       setupTravelerAnimation();
       updateDinoHighScoreUI();
+      renderDinoLeaderboard();
+      loadDinoLeaderboard();
       setupSiteSearch();
 
       // Завантаження випадкового факту історії
@@ -1660,12 +1761,24 @@
       if (gameTextElem) {
         gameTextElem.innerHTML = `🏳️ <strong>${gameItem.country}:</strong> ${gameItem.text}`;
       }
+      prepareCountryGameQuestion();
     }
 
-    // Захист гри: одне питання можна відповісти лише один раз.
-    // Після першого натискання обидві кнопки блокуються до появи нового питання.
+    // Посилений захист гри без додаткового сервісу:
+    // одне питання = одна відповідь; мінімальний час реакції; захист від серії миттєвих натискань.
     let countryGameAnswered = false;
     let countryGameNextTimer = null;
+    let countryGameQuestionToken = 0;
+    let countryGameRenderedAt = 0;
+    let countryGameSuspicious = 0;
+    let countryGameLockedUntil = 0;
+
+    function prepareCountryGameQuestion() {
+      countryGameQuestionToken++;
+      countryGameAnswered = false;
+      countryGameRenderedAt = performance.now();
+      setCountryGameButtonsDisabled(false);
+    }
 
     function setCountryGameButtonsDisabled(disabled) {
       const buttons = document.querySelectorAll('[data-country-game-answer]');
@@ -1677,8 +1790,33 @@
     }
 
     function checkCountryGame(userAnswer) {
-      // Повторний клік/автоклікер на те саме питання нічого не дає.
+      const now = performance.now();
       if (countryGameAnswered) return;
+      if (Date.now() < countryGameLockedUntil) return;
+
+      // Миттєве програмне натискання не зараховується.
+      if (now - countryGameRenderedAt < 700) {
+        countryGameSuspicious++;
+        const resultElem = document.getElementById('country-game-result');
+        if (resultElem) {
+          resultElem.style.display = 'block';
+          resultElem.style.background = '#fef3c7';
+          resultElem.style.color = '#92400e';
+          resultElem.innerHTML = '⚠️ Занадто швидка відповідь. Питання не зараховано.';
+        }
+        if (countryGameSuspicious >= 3) {
+          countryGameLockedUntil = Date.now() + 30000;
+          countryGameSuspicious = 0;
+          setCountryGameButtonsDisabled(true);
+          if (resultElem) resultElem.innerHTML = '🔒 Гру тимчасово заблоковано на 30 секунд через підозріло швидкі натискання.';
+          setTimeout(() => {
+            countryGameAnswered = false;
+            setCountryGameButtonsDisabled(false);
+          }, 30000);
+        }
+        return;
+      }
+
       countryGameAnswered = true;
       setCountryGameButtonsDisabled(true);
 
@@ -1699,17 +1837,98 @@
       }
 
       if (countryGameNextTimer) clearTimeout(countryGameNextTimer);
+      const answeredToken = countryGameQuestionToken;
       countryGameNextTimer = setTimeout(() => {
+        if (answeredToken !== countryGameQuestionToken) return;
         currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
         const nextItem = countriesGameData[currentCountryGameIndex];
         const gameTextElem = document.getElementById('country-game-text');
-        if (gameTextElem) {
-          gameTextElem.innerHTML = `🏳️ <strong>${nextItem.country}:</strong> ${nextItem.text}`;
-        }
+        if (gameTextElem) gameTextElem.innerHTML = `🏳️ <strong>${nextItem.country}:</strong> ${nextItem.text}`;
         resultElem.style.display = 'none';
-        countryGameAnswered = false;
-        setCountryGameButtonsDisabled(false);
+        prepareCountryGameQuestion();
       }, 3000);
+    }
+
+    /* --- ГЕОГРАФІЧНИЙ ДЕТЕКТИВ: робота з картою --- */
+    const mapQuestions = [
+      { country:'Україна', lat:49.0, lng:32.0 },
+      { country:'Франція', lat:46.5, lng:2.2 },
+      { country:'Єгипет', lat:26.8, lng:30.8 },
+      { country:'Бразилія', lat:-10.0, lng:-52.0 },
+      { country:'Японія', lat:36.2, lng:138.3 },
+      { country:'Канада', lat:56.1, lng:-106.3 },
+      { country:'Австралія', lat:-25.3, lng:133.8 },
+      { country:'Індія', lat:22.9, lng:79.0 },
+      { country:'Аргентина', lat:-38.4, lng:-63.6 },
+      { country:'Норвегія', lat:64.5, lng:17.5 }
+    ];
+    let worldMap = null, mapMarker = null, mapQuestionIndex = 0, mapAnswered = false, mapScore = 0;
+
+    function initMapActivity() {
+      if (!window.L || !document.getElementById('worldMap')) return;
+      worldMap = L.map('worldMap', { minZoom:1, maxZoom:6, worldCopyJump:true }).setView([25, 10], 1.7);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap contributors' }).addTo(worldMap);
+      worldMap.on('click', handleMapClick);
+      renderMapQuestion();
+    }
+
+    function renderMapQuestion() {
+      const q = mapQuestions[mapQuestionIndex];
+      mapAnswered = false;
+      document.getElementById('mapTask').textContent = `Знайдіть на карті країну: ${q.country}`;
+      document.getElementById('mapStatus').textContent = 'Натисніть на карту там, де розташована потрібна країна.';
+      document.getElementById('mapStatus').style.background = '#f8fafc';
+      document.getElementById('mapStatus').style.color = '#475569';
+      document.getElementById('mapQuestionNumber').textContent = mapQuestionIndex + 1;
+      document.getElementById('mapNextBtn').disabled = true;
+      if (mapMarker) { mapMarker.remove(); mapMarker = null; }
+    }
+
+    function handleMapClick(e) {
+      if (mapAnswered) return;
+      const q = mapQuestions[mapQuestionIndex];
+      const dLat = e.latlng.lat - q.lat;
+      const dLng = (e.latlng.lng - q.lng) * Math.cos(q.lat * Math.PI / 180);
+      const distance = Math.sqrt(dLat*dLat + dLng*dLng);
+      mapAnswered = true;
+      mapMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(worldMap);
+      const status = document.getElementById('mapStatus');
+      if (distance <= 6.5) {
+        status.textContent = '🎉 Правильно! +1 бал. Ви потрапили в межі країни або дуже близько до неї.';
+        status.style.background = '#dcfce7'; status.style.color = '#15803d';
+        mapScore++;
+        saveMapPointToFirebase();
+      } else {
+        status.textContent = `❌ Не зовсім. Правильне розташування: ${q.country}.`;
+        status.style.background = '#fee2e2'; status.style.color = '#b91c1c';
+        L.marker([q.lat,q.lng]).addTo(worldMap).bindPopup(`📍 ${q.country}`).openPopup();
+      }
+      document.getElementById('mapNextBtn').disabled = false;
+    }
+
+    function saveMapPointToFirebase() {
+      if (!window.currentUserUid) return;
+      runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
+        data = data || {};
+        data.name = data.name || window.currentStudent || 'Учень';
+        data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
+        data.score = (Number(data.score) || 0) + 1;
+        data.map_activity_points = (Number(data.map_activity_points) || 0) + 1;
+        data.week_map_activity_points = (Number(data.week_map_activity_points) || 0) + 1;
+        data.week_score =
+          (Number(data.week_history_points) || 0) +
+          (Number(data.week_geography_points) || 0) +
+          (Number(data.week_nmt_history_score) || 0) +
+          (Number(data.week_nmt_geography_score) || 0) +
+          (Number(data.week_truth_or_lie_points) || 0) +
+          (Number(data.week_map_activity_points) || 0);
+        return data;
+      }).catch(error => console.error('Бал за карту:', error));
+    }
+
+    function nextMapQuestion() {
+      mapQuestionIndex = (mapQuestionIndex + 1) % mapQuestions.length;
+      renderMapQuestion();
     }
 
     function openModal(type) {
@@ -1738,6 +1957,10 @@
 <button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
 <script>
 (() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => { setTimeout(initMapActivity, 100); });
 </script>
 </body>
 </html>
