@@ -959,7 +959,7 @@
         data.email = data.email || user.email || '';
         // Фото профілю беремо безпосередньо з Google-акаунта.
         // Не завантажуємо фотографії на Firebase Storage.
-        if (user.photoURL) data.photoURL = user.photoURL;
+        if (user.photoURL) { data.photoURL = user.photoURL; data.googlePhotoURL = user.photoURL; }
         data.role = user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student';
         if (data.score === undefined) data.score = 0;
         if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
@@ -1081,6 +1081,7 @@
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const name = student.name || student.displayName || student.email || 'Учень';
         const avatarUrl = student.photoURL || student.googlePhotoURL || '';
+        // Якщо фото ще не записане у Firebase, воно з'явиться після наступного входу учня через Google.
         const initials = String(name).trim().charAt(0).toUpperCase() || 'У';
         const avatarHtml = avatarUrl
           ? `<img class="leaderboard-avatar" src="${escapeHtml(avatarUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="leaderboard-avatar-fallback" style="display:none">${escapeHtml(initials)}</span>`
@@ -1323,8 +1324,12 @@
 
       if (authBox) {
         const role = window.currentUserRole === 'teacher' ? 'ВЧИТЕЛЬ' : 'УЧЕНЬ';
+        const homeAvatar = user.photoURL
+          ? `<img class="home-user-avatar" src="${escapeHtml(user.photoURL)}" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">`
+          : '';
+        const homeInitial = `<span class="home-user-avatar" style="width:30px;height:30px;border-radius:50%;display:${user.photoURL ? 'none' : 'inline-flex'};align-items:center;justify-content:center;background:#8b5e3c;color:#fff;font-weight:800;">${(user.displayName || 'У').charAt(0).toUpperCase()}</span>`;
         authBox.innerHTML = `<div class="home-user-chip" style="display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;">
-          <span class="home-user-avatar" style="width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#8b5e3c;color:#fff;font-weight:800;">${(user.displayName || 'У').charAt(0).toUpperCase()}</span>
+          ${homeAvatar}${homeInitial}
           <span style="font-weight:700;color:#1e293b;">${user.displayName || 'Користувач'}</span>
           <span class="home-role-badge" style="padding:4px 8px;border-radius:999px;background:${window.currentUserRole === 'teacher' ? '#5b1f0e' : '#e7ddd5'};color:${window.currentUserRole === 'teacher' ? '#fff' : '#5b1f0e'};font-size:11px;font-weight:800;">${role}</span>
           <span id="currentUserScore" class="home-score-badge">0 балів</span>
