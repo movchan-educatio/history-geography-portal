@@ -28,12 +28,6 @@
       "$uid": {
         ".write": "auth != null && auth.uid === $uid"
       }
-    },
-    "photoGallery": {
-      "$photoId": {
-        ".read": "auth != null",
-        ".write": "auth != null && (!data.exists() ? newData.child('uploaderUid').val() === auth.uid : data.child('uploaderUid').val() === auth.uid)"
-      }
     }
   }
 }
