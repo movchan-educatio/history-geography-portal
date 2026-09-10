@@ -4000,7 +4000,7 @@
       next.disabled = true;
       const distractors = [...new Set(historyYearPool.filter(y => y !== q.correct))].sort(() => Math.random() - 0.5).slice(0, 3);
       const optionYears = [q.correct, ...distractors].sort(() => Math.random() - 0.5);
-      options.innerHTML = optionYears.map(year => `<button class="history-option" type="button" onclick="answerHistoryActivity('${String(year).replace(/'/g, \"\\'\")}')">${year}</button>`).join('');
+      options.innerHTML = optionYears.map(year => `<button class="history-option" type="button" onclick="answerHistoryActivity('${String(year).replace(/'/g, "\\'")}')">${year}</button>`).join('');
     }
 
     async function saveHistoryActivityPoint() {
@@ -4061,6 +4061,10 @@
     }
     window.answerHistoryActivity = answerHistoryActivity;
     window.nextHistoryActivityQuestion = nextHistoryActivityQuestion;
+    // Ці функції викликаються нижче після завантаження Leaflet.
+    // Оскільки основний код працює в type=module, робимо їх доступними глобально.
+    window.initMapActivity = initMapActivity;
+    window.renderHistoryActivityQuestion = renderHistoryActivityQuestion;
 
     function openModal(type) {
       const modal = document.getElementById('info-modal');
@@ -4093,8 +4097,8 @@
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-      initMapActivity();
-      renderHistoryActivityQuestion();
+      if (typeof window.initMapActivity === 'function') window.initMapActivity();
+      if (typeof window.renderHistoryActivityQuestion === 'function') window.renderHistoryActivityQuestion();
     }, 100);
   });
 </script>
