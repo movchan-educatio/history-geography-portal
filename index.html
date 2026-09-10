@@ -520,18 +520,7 @@
       grid-column:2;
     }
     .map-activity-card { grid-column:1; }
-    .activity-games-grid {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
-      align-items:stretch;
-    }
-    .activity-games-grid .map-activity-card,
-    .activity-games-grid .history-activity-card { grid-column:auto; }
-    @media (max-width:700px) {
-      .map-activity-card, .history-activity-card { grid-column:auto; }
-      .activity-games-grid { grid-template-columns:1fr; }
-    }
+    @media (max-width:700px) { .map-activity-card, .history-activity-card { grid-column:auto; } }
     .history-task { font-size:13px; font-weight:800; color:#6b2f1f; line-height:1.35; }
     .history-question { font-size:15px; font-weight:900; color:#3b241c; line-height:1.35; min-height:42px; }
     .history-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
@@ -680,34 +669,6 @@
       </div>
     </div>
 
-    <!-- 🎮 НАВЧАЛЬНІ ІГРИ: карта та історичний хронолог під Правдою/Брехнею -->
-    <div class="section-title" style="margin-top: 24px;">🎮 Навчальні ігри</div>
-    <div class="activity-games-grid">
-        <!-- Блок 3: Робота з картою -->
-        <div class="map-activity-card">
-          <div style="font-weight:900;color:#0369a1;font-size:14px;">🗺️ Географічний детектив</div>
-          <div class="map-task" id="mapTask">Завантаження завдання...</div>
-          <div id="worldMap"></div>
-          <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
-          <div class="map-actions">
-            <button class="map-next" id="mapNextBtn" onclick="nextMapQuestion()" disabled>Наступне питання</button>
-          </div>
-          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
-        </div>
-
-        <!-- Блок 4: Історична хронологія -->
-        <div class="history-activity-card">
-          <div style="font-weight:900;color:#6b2f1f;font-size:14px;">📜 Історичний хронолог</div>
-          <div class="history-task">Оберіть правильний рік історичної події</div>
-          <div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
-          <div class="history-options" id="historyActivityOptions"></div>
-          <div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
-          <button class="history-next" id="historyActivityNext" onclick="nextHistoryActivityQuestion()" disabled>Наступне питання</button>
-          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
-        </div>
-
-    </div>
-
     <div class="section-title">Віртуальні екскурсії та медіа</div>
     <div class="grid-3-tours">
       <a href="https://izi.travel/uk" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="virtual-tour-card">
@@ -773,6 +734,28 @@
           </div>
         </div>
 
+        <!-- Блок 3: Робота з картою -->
+        <div class="map-activity-card">
+          <div style="font-weight:900;color:#0369a1;font-size:14px;">🗺️ Географічний детектив</div>
+          <div class="map-task" id="mapTask">Завантаження завдання...</div>
+          <div id="worldMap"></div>
+          <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
+          <div class="map-actions">
+            <button class="map-next" id="mapNextBtn" onclick="nextMapQuestion()" disabled>Наступне питання</button>
+          </div>
+          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
+        </div>
+
+        <!-- Блок 4: Історична хронологія -->
+        <div class="history-activity-card">
+          <div style="font-weight:900;color:#6b2f1f;font-size:14px;">📜 Історичний хронолог</div>
+          <div class="history-task">Оберіть правильний рік історичної події</div>
+          <div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
+          <div class="history-options" id="historyActivityOptions"></div>
+          <div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
+          <button class="history-next" id="historyActivityNext" onclick="nextHistoryActivityQuestion()" disabled>Наступне питання</button>
+          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
+        </div>
       </div>
     </section>
 
@@ -799,6 +782,7 @@
 
   <!-- FIREBASE SCRIPTS -->
   <script type="module">
+    import "./portal-score.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -1033,8 +1017,6 @@
       if (user) {
         loadDinoLeaderboard();
       } else {
-        if (typeof dinoLeaderboardUnsubscribe === 'function') dinoLeaderboardUnsubscribe();
-        dinoLeaderboardUnsubscribe = null;
         dinoLeaderboardData = [];
         renderDinoLeaderboard([]);
       }
@@ -1232,31 +1214,13 @@
 
     ensureCurrentWeek().catch(error => console.error('Тижневий рейтинг:', error));
 
-    // Усі додаткові бали (Правда/Брехня) одразу потрапляють у score + week_score.
+    // ЄДИНА точка нарахування балів для гри «Правда чи Брехня».
     window.addPointsToFirebase = function(points) {
-      if (!window.currentUserUid) {
-        alert('Увійдіть через Google, щоб бали зберігалися у рейтингу.');
-        return Promise.resolve(false);
+      if (window.portalScore?.awardTruthOrLiePoint) {
+        return window.portalScore.awardTruthOrLiePoint(points);
       }
-      const safePoints = Math.max(0, Number(points) || 0);
-      if (!safePoints) return Promise.resolve(false);
-      return runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
-        data = data || {};
-        data.name = data.name || window.currentStudent || 'Учень';
-        data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
-        data.score = (Number(data.score) || 0) + safePoints;
-        data.truth_or_lie_points = (Number(data.truth_or_lie_points) || 0) + safePoints;
-        data.week_truth_or_lie_points = (Number(data.week_truth_or_lie_points) || 0) + safePoints;
-        data.week_score =
-          (Number(data.week_history_points) || 0) +
-          (Number(data.week_geography_points) || 0) +
-          (Number(data.week_nmt_history_score) || 0) +
-          (Number(data.week_nmt_geography_score) || 0) +
-          (Number(data.week_truth_or_lie_points) || 0) +
-           (Number(data.week_map_activity_points) || 0) +
-           (Number(data.week_history_activity_points) || 0);
-        return data;
-      });
+      console.error('Центральний модуль балів ще не завантажився.');
+      return Promise.resolve(false);
     };
 
     window.sendChatMessage = async function() {
@@ -1376,12 +1340,11 @@
     // Загальна таблиця лідерів Динозаврика з Firebase.
     // Для кожного учня зберігаємо лише найкращий результат.
     let dinoLeaderboardData = [];
-    let dinoLeaderboardUnsubscribe = null;
 
     function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>'"]/g, char => ({
-        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
-      }[char]));
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[ch]));
     }
 
     function renderDinoLeaderboard(board = dinoLeaderboardData) {
@@ -1402,13 +1365,8 @@
     }
 
     function loadDinoLeaderboard() {
-      if (typeof database === 'undefined' || !window.currentUserUid) {
-        dinoLeaderboardData = [];
-        renderDinoLeaderboard([]);
-        return;
-      }
-      if (typeof dinoLeaderboardUnsubscribe === 'function') dinoLeaderboardUnsubscribe();
-      dinoLeaderboardUnsubscribe = onValue(ref(database, 'dinoLeaderboard'), snapshot => {
+      if (typeof database === 'undefined' || !window.currentUserUid) return;
+      onValue(ref(database, 'dinoLeaderboard'), snapshot => {
         const raw = snapshot.val() || {};
         dinoLeaderboardData = Object.entries(raw).map(([uid, value]) => ({
           uid,
@@ -1418,9 +1376,7 @@
         renderDinoLeaderboard();
       }, error => {
         console.error('Таблиця Динозаврика:', error);
-        dinoLeaderboardData = [];
-        const box = document.getElementById('dinoLeaderboardList');
-        if (box) box.innerHTML = '<div class="dino-leader-row"><span>⚠️ Не вдалося завантажити таблицю. Увійдіть через Google.</span><span>—</span></div>';
+        renderDinoLeaderboard([]);
       });
     }
 
@@ -1820,22 +1776,6 @@
       return next;
     }
 
-    // У кожному раунді з 10 питань індекс не повторюється.
-    function chooseUniqueRoundIndex(length, storageKey) {
-      if (!length) return 0;
-      const usedKey = storageKey + '_round_used';
-      let used = [];
-      try { used = JSON.parse(sessionStorage.getItem(usedKey) || '[]'); } catch (e) { used = []; }
-      used = Array.isArray(used) ? used.filter(i => Number.isInteger(i) && i >= 0 && i < length) : [];
-      if (used.length >= 10 || used.length >= length) used = [];
-      const available = Array.from({length}, (_, i) => i).filter(i => !used.includes(i));
-      const next = available[Math.floor(Math.random() * available.length)];
-      used.push(next);
-      sessionStorage.setItem(usedKey, JSON.stringify(used));
-      sessionStorage.setItem(storageKey, String(next));
-      return next;
-    }
-
     function chooseDifferentRandomIndex(length, storageKey, currentIndex = -1) {
       if (!length) return 0;
       const saved = Number(sessionStorage.getItem(storageKey));
@@ -1855,8 +1795,8 @@
       setupSiteSearch();
 
       // Кожне завантаження сторінки починає активності з іншого випадкового завдання.
-      mapQuestionIndex = chooseUniqueRoundIndex(mapQuestions.length, 'portal_last_map_question');
-      historyActivityIndex = chooseUniqueRoundIndex(historyActivityQuestions.length, 'portal_last_history_activity_question');
+      mapQuestionIndex = chooseFromShuffledBag(mapQuestions.length, 'portal_last_map_question');
+      historyActivityIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question');
       mapQuestionNumber = 1;
       historyActivityNumber = 1;
 
@@ -2998,34 +2938,17 @@
     }
 
     async function saveMapPointToFirebase() {
-      if (!window.currentUserUid) return false;
-      return await runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
-        data = data || {};
-        data.name = data.name || window.currentStudent || 'Учень';
-        data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
-        data.score = (Number(data.score) || 0) + 1;
-        data.map_activity_points = (Number(data.map_activity_points) || 0) + 1;
-        data.week_map_activity_points = (Number(data.week_map_activity_points) || 0) + 1;
-        // week_score — похідне поле: перераховуємо без подвійного нарахування.
-        data.week_score =
-          (Number(data.week_history_points) || 0) +
-          (Number(data.week_geography_points) || 0) +
-          (Number(data.week_nmt_history_score) || 0) +
-          (Number(data.week_nmt_geography_score) || 0) +
-          (Number(data.week_truth_or_lie_points) || 0) +
-          (Number(data.week_map_activity_points) || 0) +
-          (Number(data.week_history_activity_points) || 0);
-        return data;
-      }).then(() => true).catch(error => {
-        console.error('Бал за карту:', error);
-        return false;
-      });
+      if (window.portalScore?.awardMapPoint) {
+        return window.portalScore.awardMapPoint(1);
+      }
+      console.error('Центральний модуль балів ще не завантажився.');
+      return false;
     }
 
     function nextMapQuestion() {
       if (!mapAnswered) return;
       mapPreviousIndex = mapQuestionIndex;
-      mapQuestionIndex = chooseUniqueRoundIndex(mapQuestions.length, 'portal_last_map_question');
+      mapQuestionIndex = chooseFromShuffledBag(mapQuestions.length, 'portal_last_map_question', mapQuestionIndex);
       mapQuestionNumber = mapQuestionNumber >= 10 ? 1 : mapQuestionNumber + 1;
       renderMapQuestion();
       if (worldMap) {
@@ -4036,361 +3959,6 @@
     "subject": "Всесвітня історія",
     "event": "Паризька кліматична угода",
     "correct": "2015"
-  },
-  {
-    "subject": "Україна",
-    "event": "«Слово о полку Ігоревім» — подія походу князя Ігоря Святославича проти половців",
-    "correct": "1185"
-  },
-  {
-    "subject": "Україна",
-    "event": "Князь Роман Мстиславич об’єднав Галичину і Волинь",
-    "correct": "1199"
-  },
-  {
-    "subject": "Україна",
-    "event": "Монголи розпочали похід на руські землі, який завершився битвою на Калці",
-    "correct": "1223"
-  },
-  {
-    "subject": "Україна",
-    "event": "Литовський князь Ольгерд розгромив війська Золотої Орди в битві на Синіх Водах",
-    "correct": "1362"
-  },
-  {
-    "subject": "Україна",
-    "event": "Кримське ханство утворилося як окрема держава",
-    "correct": "1441"
-  },
-  {
-    "subject": "Україна",
-    "event": "Укладення Віленської угоди між Московією та Великим князівством Литовським",
-    "correct": "1494"
-  },
-  {
-    "subject": "Україна",
-    "event": "Іван Федоров надрукував «Апостол» у Львові",
-    "correct": "1574"
-  },
-  {
-    "subject": "Україна",
-    "event": "Повстання Криштофа Косинського",
-    "correct": "1591"
-  },
-  {
-    "subject": "Україна",
-    "event": "Повстання Северина Наливайка",
-    "correct": "1594"
-  },
-  {
-    "subject": "Україна",
-    "event": "Початок діяльності Київського братства",
-    "correct": "1615"
-  },
-  {
-    "subject": "Україна",
-    "event": "Похід Петра Конашевича-Сагайдачного на Кафу",
-    "correct": "1616"
-  },
-  {
-    "subject": "Україна",
-    "event": "Смерть гетьмана Петра Конашевича-Сагайдачного",
-    "correct": "1622"
-  },
-  {
-    "subject": "Україна",
-    "event": "Повстання Тараса Федоровича (Трясила)",
-    "correct": "1630"
-  },
-  {
-    "subject": "Україна",
-    "event": "Повстання Івана Сулими",
-    "correct": "1635"
-  },
-  {
-    "subject": "Україна",
-    "event": "Смерть Богдана Хмельницького",
-    "correct": "1657"
-  },
-  {
-    "subject": "Україна",
-    "event": "Чорна рада в Ніжині та обрання Івана Брюховецького гетьманом",
-    "correct": "1663"
-  },
-  {
-    "subject": "Україна",
-    "event": "Другий Чигиринський похід османсько-татарського війська",
-    "correct": "1678"
-  },
-  {
-    "subject": "Україна",
-    "event": "Початок Коліївщини",
-    "correct": "1768"
-  },
-  {
-    "subject": "Україна",
-    "event": "«Руська трійця» видала альманах «Русалка Дністровая»",
-    "correct": "1837"
-  },
-  {
-    "subject": "Україна",
-    "event": "Тарас Шевченко видав «Кобзар»",
-    "correct": "1840"
-  },
-  {
-    "subject": "Україна",
-    "event": "Арешти членів Кирило-Мефодіївського братства",
-    "correct": "1847"
-  },
-  {
-    "subject": "Україна",
-    "event": "Перше засідання Галицького сейму в умовах революції 1848 року",
-    "correct": "1848"
-  },
-  {
-    "subject": "Україна",
-    "event": "Заснування першої української політичної партії в Галичині — Русько-української радикальної партії",
-    "correct": "1890"
-  },
-  {
-    "subject": "Україна",
-    "event": "Створення Української соціал-демократичної партії",
-    "correct": "1905"
-  },
-  {
-    "subject": "Україна",
-    "event": "Створення Головної української ради у Львові",
-    "correct": "1914"
-  },
-  {
-    "subject": "Україна",
-    "event": "Бій Українських січових стрільців на горі Маківка",
-    "correct": "1915"
-  },
-  {
-    "subject": "Україна",
-    "event": "Брестський мир між УНР і державами Четверного союзу",
-    "correct": "1918"
-  },
-  {
-    "subject": "Україна",
-    "event": "Проголошення Української Держави на чолі з Павлом Скоропадським",
-    "correct": "1918"
-  },
-  {
-    "subject": "Україна",
-    "event": "Українська Директорія прийшла до влади в Києві",
-    "correct": "1918"
-  },
-  {
-    "subject": "Україна",
-    "event": "Перший зимовий похід Армії УНР",
-    "correct": "1919"
-  },
-  {
-    "subject": "Україна",
-    "event": "Варшавський договір УНР з Польщею",
-    "correct": "1920"
-  },
-  {
-    "subject": "Україна",
-    "event": "Другий зимовий похід Армії УНР",
-    "correct": "1921"
-  },
-  {
-    "subject": "Україна",
-    "event": "Утворення Української Соціалістичної Радянської Республіки як союзної республіки СРСР",
-    "correct": "1922"
-  },
-  {
-    "subject": "Україна",
-    "event": "Столицю УСРР перенесено з Харкова до Києва",
-    "correct": "1934"
-  },
-  {
-    "subject": "Україна",
-    "event": "Процес Спілки визволення України",
-    "correct": "1930"
-  },
-  {
-    "subject": "Україна",
-    "event": "Конституція УРСР 1937 року",
-    "correct": "1937"
-  },
-  {
-    "subject": "Україна",
-    "event": "Проголошення незалежності Карпатської України",
-    "correct": "1939"
-  },
-  {
-    "subject": "Україна",
-    "event": "Приєднання Північної Буковини та частини Бессарабії до УРСР",
-    "correct": "1940"
-  },
-  {
-    "subject": "Україна",
-    "event": "Проголошення Акта відновлення Української Держави у Львові",
-    "correct": "1941"
-  },
-  {
-    "subject": "Україна",
-    "event": "Визволення Києва від нацистської окупації",
-    "correct": "1943"
-  },
-  {
-    "subject": "Україна",
-    "event": "Депортація кримськотатарського народу з Криму",
-    "correct": "1944"
-  },
-  {
-    "subject": "Україна",
-    "event": "Операція «Захід» — масова депортація населення Західної України",
-    "correct": "1947"
-  },
-  {
-    "subject": "Україна",
-    "event": "Утворення Клубу творчої молоді «Сучасник» у Києві",
-    "correct": "1960"
-  },
-  {
-    "subject": "Україна",
-    "event": "Прем’єра фільму Сергія Параджанова «Тіні забутих предків»",
-    "correct": "1965"
-  },
-  {
-    "subject": "Україна",
-    "event": "Друга хвиля масових арештів українських дисидентів",
-    "correct": "1972"
-  },
-  {
-    "subject": "Україна",
-    "event": "Утворення Української Гельсінської групи",
-    "correct": "1976"
-  },
-  {
-    "subject": "Україна",
-    "event": "Чорнобильська катастрофа",
-    "correct": "1986"
-  },
-  {
-    "subject": "Україна",
-    "event": "Прийняття Декларації про державний суверенітет України",
-    "correct": "1990"
-  },
-  {
-    "subject": "Україна",
-    "event": "Всеукраїнський референдум на підтвердження Акта незалежності України",
-    "correct": "1991"
-  },
-  {
-    "subject": "Україна",
-    "event": "Запровадження гривні як грошової одиниці України",
-    "correct": "1996"
-  },
-  {
-    "subject": "Україна",
-    "event": "Прийняття Конституції України",
-    "correct": "1996"
-  },
-  {
-    "subject": "Україна",
-    "event": "Помаранчева революція",
-    "correct": "2004"
-  },
-  {
-    "subject": "Україна",
-    "event": "Революція Гідності розпочалася після призупинення підготовки до підписання Угоди про асоціацію з ЄС",
-    "correct": "2013"
-  },
-  {
-    "subject": "Україна",
-    "event": "Підписання Угоди про асоціацію між Україною та ЄС",
-    "correct": "2014"
-  },
-  {
-    "subject": "Україна",
-    "event": "Безвізовий режим України з ЄС набув чинності",
-    "correct": "2017"
-  },
-  {
-    "subject": "Україна",
-    "event": "Набуття чинності Законом України «Про забезпечення функціонування української мови як державної»",
-    "correct": "2019"
-  },
-  {
-    "subject": "Україна",
-    "event": "Місцеві вибори в Україні після децентралізаційної реформи",
-    "correct": "2020"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Велике переселення народів: початок масового руху гунів у Європу",
-    "correct": "375"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Початок правління Карла Великого як короля франків",
-    "correct": "768"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Початок Столітньої війни між Англією та Францією",
-    "correct": "1337"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Гутенберг створив друкарський верстат і започаткував європейське книгодрукування",
-    "correct": "1450"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Початок навколосвітньої експедиції Магеллана",
-    "correct": "1519"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Нантський едикт у Франції",
-    "correct": "1598"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Бостонське чаювання",
-    "correct": "1773"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Проголошення незалежності Греції від Османської імперії",
-    "correct": "1821"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Скасування рабства в США",
-    "correct": "1865"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Перша російська революція",
-    "correct": "1905"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Початок Жовтневої революції в Росії",
-    "correct": "1917"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Підписання пакту Молотова — Ріббентропа",
-    "correct": "1939"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Початок Корейської війни",
-    "correct": "1950"
-  },
-  {
-    "subject": "Всесвітня історія",
-    "event": "Карибська криза",
-    "correct": "1962"
   }
 ];
     const historyYearPool = historyActivityQuestions.map(q => q.correct);
@@ -4420,34 +3988,11 @@
     }
 
     async function saveHistoryActivityPoint() {
-      if (!window.currentUserUid) {
-        alert('Увійдіть через Google, щоб бал зберігся у рейтингу.');
-        return false;
+      if (window.portalScore?.awardHistoryActivityPoint) {
+        return window.portalScore.awardHistoryActivityPoint(1);
       }
-      try {
-        await runTransaction(ref(database, 'users/' + window.currentUserUid), data => {
-          data = data || {};
-          data.name = data.name || window.currentStudent || 'Учень';
-          data.role = window.currentUserUid === PORTAL_OWNER_UID ? 'teacher' : 'student';
-          data.score = (Number(data.score) || 0) + 1;
-          data.history_activity_points = (Number(data.history_activity_points) || 0) + 1;
-          data.week_history_activity_points = (Number(data.week_history_activity_points) || 0) + 1;
-          // week_score — похідне поле: перераховуємо без подвійного нарахування.
-          data.week_score =
-            (Number(data.week_history_points) || 0) +
-            (Number(data.week_geography_points) || 0) +
-            (Number(data.week_nmt_history_score) || 0) +
-            (Number(data.week_nmt_geography_score) || 0) +
-            (Number(data.week_truth_or_lie_points) || 0) +
-            (Number(data.week_map_activity_points) || 0) +
-            (Number(data.week_history_activity_points) || 0);
-          return data;
-        });
-        return true;
-      } catch (error) {
-        console.error('Бал за історичну активність:', error);
-        return false;
-      }
+      console.error('Центральний модуль балів ще не завантажився.');
+      return false;
     }
 
     async function answerHistoryActivity(year) {
@@ -4478,7 +4023,7 @@
     function nextHistoryActivityQuestion() {
       if (!historyActivityAnswered) return;
       historyActivityPreviousIndex = historyActivityIndex;
-      historyActivityIndex = chooseUniqueRoundIndex(historyActivityQuestions.length, 'portal_last_history_activity_question');
+      historyActivityIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question', historyActivityIndex);
       historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
       renderHistoryActivityQuestion();
     }

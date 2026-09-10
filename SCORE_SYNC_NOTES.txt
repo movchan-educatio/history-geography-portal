@@ -1,0 +1,24 @@
+CENTRAL SCORE SYNCHRONIZATION
+==============================
+
+All game score writes now go through portal-score.js:
+- History quiz: awardHistoryQuizScore
+- Geography quiz: awardGeographyQuizScore
+- NMT History/Geography: awardNmtScore
+- World Map: awardMapPoint
+- Historical Chronolog: awardHistoryActivityPoint
+- Truth or Lie: awardTruthOrLiePoint
+
+Every central score write updates:
+- users/{uid}/score (lifetime total)
+- the source-specific lifetime field
+- the source-specific weekly field
+- users/{uid}/week_score (recalculated from all weekly score components)
+- lastScoreSource / lastScorePoints / lastScoreAt
+
+If the user completes an activity before Firebase Auth is ready, the result is queued in localStorage and uploaded after sign-in.
+
+Dino Runner keeps its best-score leaderboard in:
+- dinoLeaderboard/{uid}
+
+The Dino leaderboard is loaded only after authentication because the current Realtime Database rules require auth for reads. It updates in realtime with onValue().

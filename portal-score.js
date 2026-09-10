@@ -48,6 +48,87 @@ function setSyncStatus(type, text) {
   if (el) el.textContent = text;
 }
 
+function calculateWeekScore(data = {}) {
+  return (Number(data.week_history_points) || 0) +
+    (Number(data.week_geography_points) || 0) +
+    (Number(data.week_nmt_history_score) || 0) +
+    (Number(data.week_nmt_geography_score) || 0) +
+    (Number(data.week_truth_or_lie_points) || 0) +
+    (Number(data.week_map_activity_points) || 0) +
+    (Number(data.week_history_activity_points) || 0);
+}
+
+async function awardActivityPoint(kind, points = 1) {
+  const safePoints = Math.max(0, Number(points) || 0);
+  if (!safePoints) return false;
+  const user = await requireUser();
+  const pendingKind = `activity_${kind}`;
+  if (!user) {
+    const pending = readPending(pendingKind);
+    pending.total = (Number(pending.total) || 0) + safePoints;
+    writePending(pendingKind, pending);
+    return false;
+  }
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+      const totalKey = kind === 'map' ? 'map_activity_points' : 'history_activity_points';
+      const weekKey = kind === 'map' ? 'week_map_activity_points' : 'week_history_activity_points';
+      data[totalKey] = (Number(data[totalKey]) || 0) + safePoints;
+      data[weekKey] = (Number(data[weekKey]) || 0) + safePoints;
+      data.score = (Number(data.score) || 0) + safePoints;
+      data.week_score = calculateWeekScore(data);
+      data.lastScoreSource = kind;
+      data.lastScorePoints = safePoints;
+      data.lastScoreAt = Date.now();
+      return data;
+    });
+    return true;
+  } catch (error) {
+    console.error(`Портал: помилка ${kind} score`, error);
+    const pending = readPending(pendingKind);
+    pending.total = (Number(pending.total) || 0) + safePoints;
+    writePending(pendingKind, pending);
+    return false;
+  }
+}
+
+async function awardTruthOrLiePoint(points = 1) {
+  const safePoints = Math.max(0, Number(points) || 0);
+  if (!safePoints) return false;
+  const user = await requireUser();
+  if (!user) {
+    const pending = readPending('truth_or_lie');
+    pending.total = (Number(pending.total) || 0) + safePoints;
+    writePending('truth_or_lie', pending);
+    return false;
+  }
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+      data.score = (Number(data.score) || 0) + safePoints;
+      data.truth_or_lie_points = (Number(data.truth_or_lie_points) || 0) + safePoints;
+      data.week_truth_or_lie_points = (Number(data.week_truth_or_lie_points) || 0) + safePoints;
+      data.week_score = calculateWeekScore(data);
+      data.lastScoreSource = 'truth_or_lie';
+      data.lastScorePoints = safePoints;
+      data.lastScoreAt = Date.now();
+      return data;
+    });
+    return true;
+  } catch (error) {
+    console.error('Портал: помилка truth_or_lie score', error);
+    const pending = readPending('truth_or_lie');
+    pending.total = (Number(pending.total) || 0) + safePoints;
+    writePending('truth_or_lie', pending);
+    return false;
+  }
+}
+
 async function awardSubjectQuiz(subject, themeId, score) {
   const points = Math.max(0, Number(score) || 0);
   if (!themeId || points <= 0) return false;
@@ -72,12 +153,7 @@ async function awardSubjectQuiz(subject, themeId, score) {
       data[totalKey] = (Number(data[totalKey]) || 0) + points;
       data[weekPointsKey] = (Number(data[weekPointsKey]) || 0) + points;
       data.score = (Number(data.score) || 0) + points;
-      data.week_score =
-        (Number(data.week_history_points) || 0) +
-        (Number(data.week_geography_points) || 0) +
-        (Number(data.week_nmt_history_score) || 0) +
-        (Number(data.week_nmt_geography_score) || 0) +
-        (Number(data.week_truth_or_lie_points) || 0);
+      data.week_score = calculateWeekScore(data);
       data.lastScoreSource = subject;
       data.lastScorePoints = points;
       data.lastScoreAt = Date.now();
@@ -122,12 +198,7 @@ async function awardNmt(subject, score, total) {
       data.nmt_total_score = (Number(data.nmt_history_score) || 0) + (Number(data.nmt_geography_score) || 0);
       data.score = (Number(data.score) || 0) + points;
       data[weekKey] = (Number(data[weekKey]) || 0) + points;
-      data.week_score =
-        (Number(data.week_history_points) || 0) +
-        (Number(data.week_geography_points) || 0) +
-        (Number(data.week_nmt_history_score) || 0) +
-        (Number(data.week_nmt_geography_score) || 0) +
-        (Number(data.week_truth_or_lie_points) || 0);
+      data.week_score = calculateWeekScore(data);
       data.lastScoreSource = `nmt_${subject}`;
       data.lastScorePoints = points;
       data.lastScoreAt = Date.now();
@@ -152,7 +223,11 @@ window.portalScore = {
   getCurrentUser: () => currentUser,
   awardHistoryQuizScore: (themeId, score) => awardSubjectQuiz('history', themeId, score),
   awardGeographyQuizScore: (themeId, score) => awardSubjectQuiz('geography', themeId, score),
-  awardNmtScore: awardNmt
+  awardNmtScore: awardNmt,
+  awardMapPoint: points => awardActivityPoint('map', points),
+  awardHistoryActivityPoint: points => awardActivityPoint('history_activity', points),
+  awardTruthOrLiePoint: awardTruthOrLiePoint,
+  calculateWeekScore
 };
 window.awardHistoryQuizScore = window.portalScore.awardHistoryQuizScore;
 window.awardGeographyQuizScore = window.portalScore.awardGeographyQuizScore;
@@ -178,6 +253,16 @@ onAuthStateChanged(auth, async user => {
     if (points > 0) {
       writePending(key, {});
       await awardNmt(subject, points, pending.total || 30);
+    }
+  }
+  for (const kind of ['map', 'history_activity', 'truth_or_lie']) {
+    const key = `activity_${kind}`;
+    const pending = readPending(key);
+    const points = Number(pending.total) || 0;
+    if (points > 0) {
+      writePending(key, {});
+      if (kind === 'truth_or_lie') await awardTruthOrLiePoint(points);
+      else await awardActivityPoint(kind, points);
     }
   }
 });
