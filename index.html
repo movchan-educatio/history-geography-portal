@@ -752,9 +752,6 @@
           <div class="map-task" id="mapTask">Завантаження завдання...</div>
           <div id="worldMap"></div>
           <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
-          <div class="map-actions">
-            <button class="map-next" id="mapNextBtn" type="button" disabled>Наступне питання</button>
-          </div>
           <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="mapQuestionNumber">1</span> із 10</div>
         </div>
 
@@ -3041,7 +3038,6 @@
       document.getElementById('mapStatus').style.background = '#f8fafc';
       document.getElementById('mapStatus').style.color = '#475569';
       document.getElementById('mapQuestionNumber').textContent = mapQuestionNumber;
-      document.getElementById('mapNextBtn').disabled = true;
       if (mapMarker) { mapMarker.remove(); mapMarker = null; }
     }
 
@@ -3067,18 +3063,23 @@
             const mine = await get(ref(database, 'users/' + window.currentUserUid));
             if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
           }
-          status.textContent = '🎉 Правильно! +1 бал додано до загального та тижневого рейтингу.';
+          status.textContent = '🎉 Правильно! +1 бал додано до загального та тижневого рейтингу. Наступна країна завантажується…';
           status.style.background = '#dcfce7'; status.style.color = '#15803d';
         } else {
           status.textContent = '⚠️ Відповідь правильна, але бал не збережено. Перевірте, чи виконано вхід через Google.';
           status.style.background = '#fef3c7'; status.style.color = '#92400e';
         }
+        // Без кнопки: після правильної відповіді автоматично показуємо нову країну.
+        const answeredIndex = mapQuestionIndex;
+        setTimeout(() => {
+          if (mapQuestionIndex !== answeredIndex || !mapAnswered) return;
+          nextMapQuestion();
+        }, 900);
       } else {
         status.textContent = `❌ Не зовсім. Правильне розташування: ${q.country}.`;
         status.style.background = '#fee2e2'; status.style.color = '#b91c1c';
         L.marker([q.lat,q.lng]).addTo(worldMap).bindPopup(`📍 ${q.country}`).openPopup();
       }
-      document.getElementById('mapNextBtn').disabled = false;
     }
 
     async function saveMapPointToFirebase() {
@@ -3090,12 +3091,8 @@
     }
 
     function nextMapQuestion() {
-      const nextButton = document.getElementById('mapNextBtn');
-      // Перехід дозволяємо лише після відповіді. Після першого кліку одразу
-      // блокуємо кнопку, щоб подвійний клік не перескочив через питання.
       if (!mapAnswered) return false;
       mapAnswered = false;
-      if (nextButton) nextButton.disabled = true;
 
       const previousIndex = mapQuestionIndex;
       let nextIndex;
@@ -3117,7 +3114,6 @@
       if (worldMap) setTimeout(() => worldMap.invalidateSize(), 50);
       return true;
     }
-    // Кнопка викликається з HTML, тому функцію потрібно зробити глобальною.
     window.nextMapQuestion = nextMapQuestion;
 
     /* --- ІСТОРИЧНИЙ ХРОНОЛОГ --- */
@@ -4229,15 +4225,6 @@
         historyNextButton.addEventListener('click', (event) => {
           event.preventDefault();
           if (!historyNextButton.disabled) nextHistoryActivityQuestion();
-        });
-      }
-      const mapNextButton = document.getElementById('mapNextBtn');
-      if (mapNextButton && !mapNextButton.dataset.bound) {
-        mapNextButton.dataset.bound = '1';
-        mapNextButton.type = 'button';
-        mapNextButton.addEventListener('click', (event) => {
-          event.preventDefault();
-          if (!mapNextButton.disabled) nextMapQuestion();
         });
       }
     }
