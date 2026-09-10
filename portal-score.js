@@ -219,6 +219,24 @@ async function awardNmt(subject, score, total) {
   }
 }
 
+async function lockTruthOrLie(reason = 'suspicious_activity', until = Date.now() + 3600000) {
+  const user = await requireUser();
+  if (!user) return false;
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.truth_or_lie_locked_until = Math.max(Number(data.truth_or_lie_locked_until) || 0, Number(until) || (Date.now()+3600000));
+      data.truth_or_lie_lock_reason = String(reason || 'suspicious_activity');
+      data.lastAntiCheatAt = Date.now();
+      return data;
+    });
+    return true;
+  } catch (error) {
+    console.error('Портал: не вдалося зберегти блокування гри', error);
+    return false;
+  }
+}
+
 window.portalScore = {
   getCurrentUser: () => currentUser,
   awardHistoryQuizScore: (themeId, score) => awardSubjectQuiz('history', themeId, score),
@@ -227,6 +245,7 @@ window.portalScore = {
   awardMapPoint: points => awardActivityPoint('map', points),
   awardHistoryActivityPoint: points => awardActivityPoint('history_activity', points),
   awardTruthOrLiePoint: awardTruthOrLiePoint,
+  lockTruthOrLie: lockTruthOrLie,
   calculateWeekScore
 };
 window.awardHistoryQuizScore = window.portalScore.awardHistoryQuizScore;

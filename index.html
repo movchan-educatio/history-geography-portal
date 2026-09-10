@@ -376,6 +376,18 @@
     .student-rank.top-3 { color: #b45309; }
     .student-score { background: #2563eb; color: #ffffff; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 13px; }
 
+    .student-details-modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:3000;align-items:center;justify-content:center;padding:20px;}
+    .student-details-card{width:min(720px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(15,23,42,.25);padding:22px;}
+    .student-details-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid #e2e8f0;padding-bottom:14px;margin-bottom:16px;}
+    .student-details-close{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:20px;cursor:pointer;}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+    .stats-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;}
+    .stats-card small{display:block;color:#64748b;font-weight:700;margin-bottom:5px;}
+    .stats-card strong{font-size:20px;color:#1e293b;}
+    .anti-cheat-badge{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;background:#fee2e2;color:#991b1b;}
+    .leaderboard-item.clickable-student{cursor:pointer;transition:transform .12s,box-shadow .12s;}
+    .leaderboard-item.clickable-student:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(15,23,42,.08);}
+
     /* Спеціальний блок: КЛУБ ДОСЛІДНИКІВ */
     .kids-club-section {
       background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
@@ -761,6 +773,19 @@
 
   </main>
 
+  <div id="studentDetailsModal" class="student-details-modal" role="dialog" aria-modal="true" aria-labelledby="studentDetailsTitle">
+    <div class="student-details-card">
+      <div class="student-details-head">
+        <div>
+          <h3 id="studentDetailsTitle" style="margin:0 0 4px;color:#1e293b;">Статистика учня</h3>
+          <div id="studentDetailsSubtitle" style="color:#64748b;font-size:13px;"></div>
+        </div>
+        <button class="student-details-close" type="button" onclick="closeStudentDetails()" aria-label="Закрити">×</button>
+      </div>
+      <div id="studentDetailsBody"></div>
+    </div>
+  </div>
+
   <footer style="background: #1e293b; color: #ffffff; padding: 30px 20px; text-align: center; margin-top: 40px; border-top: 4px solid #2563eb;">
     <h3 style="margin-bottom: 15px; font-size: 18px; font-weight: 700;">Приєднуйтесь до моїх спільнот</h3>
     <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;">
@@ -884,6 +909,8 @@
         if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
         if (data.map_activity_points === undefined) data.map_activity_points = 0;
         if (data.history_activity_points === undefined) data.history_activity_points = 0;
+        if (data.truth_or_lie_locked_until === undefined) data.truth_or_lie_locked_until = 0;
+        if (data.truth_or_lie_lock_reason === undefined) data.truth_or_lie_lock_reason = '';
 
         // Поточний тиждень. Перший запуск старих профілів зберігає вже нараховані тижневі поля.
         // Нові профілі стартують з нуля. Надалі week_key захищає від перенесення старих балів у новий тиждень.
@@ -920,6 +947,47 @@
       });
     }
 
+    window.closeStudentDetails = function() {
+      const modal = document.getElementById('studentDetailsModal');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.showStudentDetails = function(uid) {
+      const student = (window.studentsData || []).find(p => p.uid === uid);
+      if (!student) return;
+      const modal = document.getElementById('studentDetailsModal');
+      const title = document.getElementById('studentDetailsTitle');
+      const subtitle = document.getElementById('studentDetailsSubtitle');
+      const body = document.getElementById('studentDetailsBody');
+      if (!modal || !title || !body) return;
+      const nmtH = Number(student.nmt_history_score)||0, nmtG = Number(student.nmt_geography_score)||0;
+      const dino = (window.dinoLeaderboardData || []).find(p => p.uid === uid);
+      title.textContent = `📊 ${student.name || student.displayName || student.email || 'Учень'}`;
+      subtitle.textContent = `Загальні результати та результат поточного тижня`;
+      const cards = [
+        ['🏆 Загальні бали', Number(student.score)||0],
+        ['📅 За цей тиждень', Number(student.week_score)||0],
+        ['🏛️ Історія', Number(student.total_history_points)||0],
+        ['🌍 Географія', Number(student.total_geography_points)||0],
+        ['📝 НМТ — історія', nmtH],
+        ['📝 НМТ — географія', nmtG],
+        ['🎯 Правда чи Брехня', Number(student.truth_or_lie_points)||0],
+        ['🗺️ Географічна карта', Number(student.map_activity_points)||0],
+        ['⏳ Історичний хронолог', Number(student.history_activity_points)||0],
+        ['🦖 Динорейсер — рекорд', dino ? Number(dino.score)||0 : '—']
+      ];
+      const weekly = [
+        ['Історія', Number(student.week_history_points)||0],
+        ['Географія', Number(student.week_geography_points)||0],
+        ['НМТ', nmtH + nmtG],
+        ['Правда чи Брехня', Number(student.week_truth_or_lie_points)||0],
+        ['Карта', Number(student.week_map_activity_points)||0],
+        ['Хронолог', Number(student.week_history_activity_points)||0]
+      ];
+      body.innerHTML = `<h4 style="margin:0 0 10px;color:#475569;">Усього</h4><div class="stats-grid">${cards.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]}${typeof c[1]==='number'?' балів':''}</strong></div>`).join('')}</div><h4 style="margin:20px 0 10px;color:#475569;">Розшифровка за поточний тиждень</h4><div class="stats-grid">${weekly.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]} балів</strong></div>`).join('')}</div>${student.truth_or_lie_locked_until && Number(student.truth_or_lie_locked_until)>Date.now()?`<div class="anti-cheat-badge">🔒 «Правда чи Брехня» заблоковано до ${new Date(Number(student.truth_or_lie_locked_until)).toLocaleString('uk-UA')}</div>`:''}`;
+      modal.style.display = 'flex';
+    };
+
     function renderRealtimeLeaderboard() {
       const box = document.getElementById('leaderboardList');
       if (!box) return;
@@ -940,15 +1008,16 @@
         const nmt = (Number(student.week_nmt_history_score) || 0) + (Number(student.week_nmt_geography_score) || 0);
         const truth = Number(student.week_truth_or_lie_points) || 0;
         const map = Number(student.week_map_activity_points) || 0;
+        const chronology = Number(student.week_history_activity_points) || 0;
         const isMe = student.uid === window.currentUserUid;
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const name = student.name || student.displayName || student.email || 'Учень';
-        return `<div class="leaderboard-item ${isMe ? 'current-user' : ''}">
+        return `<div class="leaderboard-item clickable-student ${isMe ? 'current-user' : ''}" onclick="showStudentDetails('${student.uid}')" title="Відкрити детальну статистику">
           <div class="student-info">
             <span class="student-rank ${rankClass}">#${index + 1}</span>
             <div>
               <span>${name}${isMe ? ' (Ви)' : ''}</span>
-              <div style="font-size:11px;color:#64748b;margin-top:3px;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map}</div>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;line-height:1.55;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology}</div>
             </div>
           </div>
           <span class="student-score">${score} балів</span>
@@ -1026,6 +1095,8 @@
 
       const authBox = document.getElementById('authBox');
       if (!user) {
+        countryGameLockedUntil = 0;
+        countryGameLockLoaded = true;
         if (authBox) {
           authBox.innerHTML = '<button id="googleLoginBtn" type="button" class="user-login-btn" style="display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px;visibility:visible!important;opacity:1!important;"><i class="fa-brands fa-google"></i> Увійти через Google</button>';
           const btn = document.getElementById('googleLoginBtn');
@@ -1037,6 +1108,8 @@
 
       try {
         await ensureUserProfile(user);
+        const profileSnap = await get(ref(database, 'users/' + user.uid));
+        restoreTruthOrLieLock(profileSnap.val()?.truth_or_lie_locked_until ? { until: profileSnap.val().truth_or_lie_locked_until } : null);
       } catch (e) {
         console.error('Профіль Firebase:', e);
       }
@@ -1766,16 +1839,38 @@
     function chooseFromShuffledBag(length, storageKey, currentIndex = -1) {
       if (!length) return 0;
       let bag = [];
-      try { bag = JSON.parse(sessionStorage.getItem(storageKey + '_bag') || '[]'); } catch (e) { bag = []; }
+      try {
+        bag = JSON.parse(sessionStorage.getItem(storageKey + '_bag') || '[]');
+      } catch (e) {
+        bag = [];
+      }
       bag = Array.isArray(bag) ? bag.filter(i => Number.isInteger(i) && i >= 0 && i < length) : [];
       if (!bag.length) {
         bag = Array.from({length}, (_, i) => i);
-        for (let i = bag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+        for (let i = bag.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [bag[i], bag[j]] = [bag[j], bag[i]];
+        }
+        // Не показуємо те саме питання одразу після попереднього.
         if (length > 1 && bag[0] === currentIndex) [bag[0], bag[1]] = [bag[1], bag[0]];
       }
-      const next = bag.shift();
-      sessionStorage.setItem(storageKey + '_bag', JSON.stringify(bag));
-      sessionStorage.setItem(storageKey, String(next));
+      let next = bag.shift();
+      // Додатковий захист: наступне питання не може бути тим самим.
+      if (length > 1 && next === currentIndex) {
+        const alternate = bag.findIndex(i => i !== currentIndex);
+        if (alternate >= 0) {
+          next = bag.splice(alternate, 1)[0];
+        } else {
+          next = (currentIndex + 1) % length;
+        }
+      }
+      // sessionStorage не повинен ламати гру, навіть якщо браузер його блокує.
+      try {
+        sessionStorage.setItem(storageKey + '_bag', JSON.stringify(bag));
+        sessionStorage.setItem(storageKey, String(next));
+      } catch (e) {
+        console.warn('Не вдалося зберегти стан питання в sessionStorage:', e);
+      }
       return next;
     }
 
@@ -1829,60 +1924,100 @@
       prepareCountryGameQuestion();
     }
 
-    // Посилений захист гри без додаткового сервісу:
-    // одне питання = одна відповідь; мінімальний час реакції; захист від серії миттєвих натискань.
+    // Захист «Правда чи Брехня» від автоклікера.
+    // Основні ознаки: надто швидка відповідь, регулярні інтервали, надмірна
+    // кількість відповідей за короткий час. Блокування зберігається у Firebase.
     let countryGameAnswered = false;
     let countryGameNextTimer = null;
     let countryGameQuestionToken = 0;
     let countryGameRenderedAt = 0;
+    let countryGameMinDelay = 900;
     let countryGameSuspicious = 0;
     let countryGameLockedUntil = 0;
+    let countryGameAnswerTimes = [];
+    let countryGameLastAnswerAt = 0;
+    let countryGameLockLoaded = false;
 
     function prepareCountryGameQuestion() {
       countryGameQuestionToken++;
       countryGameAnswered = false;
       countryGameRenderedAt = performance.now();
+      countryGameMinDelay = 900 + Math.floor(Math.random() * 1100);
       setCountryGameButtonsDisabled(false);
+      if (Date.now() < countryGameLockedUntil) setCountryGameButtonsDisabled(true);
     }
 
     function setCountryGameButtonsDisabled(disabled) {
       const buttons = document.querySelectorAll('[data-country-game-answer]');
       buttons.forEach(button => {
         button.disabled = disabled;
-        button.style.opacity = disabled ? '0.65' : '1';
+        button.style.opacity = disabled ? '0.55' : '1';
         button.style.cursor = disabled ? 'not-allowed' : 'pointer';
       });
     }
 
-    function checkCountryGame(userAnswer) {
-      const now = performance.now();
-      if (countryGameAnswered) return;
-      if (Date.now() < countryGameLockedUntil) return;
+    function showCountryGameNotice(text, kind='warning') {
+      const resultElem = document.getElementById('country-game-result');
+      if (!resultElem) return;
+      resultElem.style.display = 'block';
+      resultElem.style.background = kind === 'error' ? '#fee2e2' : '#fef3c7';
+      resultElem.style.color = kind === 'error' ? '#991b1b' : '#92400e';
+      resultElem.innerHTML = text;
+    }
 
-      // Миттєве програмне натискання не зараховується.
-      if (now - countryGameRenderedAt < 700) {
+    async function lockTruthOrLieForUser(reason) {
+      const uid = window.currentUserUid;
+      if (!uid || !window.portalScore?.lockTruthOrLie) return;
+      const until = Date.now() + 60 * 60 * 1000;
+      countryGameLockedUntil = until;
+      setCountryGameButtonsDisabled(true);
+      showCountryGameNotice('🔒 Гру «Правда чи Брехня» заблоковано на 1 годину через підозрілу автоматизовану активність. Результати підозрілих натискань не зараховуються.', 'error');
+      try { await window.portalScore.lockTruthOrLie(reason, until); } catch(e) { console.error('Anti-cheat lock:', e); }
+    }
+
+    function restoreTruthOrLieLock(lock) {
+      countryGameLockLoaded = true;
+      const until = Number(lock?.until) || 0;
+      countryGameLockedUntil = until;
+      if (until > Date.now()) {
+        setCountryGameButtonsDisabled(true);
+        showCountryGameNotice(`🔒 Гра заблокована до ${new Date(until).toLocaleString('uk-UA')}. Причина: підозріла автоматизована активність.`, 'error');
+      } else if (lock?.until) {
+        countryGameLockedUntil = 0;
+      }
+    }
+
+    async function checkCountryGame(userAnswer) {
+      const now = performance.now();
+      const nowWall = Date.now();
+      if (countryGameAnswered || nowWall < countryGameLockedUntil) return;
+      if (!window.currentUserUid) {
+        showCountryGameNotice('🔐 Щоб грати та отримувати бали, спочатку увійдіть через Google.');
+        return;
+      }
+
+      const elapsed = now - countryGameRenderedAt;
+      const recent = countryGameAnswerTimes.filter(t => nowWall - t < 60000);
+      const interval = countryGameLastAnswerAt ? nowWall - countryGameLastAnswerAt : 0;
+      const tooFast = elapsed < countryGameMinDelay;
+      const tooMany = recent.length >= 9;
+      const regular = interval > 0 && countryGameAnswerTimes.length >= 4 &&
+        countryGameAnswerTimes.slice(-4).every(t => Math.abs((t - countryGameAnswerTimes[countryGameAnswerTimes.length-2]) - (countryGameAnswerTimes[countryGameAnswerTimes.length-2] - countryGameAnswerTimes[countryGameAnswerTimes.length-3])) < 120);
+
+      if (tooFast || tooMany || regular) {
         countryGameSuspicious++;
-        const resultElem = document.getElementById('country-game-result');
-        if (resultElem) {
-          resultElem.style.display = 'block';
-          resultElem.style.background = '#fef3c7';
-          resultElem.style.color = '#92400e';
-          resultElem.innerHTML = '⚠️ Занадто швидка відповідь. Питання не зараховано.';
-        }
+        showCountryGameNotice(`⚠️ Підозріла відповідь не зарахована (${countryGameSuspicious}/3). Не натискайте автоматично — відповідайте самостійно.`, 'warning');
         if (countryGameSuspicious >= 3) {
-          countryGameLockedUntil = Date.now() + 60 * 60 * 1000;
           countryGameSuspicious = 0;
-          setCountryGameButtonsDisabled(true);
-          if (resultElem) resultElem.innerHTML = '🔒 Гру тимчасово заблоковано на 1 годину через підозріло швидкі натискання.';
-          setTimeout(() => {
-            countryGameAnswered = false;
-            setCountryGameButtonsDisabled(false);
-          }, 60 * 60 * 1000);
+          await lockTruthOrLieForUser(tooFast ? 'too_fast' : tooMany ? 'too_many_answers' : 'regular_intervals');
         }
         return;
       }
 
       countryGameAnswered = true;
+      countryGameAnswerTimes.push(nowWall);
+      if (countryGameAnswerTimes.length > 20) countryGameAnswerTimes.shift();
+      countryGameLastAnswerAt = nowWall;
       setCountryGameButtonsDisabled(true);
 
       const gameItem = countriesGameData[currentCountryGameIndex];
@@ -1894,24 +2029,24 @@
         resultElem.style.background = '#dcfce7';
         resultElem.style.color = '#15803d';
         resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +1 бал!';
-        addPoints(1);
+        await addPoints(1);
       } else {
         resultElem.style.background = '#fee2e2';
         resultElem.style.color = '#b91c1c';
-        resultElem.innerHTML = '❌ Неправильно! Спробуйте ще раз.';
+        resultElem.innerHTML = '❌ Неправильно! Спробуйте наступне питання.';
       }
 
       if (countryGameNextTimer) clearTimeout(countryGameNextTimer);
       const answeredToken = countryGameQuestionToken;
       countryGameNextTimer = setTimeout(() => {
-        if (answeredToken !== countryGameQuestionToken) return;
+        if (answeredToken !== countryGameQuestionToken || Date.now() < countryGameLockedUntil) return;
         currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
         const nextItem = countriesGameData[currentCountryGameIndex];
         const gameTextElem = document.getElementById('country-game-text');
         if (gameTextElem) gameTextElem.innerHTML = `🏳️ <strong>${nextItem.country}:</strong> ${nextItem.text}`;
         resultElem.style.display = 'none';
         prepareCountryGameQuestion();
-      }, 3000);
+      }, 2200);
     }
 
     /* --- ГЕОГРАФІЧНИЙ ДЕТЕКТИВ: робота з картою --- */
@@ -4024,14 +4159,54 @@
     }
 
     function nextHistoryActivityQuestion() {
-      if (!historyActivityAnswered) return;
-      historyActivityPreviousIndex = historyActivityIndex;
-      historyActivityIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question', historyActivityIndex);
-      historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
-      renderHistoryActivityQuestion();
+      const next = document.getElementById('historyActivityNext');
+      if (!historyActivityAnswered) return false;
+      try {
+        historyActivityPreviousIndex = historyActivityIndex;
+        const previousIndex = historyActivityIndex;
+        historyActivityIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question', previousIndex);
+        if (historyActivityIndex === previousIndex && historyActivityQuestions.length > 1) {
+          historyActivityIndex = (previousIndex + 1) % historyActivityQuestions.length;
+        }
+        historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
+        renderHistoryActivityQuestion();
+        return true;
+      } catch (error) {
+        console.error('Помилка переходу до наступного питання хронолога:', error);
+        // Навіть якщо браузер заблокував sessionStorage, гра повинна продовжуватися.
+        if (historyActivityQuestions.length > 1) {
+          historyActivityIndex = (historyActivityIndex + 1) % historyActivityQuestions.length;
+        }
+        historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
+        renderHistoryActivityQuestion();
+        if (next) next.disabled = false;
+        return true;
+      }
     }
     window.answerHistoryActivity = answerHistoryActivity;
     window.nextHistoryActivityQuestion = nextHistoryActivityQuestion;
+
+    // Надійний обробник кнопки «Наступне питання» без залежності від inline onclick.
+    document.addEventListener('DOMContentLoaded', () => {
+      const historyNextButton = document.getElementById('historyActivityNext');
+      if (historyNextButton) {
+        historyNextButton.type = 'button';
+        historyNextButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          nextHistoryActivityQuestion();
+        });
+      }
+      const mapNextButton = document.getElementById('mapNextBtn');
+      if (mapNextButton) {
+        mapNextButton.type = 'button';
+        mapNextButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          nextMapQuestion();
+        });
+      }
+    });
     // Ці функції викликаються нижче після завантаження Leaflet.
     // Оскільки основний код працює в type=module, робимо їх доступними глобально.
     window.initMapActivity = initMapActivity;
