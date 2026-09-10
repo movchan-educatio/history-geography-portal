@@ -55,7 +55,8 @@ function calculateWeekScore(data = {}) {
     (Number(data.week_nmt_geography_score) || 0) +
     (Number(data.week_truth_or_lie_points) || 0) +
     (Number(data.week_map_activity_points) || 0) +
-    (Number(data.week_history_activity_points) || 0);
+    (Number(data.week_history_activity_points) || 0) +
+    (Number(data.week_flags_points) || 0);
 }
 
 async function awardActivityPoint(kind, points = 1) {
@@ -74,8 +75,10 @@ async function awardActivityPoint(kind, points = 1) {
       data = data || {};
       data.name = data.name || user.displayName || 'Учень';
       data.role = data.role || 'student';
-      const totalKey = kind === 'map' ? 'map_activity_points' : 'history_activity_points';
-      const weekKey = kind === 'map' ? 'week_map_activity_points' : 'week_history_activity_points';
+      const totalKey = kind === 'map' ? 'map_activity_points' :
+        kind === 'flags' ? 'flags_points' : 'history_activity_points';
+      const weekKey = kind === 'map' ? 'week_map_activity_points' :
+        kind === 'flags' ? 'week_flags_points' : 'week_history_activity_points';
       data[totalKey] = (Number(data[totalKey]) || 0) + safePoints;
       data[weekKey] = (Number(data[weekKey]) || 0) + safePoints;
       data.score = (Number(data.score) || 0) + safePoints;
@@ -275,6 +278,7 @@ window.portalScore = {
   awardNmtScore: awardNmt,
   awardMapPoint: points => awardActivityPoint('map', points),
   awardHistoryActivityPoint: points => awardActivityPoint('history_activity', points),
+  awardFlagsPoint: points => awardActivityPoint('flags', points),
   awardTruthOrLiePoint: awardTruthOrLiePoint,
   lockTruthOrLie: lockTruthOrLie,
   unlockDinoForUser: unlockDinoForUser,
@@ -306,7 +310,7 @@ onAuthStateChanged(auth, async user => {
       await awardNmt(subject, points, pending.total || 30);
     }
   }
-  for (const kind of ['map', 'history_activity', 'truth_or_lie']) {
+  for (const kind of ['map', 'history_activity', 'flags', 'truth_or_lie']) {
     const key = `activity_${kind}`;
     const pending = readPending(key);
     const points = Number(pending.total) || 0;

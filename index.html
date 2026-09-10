@@ -543,6 +543,17 @@
     .history-next { width:100%; border:0; border-radius:8px; padding:8px 10px; font-weight:800; cursor:pointer; background:#6b2f1f; color:#fff; }
     .history-next:disabled { opacity:.5; cursor:not-allowed; }
     @media (max-width:700px) { #worldMap { height:190px; } .dino-game-card { height:auto; min-height:420px; } }
+
+    /* --- ГРА З ПРАПОРАМИ --- */
+    .flags-activity-card { background:linear-gradient(135deg,#fffaf6,#fff); border:1px solid #ead7cc; border-radius:16px; padding:16px; min-height:270px; box-sizing:border-box; }
+    .flags-task { margin-top:8px; font-size:13px; font-weight:700; color:#475569; }
+    #flagsDisplay { margin:12px auto; min-height:90px; display:flex; align-items:center; justify-content:center; font-size:76px; line-height:1; background:#fff; border-radius:14px; border:1px solid #f0e1d8; box-shadow:0 5px 16px rgba(91,31,14,.08); }
+    .flags-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .flags-option { border:1px solid #ead0c2; background:#fff; color:#5b1f0e; border-radius:10px; padding:9px 8px; font-weight:800; cursor:pointer; }
+    .flags-option:hover:not(:disabled) { transform:translateY(-1px); background:#fff7f2; }
+    .flags-option:disabled { cursor:default; opacity:.9; }
+    .flags-status { margin-top:8px; padding:7px 8px; border-radius:8px; font-size:12px; background:#f8fafc; color:#475569; text-align:center; min-height:16px; }
+    @media (max-width:650px) { .flags-options { grid-template-columns:1fr; } #flagsDisplay { font-size:64px; } }
 </style>
   <link rel="stylesheet" href="modern-theme.css?v=300">
 <link rel="stylesheet" href="site-modern.css?v=1">
@@ -764,6 +775,15 @@
           <button class="history-next" id="historyActivityNext" type="button" disabled>Наступне питання</button>
           <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
         </div>
+
+        <!-- Блок 5: Прапори світу -->
+        <div class="flags-activity-card" id="flagsGame">
+          <div style="font-weight:900;color:#7c2d12;font-size:14px;">🚩 Прапори світу</div>
+          <div class="flags-task">Якій країні належить цей прапор?</div>
+          <div id="flagsDisplay" aria-label="Прапор країни">🌍</div>
+          <div id="flagsOptions" class="flags-options"></div>
+          <div id="flagsStatus" class="flags-status">Оберіть правильну відповідь.</div>
+        </div>
       </div>
     </section>
 
@@ -905,6 +925,7 @@
         if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
         if (data.map_activity_points === undefined) data.map_activity_points = 0;
         if (data.history_activity_points === undefined) data.history_activity_points = 0;
+        if (data.flags_points === undefined) data.flags_points = 0;
         if (data.truth_or_lie_locked_until === undefined) data.truth_or_lie_locked_until = 0;
         if (data.truth_or_lie_lock_reason === undefined) data.truth_or_lie_lock_reason = '';
 
@@ -919,6 +940,7 @@
           if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = 0;
           if (data.week_map_activity_points === undefined) data.week_map_activity_points = 0;
           if (data.week_history_activity_points === undefined) data.week_history_activity_points = 0;
+          if (data.week_flags_points === undefined) data.week_flags_points = 0;
           data.week_key = currentWeek;
         } else if (data.week_key !== currentWeek) {
           data.week_history_points = 0;
@@ -928,6 +950,7 @@
           data.week_truth_or_lie_points = 0;
           data.week_map_activity_points = 0;
           data.week_history_activity_points = 0;
+          data.week_flags_points = 0;
           data.week_score = 0;
           data.week_key = currentWeek;
         }
@@ -938,7 +961,8 @@
           (Number(data.week_nmt_geography_score) || 0) +
           (Number(data.week_truth_or_lie_points) || 0) +
            (Number(data.week_map_activity_points) || 0) +
-           (Number(data.week_history_activity_points) || 0);
+           (Number(data.week_history_activity_points) || 0) +
+           (Number(data.week_flags_points) || 0);
         return data;
       });
     }
@@ -970,6 +994,7 @@
         ['🎯 Правда чи Брехня', Number(student.truth_or_lie_points)||0],
         ['🗺️ Географічна карта', Number(student.map_activity_points)||0],
         ['⏳ Історичний хронолог', Number(student.history_activity_points)||0],
+        ['🚩 Прапори', Number(student.flags_points)||0],
         ['🦖 Динорейсер — рекорд', dino ? Number(dino.score)||0 : '—']
       ];
       const weekly = [
@@ -978,7 +1003,8 @@
         ['НМТ', nmtH + nmtG],
         ['Правда чи Брехня', Number(student.week_truth_or_lie_points)||0],
         ['Карта', Number(student.week_map_activity_points)||0],
-        ['Хронолог', Number(student.week_history_activity_points)||0]
+        ['Хронолог', Number(student.week_history_activity_points)||0],
+        ['Прапори', Number(student.week_flags_points)||0]
       ];
       body.innerHTML = `<h4 style="margin:0 0 10px;color:#475569;">Усього</h4><div class="stats-grid">${cards.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]}${typeof c[1]==='number'?' балів':''}</strong></div>`).join('')}</div><h4 style="margin:20px 0 10px;color:#475569;">Розшифровка за поточний тиждень</h4><div class="stats-grid">${weekly.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]} балів</strong></div>`).join('')}</div>${student.truth_or_lie_locked_until && Number(student.truth_or_lie_locked_until)>Date.now()?`<div class="anti-cheat-badge">🔒 «Правда чи Брехня» заблоковано до ${new Date(Number(student.truth_or_lie_locked_until)).toLocaleString('uk-UA')}</div>`:''}`;
       modal.style.display = 'flex';
@@ -1005,6 +1031,7 @@
         const truth = Number(student.week_truth_or_lie_points) || 0;
         const map = Number(student.week_map_activity_points) || 0;
         const chronology = Number(student.week_history_activity_points) || 0;
+        const flags = Number(student.week_flags_points) || 0;
         const isMe = student.uid === window.currentUserUid;
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const name = student.name || student.displayName || student.email || 'Учень';
@@ -3066,11 +3093,9 @@
       const dLng = (e.latlng.lng - q.lng) * Math.cos(q.lat * Math.PI / 180);
       const distance = Math.sqrt(dLat*dLat + dLng*dLng);
       const isCorrect = distance <= 6.5;
-
-      // Відповідь фіксуємо одразу. Перехід до нового завдання НЕ чекає Firebase.
-      mapAnswered = true;
       const answeredIndex = mapQuestionIndex;
 
+      mapAnswered = true;
       mapMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(worldMap);
       const status = document.getElementById('mapStatus');
 
@@ -3082,28 +3107,17 @@
           status.style.color = '#15803d';
         }
 
-        // Запис бала та розблокування Динорейсера запускаємо у фоні.
-        // Навіть якщо Firebase відповідає повільно, гра продовжує працювати.
+        // Firebase працює у фоні: він не може зупинити перехід до наступної країни.
         Promise.resolve(saveMapPointToFirebase()).then(saved => {
-          if (!saved) {
-            console.warn('Карта: бал буде повторно синхронізовано після готовності Firebase/Auth.');
-            return;
+          if (saved && window.currentUserUid && typeof get === 'function') {
+            return get(ref(database, 'users/' + window.currentUserUid)).then(mine => {
+              if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
+            });
           }
-          if (window.currentUserUid && typeof get === 'function' && typeof ref === 'function') {
-            get(ref(database, 'users/' + window.currentUserUid))
-              .then(mine => {
-                if (mine.exists() && typeof updateCurrentScoreBadge === 'function') {
-                  updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
-                }
-              })
-              .catch(err => console.warn('Карта: не вдалося оновити індикатор бала:', err));
-          }
-        }).catch(err => console.error('Карта: помилка фонового збереження бала:', err));
+        }).catch(err => console.warn('Карта: фонова синхронізація:', err));
 
         if (typeof unlockDinoAfterActivity === 'function') {
-          Promise.resolve(unlockDinoAfterActivity()).catch(err =>
-            console.warn('Карта: не вдалося зберегти розблокування Динорейсера:', err)
-          );
+          Promise.resolve(unlockDinoAfterActivity()).catch(() => {});
         }
       } else {
         if (status) {
@@ -3111,18 +3125,17 @@
           status.style.background = '#fee2e2';
           status.style.color = '#b91c1c';
         }
-        L.marker([q.lat, q.lng])
-          .addTo(worldMap)
+        L.marker([q.lat, q.lng]).addTo(worldMap)
           .bindPopup(`📍 Правильне розташування: ${q.country}`)
           .openPopup();
       }
 
-      // ЄДИНИЙ таймер переходу. Він запускається одразу після відповіді
-      // і не залежить від швидкості Firebase, await або мережі.
+      // Один таймер для обох випадків. Не залежить від Firebase.
       setTimeout(() => {
-        if (mapQuestionIndex !== answeredIndex || !mapAnswered) return;
-        nextMapQuestion();
-      }, isCorrect ? 900 : 900);
+        if (mapQuestionIndex === answeredIndex && mapAnswered) {
+          nextMapQuestion();
+        }
+      }, 900);
     }
 
     async function saveMapPointToFirebase() {
@@ -4279,6 +4292,92 @@
     window.initMapActivity = initMapActivity;
     window.renderHistoryActivityQuestion = renderHistoryActivityQuestion;
 
+
+    // --- ГРА «ПРАПОРИ СВІТУ» ---
+    const flagsCountries = [["🇺🇦", "Україна"], ["🇵🇱", "Польща"], ["🇩🇪", "Німеччина"], ["🇫🇷", "Франція"], ["🇮🇹", "Італія"], ["🇪🇸", "Іспанія"], ["🇵🇹", "Португалія"], ["🇬🇧", "Велика Британія"], ["🇺🇸", "США"], ["🇨🇦", "Канада"], ["🇧🇷", "Бразилія"], ["🇦🇷", "Аргентина"], ["🇲🇽", "Мексика"], ["🇨🇱", "Чилі"], ["🇵🇪", "Перу"], ["🇨🇴", "Колумбія"], ["🇯🇵", "Японія"], ["🇨🇳", "Китай"], ["🇮🇳", "Індія"], ["🇰🇷", "Південна Корея"], ["🇹🇷", "Туреччина"], ["🇬🇷", "Греція"], ["🇳🇱", "Нідерланди"], ["🇧🇪", "Бельгія"], ["🇨🇭", "Швейцарія"], ["🇦🇹", "Австрія"], ["🇨🇿", "Чехія"], ["🇸🇰", "Словаччина"], ["🇭🇺", "Угорщина"], ["🇷🇴", "Румунія"], ["🇧🇬", "Болгарія"], ["🇷🇸", "Сербія"], ["🇭🇷", "Хорватія"], ["🇸🇮", "Словенія"], ["🇳🇴", "Норвегія"], ["🇸🇪", "Швеція"], ["🇫🇮", "Фінляндія"], ["🇩🇰", "Данія"], ["🇮🇸", "Ісландія"], ["🇮🇪", "Ірландія"], ["🇪🇪", "Естонія"], ["🇱🇻", "Латвія"], ["🇱🇹", "Литва"], ["🇲🇩", "Молдова"], ["🇬🇪", "Грузія"], ["🇦🇲", "Вірменія"], ["🇦🇿", "Азербайджан"], ["🇰🇿", "Казахстан"], ["🇺🇿", "Узбекистан"], ["🇮🇱", "Ізраїль"], ["🇪🇬", "Єгипет"], ["🇲🇦", "Марокко"], ["🇿🇦", "Південна Африка"], ["🇳🇬", "Нігерія"], ["🇰🇪", "Кенія"], ["🇦🇺", "Австралія"], ["🇳🇿", "Нова Зеландія"], ["🇹🇭", "Таїланд"], ["🇻🇳", "В'єтнам"], ["🇮🇩", "Індонезія"], ["🇵🇭", "Філіппіни"], ["🇸🇬", "Сінгапур"], ["🇲🇾", "Малайзія"], ["🇵🇰", "Пакистан"], ["🇸🇦", "Саудівська Аравія"], ["🇦🇪", "ОАЕ"], ["🇮🇷", "Іран"], ["🇮🇶", "Ірак"], ["🇯🇴", "Йорданія"], ["🇨🇺", "Куба"], ["🇯🇲", "Ямайка"], ["🇨🇷", "Коста-Рика"], ["🇵🇦", "Панама"], ["🇺🇾", "Уругвай"], ["🇵🇾", "Парагвай"], ["🇧🇴", "Болівія"], ["🇪🇨", "Еквадор"], ["🇻🇪", "Венесуела"], ["🇬🇹", "Гватемала"], ["🇩🇴", "Домініканська Республіка"], ["🇭🇳", "Гондурас"], ["🇳🇮", "Нікарагуа"], ["🇸🇻", "Сальвадор"], ["🇬🇭", "Гана"], ["🇸🇳", "Сенегал"], ["🇪🇹", "Ефіопія"], ["🇹🇿", "Танзанія"], ["🇺🇬", "Уганда"], ["🇿🇲", "Замбія"], ["🇿🇼", "Зімбабве"], ["🇲🇬", "Мадагаскар"], ["🇫🇯", "Фіджі"], ["🇵🇬", "Папуа-Нова Гвінея"], ["🇳🇵", "Непал"], ["🇲🇳", "Монголія"], ["🇻🇦", "Ватикан"], ["🇱🇺", "Люксембург"], ["🇲🇹", "Мальта"], ["🇨🇾", "Кіпр"], ["🇦🇱", "Албанія"], ["🇧🇦", "Боснія і Герцеговина"], ["🇲🇪", "Чорногорія"], ["🇲🇰", "Північна Македонія"], ["🇽🇰", "Косово"], ["🇧🇾", "Білорусь"], ["🇷🇺", "Росія"]];
+    let flagsCurrent = null;
+    let flagsAnswered = false;
+    let flagsPreviousIndex = -1;
+
+    function flagsShuffle(arr) {
+      return arr.slice().sort(() => Math.random() - 0.5);
+    }
+
+    function renderFlagsQuestion() {
+      const display = document.getElementById('flagsDisplay');
+      const options = document.getElementById('flagsOptions');
+      const status = document.getElementById('flagsStatus');
+      if (!display || !options || !status) return;
+
+      let idx;
+      do { idx = Math.floor(Math.random() * flagsCountries.length); }
+      while (flagsCountries.length > 1 && idx === flagsPreviousIndex);
+
+      flagsPreviousIndex = idx;
+      flagsCurrent = flagsCountries[idx];
+      flagsAnswered = false;
+      display.textContent = flagsCurrent[0];
+      options.innerHTML = '';
+
+      const wrong = flagsShuffle(flagsCountries.filter((_, i) => i !== idx)).slice(0, 3);
+      flagsShuffle([flagsCurrent, ...wrong]).forEach(([emoji, country]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'flags-option';
+        btn.textContent = country;
+        btn.addEventListener('click', () => answerFlags(country, btn));
+        options.appendChild(btn);
+      });
+      status.textContent = 'Оберіть правильну відповідь.';
+      status.style.background = '#f8fafc';
+      status.style.color = '#475569';
+    }
+
+    function answerFlags(country, clickedButton) {
+      if (flagsAnswered || !flagsCurrent) return;
+      flagsAnswered = true;
+      const answered = flagsCurrent;
+      const correct = country === flagsCurrent[1];
+
+      document.querySelectorAll('#flagsOptions .flags-option').forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === flagsCurrent[1]) {
+          btn.style.background = '#dcfce7';
+          btn.style.borderColor = '#86efac';
+        }
+      });
+
+      const status = document.getElementById('flagsStatus');
+      if (correct) {
+        if (status) {
+          status.textContent = '🎉 Правильно! +1 бал. Наступний прапор…';
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
+        }
+        if (window.portalScore?.awardFlagsPoint) {
+          Promise.resolve(window.portalScore.awardFlagsPoint(1)).catch(err =>
+            console.warn('Прапори: помилка синхронізації:', err)
+          );
+        }
+      } else {
+        if (clickedButton) {
+          clickedButton.style.background = '#fee2e2';
+          clickedButton.style.borderColor = '#fca5a5';
+        }
+        if (status) {
+          status.textContent = `❌ Неправильно. Правильна відповідь: ${flagsCurrent[1]}. Наступний прапор…`;
+          status.style.background = '#fee2e2';
+          status.style.color = '#b91c1c';
+        }
+      }
+
+      setTimeout(() => {
+        if (flagsCurrent === answered && flagsAnswered) renderFlagsQuestion();
+      }, 900);
+    }
+
+    window.renderFlagsQuestion = renderFlagsQuestion;
+
     function openModal(type) {
       const modal = document.getElementById('info-modal');
       const titleElem = document.getElementById('modal-title');
@@ -4312,6 +4411,7 @@
     setTimeout(() => {
       if (typeof window.initMapActivity === 'function') window.initMapActivity();
       if (typeof window.renderHistoryActivityQuestion === 'function') window.renderHistoryActivityQuestion();
+      if (typeof window.renderFlagsQuestion === 'function') window.renderFlagsQuestion();
     }, 100);
   });
 </script>
