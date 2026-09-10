@@ -1064,6 +1064,8 @@
       if (window.currentUserUid) {
         const mine = raw[window.currentUserUid] || {};
         updateCurrentScoreBadge(Number(mine.week_score) || 0);
+        // Розблокування може надійти з будь-якої навчальної сторінки через Firebase.
+        if (mine.dino_unlocked === true) unlockDinoGame();
       }
     }, error => {
       console.error('Firebase рейтинг:', error);
@@ -1105,7 +1107,9 @@
       try {
         await ensureUserProfile(user);
         const profileSnap = await get(ref(database, 'users/' + user.uid));
-        restoreTruthOrLieLock(profileSnap.val()?.truth_or_lie_locked_until ? { until: profileSnap.val().truth_or_lie_locked_until } : null);
+        const profileData = profileSnap.val() || {};
+        restoreTruthOrLieLock(profileData.truth_or_lie_locked_until ? { until: profileData.truth_or_lie_locked_until } : null);
+        if (profileData.dino_unlocked === true) unlockDinoGame();
       } catch (e) {
         console.error('Профіль Firebase:', e);
       }
@@ -1636,7 +1640,19 @@
       if (typeof window.addPointsToFirebase === 'function') {
         window.addPointsToFirebase(points);
       }
+    }
+
+    // Динорейсер відкривається після будь-якого позитивного навчального результату
+    // і зберігає цей стан у Firebase.
+    async function unlockDinoAfterActivity() {
       unlockDinoGame();
+      try {
+        if (window.portalScore?.unlockDinoForUser) {
+          await window.portalScore.unlockDinoForUser();
+        }
+      } catch (e) {
+        console.error('Не вдалося зберегти розблокування Динорейсера:', e);
+      }
     }
 
     const keyEvents = [
@@ -2026,6 +2042,7 @@
         resultElem.style.color = '#15803d';
         resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +1 бал!';
         await addPoints(1);
+        await unlockDinoAfterActivity();
       } else {
         resultElem.style.background = '#fee2e2';
         resultElem.style.color = '#b91c1c';
@@ -3067,6 +3084,8 @@
           status.textContent = '⚠️ Відповідь правильна, але бал не збережено. Перевірте, чи виконано вхід через Google.';
           status.style.background = '#fef3c7'; status.style.color = '#92400e';
         }
+        // Правильна карта розблоковує Динорейсер. Розблокування також зберігається у Firebase.
+        unlockDinoAfterActivity();
         // Без кнопки: після правильної відповіді автоматично показуємо нову країну.
         const answeredIndex = mapQuestionIndex;
         setTimeout(() => {
@@ -4173,6 +4192,8 @@
           status.style.background = '#dcfce7';
           status.style.color = '#15803d';
         }
+        // Правильний хронолог розблоковує Динорейсер.
+        unlockDinoAfterActivity();
         saveHistoryActivityPoint().then(async saved => {
           if (saved && window.currentUserUid) {
             try {

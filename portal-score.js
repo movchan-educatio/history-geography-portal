@@ -83,6 +83,9 @@ async function awardActivityPoint(kind, points = 1) {
       data.lastScoreSource = kind;
       data.lastScorePoints = safePoints;
       data.lastScoreAt = Date.now();
+      // Будь-який позитивний навчальний результат відкриває Динорейсер.
+      data.dino_unlocked = true;
+      data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
       return data;
     });
     return true;
@@ -117,6 +120,9 @@ async function awardTruthOrLiePoint(points = 1) {
       data.lastScoreSource = 'truth_or_lie';
       data.lastScorePoints = safePoints;
       data.lastScoreAt = Date.now();
+      // Будь-який позитивний навчальний результат відкриває Динорейсер.
+      data.dino_unlocked = true;
+      data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
       return data;
     });
     return true;
@@ -157,6 +163,9 @@ async function awardSubjectQuiz(subject, themeId, score) {
       data.lastScoreSource = subject;
       data.lastScorePoints = points;
       data.lastScoreAt = Date.now();
+      // Будь-який позитивний навчальний результат відкриває Динорейсер.
+      data.dino_unlocked = true;
+      data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
       return data;
     });
     console.log(`Портал: ${subject} ${themeId} → +${points} балів.`);
@@ -202,6 +211,9 @@ async function awardNmt(subject, score, total) {
       data.lastScoreSource = `nmt_${subject}`;
       data.lastScorePoints = points;
       data.lastScoreAt = Date.now();
+      // Будь-який позитивний навчальний результат відкриває Динорейсер.
+      data.dino_unlocked = true;
+      data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
       return data;
     });
     writePending(`nmt_${subject}`, {});
@@ -215,6 +227,25 @@ async function awardNmt(subject, score, total) {
     pending.total = Number(total) || 30;
     writePending(`nmt_${subject}`, pending);
     setSyncStatus(subject, '⚠️ Не вдалося синхронізувати. Спробуйте ще раз.');
+    return false;
+  }
+}
+
+async function unlockDinoForUser() {
+  const user = await requireUser();
+  if (!user) return false;
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+      data.dino_unlocked = true;
+      data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
+      return data;
+    });
+    return true;
+  } catch (error) {
+    console.error('Портал: не вдалося зберегти розблокування Динорейсера', error);
     return false;
   }
 }
@@ -246,6 +277,7 @@ window.portalScore = {
   awardHistoryActivityPoint: points => awardActivityPoint('history_activity', points),
   awardTruthOrLiePoint: awardTruthOrLiePoint,
   lockTruthOrLie: lockTruthOrLie,
+  unlockDinoForUser: unlockDinoForUser,
   calculateWeekScore
 };
 window.awardHistoryQuizScore = window.portalScore.awardHistoryQuizScore;
