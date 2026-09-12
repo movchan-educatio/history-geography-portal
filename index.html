@@ -1384,6 +1384,81 @@ img, svg, canvas, video, iframe {
   #escapePastGame .escape-scene{height:190px!important;min-height:190px!important;}
 }
 </style>
+
+<style id="escape-photo-v8">
+#escapePastGame .escape-scene{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:0!important;
+  height:250px!important;
+  min-height:250px!important;
+  background:#172033!important;
+}
+.escape-history-photo{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  opacity:1!important;
+  filter:none!important;
+}
+.escape-photo-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(7,12,20,.05),rgba(7,12,20,.1) 55%,rgba(7,12,20,.55));
+  pointer-events:none;
+}
+.escape-photo-credit{
+  position:absolute;
+  left:9px;
+  bottom:8px;
+  max-width:calc(100% - 18px);
+  padding:4px 7px;
+  border-radius:7px;
+  background:rgba(10,18,30,.7);
+  color:#fff!important;
+  font-size:8px!important;
+  line-height:1.2;
+  text-decoration:none!important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  backdrop-filter:blur(4px);
+}
+.escape-photo-loading,.escape-photo-fallback{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:9px;text-align:center;color:#dbeafe;font-weight:800;
+  background:linear-gradient(135deg,#22334b,#334f67);
+}
+.escape-photo-fallback span{font-size:10px;color:#cbd5e1;}
+.escape-photo-fallback-icon{font-size:44px;}
+.escape-photo-spinner{
+  width:30px;height:30px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.25);border-top-color:#fff;
+  animation:escapeSpin .7s linear infinite;
+}
+@keyframes escapeSpin{to{transform:rotate(360deg)}}
+#escapePastGame .escape-scene-label,
+#escapePastGame .escape-torch,
+#escapePastGame #escapeSceneTheme,
+#escapePastGame #escapeSceneBadge{display:none!important;}
+#escapePastGame .escape-story,
+#escapePastGame .escape-question,
+#escapePastGame .escape-feedback{
+  white-space:normal!important;
+  overflow:visible!important;
+}
+@media(max-width:700px){
+  #escapePastGame .escape-scene{
+    height:205px!important;
+    min-height:205px!important;
+  }
+  .escape-photo-credit{font-size:7px!important;}
+}
+</style>
 </head>
 <body>
 
@@ -2023,6 +2098,122 @@ img, svg, canvas, video, iframe {
 
     const escapeExtraQuestions = {"kyiv1240": [["За якого князя спорудили Золоті ворота?", "Ярослава Мудрого", "gate"], ["На якій річці розташований Київ?", "Дніпро", "river"], ["Що таке воєвода?", "Військовий керівник", "defender"], ["Хто залишив воєводу Дмитра обороняти Київ?", "Данило Романович", "defender"], ["Яку функцію мали міські вали?", "Оборонну", "gate"], ["До якої імперії належали війська Батия?", "Монгольської імперії", "cavalry"], ["Який матеріал широко використовували в укріпленнях Русі?", "Дерево і землю", "gate"], ["Хто започаткував будівництво Десятинної церкви?", "Володимир Великий", "church"], ["Чому церкву назвали Десятинною?", "На неї князь віддавав десятину доходів", "church"], ["Що найбільше допомагало монгольському війську швидко пересуватися?", "Мобільна кіннота", "cavalry"], ["Яка подія сталася раніше: Хрещення Русі чи захоплення Києва Батиєм?", "Хрещення Русі", "kyiv"], ["Як називається силова атака на укріплене місто?", "Штурм", "gate"], ["Що сталося з політичною роллю Києва після навали?", "Вона ослабла", "ruins"], ["Який природний об’єкт був ключовим для життя Києва?", "Дніпро", "river"], ["Який князь був важливим правителем західноруських земель у добу навали?", "Данило Романович", "defender"], ["Який тип укріплень був характерним для княжого Києва?", "Дерев’яно-земляні укріплення", "gate"], ["Що стало одним із наслідків навали для населення Києва?", "Великі людські втрати", "ruins"]], "baptism988": [["Яке місто було столицею Візантії?", "Константинополь", "byzantium"], ["Яку церкву спорудили за Володимира Великого?", "Десятинну церкву", "church"], ["Хто з родичів Володимира прийняв християнство раніше?", "Княгиня Ольга", "prince"], ["Що посилилося після християнізації Русі?", "Міжнародні культурні зв’язки", "byzantium"], ["Яка галузь культури отримала поштовх після хрещення?", "Книжність і освіта", "book"], ["Який титул мав Володимир?", "Князь", "prince"], ["До якого століття належить 988 рік?", "X століття", "kyiv"], ["Який культурний вплив був особливо відчутним після хрещення?", "Візантійський", "byzantium"], ["Яка споруда стала символом раннього християнського Києва?", "Десятинна церква", "church"], ["Яке поняття найточніше описує події 988 року?", "Християнізація", "river"], ["Яка практика поширювалася разом із християнством?", "Храмове будівництво", "church"], ["Що допомагало консолідувати Русь після хрещення?", "Спільна релігія", "kyiv"], ["Яка подія відбулася пізніше за 988 рік?", "Захоплення Києва Батиєм", "kyiv"], ["Яка мова мала важливе значення для церковної книжності Русі?", "Церковнослов’янська", "book"], ["Який князь найбільше пов’язаний із 988 роком?", "Володимир Великий", "prince"], ["Який наслідок мало прийняття християнства для писемності?", "Розвиток писемної культури", "book"], ["Яке місто було центром подій 988 року?", "Київ", "kyiv"]], "sich": [["Як називався військовий підрозділ і житлова одиниця Січі?", "Курінь", "sich"], ["Який символ влади мав кошовий отаман?", "Булава", "otaman"], ["Яку зброю широко використовували козаки?", "Шаблю і вогнепальну зброю", "weapons"], ["Що таке паланка?", "Територіальний округ Запорожжя", "sich"], ["Які походи здійснювали запорожці?", "Сухопутні й морські", "chaika"], ["Чим була Січ за характером?", "Військово-політичним центром", "sich"], ["Який транспорт був особливо важливим для козака в степу?", "Кінь", "horse"], ["Що означає козацьке самоврядування?", "Участь козаків у виборі влади", "rada"], ["Який тип поселення була Січ?", "Укріплений козацький табір", "sich"], ["Яке поняття пов’язане з козацьким товариством?", "Побратимство", "rada"], ["Що допомагало козакам у морських походах?", "Маневрені чайки", "chaika"], ["Яка територія найбільше асоціюється із Запорозькою Січчю?", "Нижнє Подніпров’я", "river"], ["Хто обирав кошового отамана?", "Козацька громада на раді", "rada"], ["Що оточувало Січ для захисту?", "Вали й укріплення", "sich"], ["Яка дисципліна була особливо важливою на Січі?", "Військова", "weapons"], ["Який принцип був важливим у політичному житті Січі?", "Виборність", "rada"], ["Яка річка була головною водною артерією Запорожжя?", "Дніпро", "river"]], "khmel1648": [["Який титул мав Богдан Хмельницький?", "Гетьман", "khmel"], ["Проти влади якої держави виступили повстанці?", "Речі Посполитої", "map"], ["Яка ще велика перемога відбулася 1648 року після Корсуня?", "Пилявецька битва", "battle"], ["Яке місто було резиденцією Хмельницького?", "Чигирин", "hetmanate"], ["Як називався договір 1649 року?", "Зборівський договір", "document"], ["Яка битва відбулася 1651 року?", "Берестецька битва", "battle"], ["Яка битва 1652 року стала перемогою козаків?", "Батозька битва", "battle"], ["Яка система управління склалася в Гетьманщині?", "Полково-сотенна", "hetmanate"], ["Що таке універсал гетьмана?", "Офіційний акт влади", "document"], ["Який символ влади гетьмана?", "Булава", "khmel"], ["Який стан був ядром повстання?", "Козацтво", "cossacks"], ["Яка річка була важливою для козацької України?", "Дніпро", "river"], ["Що стало одним із головних наслідків війни?", "Постання козацької держави", "hetmanate"], ["Яка битва відбулася раніше: Жовті Води чи Берестечко?", "Жовті Води", "battle"], ["Що означає слово «гетьман» у цьому контексті?", "Керівник козацької держави і війська", "khmel"], ["Хто був союзником Хмельницького в перших кампаніях?", "Кримські татари", "alliance"], ["Який політичний центр найбільше пов’язаний із Хмельницьким?", "Чигирин", "hetmanate"]], "revolution1917": [["Який мирний договір уклала УНР 1918 року?", "Берестейський мир", "document"], ["Яка держава постала після перевороту Павла Скоропадського?", "Українська Держава", "skoropadsky"], ["Хто був одним із провідних діячів Директорії?", "Симон Петлюра", "petliura"], ["Яка українська держава постала у Львові восени 1918 року?", "ЗУНР", "zunr"], ["Хто очолював ЗУНР?", "Євген Петрушевич", "zunr"], ["Що означає соборність?", "Єдність українських земель", "unity"], ["Де проголосили Акт Злуки?", "У Києві", "sofia"], ["Який символ став гербом УНР?", "Тризуб", "trident"], ["Яка валюта використовувалася в УНР?", "Гривня", "money"], ["Яке місто було політичним центром Центральної Ради?", "Київ", "rada1917"], ["Яка подія відбулася 29 січня 1918 року?", "Бій під Крутами", "kruty"], ["Який період охоплює Українська революція?", "1917–1921", "rada1917"], ["Яке поняття найкраще описує мету революції?", "Українське державотворення", "flag"], ["Який документ проголосив незалежність УНР?", "IV Універсал", "universal"], ["Яка площа Києва пов’язана з Актом Злуки?", "Софійська площа", "sofia"], ["Який прапор використовувала УНР?", "Синьо-жовтий", "flag"], ["Який документ проголосив Українську Народну Республіку?", "III Універсал", "universal"]], "kruty1918": [["Де відбувся бій під Крутами?", "Біля залізничної станції Крути", "rail"], ["Який напрямок прикривали захисники Крут?", "Шлях на Київ", "rail"], ["Який акт УНР передував бою під Крутами?", "IV Універсал", "document"], ["Яка пора року була під час бою?", "Зима", "snow"], ["Яке місто було столицею УНР?", "Київ", "flag"], ["Яка транспортна система була стратегічно важливою під Крутами?", "Залізниця", "rail"], ["До якої революції належить бій під Крутами?", "Української революції 1917–1921", "flag"], ["Який символ державності асоціюється з УНР?", "Тризуб", "trident"], ["Яке поняття пов’язують із пам’яттю про Крути?", "Самопожертва", "memorial"], ["Що було головною загрозою для Києва?", "Більшовицький наступ", "enemy"], ["Яка область сучасної України пов’язана з Крутами?", "Чернігівщина", "map"], ["Якою була головна мета оборонців?", "Стримати просування ворога", "kruty"], ["Що символізує меморіал Крут?", "Пам’ять про захисників УНР", "memorial"], ["Який державний прапор захищали вояки УНР?", "Синьо-жовтий", "flag"], ["Який тип місцевості був важливим у бою?", "Залізничний вузол", "rail"], ["Чому бій має символічне значення?", "Молодь стала на захист держави", "memorial"], ["Яка дата проголошення незалежності УНР передувала Крутам?", "22 січня 1918", "document"]], "egypt": [["Який природний цикл визначав землеробство Єгипту?", "Розливи Нілу", "nile"], ["На чому писали єгиптяни?", "На папірусі", "papyrus"], ["Який бог зображувався з головою шакала?", "Анубіс", "anubis"], ["Де розташований найвідоміший комплекс пірамід?", "У Гізі", "pyramids"], ["Яка споруда має тіло лева й голову людини?", "Сфінкс", "sphinx"], ["Хто розшифрував єгипетські ієрогліфи?", "Жан-Франсуа Шампольйон", "hieroglyph"], ["Що допомогло розшифрувати ієрогліфи?", "Розетський камінь", "hieroglyph"], ["Яка галузь господарства була основою життя Єгипту?", "Землеробство", "nile"], ["Хто служив у єгипетських храмах?", "Жерці", "temple"], ["Ким була Клеопатра VII?", "Царицею Єгипту", "pharaoh"], ["Яка тварина мала священне значення в Єгипті?", "Кішка", "cat"], ["У якому напрямі тече Ніл?", "З півдня на північ", "nile"], ["Яке море лежить на півночі Єгипту?", "Середземне", "nile"], ["Що таке саркофаг?", "Оздоблена труна", "mummy"], ["Що зберігали в канопах?", "Внутрішні органи", "mummy"], ["Яке сонячне божество було відомим у Єгипті?", "Ра", "sun"], ["На якому континенті виникла єгипетська цивілізація?", "Африка", "pyramids"]], "pompeii79": [["Що накрило Помпеї під час виверження?", "Вулканічний попіл і уламки", "vesuvius"], ["Біля якого сучасного міста розташований Везувій?", "Неаполь", "pompeii"], ["Якою мовою переважно говорили римляни?", "Латиною", "forum"], ["Що таке форум?", "Громадський центр римського міста", "forum"], ["Для чого слугував амфітеатр?", "Для видовищ", "amphitheatre"], ["Що археологи знаходять на стінах Помпеїв?", "Фрески й написи", "fresco"], ["Який бог був верховним у римлян?", "Юпітер", "temple"], ["До якого століття належить 79 рік?", "I століття", "pompeii"], ["Яке місто також постраждало від виверження Везувію?", "Геркуланум", "ruins"], ["Що таке терми?", "Громадські лазні", "bath"], ["Що таке атріум?", "Центральна частина римського дому", "house"], ["Яке заняття було поширеним у Помпеях?", "Торгівля", "market"], ["Чому збереглося багато будівель Помпеїв?", "Їх законсервував вулканічний матеріал", "ruins"], ["Який транспорт використовували на вулицях Помпеїв?", "Вози", "street"], ["Що показують помпейські будинки?", "Повсякденне життя римлян", "house"], ["Яке море розташоване неподалік Помпеїв?", "Середземне", "pompeii"], ["Яка наука досліджує Помпеї через розкопки?", "Археологія", "ruins"]], "medieval": [["Хто такий васал?", "Феодал, залежний від сеньйора", "feudal"], ["Що таке феод?", "Земельне володіння за службу", "feudal"], ["Яка споруда опускалася над ровом замку?", "Підйомний міст", "castle"], ["Для чого був рів навколо замку?", "Ускладнював штурм", "castle"], ["Хто очолював роботу в ремісничій майстерні?", "Майстер", "guild"], ["Що таке гільдія?", "Об’єднання купців", "market"], ["Який стиль відомий стрілчастими арками?", "Готика", "cathedral"], ["Що було центром релігійного життя міста?", "Собор", "cathedral"], ["Хто обробляв землю в маєтку феодала?", "Селяни", "village"], ["Що таке лицарський турнір?", "Військове змагання", "knight"], ["Що захищало лицаря в бою?", "Щит", "knight"], ["Що таке герб?", "Символ роду або міста", "heraldry"], ["Що таке ярмарок?", "Великий періодичний торг", "market"], ["Хто жив у монастирях?", "Монахи", "monastery"], ["Що переписували в монастирях?", "Книги", "book"], ["Яка зброя була типовою для лицаря?", "Меч", "knight"], ["Що означає васалітет?", "Систему залежності й служби", "feudal"]], "paris1789": [["Що символізувала Бастилія?", "Королівський абсолютизм", "bastille"], ["Яка дата є національним святом Франції?", "14 липня", "tricolor"], ["Який політичний устрій був у Франції на початку революції?", "Абсолютна монархія", "king"], ["Де перебував королівський двір?", "У Версалі", "versailles"], ["Хто була королевою Франції?", "Марія-Антуанетта", "versailles"], ["Що сталося в серпні 1789 року?", "Скасували багато феодальних привілеїв", "assembly"], ["Який колір НЕ входить до французького триколора?", "Зелений", "tricolor"], ["Який орган утворили представники третього стану?", "Національні збори", "assembly"], ["Що вимагав третій стан?", "Політичних реформ", "crowd"], ["Яка форма правління постала пізніше в ході революції?", "Республіка", "republic"], ["Яке поняття стало центральним у революції?", "Громадянство", "declaration"], ["Яке місто було центром революційних подій?", "Париж", "paris"], ["Який символ свободи використовували революціонери?", "Фригійський ковпак", "cap"], ["Який стан мав привілеї до революції?", "Дворянство", "versailles"], ["Яка фінансова проблема посилила кризу?", "Великий державний борг", "crowd"], ["Де відбулася Клятва в залі для гри в м’яч?", "У Версалі", "assembly"], ["Що проголошувала Декларація 1789 року?", "Рівність громадян перед законом", "declaration"]], "discoveries1492": [["Яка держава підтримала подорож Колумба?", "Іспанія", "columbus"], ["Яка держава активно шукала шлях навколо Африки?", "Португалія", "gama"], ["Хто досяг мису Доброї Надії?", "Бартоломеу Діаш", "cape"], ["Який прилад допомагав визначати напрям?", "Компас", "compass"], ["Які карти використовували мореплавці?", "Портолани", "map"], ["Який океан перетнув Колумб?", "Атлантичний", "ocean"], ["Куди прагнув дістатися Колумб західним шляхом?", "До Азії", "map"], ["Хто дав ім’я Америці?", "Амеріго Веспуччі", "map"], ["Який мис обігнув Бартоломеу Діаш?", "Мис Доброї Надії", "cape"], ["До якого міста Індії прибув Васко да Гама?", "Калікут", "gama"], ["Що стимулювало пошук нових морських шляхів?", "Потреба прямої торгівлі зі Сходом", "market"], ["Який товар був особливо бажаним зі Сходу?", "Прянощі", "market"], ["Що таке Колумбів обмін?", "Обмін між Старим і Новим світом", "map"], ["Яка негативна сторона Великих відкриттів?", "Колоніальне підкорення й насильство", "colony"], ["Який корабель був флагманом Колумба?", "Санта-Марія", "ship"], ["Який корабель завершив плавання експедиції Магеллана?", "Вікторія", "ship"], ["Який океан назвав Магеллан Тихим?", "Тихий", "ocean"]]};
 
+    function escapeStem(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/[’'“”«».,!?;:()[\]—–-]/g,' ')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(w => w
+          .replace(/(ами|ями|ові|еві|ого|ому|ою|ею|ій|ий|а|я|у|ю|і|и|е|о)$/u,'')
+          .slice(0, 10)
+        )
+        .join(' ');
+    }
+
+    function escapeSameMeaning(a, b) {
+      const A = escapeStem(a), B = escapeStem(b);
+      if (!A || !B) return false;
+      if (A === B) return true;
+      const aw = A.split(' '), bw = B.split(' ');
+      const shared = aw.filter(x => bw.includes(x)).length;
+      return shared >= Math.max(1, Math.min(aw.length, bw.length) - 1);
+    }
+
+    const escapeSmartWrongAnswers = {
+      kyiv1240: {
+        church:['Софійський собор','Кирилівську церкву','Михайлівський Золотоверхий монастир'],
+        gate:['Лядські ворота','Печерські ворота','Жидівські ворота'],
+        river:['Дунай','Дністер','Південний Буг'],
+        defender:['Князь Ігор','Ярослав Осмомисл','Володимир Мономах'],
+        cavalry:['Піхота','Морський флот','Арбалетники'],
+        ruins:['Створення нової імперської столиці','Початок індустріалізації','Об’єднання всієї Русі']
+      },
+      baptism988: {
+        church:['Софійський собор','Кирилівську церкву','Михайлівський Золотоверхий монастир'],
+        river:['Дунай','Дністер','Південний Буг'],
+        prince:['Ярослав Мудрий','Святослав Ігорович','Володимир Мономах'],
+        byzantium:['Рим','Александрія','Афіни'],
+        book:['Військова справа','Мореплавство','Монетна справа'],
+        kyiv:['Чернігів','Переяслав','Галич']
+      },
+      sich: {
+        sich:['Кам’яний замок','Античний поліс','Королівський палац'],
+        rada:['Абсолютна монархія','Спадкова влада','Призначення королем'],
+        otaman:['Воєвода','Бургомістр','Консул'],
+        chaika:['Каравела','Драккар','Галера'],
+        river:['Дунай','Дністер','Південний Буг'],
+        weapons:['Катана','Гладіус','Арбалет як єдина зброя'],
+        horse:['Віз','Паровоз','Корабель']
+      },
+      khmel1648: {
+        khmel:['Іван Мазепа','Петро Дорошенко','Пилип Орлик'],
+        battle:['Берестечко','Полтава','Конотоп'],
+        alliance:['Швеція','Франція','Московія'],
+        hetmanate:['ЗУНР','УНР','Київська Русь'],
+        document:['Берестейський мир 1918 року','Версальський договір','Ризький мир'],
+        river:['Дунай','Дністер','Південний Буг']
+      },
+      revolution1917: {
+        rada1917:['Директорія','Рада Народних Міністрів','Українська Національна Рада'],
+        universal:['I Універсал','II Універсал','Акт Злуки'],
+        skoropadsky:['Симон Петлюра','Михайло Грушевський','Євген Петрушевич'],
+        unity:['Берестейський мир','IV Універсал','Листопадовий чин'],
+        trident:['Двоголовий орел','Французька лілея','Османський півмісяць'],
+        flag:['Біло-червоний прапор','Французький триколор','Чорно-жовтий прапор'],
+        document:['Зборівський договір','Версальський договір','Ризький мир']
+      },
+      kruty1918: {
+        rail:['Морський порт','Гірський перевал','Річкова переправа'],
+        flag:['ЗУНР','Річ Посполита','Українська Держава Скоропадського'],
+        enemy:['Османські війська','Австро-угорські війська','Шведська армія'],
+        memorial:['Початок козацтва','Хрещення Русі','Французька революція'],
+        document:['Акт Злуки','III Універсал','Берестейська унія'],
+        snow:['Літо','Весна','Осінь']
+      },
+      egypt: {
+        nile:['Тигр','Євфрат','Інд'],
+        pharaoh:['Консул','Архонт','Султан'],
+        hieroglyph:['Клинопис','Латиниця','Кирилиця'],
+        pyramids:['Амфітеатри','Форуми','Акведуки'],
+        mummy:['Кремування','Бальзамування лише для торгівлі','Спалення на вогнищі'],
+        temple:['Форум','Базиліка','Січ'],
+        sphinx:['Колос Родоський','Парфенон','Зикурат']
+      },
+      pompeii79: {
+        vesuvius:['Етна','Стромболі','Фудзі'],
+        pompeii:['Рим','Афіни','Карфаген'],
+        forum:['Піраміда','Січ','Донжон'],
+        amphitheatre:['Храм','Фортеця','Порт'],
+        ruins:['Середньовіччя','Козацька доба','Єгипет Нового царства'],
+        house:['Курінь','Донжон','Монастир']
+      },
+      medieval: {
+        castle:['Форум','Піраміда','Січ'],
+        knight:['Гладіатор','Фараон','Консул'],
+        guild:['Легіон','Поліс','Сенат'],
+        feudal:['Індустріалізація','Демократія полісу','Колонізація Америки'],
+        cathedral:['Амфітеатр','Піраміда','Палац фараона'],
+        market:['Військовий табір','Монастир','Фортеця']
+      },
+      paris1789: {
+        bastille:['Версаль','Лувр','Нотр-Дам'],
+        king:['Наполеон III','Людовік XIV','Карл Великий'],
+        tricolor:['Зелений, білий, чорний','Синій, жовтий, червоний','Червоний, жовтий, зелений'],
+        declaration:['Кодекс Хаммурапі','Велика хартія вольностей','IV Універсал'],
+        versailles:['Лувр','Тюїльрі','Фонтенбло'],
+        assembly:['Римський сенат','Козацька рада','Директорія УНР']
+      },
+      discoveries1492: {
+        ship:['Драккар','Трієра','Пароплав'],
+        ocean:['Індійський океан','Північний Льодовитий океан','Середземне море'],
+        map:['Антарктида','Австралія','Сахара'],
+        compass:['Барометр','Телескоп','Друкарський верстат'],
+        columbus:['Васко да Гама','Фернан Магеллан','Джеймс Кук'],
+        gama:['Христофор Колумб','Амеріго Веспуччі','Джеймс Кук']
+      }
+    };
+
     function buildEscapeQuestionPool(scenario) {
       const bank = escapeVariantBanks[scenario.id] || [];
       const extra = escapeExtraQuestions[scenario.id] || [];
@@ -2031,7 +2222,7 @@ img, svg, canvas, video, iframe {
       scenario.stages.forEach((s, i) => {
         sources.push({
           sourceId:`base_${i}`,
-          icon:s[1], label:s[2], question:s[3], options:s[4],
+          icon:s[1], label:s[2], question:s[3], options:[...s[4]],
           answer:s[5], explanation:s[6], visualKey:s[0]
         });
       });
@@ -2041,66 +2232,66 @@ img, svg, canvas, video, iframe {
           sourceId:`bank_${i}`,
           icon:scenario.stages[i % 5][1],
           label:scenario.stages[i % 5][2],
-          question:q[0], options:q[1], answer:q[2], explanation:q[3],
+          question:q[0], options:[...q[1]], answer:q[2], explanation:q[3],
           visualKey:scenario.stages[i % 5][0]
         });
       });
 
       extra.forEach((q, i) => {
-        const correct = q[1];
         sources.push({
           sourceId:`extra_${i}`,
           icon:scenario.icon,
           label:scenario.title,
           question:q[0],
           options:null,
-          correctText:correct,
-          explanation:`✅ Правильна відповідь: ${correct}.`,
+          correctText:q[1],
+          explanation:`✅ Правильна відповідь: ${q[1]}.`,
           visualKey:q[2]
         });
       });
 
-      const normalizedWords = text => String(text || '')
-        .toLowerCase()
-        .replace(/[’'“”«».,!?;:()[\]—–-]/g,' ')
-        .split(/\s+/)
-        .filter(x => x.length > 2);
-
-      const sameFact = (a,b) => {
-        const aAnswer = a.correctText ?? a.options?.[a.answer] ?? '';
-        const bAnswer = b.correctText ?? b.options?.[b.answer] ?? '';
-        if (String(aAnswer).trim().toLowerCase() !== String(bAnswer).trim().toLowerCase()) return false;
-        const A = new Set(normalizedWords(a.question));
-        const B = new Set(normalizedWords(b.question));
-        const inter = [...A].filter(x => B.has(x)).length;
-        const minLen = Math.max(1, Math.min(A.size,B.size));
-        return inter / minLen >= .35;
-      };
-
+      // Remove semantically duplicated facts, not only exact strings.
       const unique = [];
       for (const src of sources) {
-        if (!unique.some(x => sameFact(x, src))) unique.push(src);
+        const srcCorrect = src.correctText ?? src.options?.[src.answer] ?? '';
+        const duplicate = unique.some(old => {
+          const oldCorrect = old.correctText ?? old.options?.[old.answer] ?? '';
+          return escapeSameMeaning(src.question, old.question) &&
+                 escapeSameMeaning(srcCorrect, oldCorrect);
+        });
+        if (!duplicate) unique.push(src);
       }
 
-      // Build distractors for compact extra questions from other answers in this topic.
-      const answerUniverse = [...new Set(unique.map(x =>
-        x.correctText ?? x.options?.[x.answer] ?? ''
-      ).filter(Boolean))];
+      const fallbackByTheme = escapeSmartWrongAnswers[scenario.id] || {};
 
       unique.forEach((x, idx) => {
-        if (!x.options) {
-          const correct = x.correctText;
-          const others = answerUniverse.filter(a => a !== correct);
-          // Deterministic nearby distractors; then shuffled later.
-          const wrong = [];
-          for (let step=1; wrong.length<3 && step<others.length+4; step++) {
-            const cand = others[(idx*3 + step*5) % others.length];
-            if (cand && !wrong.includes(cand)) wrong.push(cand);
-          }
-          while (wrong.length < 3) wrong.push(['Інша подія','Інша особа','Інша дата'][wrong.length]);
-          x.options = [correct, ...wrong];
-          x.answer = 0;
+        const correct = x.correctText ?? x.options?.[x.answer] ?? '';
+        let wrong = [];
+
+        if (Array.isArray(x.options)) {
+          wrong = x.options.filter((opt, i) => i !== x.answer && !escapeSameMeaning(opt, correct));
         }
+
+        const themed = fallbackByTheme[x.visualKey] || [];
+        themed.forEach(opt => {
+          if (wrong.length < 3 && !escapeSameMeaning(opt, correct) && !wrong.some(w => escapeSameMeaning(w,opt))) wrong.push(opt);
+        });
+
+        // Generic but type-aware fallback.
+        const q = x.question.toLowerCase();
+        let generic = [];
+        if (/якому році|який рік|коли/.test(q)) generic = ['1054','1362','1648','1918','1789'];
+        else if (/хто|ким|який князь|який правитель/.test(q)) generic = ['Ярослав Мудрий','Іван Мазепа','Симон Петлюра','Перікл'];
+        else if (/яка річка|яке море|де |яке місто/.test(q)) generic = ['Дунай','Львів','Константинополь','Афіни'];
+        else generic = ['Інша історична подія','Інший політичний устрій','Інше історичне поняття'];
+
+        generic.forEach(opt => {
+          if (wrong.length < 3 && !escapeSameMeaning(opt, correct) && !wrong.some(w => escapeSameMeaning(w,opt))) wrong.push(opt);
+        });
+
+        wrong = wrong.slice(0,3);
+        x.options = [correct, ...wrong];
+        x.answer = 0;
       });
 
       return unique;
@@ -2108,7 +2299,7 @@ img, svg, canvas, video, iframe {
 
     function getEscapeRunQuestions(scenario) {
       const pool = buildEscapeQuestionPool(scenario);
-      const key = `escape_fact_cycle_v7_${scenario.id}`;
+      const key = `escape_fact_cycle_v8_${scenario.id}`;
       let state = null;
       try { state = JSON.parse(localStorage.getItem(key) || 'null'); } catch(e) {}
 
@@ -2413,110 +2604,197 @@ img, svg, canvas, video, iframe {
       }
     };
 
-    function renderEscapeQuestionScene(stage) {
+    const escapeCommonsQueries = {
+      kyiv1240: {
+        gate:'Golden Gate Kyiv reconstruction',
+        church:'Tithe Church Kyiv reconstruction',
+        cavalry:'Mongol cavalry medieval illustration',
+        defender:'medieval Rus warrior Kyiv',
+        river:'Dnipro Kyiv historical',
+        ruins:'medieval Kyiv reconstruction'
+      },
+      baptism988: {
+        prince:'Vladimir the Great portrait',
+        river:'Baptism of Rus Vasnetsov',
+        church:'Tithe Church Kyiv reconstruction',
+        byzantium:'Constantinople Byzantine illustration',
+        book:'medieval Slavic manuscript'
+      },
+      sich: {
+        sich:'Zaporizhian Sich reconstruction',
+        rada:'Reply of the Zaporozhian Cossacks Repin',
+        otaman:'Zaporozhian Cossack portrait',
+        chaika:'Cossack chaika boat',
+        horse:'Zaporozhian Cossack horse',
+        weapons:'Zaporozhian Cossack weapons'
+      },
+      khmel1648: {
+        khmel:'Bohdan Khmelnytsky portrait',
+        battle:'Khmelnytsky uprising battle painting',
+        alliance:'Crimean Tatar Cossack 1648',
+        hetmanate:'Chyhyryn historical',
+        document:'Bohdan Khmelnytsky document',
+        river:'Dnipro Cossacks'
+      },
+      revolution1917: {
+        rada1917:'Ukrainian Central Rada 1917',
+        universal:'Fourth Universal Ukrainian Central Rada',
+        skoropadsky:'Pavlo Skoropadsky portrait',
+        petliura:'Symon Petliura portrait',
+        zunr:'West Ukrainian Peoples Republic 1918 Lviv',
+        unity:'Act Zluky 1919 Kyiv',
+        sofia:'Sofia Square Kyiv 1919 Act Zluky',
+        trident:'Ukrainian Peoples Republic trident 1918',
+        flag:'Ukrainian Peoples Republic flag',
+        kruty:'Battle of Kruty 1918'
+      },
+      kruty1918: {
+        rail:'Kruty railway station 1918',
+        kruty:'Battle of Kruty 1918',
+        memorial:'Kruty memorial Ukraine',
+        flag:'Ukrainian Peoples Republic flag 1918',
+        enemy:'Battle of Kruty map',
+        document:'Fourth Universal Ukrainian Central Rada',
+        snow:'Kruty winter railway'
+      },
+      egypt: {
+        nile:'Nile River ancient Egypt',
+        pharaoh:'Egyptian pharaoh statue',
+        hieroglyph:'Egyptian hieroglyphs wall',
+        pyramids:'Great Pyramid of Giza',
+        mummy:'Egyptian mummy museum',
+        sphinx:'Great Sphinx of Giza',
+        temple:'Karnak temple Egypt',
+        papyrus:'ancient Egyptian papyrus',
+        anubis:'Anubis ancient Egypt',
+        cat:'Bastet cat ancient Egypt',
+        sun:'Ra ancient Egyptian god'
+      },
+      pompeii79: {
+        vesuvius:'Pompeii Vesuvius ruins',
+        pompeii:'Pompeii ruins street',
+        forum:'Pompeii forum ruins',
+        amphitheatre:'Pompeii amphitheatre',
+        fresco:'Pompeii fresco',
+        temple:'Pompeii temple ruins',
+        bath:'Pompeii baths',
+        house:'Pompeii house atrium',
+        market:'Pompeii macellum',
+        street:'Pompeii street'
+      },
+      medieval: {
+        castle:'medieval castle Europe',
+        knight:'medieval knight armor',
+        guild:'medieval guild illustration',
+        market:'medieval market illustration',
+        cathedral:'Gothic cathedral medieval',
+        monastery:'medieval monastery',
+        book:'medieval illuminated manuscript',
+        feudal:'medieval feudal society illustration',
+        heraldry:'medieval heraldry shield',
+        village:'medieval village illustration'
+      },
+      paris1789: {
+        bastille:'Storming of the Bastille 1789',
+        king:'Louis XVI portrait',
+        versailles:'Palace of Versailles 18th century',
+        tricolor:'French Revolution tricolor cockade',
+        declaration:'Declaration of the Rights of Man 1789',
+        assembly:'French National Assembly 1789',
+        crowd:'French Revolution crowd painting',
+        cap:'Phrygian cap French Revolution',
+        republic:'French First Republic allegory',
+        paris:'Paris 1789 engraving'
+      },
+      discoveries1492: {
+        columbus:'Christopher Columbus 1492 painting',
+        gama:'Vasco da Gama portrait ship',
+        magellan:'Ferdinand Magellan portrait',
+        ship:'caravel Age of Discovery',
+        map:'Age of Discovery world map',
+        compass:'historical compass navigation',
+        ocean:'caravel Atlantic Ocean',
+        cape:'Cape of Good Hope historical map',
+        market:'spice trade Age of Discovery',
+        colony:'European colonization early modern map'
+      }
+    };
+
+    let escapeImageRequestToken = 0;
+
+    async function escapeCommonsImage(query) {
+      const cacheKey = 'escape_commons_v2_' + query;
+      try {
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+        if (cached?.url) return cached;
+      } catch(e) {}
+
+      const endpoint =
+        'https://commons.wikimedia.org/w/api.php?action=query&generator=search' +
+        '&gsrnamespace=6&gsrlimit=8&gsrsearch=' + encodeURIComponent(query) +
+        '&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=1100&format=json&formatversion=2&origin=*';
+
+      const res = await fetch(endpoint);
+      if (!res.ok) throw new Error('Commons HTTP ' + res.status);
+      const data = await res.json();
+      const pages = data?.query?.pages || [];
+
+      const good = pages.find(p => {
+        const ii = p.imageinfo?.[0];
+        const mime = ii?.mime || '';
+        return ii?.thumburl && /^image\/(jpeg|png|webp)$/i.test(mime);
+      }) || pages.find(p => p.imageinfo?.[0]?.thumburl);
+
+      if (!good) throw new Error('No Commons image');
+
+      const ii = good.imageinfo[0];
+      const result = {
+        url: ii.thumburl,
+        page: 'https://commons.wikimedia.org/wiki/' + encodeURIComponent(good.title.replace(/ /g,'_')),
+        title: good.title.replace(/^File:/,'')
+      };
+      try { localStorage.setItem(cacheKey, JSON.stringify(result)); } catch(e) {}
+      return result;
+    }
+
+    async function renderEscapeQuestionScene(stage) {
       const wrap = document.querySelector('#escapePastGame .escape-scene');
       if (!wrap || !stage || !escapeCurrentScenario) return;
 
-      // Remove old static Kyiv picture, old labels and overlays completely.
-      wrap.innerHTML = '<div id="escapeDynamicScene" style="position:absolute;inset:0;width:100%;height:100%;"></div>';
-      const host = document.getElementById('escapeDynamicScene');
-      const k = stage.visualKey || 'default';
       const id = escapeCurrentScenario.id;
-      const common = 'viewBox="0 0 900 300" preserveAspectRatio="xMidYMid slice"';
+      const query =
+        escapeCommonsQueries[id]?.[stage.visualKey] ||
+        `${escapeCurrentScenario.title} ${stage.question}`;
 
-      const frame = (sky,ground,body) => `<svg ${common} role="img" aria-label="${escapeCurrentScenario.title}"><rect width="900" height="300" fill="${sky}"/><rect y="228" width="900" height="72" fill="${ground}"/>${body}</svg>`;
+      const token = ++escapeImageRequestToken;
 
-      let body='', sky='#52677a', ground='#3f342c';
+      wrap.innerHTML = `
+        <div class="escape-photo-loading">
+          <div class="escape-photo-spinner"></div>
+          <div>Завантажую історичне зображення…</div>
+        </div>
+      `;
 
-      if (id==='kyiv1240') {
-        sky='#536a7d'; ground='#49382d';
-        if(k==='church') body='<g transform="translate(270 35)"><rect y="100" width="360" height="140" fill="#b79265"/><path d="M70 100Q130 25 190 100Z" fill="#50382d"/><path d="M180 100Q245 5 310 100Z" fill="#50382d"/><rect x="240" y="20" width="11" height="45" fill="#e0c46e"/></g>';
-        else if(k==='cavalry') body='<g fill="#242321"><path d="M150 235q65-100 135 0h-38q-30-42-62 0z"/><circle cx="235" cy="115" r="25"/><path d="M500 235q65-100 135 0h-38q-30-42-62 0z"/><circle cx="585" cy="115" r="25"/></g>';
-        else if(k==='river') body='<path d="M0 170Q180 125 370 170T730 158T900 145V300H0Z" fill="#2e7898"/><path d="M0 212Q190 170 390 210T900 188" stroke="#a5d5e6" stroke-width="9" fill="none"/>';
-        else if(k==='ruins') body='<path d="M120 230V105H245V165H340V230M520 230V125H605V85H715V230" fill="#6e594d"/>';
-        else if(k==='defender') body='<circle cx="450" cy="82" r="42" fill="#d0aa82"/><path d="M365 285Q450 120 535 285" fill="#66707a"/><circle cx="450" cy="180" r="60" fill="#36424e" stroke="#d2d7dc" stroke-width="9"/>';
-        else body='<g transform="translate(235 35)"><rect y="100" width="430" height="140" fill="#805e41"/><rect x="85" y="60" width="260" height="75" fill="#a17a51"/><polygon points="65,60 215,5 365,60" fill="#443126"/><path d="M168 240V155Q215 110 262 155V240Z" fill="#202327"/></g>';
-      }
-      else if(id==='baptism988') {
-        sky='#6d93aa'; ground='#47636d';
-        if(k==='river') body='<path d="M0 160Q180 120 380 170T760 155T900 145V300H0Z" fill="#347f9f"/><g fill="#ead5b0"><circle cx="330" cy="155" r="20"/><circle cx="455" cy="140" r="20"/><circle cx="575" cy="155" r="20"/></g>';
-        else if(k==='church') body='<g transform="translate(255 40)"><rect y="100" width="390" height="140" fill="#c09d72"/><path d="M75 100Q140 25 205 100Z" fill="#5b4037"/><path d="M190 100Q255 5 320 100Z" fill="#5b4037"/><rect x="250" y="18" width="11" height="47" fill="#e5cb72"/></g>';
-        else if(k==='byzantium') body='<g transform="translate(250 35)"><rect y="110" width="400" height="140" fill="#b7916b"/><path d="M55 110Q200 0 345 110Z" fill="#654970"/><rect x="195" y="18" width="10" height="45" fill="#e5cd74"/></g>';
-        else if(k==='book') body='<path d="M170 75Q320 50 450 110Q580 50 730 75V245Q585 215 450 265Q315 215 170 245Z" fill="#ead8ac"/><path d="M450 110V265" stroke="#98764b" stroke-width="6"/>';
-        else body='<circle cx="450" cy="82" r="42" fill="#d6b087"/><path d="M370 280Q450 120 530 280" fill="#76364d"/><path d="M450 135V230M410 175H490" stroke="#ead16d" stroke-width="14"/>';
-      }
-      else if(id==='sich') {
-        sky='#8c7540'; ground='#5a402c';
-        if(k==='chaika') body='<path d="M175 190Q450 275 725 190L640 255H260Z" fill="#71472d"/><rect x="445" y="40" width="10" height="170" fill="#d8c09a"/><path d="M455 55Q610 95 455 150Z" fill="#e8d8aa"/>';
-        else if(k==='rada') body='<g fill="#d5ad84"><circle cx="250" cy="100" r="30"/><circle cx="385" cy="88" r="30"/><circle cx="520" cy="88" r="30"/><circle cx="655" cy="100" r="30"/></g><g fill="#65472f"><path d="M195 285Q250 145 305 285"/><path d="M330 285Q385 130 440 285"/><path d="M465 285Q520 130 575 285"/><path d="M600 285Q655 145 710 285"/></g>';
-        else if(k==='otaman') body='<circle cx="450" cy="85" r="42" fill="#d5ad80"/><path d="M360 285Q450 120 540 285" fill="#7a352e"/><path d="M430 45H470L450 12Z" fill="#d9b556"/>';
-        else if(k==='horse') body='<path d="M310 235q70-105 145 0h-40q-32-45-65 0z" fill="#2d2925"/><circle cx="390" cy="110" r="28" fill="#2d2925"/>';
-        else body='<rect x="185" y="120" width="530" height="120" fill="#805f39"/><path d="M155 120L450 38L745 120Z" fill="#392b22"/><rect x="405" y="150" width="90" height="90" fill="#202326"/>';
-      }
-      else if(id==='khmel1648') {
-        sky='#777040';ground='#503629';
-        if(k==='battle') body='<path d="M260 265L575 45M345 45L655 265" stroke="#e0b458" stroke-width="18"/><circle cx="460" cy="155" r="55" fill="#65402f"/>';
-        else if(k==='alliance') body='<path d="M220 155Q330 60 450 155Q570 60 680 155Q565 260 450 195Q335 260 220 155Z" fill="#d1aa50"/>';
-        else if(k==='khmel') body='<circle cx="450" cy="82" r="45" fill="#d4ad82"/><path d="M355 285Q450 115 545 285" fill="#713329"/><path d="M430 45H470L450 12Z" fill="#d9b556"/>';
-        else if(k==='river') body='<path d="M0 170Q180 125 370 170T730 158T900 145V300H0Z" fill="#2f7898"/>';
-        else body='<rect x="270" y="45" width="360" height="220" rx="20" fill="#e7d3a5"/><path d="M325 105H575M325 145H550M325 185H575M325 225H520" stroke="#946e45" stroke-width="8"/>';
-      }
-      else if(id==='revolution1917') {
-        sky='#376783';ground='#29394b';
-        if(k==='universal'||k==='document') body='<rect x="265" y="40" width="370" height="225" rx="22" fill="#efe0b8"/><path d="M320 100H580M320 140H560M320 180H585M320 220H530" stroke="#957248" stroke-width="8"/>';
-        else if(k==='unity') body='<circle cx="355" cy="150" r="80" fill="#3575a9"/><circle cx="545" cy="150" r="80" fill="#e2c33f"/><path d="M425 150H475" stroke="#fff" stroke-width="20"/>';
-        else if(k==='trident') body='<path d="M450 45V250M450 95Q380 70 385 135Q390 190 450 170M450 95Q520 70 515 135Q510 190 450 170" stroke="#f0cd42" stroke-width="15" fill="none"/>';
-        else if(k==='flag') body='<rect x="310" y="55" width="280" height="95" fill="#2f74b5"/><rect x="310" y="150" width="280" height="95" fill="#e2c643"/>';
-        else if(k==='sofia'||k==='rada1917') body='<g transform="translate(275 35)"><rect y="110" width="350" height="125" fill="#b68b60"/><rect x="55" y="70" width="240" height="60" fill="#c69b6b"/><path d="M40 70L175 20L310 70Z" fill="#493329"/></g>';
-        else body='<circle cx="450" cy="85" r="44" fill="#d4ad86"/><path d="M365 285Q450 120 535 285" fill="#52657b"/>';
-      }
-      else if(id==='kruty1918') {
-        sky='#a5bfd0';ground='#dbe7ef';
-        if(k==='rail') body='<path d="M255 50L380 280M645 50L520 280" stroke="#394957" stroke-width="12"/><path d="M300 85H600M325 125H575M350 165H550M375 205H525" stroke="#eef2f5" stroke-width="10"/>';
-        else if(k==='memorial') body='<rect x="425" y="55" width="50" height="165" fill="#f1f4f6"/><path d="M385 220H515L560 275H340Z" fill="#cbd5dd"/>';
-        else if(k==='flag') body='<rect x="310" y="55" width="280" height="95" fill="#2f74b5"/><rect x="310" y="150" width="280" height="95" fill="#e2c643"/>';
-        else body='<path d="M0 230Q220 190 450 225T900 210V300H0Z" fill="#edf4f7"/><g fill="#fff"><circle cx="220" cy="75" r="8"/><circle cx="360" cy="130" r="9"/><circle cx="520" cy="80" r="8"/><circle cx="690" cy="120" r="9"/></g>';
-      }
-      else if(id==='egypt') {
-        sky='#d7a154';ground='#9b6b31';
-        if(k==='nile') body='<path d="M0 165Q190 125 380 170T760 155T900 145V300H0Z" fill="#347f9d"/>';
-        else if(k==='pharaoh') body='<circle cx="450" cy="85" r="44" fill="#d7ad78"/><path d="M355 285Q450 120 545 285" fill="#27617a"/><path d="M395 45H505L475 12H425Z" fill="#e3bd4a"/>';
-        else if(k==='hieroglyph') body='<rect x="235" y="45" width="430" height="220" rx="18" fill="#e7c97e"/><text x="450" y="180" text-anchor="middle" font-size="76" fill="#674923">𓂀 𓃭 𓆣</text>';
-        else if(k==='mummy') body='<ellipse cx="450" cy="150" rx="90" ry="120" fill="#dcc9a2"/><path d="M385 75H515M375 115H525M370 155H530M385 200H515" stroke="#9e865e" stroke-width="11"/>';
-        else if(k==='sphinx') body='<path d="M260 220Q350 110 465 160L610 195L670 245H260Z" fill="#caa45d"/><circle cx="385" cy="115" r="45" fill="#d8b56c"/>';
-        else body='<path d="M450 30L680 255H220Z" fill="#d7b25f"/><path d="M450 30L450 255H220Z" fill="#b68e3f"/>';
-      }
-      else if(id==='pompeii79') {
-        sky='#8d5840';ground='#40302c';
-        if(k==='vesuvius') body='<path d="M190 250L420 65L690 250Z" fill="#59443c"/><path d="M390 95Q450 30 520 95L480 125H420Z" fill="#ef7548"/><path d="M445 55Q475 5 510 48Q550 5 585 55" stroke="#d8d3cf" stroke-width="20" fill="none"/>';
-        else if(k==='amphitheatre') body='<ellipse cx="450" cy="165" rx="265" ry="115" fill="#bca58d"/><ellipse cx="450" cy="165" rx="155" ry="62" fill="#665044"/>';
-        else if(k==='forum') body='<g fill="#d6c5b1"><rect x="240" y="80" width="32" height="160"/><rect x="350" y="80" width="32" height="160"/><rect x="460" y="80" width="32" height="160"/><rect x="570" y="80" width="32" height="160"/></g>';
-        else body='<path d="M130 230V110H245V165H350V230M520 230V125H610V85H715V230" fill="#745d4d"/>';
-      }
-      else if(id==='medieval') {
-        sky='#66717b';ground='#303943';
-        if(k==='knight') body='<circle cx="450" cy="88" r="46" fill="#9da4aa"/><path d="M360 285Q450 120 540 285" fill="#59636d"/><circle cx="450" cy="180" r="58" fill="#777f87" stroke="#d3d8dc" stroke-width="9"/>';
-        else if(k==='cathedral') body='<rect x="260" y="105" width="380" height="150" fill="#8d949b"/><path d="M300 105L450 25L600 105Z" fill="#555d64"/><circle cx="450" cy="150" r="38" fill="#b5c6cf"/>';
-        else if(k==='guild'||k==='market') body='<g fill="#7d6753"><rect x="130" y="125" width="170" height="105"/><rect x="355" y="105" width="190" height="125"/><rect x="610" y="135" width="150" height="95"/></g>';
-        else body='<rect x="215" y="115" width="470" height="140" fill="#707982"/><rect x="180" y="65" width="120" height="190" fill="#7f8992"/><rect x="600" y="65" width="120" height="190" fill="#7f8992"/><rect x="395" y="155" width="110" height="100" fill="#252c32"/>';
-      }
-      else if(id==='paris1789') {
-        sky='#53658b';ground='#2e3a58';
-        if(k==='bastille') body='<rect x="225" y="105" width="450" height="145" fill="#6a6f78"/><rect x="185" y="55" width="110" height="195" fill="#7b818a"/><rect x="605" y="55" width="110" height="195" fill="#7b818a"/>';
-        else if(k==='tricolor') body='<rect x="300" y="55" width="100" height="190" fill="#2450a0"/><rect x="400" y="55" width="100" height="190" fill="#f6f2e9"/><rect x="500" y="55" width="100" height="190" fill="#cb4050"/>';
-        else if(k==='declaration') body='<rect x="265" y="40" width="370" height="225" rx="20" fill="#f2e4c5"/><path d="M320 100H580M320 140H560M320 180H585M320 220H525" stroke="#9c7a50" stroke-width="8"/>';
-        else if(k==='versailles') body='<rect x="175" y="135" width="550" height="120" fill="#c9b184"/><rect x="300" y="75" width="300" height="75" fill="#ddcaa0"/><path d="M270 75L450 30L630 75Z" fill="#9e835e"/>';
-        else body='<g fill="#d6af86"><circle cx="250" cy="100" r="28"/><circle cx="380" cy="85" r="28"/><circle cx="520" cy="85" r="28"/><circle cx="650" cy="100" r="28"/></g>';
-      }
-      else {
-        sky='#2f6b78';ground='#193f4d';
-        if(k==='compass') body='<circle cx="450" cy="150" r="115" fill="#eadfc6" stroke="#d5af58" stroke-width="12"/><path d="M450 45L500 170L450 255L400 170Z" fill="#b84443"/>';
-        else if(k==='ocean') body='<path d="M0 175Q155 120 310 175T620 175T900 165V300H0Z" fill="#2f829f"/>';
-        else if(k==='map'||k==='cape'||k==='colony') body='<path d="M150 80Q285 25 405 85T675 80L750 180Q630 250 490 225T205 235L125 150Z" fill="#b69665"/><path d="M235 195Q420 80 670 120" stroke="#e0bb58" stroke-width="9" stroke-dasharray="14 11" fill="none"/>';
-        else body='<path d="M190 190Q450 270 710 190L640 255H260Z" fill="#704b30"/><rect x="445" y="40" width="10" height="170" fill="#dbc39a"/><path d="M455 52Q610 95 455 150Z" fill="#eee4cf"/>';
-      }
+      try {
+        const img = await escapeCommonsImage(query);
+        if (token !== escapeImageRequestToken) return;
 
-      host.innerHTML = frame(sky,ground,body);
+        wrap.innerHTML = `
+          <img class="escape-history-photo" src="${img.url}" alt="${escapeCurrentScenario.title}" loading="eager">
+          <div class="escape-photo-shade"></div>
+          <a class="escape-photo-credit" href="${img.page}" target="_blank" rel="noopener">Wikimedia Commons · ${img.title}</a>
+        `;
+      } catch (err) {
+        if (token !== escapeImageRequestToken) return;
+        console.warn('Escape image:', err);
+        wrap.innerHTML = `
+          <div class="escape-photo-fallback">
+            <div class="escape-photo-fallback-icon">${escapeCurrentScenario.icon}</div>
+            <strong>${escapeCurrentScenario.title}</strong>
+            <span>Історична сцена</span>
+          </div>
+        `;
+      }
     }
 
     function renderEscapeStage() {
