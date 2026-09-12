@@ -1335,6 +1335,21 @@ img, svg, canvas, video, iframe {
 }
 </style>
 
+
+
+<style id="escape-dynamic-scene-fix">
+#escapePastGame .escape-scene { position: relative; }
+#escapePastGame .escape-scene svg {
+  opacity: .30 !important;
+  filter: saturate(.55) contrast(.9) !important;
+}
+#escapeDynamicScene { animation: escapeSceneIn .22s ease-out; }
+@keyframes escapeSceneIn {
+  from { opacity:0; transform:scale(.985); }
+  to { opacity:1; transform:scale(1); }
+}
+</style>
+
 </head>
 <body>
 
@@ -1739,6 +1754,7 @@ img, svg, canvas, video, iframe {
 
 
   <script>
+
     // ======================================================
     // 🏃 ВТЕЧІ З МИНУЛОГО — 11 СЦЕНАРІЇВ
     // ======================================================
@@ -1976,18 +1992,36 @@ img, svg, canvas, video, iframe {
       if (!bank.length) return stage;
 
       const storageKey = `escape_qcycle_${scenarioId}_${stageIndex}`;
-      let used = [];
-      try { used = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch(e) {}
-      used = Array.isArray(used) ? used.filter(n => Number.isInteger(n) && n >= 0 && n < bank.length) : [];
+      let state = { order: [], pos: 0 };
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+        if (saved && Array.isArray(saved.order) && Number.isInteger(saved.pos)) {
+          state = saved;
+        }
+      } catch(e) {}
 
-      if (used.length >= bank.length) used = [];
-      const available = bank.map((_,i)=>i).filter(i => !used.includes(i));
-      const pickedIndex = available[Math.floor(Math.random() * available.length)] ?? 0;
-      used.push(pickedIndex);
-      localStorage.setItem(storageKey, JSON.stringify(used));
+      // Rebuild cycle if missing, invalid, completed, or bank size changed.
+      const validOrder =
+        state.order.length === bank.length &&
+        new Set(state.order).size === bank.length &&
+        state.order.every(i => Number.isInteger(i) && i >= 0 && i < bank.length);
+
+      if (!validOrder || state.pos >= bank.length) {
+        const order = bank.map((_, i) => i);
+        // Fisher-Yates shuffle
+        for (let i = order.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [order[i], order[j]] = [order[j], order[i]];
+        }
+        state = { order, pos: 0 };
+      }
+
+      const pickedIndex = state.order[state.pos];
+      state.pos += 1;
+      localStorage.setItem(storageKey, JSON.stringify(state));
 
       const [question, options, answer, explanation] = bank[pickedIndex];
-      return [stage[0], stage[1], stage[2], question, options, answer, explanation];
+      return [stage[0], stage[1], stage[2], question, options, answer, explanation, pickedIndex];
     }
 
     let escapeCurrentScenarioId = 'kyiv1240';
@@ -2022,15 +2056,20 @@ img, svg, canvas, video, iframe {
     };
 
     function shuffleEscapeStage(raw, scenarioId) {
-      const [id, icon, label, question, options, answer, explanation] = raw;
+      const [id, icon, label, question, options, answer, explanation, variantIndex] = raw;
       const mixed = options.map((option, i) => ({option, correct:i===answer}))
         .sort(() => Math.random() - 0.5);
+
       return {
         id:`${scenarioId}__${id}`,
-        icon,label,question,
+        baseId:id,
+        icon,
+        label,
+        question,
         options:mixed.map(x=>x.option),
         answer:mixed.findIndex(x=>x.correct),
-        explanation
+        explanation,
+        variantIndex:Number.isInteger(variantIndex) ? variantIndex : 0
       };
     }
 
@@ -2163,6 +2202,131 @@ img, svg, canvas, video, iframe {
       marker.setAttribute('cx',cx); marker.setAttribute('cy',cy);
     }
 
+
+    const escapeSceneVisuals = {
+      kyiv1240: {
+        gate:['🏰','Золоті ворота','Міська брама княжого Києва'],
+        defender:['🛡️','Оборона Києва','Воєвода та міські укріплення'],
+        enemy:['🐎','Військо Батия','Кіннота біля міських валів'],
+        church:['⛪','Десятинна церква','Останній осередок опору'],
+        result:['🌊','Дніпро','Шлях із зруйнованого міста']
+      },
+      baptism988: {
+        prince:['👑','Князь Володимир','Княжий двір у Києві'],
+        date:['📜','988 рік','Літописна дата хрещення Русі'],
+        faith:['✝️','Християнство','Нова державна релігія'],
+        river:['🌊','Дніпро','Хрещення киян у водах Дніпра'],
+        meaning:['📚','Наслідки хрещення','Культурні зв’язки з християнським світом']
+      },
+      sich: {
+        place:['🏞️','Запорожжя','Степи за дніпровськими порогами'],
+        rada:['🗣️','Козацька рада','Спільне ухвалення рішень'],
+        leader:['🪶','Кошовий отаман','Виборний керівник Січі'],
+        boat:['🛶','Козацька чайка','Човен для морських походів'],
+        symbol:['🏳️','Козацькі вольності','Виборність і самоврядування']
+      },
+      khmel1648: {
+        leader:['👤','Богдан Хмельницький','Гетьман і керівник повстання'],
+        battle1:['⚔️','Жовті Води','Перша велика перемога 1648 року'],
+        ally:['🤝','Союзники','Козацько-кримськотатарський союз'],
+        battle2:['🏹','Корсунь','Наступна перемога 1648 року'],
+        state:['📜','Гетьманщина','Формування козацької держави']
+      },
+      revolution1917: {
+        rada:['🏛️','Центральна Рада','Київ, березень 1917 року'],
+        leader:['👤','Михайло Грушевський','Голова Центральної Ради'],
+        universal:['📜','IV Універсал','Проголошення незалежності УНР'],
+        hetman:['🎖️','Гетьманат','Українська Держава Павла Скоропадського'],
+        unity:['🤝','Акт Злуки','Соборність УНР і ЗУНР']
+      },
+      kruty1918: {
+        date:['📅','29 січня 1918','Дата бою під Крутами'],
+        state:['🇺🇦','УНР','Держава, яку захищали'],
+        enemy:['🚂','Більшовицький наступ','Просування на Київ'],
+        meaning:['⏳','Затримка наступу','Час, виграний обороною'],
+        memory:['🕯️','Пам’ять про Крути','Символ боротьби за державність']
+      },
+      egypt: {
+        river:['🌊','Ніл','Основа життя Стародавнього Єгипту'],
+        ruler:['👑','Фараон','Правитель Єгипту'],
+        writing:['📜','Ієрогліфи','Система давньоєгипетського письма'],
+        tomb:['🔺','Піраміда','Монументальна царська гробниця'],
+        afterlife:['⚱️','Муміфікація','Віра в потойбічне життя']
+      },
+      pompeii79: {
+        volcano:['🌋','Везувій','Вулкан над Помпеями'],
+        empire:['🏛️','Римська імперія','Помпеї як римське місто'],
+        year:['📅','79 рік','Рік катастрофи'],
+        source:['✍️','Пліній Молодший','Свідчення про виверження'],
+        preserve:['🏺','Археологічні Помпеї','Збережене повсякденне життя']
+      },
+      medieval: {
+        feudal:['📜','Феодальні відносини','Суспільний устрій Середньовіччя'],
+        keep:['🗼','Донжон','Головна башта замку'],
+        knight:['🛡️','Лицар','Професійний воїн'],
+        town:['🧱','Міські мури','Оборона середньовічного міста'],
+        guild:['🔨','Цех','Об’єднання ремісників']
+      },
+      paris1789: {
+        bastille:['🏰','Бастилія','14 липня 1789 року'],
+        king:['👑','Людовік XVI','Король Франції'],
+        estate:['🗣️','Третій стан','Більшість французького суспільства'],
+        rights:['📜','Декларація прав','Права людини і громадянина'],
+        slogan:['⚖️','Свобода, рівність, братерство','Ідеї революції']
+      },
+      discoveries1492: {
+        columbus:['🧭','1492 рік','Плавання Колумба через Атлантику'],
+        gama:['🌊','Шлях до Індії','Подорож Васко да Гами'],
+        magellan:['🌍','Навколо світу','Експедиція Магеллана'],
+        ship:['⛵','Каравела','Судно доби великих відкриттів'],
+        impact:['🗺️','Нові карти світу','Наслідки Великих географічних відкриттів']
+      }
+    };
+
+    function renderEscapeQuestionScene(stage) {
+      const wrap = document.querySelector('#escapePastGame .escape-scene');
+      const badge = document.getElementById('escapeSceneBadge');
+      if (!wrap || !stage || !escapeCurrentScenario) return;
+
+      const visual =
+        escapeSceneVisuals[escapeCurrentScenario.id]?.[stage.baseId] ||
+        [stage.icon || '📜', stage.label || 'Історична сцена', escapeCurrentScenario.title];
+
+      const [emoji, title, subtitle] = visual;
+
+      let scene = document.getElementById('escapeDynamicScene');
+      if (!scene) {
+        scene = document.createElement('div');
+        scene.id = 'escapeDynamicScene';
+        scene.style.position = 'absolute';
+        scene.style.inset = '0';
+        scene.style.zIndex = '2';
+        scene.style.display = 'flex';
+        scene.style.alignItems = 'center';
+        scene.style.justifyContent = 'center';
+        scene.style.textAlign = 'center';
+        scene.style.padding = '18px';
+        scene.style.pointerEvents = 'none';
+        scene.style.background = 'linear-gradient(180deg,rgba(15,23,42,.18),rgba(15,23,42,.55))';
+        wrap.appendChild(scene);
+      }
+
+      const variant = stage.variantIndex || 0;
+      const decorative = [
+        ['✦','•','✦'], ['⋆','✧','⋆'], ['✺','•','✺'], ['✦','◆','✦'], ['❖','•','❖']
+      ][variant % 5];
+
+      scene.innerHTML = `
+        <div style="width:min(92%,560px);padding:14px 16px;border-radius:18px;background:rgba(15,23,42,.68);border:1px solid rgba(255,255,255,.22);box-shadow:0 12px 34px rgba(0,0,0,.28);backdrop-filter:blur(4px);">
+          <div style="font-size:48px;line-height:1;margin-bottom:7px;filter:drop-shadow(0 5px 12px rgba(0,0,0,.3));">${emoji}</div>
+          <div style="font-size:10px;letter-spacing:.18em;font-weight:950;color:#fde68a;margin-bottom:4px;">${decorative.join(' ')}</div>
+          <div style="font-size:17px;font-weight:950;color:#fff;line-height:1.12;">${title}</div>
+          <div style="margin-top:5px;font-size:11px;font-weight:750;color:#dbeafe;line-height:1.3;">${subtitle}</div>
+        </div>
+      `;
+      if (badge) badge.textContent = `${emoji} ${title}`;
+    }
+
     function renderEscapeStage() {
       if (!window.currentUserUid) {
         alert('Увійдіть через Google, щоб почати втечу. Це потрібно для тижневого блокування результату.');
@@ -2184,6 +2348,7 @@ img, svg, canvas, video, iframe {
       el.story.textContent = `${escapeCurrentScenario.scene}. Пройдіть цей етап, щоб рухатися далі.`;
       el.question.textContent = stage.question;
       el.sceneLabel.textContent = `${stage.icon} ${stage.label} — ${escapeCurrentScenario.title}`;
+      renderEscapeQuestionScene(stage);
       el.feedback.textContent = 'Оберіть відповідь. За правильну відповідь із першої спроби — 2 бали.';
       el.feedback.style.background = '#f8fafc';
       el.feedback.style.color = '#475569';
@@ -2343,6 +2508,8 @@ img, svg, canvas, video, iframe {
         el.next.disabled = false;
       }
       if (el.sceneLabel && escapeCurrentScenario) el.sceneLabel.textContent = escapeCurrentScenario.scene;
+      const dyn = document.getElementById('escapeDynamicScene');
+      if (dyn) dyn.innerHTML = `<div style="padding:14px 16px;border-radius:18px;background:rgba(15,23,42,.62);border:1px solid rgba(255,255,255,.2);font-size:42px;">${escapeCurrentScenario?.icon || '🏃'}<div style="font-size:15px;font-weight:950;color:#fff;margin-top:6px;">${escapeCurrentScenario?.title || 'Втеча з минулого'}</div></div>`;
       updateEscapeRoute();
       moveEscapeMarker(0);
       updateEscapeHud();
@@ -2360,6 +2527,7 @@ img, svg, canvas, video, iframe {
       prepareEscapeScenario(escapeScenarios[0]);
       renderEscapeCatalog();
     });
+  
   </script>
 
 
