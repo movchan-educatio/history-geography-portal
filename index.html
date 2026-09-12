@@ -1002,6 +1002,339 @@
 }
 </style>
 
+
+
+<style id="mobile-full-width-fix">
+/* ===== Жорстка мобільна адаптація головної сторінки ===== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, svg, canvas, video, iframe {
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  body {
+    width: 100%;
+    min-width: 0 !important;
+  }
+
+  .main-container,
+  main.main-container,
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .kids-club-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 24px 0 18px !important;
+    padding: 10px !important;
+    border-radius: 15px !important;
+    overflow: hidden !important;
+  }
+
+  .kids-club-header {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .kids-club-header h3 {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .kids-club-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    gap: 12px !important;
+  }
+
+  .kids-club-grid > *,
+  .map-activity-card,
+  .history-activity-card,
+  .flags-activity-card,
+  .dino-game-card,
+  .chat-box,
+  .escape-catalog-wrap,
+  .escape-past-card {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .map-activity-card,
+  .history-activity-card,
+  .flags-activity-card,
+  .dino-game-card,
+  .chat-box {
+    padding: 11px !important;
+    overflow: hidden !important;
+  }
+
+  #worldMap {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 185px !important;
+  }
+
+  .history-task,
+  .history-question,
+  .history-status,
+  .map-task,
+  .map-status,
+  .flags-task,
+  .flags-status {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .history-question {
+    min-height: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+  }
+
+  .history-options,
+  .flags-options {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+  }
+
+  .history-option,
+  .flags-option {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    text-align: left !important;
+  }
+
+  #flagsDisplay {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 105px !important;
+  }
+
+  #flagsDisplay .flag-image {
+    width: min(82%, 220px) !important;
+    max-width: 100% !important;
+    height: 96px !important;
+  }
+
+  .escape-catalog-wrap {
+    padding: 10px !important;
+    overflow: hidden !important;
+  }
+
+  .escape-catalog-head,
+  .escape-catalog-head > div {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .escape-catalog-head p {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .escape-catalog {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px !important;
+  }
+
+  .escape-chapter {
+    flex: 0 0 145px !important;
+    min-width: 145px !important;
+    max-width: 145px !important;
+  }
+
+  .escape-past-card {
+    border-radius: 15px !important;
+    overflow: hidden !important;
+  }
+
+  .escape-past-head {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 13px 11px 10px !important;
+  }
+
+  .escape-past-head > div {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .escape-past-title {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .escape-past-subtitle {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .escape-hud {
+    width: 100% !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  .escape-scene {
+    width: calc(100% - 18px) !important;
+    max-width: calc(100% - 18px) !important;
+    min-width: 0 !important;
+    margin: 0 9px !important;
+  }
+
+  .escape-scene svg {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 180px !important;
+  }
+
+  #escapeSceneTheme,
+  #escapeSceneBadge {
+    max-width: calc(100% - 16px) !important;
+  }
+
+  #escapeSceneBadge,
+  .escape-scene-label {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .escape-route {
+    width: calc(100% - 16px) !important;
+    max-width: calc(100% - 16px) !important;
+    min-width: 0 !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  .escape-route-step {
+    min-width: 0 !important;
+  }
+
+  .escape-route-name {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    font-size: 7.5px !important;
+  }
+
+  .escape-mission-panel {
+    width: calc(100% - 18px) !important;
+    max-width: calc(100% - 18px) !important;
+    min-width: 0 !important;
+    margin: 8px 9px 11px !important;
+    padding: 11px !important;
+  }
+
+  .escape-story,
+  .escape-question,
+  .escape-feedback,
+  .escape-options,
+  .escape-actions {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .escape-option,
+  .escape-btn {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .chat-input-group {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .chat-input-group input {
+    min-width: 0 !important;
+  }
+
+  #dinoCanvas {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .main-container,
+  main.main-container,
+  main {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+  }
+
+  .kids-club-section {
+    padding: 8px !important;
+  }
+
+  .escape-chapter {
+    flex-basis: 136px !important;
+    min-width: 136px !important;
+    max-width: 136px !important;
+  }
+
+  .escape-past-title {
+    font-size: 17px !important;
+  }
+
+  .history-question {
+    font-size: 14px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
