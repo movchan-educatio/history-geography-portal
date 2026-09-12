@@ -64,7 +64,8 @@ function calculateWeekScore(data = {}) {
 // ===== PORTAL ECONOMY / STORE / ACHIEVEMENTS =====
 const PORTAL_STORE_CATALOG = Object.freeze({
   // Скіни
-  skin_dino:          { type:'skin', value:'dino',          price:90,  label:'Дино' },
+  skin_dino:          { type:'skin', value:'dino',          price:0,   label:'Дино' },
+  skin_teacher:       { type:'skin', value:'teacher',       price:240, label:'Вчитель' },
   skin_cossack:       { type:'skin', value:'cossack',       price:180, label:'Козак' },
   skin_knight:        { type:'skin', value:'knight',        price:260, label:'Лицар' },
   skin_pharaoh:       { type:'skin', value:'pharaoh',       price:340, label:'Фараон' },
@@ -79,8 +80,8 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   skin_samurai:       { type:'skin', value:'samurai',       price:950, label:'Самурай' },
 
   // Зброя
-  weapon_training:    { type:'weapon', value:'training',       price:0,   label:'Тренувальний бластер' },
-  weapon_firebreath:  { type:'weapon', value:'firebreath',     price:130, label:'Вогняне ядро' },
+  weapon_firebreath:  { type:'weapon', value:'firebreath',     price:0,   label:'Вогняний плювок' },
+  weapon_training:    { type:'weapon', value:'training',       price:140, label:'Тренувальний бластер' },
   weapon_bow:         { type:'weapon', value:'prince_bow',     price:180, label:'Князівський лук' },
   weapon_crossbow:    { type:'weapon', value:'crossbow',       price:240, label:'Лицарський арбалет' },
   weapon_flare:       { type:'weapon', value:'flare',          price:280, label:'Сигнальний пістолет' },
@@ -114,24 +115,67 @@ const PORTAL_STORE_CATALOG = Object.freeze({
 
 function ensurePortalEconomy(data = {}) {
   const oldScore = Math.max(0, Math.floor(Number(data.score) || 0));
+
   if (!data.portal_economy_version) {
-    // Перший запуск економіки: старі бали не пропадають — вони стають стартовими монетами.
+    // Перший запуск економіки: старі бали стають стартовими монетами.
     if (data.portal_coins === undefined) data.portal_coins = oldScore;
     if (data.portal_coins_earned === undefined) data.portal_coins_earned = oldScore;
     data.portal_economy_version = 1;
   }
+
   data.portal_coins = Math.max(0, Math.floor(Number(data.portal_coins) || 0));
   data.portal_coins_earned = Math.max(data.portal_coins, Math.floor(Number(data.portal_coins_earned) || 0));
   data.portal_owned_items = data.portal_owned_items || {};
-  data.portal_owned_items.skin_teacher = true;
+  data.portal_equipped = data.portal_equipped || {};
+
+  // Міграція 2.8: стартовий персонаж — тільки Dino.
+  // Старий "Вчитель" раніше був безкоштовним, тому це право безпечно прибираємо:
+  // тепер його можна окремо купити в магазині.
+  if ((Number(data.portal_economy_version) || 0) < 2) {
+    data.portal_owned_items.skin_dino = true;
+    delete data.portal_owned_items.skin_teacher;
+
+    // Старий тренувальний бластер теж був безкоштовним.
+    // Новий стартовий комплект Dino — вогняний плювок.
+    data.portal_owned_items.weapon_firebreath = true;
+    delete data.portal_owned_items.weapon_training;
+
+    if (!data.portal_equipped.skin || data.portal_equipped.skin === 'teacher') {
+      data.portal_equipped.skin = 'dino';
+    }
+    if (!data.portal_equipped.weapon || data.portal_equipped.weapon === 'training') {
+      data.portal_equipped.weapon = 'firebreath';
+    }
+    data.portal_economy_version = 2;
+  }
+
+  // Гарантовані безкоштовні стартові предмети.
+  data.portal_owned_items.skin_dino = true;
+  data.portal_owned_items.weapon_firebreath = true;
   data.portal_owned_items.trail_none = true;
   data.portal_owned_items.frame_none = true;
-  data.portal_owned_items.weapon_training = true;
-  data.portal_equipped = data.portal_equipped || {};
-  data.portal_equipped.skin = data.portal_equipped.skin || 'teacher';
+
+  data.portal_equipped.skin = data.portal_equipped.skin || 'dino';
+  data.portal_equipped.weapon = data.portal_equipped.weapon || 'firebreath';
   data.portal_equipped.trail = data.portal_equipped.trail || 'none';
   data.portal_equipped.frame = data.portal_equipped.frame || 'none';
-  data.portal_equipped.weapon = data.portal_equipped.weapon || 'training';
+
+  // Якщо після старої локальної конфігурації стоїть предмет, якого вже немає у власності,
+  // повертаємо безпечний стартовий комплект.
+  const skinItemId = Object.keys(PORTAL_STORE_CATALOG).find(
+    id => PORTAL_STORE_CATALOG[id]?.type === 'skin' && PORTAL_STORE_CATALOG[id]?.value === data.portal_equipped.skin
+  );
+  if (data.portal_equipped.skin !== 'dino' && (!skinItemId || !data.portal_owned_items[skinItemId])) {
+    data.portal_equipped.skin = 'dino';
+  }
+
+  const weaponItemId = Object.keys(PORTAL_STORE_CATALOG).find(
+    id => PORTAL_STORE_CATALOG[id]?.type === 'weapon' && PORTAL_STORE_CATALOG[id]?.value === data.portal_equipped.weapon
+  );
+  if (data.portal_equipped.weapon !== 'firebreath' && (!weaponItemId || !data.portal_owned_items[weaponItemId])) {
+    data.portal_equipped.weapon = 'firebreath';
+  }
+
   data.portal_achievements = data.portal_achievements || {};
   data.portal_weekly_claims = data.portal_weekly_claims || {};
   return data;
@@ -166,7 +210,7 @@ function applyPortalProgressRewards(data) {
   const ach = data.portal_achievements;
   const score = Math.max(0, Number(data.score) || 0);
   const dino = Math.max(0, Number(data.dino_best) || 0);
-  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_teacher','trail_none','frame_none','weapon_training'].includes(id)).length;
+  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_dino','trail_none','frame_none','weapon_firebreath'].includes(id)).length;
 
   if (score >= 1)   rewardOnce(data, ach, 'first_step', 10, { label:'Перший крок' });
   if (score >= 50)  rewardOnce(data, ach, 'scholar_50', 20, { label:'50 балів знань' });
@@ -615,7 +659,7 @@ async function equipPortalItem(slot, itemId) {
   const safeSlot = ['skin','weapon','trail','frame'].includes(slot) ? slot : '';
   const id = String(itemId || '');
   const item = PORTAL_STORE_CATALOG[id];
-  const freeMap = { skin:'skin_teacher', weapon:'weapon_training', trail:'trail_none', frame:'frame_none' };
+  const freeMap = { skin:'skin_dino', weapon:'weapon_firebreath', trail:'trail_none', frame:'frame_none' };
   if (!safeSlot) return { ok:false, reason:'invalid_slot' };
   const isFree = id === freeMap[safeSlot];
   if (!isFree && (!item || item.type !== safeSlot)) return { ok:false, reason:'invalid_item' };
@@ -627,11 +671,11 @@ async function equipPortalItem(slot, itemId) {
       data = data || {};
       ensurePortalEconomy(data);
       if (!data.portal_owned_items[id]) return;
-      data.portal_equipped[safeSlot] = isFree ? ({skin:'teacher',weapon:'training',trail:'none',frame:'none'}[safeSlot]) : item.value;
+      data.portal_equipped[safeSlot] = isFree ? ({skin:'dino',weapon:'firebreath',trail:'none',frame:'none'}[safeSlot]) : item.value;
       equipped = true;
       return data;
     });
-    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'teacher',weapon:'training',trail:'none',frame:'none'}[safeSlot]) : item?.value };
+    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'dino',weapon:'firebreath',trail:'none',frame:'none'}[safeSlot]) : item?.value };
   } catch (error) {
     console.error('Портал: equip item', error);
     return { ok:false, reason:'firebase' };
