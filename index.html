@@ -1174,6 +1174,7 @@
       window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
         .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
       renderRealtimeLeaderboard();
+      syncDinoLeaderboardFromUsers(raw);
 
       if (window.currentUserUid) {
         const mine = raw[window.currentUserUid] || {};
@@ -1320,8 +1321,8 @@
         startPresence(user);
         loadDinoLeaderboard();
       } else {
-        dinoLeaderboardData = [];
-        renderDinoLeaderboard([]);
+        // Основний users-listener сам оновить таблицю Dino Runner.
+        renderDinoLeaderboard(dinoLeaderboardData);
       }
 
       const authBox = document.getElementById('authBox');
@@ -1698,34 +1699,39 @@
       }).join('');
     }
 
-    function loadDinoLeaderboard() {
-      if (typeof database === 'undefined') return;
-      onValue(ref(database, 'dinoLeaderboard'), snapshot => {
-        const raw = snapshot.val() || {};
-        dinoLeaderboardData = Object.entries(raw).map(([uid, value]) => ({
+    function syncDinoLeaderboardFromUsers(rawUsers = {}) {
+      dinoLeaderboardData = Object.entries(rawUsers || {})
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher')
+        .map(([uid, p]) => ({
           uid,
-          name: value && value.name ? value.name : 'Гравець',
-          score: Number(value && value.score) || 0
-        }));
-        renderDinoLeaderboard();
-      }, error => {
-        console.error('Таблиця Динозаврика:', error);
+          name: p.name || p.displayName || p.email || 'Гравець',
+          score: Number(p.dino_best) || 0
+        }))
+        .filter(p => p.score > 0);
+      renderDinoLeaderboard();
+    }
+
+    // Таблиця Dino Runner використовує той самий вузол users, що й основний рейтинг.
+    // Так запис точно проходить через уже чинні правила Firebase для users/$uid.
+    function loadDinoLeaderboard() {
+      if (Array.isArray(window.studentsData)) {
+        const raw = {};
+        window.studentsData.forEach(p => { if (p && p.uid) raw[p.uid] = p; });
+        syncDinoLeaderboardFromUsers(raw);
+      } else {
         renderDinoLeaderboard([]);
-      });
+      }
     }
 
     async function saveDinoLeaderboard(score) {
-      if (!Number.isFinite(score) || score <= 0 || !window.currentUserUid) return;
+      if (!Number.isFinite(Number(score)) || Number(score) <= 0 || !window.currentUserUid) return;
       const uid = window.currentUserUid;
-      const name = (window.currentStudent || 'Гравець').trim().slice(0, 30) || 'Гравець';
-      const playerRef = ref(database, 'dinoLeaderboard/' + uid);
+      const bestRef = ref(database, 'users/' + uid + '/dino_best');
+      const newScore = Math.floor(Number(score));
       try {
-        await runTransaction(playerRef, current => {
-          current = current || {};
-          const oldScore = Number(current.score) || 0;
-          const newScore = Math.floor(score);
-          if (newScore <= oldScore) return current;
-          return { name, score: newScore, updatedAt: Date.now() };
+        await runTransaction(bestRef, current => {
+          const oldScore = Number(current) || 0;
+          return newScore > oldScore ? newScore : oldScore;
         });
       } catch (e) {
         console.error('Збереження рекорду Динозаврика:', e);
