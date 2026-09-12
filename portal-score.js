@@ -60,6 +60,108 @@ function calculateWeekScore(data = {}) {
     (Number(data.week_escape_points) || 0);
 }
 
+
+// ===== PORTAL ECONOMY / STORE / ACHIEVEMENTS =====
+const PORTAL_STORE_CATALOG = Object.freeze({
+  skin_dino:        { type:'skin', value:'dino',        price:90,  label:'Дино' },
+  skin_cossack:     { type:'skin', value:'cossack',     price:180, label:'Козак' },
+  skin_knight:      { type:'skin', value:'knight',      price:260, label:'Лицар' },
+  skin_pharaoh:     { type:'skin', value:'pharaoh',     price:340, label:'Фараон' },
+  skin_explorer:    { type:'skin', value:'explorer',    price:420, label:'Мандрівник' },
+  skin_archaeologist:{type:'skin', value:'archaeologist',price:520,label:'Археолог' },
+  skin_prince:      { type:'skin', value:'prince',      price:650, label:'Князь' },
+  skin_viking:      { type:'skin', value:'viking',      price:780, label:'Вікінг' },
+
+  trail_gold:       { type:'trail', value:'gold',       price:120, label:'Золотий слід' },
+  trail_fire:       { type:'trail', value:'fire',       price:220, label:'Вогняний слід' },
+  trail_stars:      { type:'trail', value:'stars',      price:300, label:'Зоряний слід' },
+  trail_lightning:  { type:'trail', value:'lightning',  price:380, label:'Блискавка' },
+
+  frame_bronze:     { type:'frame', value:'bronze',     price:100, label:'Бронзова рамка' },
+  frame_silver:     { type:'frame', value:'silver',     price:200, label:'Срібна рамка' },
+  frame_gold:       { type:'frame', value:'gold',       price:350, label:'Золота рамка' },
+  frame_historian:  { type:'frame', value:'historian',  price:450, label:'Історик' },
+
+  boost_shield:     { type:'boost', value:'shield',     price:180, label:'Щит на старті' },
+  boost_magnet:     { type:'boost', value:'magnet',     price:220, label:'Магніт на старті' },
+  boost_heart:      { type:'boost', value:'heart',      price:300, label:'+1 життя на старті' }
+});
+
+function ensurePortalEconomy(data = {}) {
+  const oldScore = Math.max(0, Math.floor(Number(data.score) || 0));
+  if (!data.portal_economy_version) {
+    // Перший запуск економіки: старі бали не пропадають — вони стають стартовими монетами.
+    if (data.portal_coins === undefined) data.portal_coins = oldScore;
+    if (data.portal_coins_earned === undefined) data.portal_coins_earned = oldScore;
+    data.portal_economy_version = 1;
+  }
+  data.portal_coins = Math.max(0, Math.floor(Number(data.portal_coins) || 0));
+  data.portal_coins_earned = Math.max(data.portal_coins, Math.floor(Number(data.portal_coins_earned) || 0));
+  data.portal_owned_items = data.portal_owned_items || {};
+  data.portal_owned_items.skin_teacher = true;
+  data.portal_owned_items.trail_none = true;
+  data.portal_owned_items.frame_none = true;
+  data.portal_equipped = data.portal_equipped || {};
+  data.portal_equipped.skin = data.portal_equipped.skin || 'teacher';
+  data.portal_equipped.trail = data.portal_equipped.trail || 'none';
+  data.portal_equipped.frame = data.portal_equipped.frame || 'none';
+  data.portal_achievements = data.portal_achievements || {};
+  data.portal_weekly_claims = data.portal_weekly_claims || {};
+  return data;
+}
+
+function creditPortalCoins(data, amount) {
+  const safe = Math.max(0, Math.floor(Number(amount) || 0));
+  if (!safe) return;
+  // Якщо економіка запускається вперше саме під час нарахування бала,
+  // стартовий баланс рахуємо зі score ДО цього нарахування, щоб не подвоїти монети.
+  if (!data.portal_economy_version) {
+    const previousScore = Math.max(0, Math.floor(Number(data.score) || 0) - safe);
+    if (data.portal_coins === undefined) data.portal_coins = previousScore;
+    if (data.portal_coins_earned === undefined) data.portal_coins_earned = previousScore;
+    data.portal_economy_version = 1;
+  }
+  ensurePortalEconomy(data);
+  data.portal_coins += safe;
+  data.portal_coins_earned += safe;
+}
+
+function rewardOnce(data, bucket, key, bonus, meta = {}) {
+  if (bucket[key]) return false;
+  bucket[key] = { claimedAt: Date.now(), bonus, ...meta };
+  data.portal_coins += bonus;
+  data.portal_coins_earned += bonus;
+  return true;
+}
+
+function applyPortalProgressRewards(data) {
+  ensurePortalEconomy(data);
+  const ach = data.portal_achievements;
+  const score = Math.max(0, Number(data.score) || 0);
+  const dino = Math.max(0, Number(data.dino_best) || 0);
+  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_teacher','trail_none','frame_none'].includes(id)).length;
+
+  if (score >= 1)   rewardOnce(data, ach, 'first_step', 10, { label:'Перший крок' });
+  if (score >= 50)  rewardOnce(data, ach, 'scholar_50', 20, { label:'50 балів знань' });
+  if (score >= 100) rewardOnce(data, ach, 'prime_100', 30, { label:'Сотня' });
+  if (score >= 250) rewardOnce(data, ach, 'expert_250', 50, { label:'Експерт порталу' });
+  if (dino >= 500)  rewardOnce(data, ach, 'runner_500', 20, { label:'Раннер 500' });
+  if (dino >= 1500) rewardOnce(data, ach, 'runner_1500', 40, { label:'Раннер 1500' });
+  if (ownedCount >= 3) rewardOnce(data, ach, 'collector_3', 25, { label:'Колекціонер' });
+
+  const week = getCurrentWeekKey();
+  data.portal_weekly_claims[week] = data.portal_weekly_claims[week] || {};
+  const wk = data.portal_weekly_claims[week];
+  const weekScore = calculateWeekScore(data);
+  const geoProgress = (Number(data.week_map_activity_points)||0) + (Number(data.week_flags_points)||0);
+  const histProgress = (Number(data.week_history_activity_points)||0) + (Number(data.week_escape_points)||0);
+  const dinoWeek = data.dino_week_key === week ? (Number(data.dino_week_best)||0) : 0;
+  if (weekScore >= 20) rewardOnce(data, wk, 'score20', 20, { label:'20 балів за тиждень' });
+  if (geoProgress >= 10) rewardOnce(data, wk, 'geo10', 15, { label:'10 географічних активностей' });
+  if (histProgress >= 10) rewardOnce(data, wk, 'history10', 15, { label:'10 історичних активностей' });
+  if (dinoWeek >= 600) rewardOnce(data, wk, 'dino600', 20, { label:'600 у Dino Runner' });
+}
+
 async function awardActivityPoint(kind, points = 1) {
   const safePoints = Math.max(0, Number(points) || 0);
   if (!safePoints) return false;
@@ -87,6 +189,8 @@ async function awardActivityPoint(kind, points = 1) {
       data.lastScoreSource = kind;
       data.lastScorePoints = safePoints;
       data.lastScoreAt = Date.now();
+      creditPortalCoins(data, safePoints);
+      applyPortalProgressRewards(data);
       // Будь-який позитивний навчальний результат відкриває Динорейсер.
       data.dino_unlocked = true;
       data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
@@ -124,6 +228,8 @@ async function awardTruthOrLiePoint(points = 1) {
       data.lastScoreSource = 'truth_or_lie';
       data.lastScorePoints = safePoints;
       data.lastScoreAt = Date.now();
+      creditPortalCoins(data, safePoints);
+      applyPortalProgressRewards(data);
       // Будь-який позитивний навчальний результат відкриває Динорейсер.
       data.dino_unlocked = true;
       data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
@@ -167,6 +273,8 @@ async function awardSubjectQuiz(subject, themeId, score) {
       data.lastScoreSource = subject;
       data.lastScorePoints = points;
       data.lastScoreAt = Date.now();
+      creditPortalCoins(data, points);
+      applyPortalProgressRewards(data);
       // Будь-який позитивний навчальний результат відкриває Динорейсер.
       data.dino_unlocked = true;
       data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
@@ -215,6 +323,8 @@ async function awardNmt(subject, score, total) {
       data.lastScoreSource = `nmt_${subject}`;
       data.lastScorePoints = points;
       data.lastScoreAt = Date.now();
+      creditPortalCoins(data, points);
+      applyPortalProgressRewards(data);
       // Будь-який позитивний навчальний результат відкриває Динорейсер.
       data.dino_unlocked = true;
       data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
@@ -283,6 +393,8 @@ async function awardEscapeStage(stageId, points = 2) {
       data.lastScoreSource = 'escape_from_past';
       data.lastScorePoints = safePoints;
       data.lastScoreAt = Date.now();
+      creditPortalCoins(data, safePoints);
+      applyPortalProgressRewards(data);
 
       data.dino_unlocked = true;
       data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
@@ -360,12 +472,25 @@ async function unlockDinoForUser() {
 }
 
 
-async function saveDinoBest(score) {
+async function saveDinoBest(score, artifacts = 0, durationMs = 0, runId = '') {
   const safeScore = Math.max(0, Math.floor(Number(score) || 0));
+  const safeArtifacts = Math.max(0, Math.min(100, Math.floor(Number(artifacts) || 0)));
+  const safeDuration = Math.max(0, Math.floor(Number(durationMs) || 0));
+  const safeRunId = String(runId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 100);
   if (!safeScore) return false;
+
+  // Basic anti-cheat sanity check. Normal runs stay far below this ceiling.
+  if (safeDuration > 0) {
+    const maxPlausibleScore = 350 + Math.floor((safeDuration / 1000) * 55);
+    if (safeScore > maxPlausibleScore || safeArtifacts > Math.floor(safeDuration / 1800) + 8) {
+      console.warn('Portal: Dino result rejected by sanity check', { safeScore, safeArtifacts, safeDuration });
+      return false;
+    }
+  }
 
   const user = await requireUser();
   if (!user) return false;
+  const weekKey = getCurrentWeekKey();
 
   try {
     await runTransaction(ref(database, `users/${user.uid}`), data => {
@@ -378,12 +503,111 @@ async function saveDinoBest(score) {
       }
       data.role = data.role || 'student';
       data.dino_best = Math.max(Number(data.dino_best) || 0, safeScore);
+      if (data.dino_week_key !== weekKey) {
+        data.dino_week_key = weekKey;
+        data.dino_week_best = 0;
+      }
+      data.dino_week_best = Math.max(Number(data.dino_week_best) || 0, safeScore);
+
+      // Artifacts are credited once per run id.
+      const duplicateRun = safeRunId && data.dino_last_run_id === safeRunId;
+      if (!duplicateRun) {
+        data.dino_artifacts_total = (Number(data.dino_artifacts_total) || 0) + safeArtifacts;
+        data.dino_runs_total = (Number(data.dino_runs_total) || 0) + 1;
+        if (safeRunId) data.dino_last_run_id = safeRunId;
+      }
+      data.dino_last_score = safeScore;
+      data.dino_last_run_at = Date.now();
+      ensurePortalEconomy(data);
+      applyPortalProgressRewards(data);
       return data;
     });
     return true;
   } catch (error) {
-    console.error('Портал: не вдалося зберегти рекорд Динорейсера', error);
+    console.error('Портал: не вдалося зберегти рекорд Dino Runner', error);
     return false;
+  }
+}
+
+
+async function refreshPortalEconomy() {
+  const user = await requireUser();
+  if (!user) return { ok:false, reason:'login' };
+  try {
+    const tx = await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+      ensurePortalEconomy(data);
+      applyPortalProgressRewards(data);
+      return data;
+    });
+    return { ok:true, profile:tx.snapshot.val() || {} };
+  } catch (error) {
+    console.error('Портал: economy refresh', error);
+    return { ok:false, reason:'firebase' };
+  }
+}
+
+async function purchasePortalItem(itemId) {
+  const id = String(itemId || '');
+  const item = PORTAL_STORE_CATALOG[id];
+  if (!item) return { ok:false, reason:'invalid_item' };
+  const user = await requireUser();
+  if (!user) return { ok:false, reason:'login' };
+  let result = { ok:false, reason:'unknown' };
+  try {
+    const tx = await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      ensurePortalEconomy(data);
+      if (data.portal_owned_items[id]) {
+        result = { ok:true, owned:true, reason:'already_owned', balance:data.portal_coins };
+        return data;
+      }
+      if (data.portal_coins < item.price) {
+        result = { ok:false, reason:'not_enough', balance:data.portal_coins, price:item.price };
+        return; // abort transaction: nothing changes
+      }
+      data.portal_coins -= item.price;
+      data.portal_coins_spent = (Number(data.portal_coins_spent)||0) + item.price;
+      data.portal_owned_items[id] = true;
+      data.portal_last_purchase = { id, label:item.label, price:item.price, at:Date.now() };
+      applyPortalProgressRewards(data);
+      result = { ok:true, bought:true, balance:data.portal_coins, item };
+      return data;
+    });
+    if (!tx.committed && result.reason === 'unknown') result = { ok:false, reason:'not_enough' };
+    return result;
+  } catch (error) {
+    console.error('Портал: purchase item', error);
+    return { ok:false, reason:'firebase' };
+  }
+}
+
+async function equipPortalItem(slot, itemId) {
+  const safeSlot = ['skin','trail','frame'].includes(slot) ? slot : '';
+  const id = String(itemId || '');
+  const item = PORTAL_STORE_CATALOG[id];
+  const freeMap = { skin:'skin_teacher', trail:'trail_none', frame:'frame_none' };
+  if (!safeSlot) return { ok:false, reason:'invalid_slot' };
+  const isFree = id === freeMap[safeSlot];
+  if (!isFree && (!item || item.type !== safeSlot)) return { ok:false, reason:'invalid_item' };
+  const user = await requireUser();
+  if (!user) return { ok:false, reason:'login' };
+  try {
+    let equipped = false;
+    const tx = await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      ensurePortalEconomy(data);
+      if (!data.portal_owned_items[id]) return;
+      data.portal_equipped[safeSlot] = isFree ? ({skin:'teacher',trail:'none',frame:'none'}[safeSlot]) : item.value;
+      equipped = true;
+      return data;
+    });
+    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'teacher',trail:'none',frame:'none'}[safeSlot]) : item?.value };
+  } catch (error) {
+    console.error('Портал: equip item', error);
+    return { ok:false, reason:'firebase' };
   }
 }
 
@@ -419,6 +643,10 @@ window.portalScore = {
   lockTruthOrLie: lockTruthOrLie,
   unlockDinoForUser: unlockDinoForUser,
   saveDinoBest: saveDinoBest,
+  refreshPortalEconomy: refreshPortalEconomy,
+  purchasePortalItem: purchasePortalItem,
+  equipPortalItem: equipPortalItem,
+  storeCatalog: PORTAL_STORE_CATALOG,
   calculateWeekScore
 };
 window.awardHistoryQuizScore = window.portalScore.awardHistoryQuizScore;
