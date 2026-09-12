@@ -673,6 +673,130 @@
 
 
 
+
+<style id="final-profile-layout-fix">
+@media (max-width:700px){
+  #authBox.user-login-bar{
+    width:100% !important;
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:6px !important;
+    padding:0 !important;
+  }
+
+  #authBox .home-user-chip{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    width:auto !important;
+    max-width:calc(100% - 78px) !important;
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    gap:5px !important;
+    padding:5px 7px !important;
+    overflow:hidden !important;
+    border-radius:999px !important;
+    background:#fff !important;
+  }
+
+  #authBox .home-user-avatar{
+    width:24px !important;
+    height:24px !important;
+    min-width:24px !important;
+    flex:0 0 24px !important;
+  }
+
+  #authBox .home-user-name{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    font-size:11px !important;
+    line-height:1 !important;
+  }
+
+  #authBox .home-role-badge{
+    flex:0 0 auto !important;
+    white-space:nowrap !important;
+    padding:4px 5px !important;
+    font-size:8px !important;
+    line-height:1 !important;
+  }
+
+  #authBox .home-score-badge{
+    flex:0 0 auto !important;
+    min-width:max-content !important;
+    white-space:nowrap !important;
+    font-size:10px !important;
+    line-height:1 !important;
+    margin:0 !important;
+  }
+
+  #authBox > .user-login-btn{
+    flex:0 0 66px !important;
+    width:66px !important;
+    min-width:66px !important;
+    max-width:66px !important;
+    height:36px !important;
+    min-height:36px !important;
+    margin:0 8px 0 0 !important;
+    padding:6px 8px !important;
+    border-radius:12px !important;
+    font-size:11px !important;
+    line-height:1 !important;
+  }
+}
+
+@media (max-width:390px){
+  #authBox .home-user-chip{
+    max-width:calc(100% - 72px) !important;
+    gap:4px !important;
+    padding:5px 6px !important;
+  }
+  #authBox .home-user-name{font-size:10px !important;}
+  #authBox .home-role-badge{font-size:7px !important;padding:3px 4px !important;}
+  #authBox .home-score-badge{font-size:9px !important;}
+  #authBox > .user-login-btn{
+    flex-basis:62px !important;
+    width:62px !important;
+    min-width:62px !important;
+    max-width:62px !important;
+    margin-right:6px !important;
+  }
+}
+
+#dinoLeaderboardList{width:100% !important;overflow:hidden !important;}
+.dino-leader-row{
+  display:grid !important;
+  grid-template-columns:54px minmax(0,1fr) 72px !important;
+  gap:7px !important;
+  align-items:center !important;
+}
+.dino-leader-row > :last-child{
+  text-align:right !important;
+  white-space:nowrap !important;
+}
+.dino-player{
+  min-width:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+@media (max-width:430px){
+  .dino-leader-row{
+    grid-template-columns:46px minmax(0,1fr) 62px !important;
+    padding:7px 8px !important;
+    font-size:11px !important;
+  }
+  .dino-leader-head{font-size:9px !important;}
+}
+</style>
+
 </head>
 <body>
 
@@ -1767,14 +1891,13 @@
     }
 
     async function saveDinoLeaderboard(score) {
-      const newScore = Math.floor(Number(score));
+      const newScore = Math.max(0, Math.floor(Number(score) || 0));
       const uid = window.currentUserUid;
-      if (!uid || !Number.isFinite(newScore) || newScore <= 0) return false;
+      if (!uid || !newScore) return false;
 
-      const playerName = (window.currentStudent || 'Гравець').trim().slice(0,40) || 'Гравець';
-      const box = document.getElementById('dinoLeaderboardList');
-      box?.querySelector('.dino-save-warning')?.remove();
+      const playerName = (window.currentStudent || 'Гравець').trim().slice(0, 40) || 'Гравець';
 
+      // Відразу показуємо результат на цьому пристрої.
       const existing = dinoLeaderboardData.find(p => p.uid === uid);
       if (!existing) {
         dinoLeaderboardData.push({ uid, name: playerName, score: newScore });
@@ -1784,29 +1907,20 @@
       }
       renderDinoLeaderboard();
 
+      // Синхронізація через portal-score.js — той самий шар Firebase,
+      // який уже працює для прапорів, карти, хронології та інших балів.
       try {
-        const bestRef = ref(database, 'users/' + uid + '/dino_best');
-        const currentSnap = await get(bestRef);
-        const currentBest = Number(currentSnap.val()) || 0;
-        const bestToSave = Math.max(currentBest, newScore);
-
-        if (bestToSave !== currentBest) {
-          await set(bestRef, bestToSave);
-        }
-
-        const nameRef = ref(database, 'users/' + uid + '/name');
-        const nameSnap = await get(nameRef);
-        if (!nameSnap.exists()) {
-          await set(nameRef, playerName);
-        }
+        const ok = await window.portalScore?.saveDinoBest?.(newScore);
+        if (!ok) throw new Error('saveDinoBest=false');
+        document.querySelector('#dinoLeaderboardList .dino-save-warning')?.remove();
         return true;
-      } catch (e) {
-        console.error('Збереження рекорду Динозаврика:', e);
-        if (box) {
+      } catch (error) {
+        console.error('Dino leaderboard sync:', error);
+        const box = document.getElementById('dinoLeaderboardList');
+        if (box && !box.querySelector('.dino-save-warning')) {
           const warning = document.createElement('div');
           warning.className = 'dino-save-warning';
-          const code = e && e.code ? ` (${e.code})` : '';
-          warning.textContent = `⚠️ Рекорд видно локально, але не вдалося синхронізувати з Firebase${code}.`;
+          warning.textContent = '⚠️ Рекорд показано локально, але синхронізація не вдалася.';
           box.appendChild(warning);
         }
         return false;

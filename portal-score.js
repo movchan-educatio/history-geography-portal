@@ -253,6 +253,34 @@ async function unlockDinoForUser() {
   }
 }
 
+
+async function saveDinoBest(score) {
+  const safeScore = Math.max(0, Math.floor(Number(score) || 0));
+  if (!safeScore) return false;
+
+  const user = await requireUser();
+  if (!user) return false;
+
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Гравець';
+      data.email = data.email || user.email || '';
+      if (user.photoURL) {
+        data.photoURL = data.photoURL || user.photoURL;
+        data.googlePhotoURL = data.googlePhotoURL || user.photoURL;
+      }
+      data.role = data.role || 'student';
+      data.dino_best = Math.max(Number(data.dino_best) || 0, safeScore);
+      return data;
+    });
+    return true;
+  } catch (error) {
+    console.error('Портал: не вдалося зберегти рекорд Динорейсера', error);
+    return false;
+  }
+}
+
 async function lockTruthOrLie(reason = 'suspicious_activity', until = Date.now() + 3600000) {
   const user = await requireUser();
   if (!user) return false;
@@ -282,6 +310,7 @@ window.portalScore = {
   awardTruthOrLiePoint: awardTruthOrLiePoint,
   lockTruthOrLie: lockTruthOrLie,
   unlockDinoForUser: unlockDinoForUser,
+  saveDinoBest: saveDinoBest,
   calculateWeekScore
 };
 window.awardHistoryQuizScore = window.portalScore.awardHistoryQuizScore;
