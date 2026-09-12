@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-
 <html lang="uk">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Історія і географія БЕЗ МЕЖ — Освітній Портал Сергія Мовчана</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-<!-- Підключення іконок -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
-<link href="style.css?v=16" rel="stylesheet"/>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Історія і географія БЕЗ МЕЖ — Освітній Портал Сергія Мовчана</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Підключення іконок -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="style.css?v=16">
+  
+  <style>
     html {
       scroll-behavior: smooth;
     }
@@ -560,10 +560,11 @@
     .flags-status { margin-top:8px; padding:7px 8px; border-radius:8px; font-size:12px; background:#f8fafc; color:#475569; text-align:center; min-height:16px; }
     @media (max-width:650px) { .flags-options { grid-template-columns:1fr; } #flagsDisplay { font-size:64px; } }
 </style>
-<link href="modern-theme.css?v=300" rel="stylesheet"/>
-<link href="site-modern.css?v=1" rel="stylesheet"/>
-<link href="redesign.css?v=5" rel="stylesheet"/>
-<link href="premium-design.css?v=8" rel="stylesheet"/>
+  <link rel="stylesheet" href="modern-theme.css?v=300">
+<link rel="stylesheet" href="site-modern.css?v=1">
+<link rel="stylesheet" href="redesign.css?v=5">
+  <link rel="stylesheet" href="premium-design.css?v=8">
+
 <style id="online-presence-styles">
 .online-presence-panel{margin:12px 0 16px;padding:12px 16px;border:1px solid #dbe7df;border-radius:14px;background:linear-gradient(135deg,#f7fff9,#eefaf2);box-shadow:0 4px 14px rgba(34,197,94,.06)}
 .online-presence-title{font-weight:900;color:#166534;font-size:14px;margin-bottom:4px}
@@ -573,6 +574,8 @@
 .online-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 2px #dcfce7}
 .online-presence-empty{font-size:12px;color:#64748b}
 </style>
+
+
 <style id="boss-presence-extra">
 .online-presence-panel.boss-online{
   border-color:#d6b06a!important;
@@ -587,255 +590,281 @@
   color:#5b3a12!important;
 }
 </style>
-<link href="reference-final.css?v=1" rel="stylesheet"/>
+
+
+
+
 </head>
 <body>
-<!-- Навігаційна шапка -->
-<header>
-<a class="logo-group" href="index.html">
-<img alt="Логотип Освітній Портал" class="logo-img" src="logo.png"/>
-<div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
-</a>
-<nav>
-<ul>
-<li><a class="active" href="index.html">Головна</a></li>
-<li><a href="history.html">Історія</a></li>
-<li><a href="geography.html">Географія</a></li>
-<li><a href="nmt.html">НМТ</a></li>
-<li><a href="methodology.html">Методична скарбничка</a></li>
-</ul>
-</nav><div class="ref-tools"><a class="hide-m" href="#site-main"><i class="fa-solid fa-magnifying-glass"></i></a><a class="hide-m" href="#leaderboardList"><i class="fa-solid fa-bell"></i></a><a href="#authBox"><i class="fa-solid fa-circle-user"></i></a></div>
-<!-- АНІМАЦІЯ МАНДРІВНИКА -->
-<div class="traveler-container" id="traveler">
-<svg class="traveler-svg" fill="none" viewbox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
-<g class="traveler-body">
-<path d="M 22 16 C 22 10, 34 10, 34 16 Z" fill="#ffffff"></path>
-<path d="M 16 16 C 16 14, 40 14, 40 16 C 40 18, 16 18, 16 16 Z" fill="#ffffff"></path>
-<circle cx="28" cy="20" fill="#ffffff" r="4.5"></circle>
-<path d="M 22 25 L 34 25 L 32 44 L 24 44 Z" fill="#ffffff"></path>
-<rect fill="#ffffff" height="14" rx="2" width="7" x="16" y="26"></rect>
-<path d="M 24 44 L 20 62 L 15 62" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"></path>
-<path d="M 31 44 L 35 62 L 41 62" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"></path>
-<path d="M 23 26 L 19 37" stroke="#ffffff" stroke-linecap="round" stroke-width="3"></path>
-<path d="M 33 26 L 40 18 L 38 7" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
-</g>
-<g class="traveler-compass" transform="translate(38, 5)">
-<circle cx="0" cy="0" fill="#1e293b" r="5.5" stroke="#38bdf8" stroke-width="1.5"></circle>
-<line class="traveler-compass-needle" stroke="#38bdf8" stroke-linecap="round" stroke-width="1.5" x1="0" x2="0" y1="-3.5" y2="3.5"></line>
-<line class="traveler-compass-needle" stroke="#38bdf8" stroke-linecap="round" stroke-width="1.5" x1="-3.5" x2="3.5" y1="0" y2="0"></line>
-</g>
-</svg>
-</div>
-</header>
-<!-- Головний банер -->
-<section class="mountain-banner">
-<div class="hero-text-content" style="width: 100%; max-width: 800px;">
-<h1>ІСТОРІЯ І ГЕОГРАФІЯ <span>БЕЗ МЕЖ</span></h1>
-<p class="subtitle">Авторський освітній Портал Сергія Мовчана</p>
-<p class="quote">“Пізнаємо минуле — будуємо майбутнє!”</p>
-<a class="ref-start" href="#subjectHub">Почати  →</a></div>
-</section><section class="ref-subjects" id="subjectHub">
-<a class="ref-subject" href="history.html"><div class="pic" style="background-image:url('ref-assets/history.jpg')"></div><div class="txt"><h3>Історія</h3><p>Подорожуй крізь епохи, відкривай видатні події та особистості.</p><span class="ref-go">Перейти <b>→</b></span></div></a>
-<a class="ref-subject" href="geography.html"><div class="pic" style="background-image:url('ref-assets/geo.jpg')"></div><div class="txt"><h3>Географія</h3><p>Досліджуй країни, континенти, природу та унікальні місця.</p><span class="ref-go">Перейти <b>→</b></span></div></a>
-<a class="ref-subject" href="nmt.html"><div class="pic" style="background-image:url('ref-assets/nmt.jpg')"></div><div class="txt"><h3>НМТ</h3><p>Підготуйся до іспиту. Тести, теорія, тренажери.</p><span class="ref-go">Перейти <b>→</b></span></div></a>
-<a class="ref-subject" href="methodology.html"><div class="pic" style="background-image:url('ref-assets/method.jpg')"></div><div class="txt"><h3>Методична скарбничка</h3><p>Готові матеріали для уроків, презентації та ресурси.</p><span class="ref-go">Перейти <b>→</b></span></div></a>
-</section>
-<!-- Основний контент -->
-<main class="main-container" id="site-main" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-<!-- БЛОК: КОМУ БУДЕ КОРИСНИЙ ПОРТАЛ? -->
 
-<!-- ТАБЛИЦЯ АКТИВНОСТІ -->
-<section class="ref-dashboard"><div class="leaderboard-section">
-<div class="leaderboard-header">
-<h3><i class="fas fa-medal" style="color: #2563eb;"></i> Рейтинг активності учнів</h3>
-<span class="reset-timer-badge" id="weekResetTimer">🔄 Оновлення тижня...</span>
-<div class="user-login-bar" id="authBox">
-<!-- Кнопка Google відображається одразу, ще до завершення Firebase Auth. -->
-<button class="user-login-btn" id="googleLoginBtn" style="display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px;visibility:visible!important;opacity:1!important;" type="button">
-<i class="fa-brands fa-google"></i> Увійти через Google
+  <!-- Навігаційна шапка -->
+  <header>
+    <a href="index.html" class="logo-group">
+      <img src="logo.png" alt="Логотип Освітній Портал" class="logo-img">
+      <div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Головна</a></li>
+        <li><a href="history.html">Історія</a></li>
+        <li><a href="geography.html">Географія</a></li>
+        <li><a href="nmt.html">НМТ</a></li>
+        <li><a href="methodology.html">Методична скарбничка</a></li>
+      </ul>
+    </nav>
+
+    <!-- АНІМАЦІЯ МАНДРІВНИКА -->
+    <div class="traveler-container" id="traveler">
+      <svg class="traveler-svg" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="traveler-body">
+          <path d="M 22 16 C 22 10, 34 10, 34 16 Z" fill="#ffffff" />
+          <path d="M 16 16 C 16 14, 40 14, 40 16 C 40 18, 16 18, 16 16 Z" fill="#ffffff" />
+          <circle cx="28" cy="20" r="4.5" fill="#ffffff" />
+          <path d="M 22 25 L 34 25 L 32 44 L 24 44 Z" fill="#ffffff" />
+          <rect x="16" y="26" width="7" height="14" rx="2" fill="#ffffff" />
+          <path d="M 24 44 L 20 62 L 15 62" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M 31 44 L 35 62 L 41 62" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M 23 26 L 19 37" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+          <path d="M 33 26 L 40 18 L 38 7" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+        <g class="traveler-compass" transform="translate(38, 5)">
+          <circle cx="0" cy="0" r="5.5" stroke="#38bdf8" stroke-width="1.5" fill="#1e293b" />
+          <line class="traveler-compass-needle" x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" />
+          <line class="traveler-compass-needle" x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" />
+        </g>
+      </svg>
+    </div>
+  </header>
+
+  <!-- Головний банер -->
+  <section class="mountain-banner">
+    <div class="hero-text-content" style="width: 100%; max-width: 800px;">
+      <h1>ІСТОРІЯ І ГЕОГРАФІЯ <span>БЕЗ МЕЖ</span></h1>
+      <p class="subtitle">Авторський освітній Портал Сергія Мовчана</p>
+      <p class="quote">“Пізнаємо минуле — будуємо майбутнє!”</p>
+    </div>
+  </section>
+
+  <!-- Основний контент -->
+  <main class="main-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    
+    <!-- БЛОК: КОМУ БУДЕ КОРИСНИЙ ПОРТАЛ? -->
+    <section class="target-audience-section">
+      <h3>Кому буде корисний Портал?</h3>
+      <div class="target-audience-grid">
+        <div class="audience-card">
+          <h4>🎓 Учням та випускникам</h4>
+          <ul>
+            <li>Готуйтеся до НМТ з історії та географії за допомогою інтерактивних тестів.</li>
+            <li>Закріплюйте знання у формі гри: відгадуйте факти, змагайтеся в рейтингу та розблоковуйте розваги.</li>
+            <li>Досліджуйте світ через 3D-артефакти та віртуальні аудіотури.</li>
+          </ul>
+        </div>
+        <div class="audience-card">
+          <h4>👩‍🏫 Вчителям та педагогам</h4>
+          <ul>
+            <li>Знаходьте натхнення та готові матеріали у «Методичній скарбничці».</li>
+            <li>Використовуйте інтерактивні елементи сайту для урізноманітнення уроків та підвищення мотивації учнів.</li>
+          </ul>
+        </div>
+        <div class="audience-card">
+          <h4>🧭 Всім допитливим і любителям мандрів</h4>
+          <ul>
+            <li>Відкривайте для себе щодня цікаві історичні факти, інтерактивні вікторини та віртуальні екскурсії.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ТАБЛИЦЯ АКТИВНОСТІ -->
+    <div class="leaderboard-section">
+      <div class="leaderboard-header">
+        <h3><i class="fas fa-medal" style="color: #2563eb;"></i> Рейтинг активності учнів</h3>
+        <span id="weekResetTimer" class="reset-timer-badge">🔄 Оновлення тижня...</span>
+        <div class="user-login-bar" id="authBox">
+          <!-- Кнопка Google відображається одразу, ще до завершення Firebase Auth. -->
+          <button id="googleLoginBtn" type="button" class="user-login-btn" style="display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px;visibility:visible!important;opacity:1!important;">
+            <i class="fa-brands fa-google"></i> Увійти через Google
           </button>
-</div>
-</div>
-<div aria-live="polite" class="online-presence-panel" id="onlinePresencePanel">
-<div class="online-presence-title" id="onlinePresenceTitle">🟢 Зараз на сайті</div>
-<div class="online-presence-text" id="onlinePresenceText">Перевіряємо, хто зараз онлайн…</div>
-<div class="online-presence-names" id="onlinePresenceNames"></div>
-</div>
-<div class="leaderboard-list" id="leaderboardList"></div>
-<div id="weeklyWinnerPanel" style="display:none;margin-top:16px;padding:18px 20px;border:2px solid #e8d2c5;border-radius:16px;background:linear-gradient(135deg,#fffaf6,#f7eee8);text-align:center;box-shadow:0 6px 20px rgba(91,31,14,.08);">
-<div style="font-size:13px;font-weight:800;color:#9a604a;text-transform:uppercase;letter-spacing:.04em;">🏆 Переможець тижня</div>
-<div id="weeklyWinnerName" style="font-size:24px;font-weight:900;color:#5b1f0e;margin-top:6px;"></div>
-<div id="weeklyWinnerPoints" style="font-size:15px;font-weight:700;color:#64748b;margin-top:4px;"></div>
-<div style="font-size:12px;color:#8b6b5d;margin-top:8px;">Підсумок тижня • неділя 12:00–24:00</div>
-</div>
-</div><div class="ref-media"><div class="section-title">Віртуальні екскурсії та медіа</div><div class="grid-3-tours">
-<a class="virtual-tour-card" href="https://izi.travel/uk" onclick="window.open(this.href, '_blank'); return false;" target="_blank">
-<div class="icon">🗺️</div>
-<span>AUDIO &amp; 3D Тури</span>
-</a>
-<a class="virtual-tour-card" href="https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" onclick="window.open(this.href, '_blank'); return false;" target="_blank">
-<div class="icon" style="color: #ff0000;"><i class="fa-brands fa-youtube"></i></div>
-<span>Реальна історія</span>
-</a>
-<a class="virtual-tour-card" href="https://sketchfab.com/tags/history" onclick="window.open(this.href, '_blank'); return false;" target="_blank">
-<div class="icon">🏺</div>
-<span>3D Артефакти</span>
-</a>
-</div></div></section>
-<div class="section-title" style="margin-top: 30px;">Що цікавого сьогодні</div>
-<div class="grid-3">
-<div class="info-card">
-<h4>📜 Історичний факт</h4>
-<p id="event-content">Завантаження...</p>
-<button class="btn-link" onclick="openModal('event');">Детальніше →</button>
-</div>
-<div class="info-card">
-<h4>🌍 Цікаво про географію</h4>
-<p id="geo-content">Завантаження...</p>
-<button class="btn-link" onclick="openModal('geo');">Читати більше →</button>
-</div>
-<div class="info-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-<div>
-<h4>🌍 Гра: Правда чи Брехня?</h4>
-<p id="country-game-text" style="font-weight: 600; margin: 10px 0; font-size: 14px; color: #1e293b;">Завантаження гри...</p>
-</div>
-<div>
-<div style="display: flex; gap: 8px; margin-bottom: 8px;">
-<button data-country-game-answer="" onclick="checkCountryGame(true)" style="flex: 1; background: #16a34a; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">✅ Правда</button>
-<button data-country-game-answer="" onclick="checkCountryGame(false)" style="flex: 1; background: #dc2626; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">❌ Брехня</button>
-</div>
-<div id="country-game-result" style="font-size: 12px; padding: 6px; border-radius: 6px; display: none;"></div>
-</div>
-</div>
-</div>
+        </div>
+      </div>
+      <div id="onlinePresencePanel" class="online-presence-panel" aria-live="polite">
+        <div id="onlinePresenceTitle" class="online-presence-title">🟢 Зараз на сайті</div>
+        <div id="onlinePresenceText" class="online-presence-text">Перевіряємо, хто зараз онлайн…</div>
+        <div id="onlinePresenceNames" class="online-presence-names"></div>
+      </div>
+      
 
+      <div id="leaderboardList" class="leaderboard-list"></div>
+      <div id="weeklyWinnerPanel" style="display:none;margin-top:16px;padding:18px 20px;border:2px solid #e8d2c5;border-radius:16px;background:linear-gradient(135deg,#fffaf6,#f7eee8);text-align:center;box-shadow:0 6px 20px rgba(91,31,14,.08);">
+        <div style="font-size:13px;font-weight:800;color:#9a604a;text-transform:uppercase;letter-spacing:.04em;">🏆 Переможець тижня</div>
+        <div id="weeklyWinnerName" style="font-size:24px;font-weight:900;color:#5b1f0e;margin-top:6px;"></div>
+        <div id="weeklyWinnerPoints" style="font-size:15px;font-weight:700;color:#64748b;margin-top:4px;"></div>
+        <div style="font-size:12px;color:#8b6b5d;margin-top:8px;">Підсумок тижня • неділя 12:00–24:00</div>
+      </div>
+    </div>
 
-<!-- 🧭 СЕКЦІЯ: КЛУБ ДОСЛІДНИКІВ -->
-<section class="kids-club-section" id="kids-club">
-<div class="kids-club-header">
-<span style="font-size: 30px;">🧭</span>
-<div>
-<h3>Клуб дослідників &amp; Зона розваг</h3>
-<p style="margin: 0; font-size: 13px; color: #0369a1;">Відпочивайте від уроків, грайте та спілкуйтеся з друзями!</p>
-</div>
-</div>
-<div class="kids-club-grid">
-<!-- Блок 1: Інтерактивний чат / Стіна коментарів -->
-<div class="chat-box">
-<div style="font-weight: 800; color: #0369a1; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-<i class="fas fa-comments"></i> Стіна думок та вражень
+    <div class="section-title" style="margin-top: 30px;">Що цікавого сьогодні</div>
+    <div class="grid-3">
+      <div class="info-card">
+        <h4>📜 Історичний факт</h4>
+        <p id="event-content">Завантаження...</p>
+        <button onclick="openModal('event');" class="btn-link">Детальніше →</button>
+      </div>
+
+      <div class="info-card">
+        <h4>🌍 Цікаво про географію</h4>
+        <p id="geo-content">Завантаження...</p>
+        <button onclick="openModal('geo');" class="btn-link">Читати більше →</button>
+      </div>
+
+      <div class="info-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <h4>🌍 Гра: Правда чи Брехня?</h4>
+          <p id="country-game-text" style="font-weight: 600; margin: 10px 0; font-size: 14px; color: #1e293b;">Завантаження гри...</p>
+        </div>
+        <div>
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <button data-country-game-answer onclick="checkCountryGame(true)" style="flex: 1; background: #16a34a; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">✅ Правда</button>
+            <button data-country-game-answer onclick="checkCountryGame(false)" style="flex: 1; background: #dc2626; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px;">❌ Брехня</button>
           </div>
-<div class="chat-messages" id="chatMessages"></div>
-<div class="chat-input-group">
-<input id="chatInput" maxlength="120" placeholder="Напишіть повідомлення чи коментар..." type="text"/>
-<button onclick="sendChatMessage()">Надіслати</button>
-</div>
-</div>
-<!-- Блок 2: Динозаврик-Ранер -->
-<div class="dino-game-card">
-<div class="dino-controls">
-<span>🦖 Динозаврик-Ранер</span>
-<span>Очки: <strong id="dinoScore">0</strong> | Рекорд: <strong id="dinoHighScore">0</strong></span>
-</div>
-<div style="position: relative; width: 100%;">
-<canvas height="180" id="dinoCanvas" width="320"></canvas>
-<!-- Оверлей блокування гри -->
-<div id="dinoLockOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 180px; background: rgba(15, 23, 42, 0.85); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 15px; box-sizing: border-box; z-index: 10;">
-<span style="font-size: 28px; margin-bottom: 5px;">🔒</span>
-<strong style="font-size: 14px; color: #38bdf8;">Гра заблокована</strong>
-<span style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Виконайте будь-яке навчальне завдання (опрацюйте факт чи пройдіть тест), щоб розблокувати!</span>
-</div>
-</div>
-<button disabled="" id="dinoStartBtn" onclick="startDinoGame()" style="background: #94a3b8; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: not-allowed; font-size: 12px; width: 100%;">Старт / Стрибок (Пробіл або Тап)</button>
-<div class="dino-leaderboard">
-<div class="dino-leaderboard-title">🏆 Лідери Динозаврика-Ранера • усі учні</div>
-<div id="dinoLeaderboardList"></div>
-</div>
-</div>
-<!-- Блок 3: Робота з картою -->
-<div class="map-activity-card">
-<div style="font-weight:900;color:#0369a1;font-size:14px;">🗺️ Географічний детектив</div>
-<div class="map-task" id="mapTask">Завантаження завдання...</div>
-<div id="worldMap"></div>
-<div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
-</div>
-<!-- Блок 4: Історична хронологія -->
-<div class="history-activity-card">
-<div style="font-weight:900;color:#6b2f1f;font-size:14px;">📜 Історичний хронолог</div>
-<div class="history-task">Оберіть правильний рік історичної події</div>
-<div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
-<div class="history-options" id="historyActivityOptions"></div>
-<div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
-<button class="history-next" disabled="" id="historyActivityNext" type="button">Наступне питання</button>
-<div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
-</div>
-<!-- Блок 5: Прапори світу -->
-<div class="flags-activity-card" id="flagsGame">
-<div style="font-weight:900;color:#7c2d12;font-size:14px;">🚩 Прапори світу</div>
-<div class="flags-task">Якій країні належить цей прапор?</div>
-<div aria-label="Прапор країни" id="flagsDisplay">🌍</div>
-<div class="flags-options" id="flagsOptions"></div>
-<div class="flags-status" id="flagsStatus">Оберіть правильну відповідь.</div>
-</div>
-</div>
-</section><section class="target-audience-section">
-<h3>Кому буде корисний Портал?</h3>
-<div class="target-audience-grid">
-<div class="audience-card">
-<h4>🎓 Учням та випускникам</h4>
-<ul>
-<li>Готуйтеся до НМТ з історії та географії за допомогою інтерактивних тестів.</li>
-<li>Закріплюйте знання у формі гри: відгадуйте факти, змагайтеся в рейтингу та розблоковуйте розваги.</li>
-<li>Досліджуйте світ через 3D-артефакти та віртуальні аудіотури.</li>
-</ul>
-</div>
-<div class="audience-card">
-<h4>👩‍🏫 Вчителям та педагогам</h4>
-<ul>
-<li>Знаходьте натхнення та готові матеріали у «Методичній скарбничці».</li>
-<li>Використовуйте інтерактивні елементи сайту для урізноманітнення уроків та підвищення мотивації учнів.</li>
-</ul>
-</div>
-<div class="audience-card">
-<h4>🧭 Всім допитливим і любителям мандрів</h4>
-<ul>
-<li>Відкривайте для себе щодня цікаві історичні факти, інтерактивні вікторини та віртуальні екскурсії.</li>
-</ul>
-</div>
-</div>
-</section>
-</main>
-<div aria-labelledby="studentDetailsTitle" aria-modal="true" class="student-details-modal" id="studentDetailsModal" role="dialog">
-<div class="student-details-card">
-<div class="student-details-head">
-<div>
-<h3 id="studentDetailsTitle" style="margin:0 0 4px;color:#1e293b;">Статистика учня</h3>
-<div id="studentDetailsSubtitle" style="color:#64748b;font-size:13px;"></div>
-</div>
-<button aria-label="Закрити" class="student-details-close" onclick="closeStudentDetails()" type="button">×</button>
-</div>
-<div id="studentDetailsBody"></div>
-</div>
-</div>
-<footer style="background: #1e293b; color: #ffffff; padding: 30px 20px; text-align: center; margin-top: 40px; border-top: 4px solid #2563eb;">
-<h3 style="margin-bottom: 15px; font-size: 18px; font-weight: 700;">Приєднуйтесь до моїх спільнот</h3>
-<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;">
-<a href="https://www.instagram.com/matilda.poetry?igsh=MXNkeWo5anFmd2k0Nw%3D%3D&amp;utm_source=qr" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #e1306c; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-<a href="https://www.tiktok.com/@matilda.poetry?_r=1&amp;_t=ZS-98cZEDGY3ym" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #000000; border: 1px solid #333333; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-<a href="https://www.facebook.com/share/1ETNyD3yDX/?mibextid=wwXIfr" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877f2; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-</div>
-<p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
-<p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
-</footer>
-<div class="modal-overlay" id="info-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
-<div class="modal-card" style="background:#fff; padding:25px; border-radius:12px; max-width:500px; width:90%; text-align:left;">
-<h3 id="modal-title" style="margin-top:0;">Заголовок</h3>
-<p id="modal-text" style="white-space: pre-line;">Детальна інформація...</p>
-<button class="modal-close-btn" onclick="closeModal()" style="margin-top:15px; background:#2563eb; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer;">Зрозуміло</button>
-</div>
-</div>
-<!-- FIREBASE SCRIPTS -->
-<script type="module">
+          <div id="country-game-result" style="font-size: 12px; padding: 6px; border-radius: 6px; display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Віртуальні екскурсії та медіа</div>
+    <div class="grid-3-tours">
+      <a href="https://izi.travel/uk" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="virtual-tour-card">
+        <div class="icon">🗺️</div>
+        <span>AUDIO & 3D Тури</span>
+      </a>
+      <a href="https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="virtual-tour-card">
+        <div class="icon" style="color: #ff0000;"><i class="fa-brands fa-youtube"></i></div>
+        <span>Реальна історія</span>
+      </a>
+      <a href="https://sketchfab.com/tags/history" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="virtual-tour-card">
+        <div class="icon">🏺</div>
+        <span>3D Артефакти</span>
+      </a>
+    </div>
+
+    <!-- 🧭 СЕКЦІЯ: КЛУБ ДОСЛІДНИКІВ -->
+    <section class="kids-club-section" id="kids-club">
+      <div class="kids-club-header">
+        <span style="font-size: 30px;">🧭</span>
+        <div>
+          <h3>Клуб дослідників & Зона розваг</h3>
+          <p style="margin: 0; font-size: 13px; color: #0369a1;">Відпочивайте від уроків, грайте та спілкуйтеся з друзями!</p>
+        </div>
+      </div>
+
+      <div class="kids-club-grid">
+        <!-- Блок 1: Інтерактивний чат / Стіна коментарів -->
+        <div class="chat-box">
+          <div style="font-weight: 800; color: #0369a1; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-comments"></i> Стіна думок та вражень
+          </div>
+          <div class="chat-messages" id="chatMessages"></div>
+          <div class="chat-input-group">
+            <input type="text" id="chatInput" placeholder="Напишіть повідомлення чи коментар..." maxlength="120">
+            <button onclick="sendChatMessage()">Надіслати</button>
+          </div>
+        </div>
+
+        <!-- Блок 2: Динозаврик-Ранер -->
+        <div class="dino-game-card">
+          <div class="dino-controls">
+            <span>🦖 Динозаврик-Ранер</span>
+            <span>Очки: <strong id="dinoScore">0</strong> | Рекорд: <strong id="dinoHighScore">0</strong></span>
+          </div>
+
+          <div style="position: relative; width: 100%;">
+            <canvas id="dinoCanvas" width="320" height="180"></canvas>
+            
+            <!-- Оверлей блокування гри -->
+            <div id="dinoLockOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 180px; background: rgba(15, 23, 42, 0.85); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 15px; box-sizing: border-box; z-index: 10;">
+              <span style="font-size: 28px; margin-bottom: 5px;">🔒</span>
+              <strong style="font-size: 14px; color: #38bdf8;">Гра заблокована</strong>
+              <span style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Виконайте будь-яке навчальне завдання (опрацюйте факт чи пройдіть тест), щоб розблокувати!</span>
+            </div>
+          </div>
+
+          <button id="dinoStartBtn" onclick="startDinoGame()" disabled style="background: #94a3b8; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: not-allowed; font-size: 12px; width: 100%;">Старт / Стрибок (Пробіл або Тап)</button>
+
+          <div class="dino-leaderboard">
+            <div class="dino-leaderboard-title">🏆 Лідери Динозаврика-Ранера • усі учні</div>
+            <div id="dinoLeaderboardList"></div>
+          </div>
+        </div>
+
+        <!-- Блок 3: Робота з картою -->
+        <div class="map-activity-card">
+          <div style="font-weight:900;color:#0369a1;font-size:14px;">🗺️ Географічний детектив</div>
+          <div class="map-task" id="mapTask">Завантаження завдання...</div>
+          <div id="worldMap"></div>
+          <div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
+        </div>
+
+        <!-- Блок 4: Історична хронологія -->
+        <div class="history-activity-card">
+          <div style="font-weight:900;color:#6b2f1f;font-size:14px;">📜 Історичний хронолог</div>
+          <div class="history-task">Оберіть правильний рік історичної події</div>
+          <div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
+          <div class="history-options" id="historyActivityOptions"></div>
+          <div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
+          <button class="history-next" id="historyActivityNext" type="button" disabled>Наступне питання</button>
+          <div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
+        </div>
+
+        <!-- Блок 5: Прапори світу -->
+        <div class="flags-activity-card" id="flagsGame">
+          <div style="font-weight:900;color:#7c2d12;font-size:14px;">🚩 Прапори світу</div>
+          <div class="flags-task">Якій країні належить цей прапор?</div>
+          <div id="flagsDisplay" aria-label="Прапор країни">🌍</div>
+          <div id="flagsOptions" class="flags-options"></div>
+          <div id="flagsStatus" class="flags-status">Оберіть правильну відповідь.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="studentDetailsModal" class="student-details-modal" role="dialog" aria-modal="true" aria-labelledby="studentDetailsTitle">
+    <div class="student-details-card">
+      <div class="student-details-head">
+        <div>
+          <h3 id="studentDetailsTitle" style="margin:0 0 4px;color:#1e293b;">Статистика учня</h3>
+          <div id="studentDetailsSubtitle" style="color:#64748b;font-size:13px;"></div>
+        </div>
+        <button class="student-details-close" type="button" onclick="closeStudentDetails()" aria-label="Закрити">×</button>
+      </div>
+      <div id="studentDetailsBody"></div>
+    </div>
+  </div>
+
+  <footer style="background: #1e293b; color: #ffffff; padding: 30px 20px; text-align: center; margin-top: 40px; border-top: 4px solid #2563eb;">
+    <h3 style="margin-bottom: 15px; font-size: 18px; font-weight: 700;">Приєднуйтесь до моїх спільнот</h3>
+    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;">
+      <a href="https://www.instagram.com/matilda.poetry?igsh=MXNkeWo5anFmd2k0Nw%3D%3D&utm_source=qr" target="_blank" title="Instagram" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #e1306c; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@matilda.poetry?_r=1&_t=ZS-98cZEDGY3ym" target="_blank" title="TikTok" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #000000; border: 1px solid #333333; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://www.facebook.com/share/1ETNyD3yDX/?mibextid=wwXIfr" target="_blank" title="Facebook" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877f2; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;"><i class="fa-brands fa-facebook-f"></i></a>
+    </div>
+    <p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
+  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
+  </footer>
+
+  <div class="modal-overlay" id="info-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+    <div class="modal-card" style="background:#fff; padding:25px; border-radius:12px; max-width:500px; width:90%; text-align:left;">
+      <h3 id="modal-title" style="margin-top:0;">Заголовок</h3>
+      <p id="modal-text" style="white-space: pre-line;">Детальна інформація...</p>
+      <button class="modal-close-btn" onclick="closeModal()" style="margin-top:15px; background:#2563eb; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer;">Зрозуміло</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE SCRIPTS -->
+  <script type="module">
     import "./portal-score.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1499,7 +1528,8 @@
       input.value = '';
     };
   </script>
-<script>
+
+  <script>
     function setupTravelerAnimation() {
       const traveler = document.getElementById('traveler');
       const totalAnimationTime = 25000;
@@ -4573,11 +4603,11 @@
 
     window.addEventListener('DOMContentLoaded', initPageData);
   </script>
-<button aria-label="Повернутися вгору" id="backToTop" title="Вгору" type="button">↑</button>
+<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
 <script>
 (() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
 </script>
-<script crossorigin="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
@@ -4587,5 +4617,5 @@
     }, 100);
   });
 </script>
-<nav class="ref-mobile-nav"><a href="index.html"><i class="fa-solid fa-house"></i><span>Головна</span></a><a href="#kids-club"><i class="fa-solid fa-gamepad"></i><span>Ігри</span></a><a href="#leaderboardList"><i class="fa-solid fa-trophy"></i><span>Рейтинг</span></a><a href="#site-main"><i class="fa-solid fa-bars"></i><span>Меню</span></a></nav></body>
+</body>
 </html>
