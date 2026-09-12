@@ -63,25 +63,50 @@ function calculateWeekScore(data = {}) {
 
 // ===== PORTAL ECONOMY / STORE / ACHIEVEMENTS =====
 const PORTAL_STORE_CATALOG = Object.freeze({
-  skin_dino:        { type:'skin', value:'dino',        price:90,  label:'Дино' },
-  skin_cossack:     { type:'skin', value:'cossack',     price:180, label:'Козак' },
-  skin_knight:      { type:'skin', value:'knight',      price:260, label:'Лицар' },
-  skin_pharaoh:     { type:'skin', value:'pharaoh',     price:340, label:'Фараон' },
-  skin_explorer:    { type:'skin', value:'explorer',    price:420, label:'Мандрівник' },
-  skin_archaeologist:{type:'skin', value:'archaeologist',price:520,label:'Археолог' },
-  skin_prince:      { type:'skin', value:'prince',      price:650, label:'Князь' },
-  skin_viking:      { type:'skin', value:'viking',      price:780, label:'Вікінг' },
+  // Скіни
+  skin_dino:          { type:'skin', value:'dino',          price:90,  label:'Дино' },
+  skin_cossack:       { type:'skin', value:'cossack',       price:180, label:'Козак' },
+  skin_knight:        { type:'skin', value:'knight',        price:260, label:'Лицар' },
+  skin_pharaoh:       { type:'skin', value:'pharaoh',       price:340, label:'Фараон' },
+  skin_explorer:      { type:'skin', value:'explorer',      price:420, label:'Мандрівник' },
+  skin_archaeologist: { type:'skin', value:'archaeologist', price:520, label:'Археолог' },
+  skin_prince:        { type:'skin', value:'prince',        price:650, label:'Князь' },
+  skin_viking:        { type:'skin', value:'viking',        price:780, label:'Вікінг' },
+  skin_pirate:        { type:'skin', value:'pirate',        price:540, label:'Пірат' },
+  skin_legionary:     { type:'skin', value:'legionary',     price:690, label:'Римський легіонер' },
+  skin_scythian:      { type:'skin', value:'scythian',      price:760, label:'Скіфський лучник' },
+  skin_musketeer:     { type:'skin', value:'musketeer',     price:840, label:'Мушкетер' },
+  skin_samurai:       { type:'skin', value:'samurai',       price:950, label:'Самурай' },
 
+  // Зброя
+  weapon_training:    { type:'weapon', value:'training',       price:0,   label:'Тренувальний бластер' },
+  weapon_firebreath:  { type:'weapon', value:'firebreath',     price:130, label:'Вогняне ядро' },
+  weapon_bow:         { type:'weapon', value:'prince_bow',     price:180, label:'Князівський лук' },
+  weapon_crossbow:    { type:'weapon', value:'crossbow',       price:240, label:'Лицарський арбалет' },
+  weapon_flare:       { type:'weapon', value:'flare',          price:280, label:'Сигнальний пістолет' },
+  weapon_musket:      { type:'weapon', value:'cossack_musket', price:340, label:'Козацький мушкет' },
+  weapon_disc:        { type:'weapon', value:'relic_disc',     price:380, label:'Релікварний диск' },
+  weapon_ra_staff:    { type:'weapon', value:'ra_staff',       price:430, label:'Посох Ра' },
+  weapon_viking_axe:  { type:'weapon', value:'viking_axe',     price:470, label:'Метальна сокира' },
+  weapon_scythian_bow:{ type:'weapon', value:'scythian_bow',   price:520, label:'Скіфський складний лук' },
+  weapon_pirate:      { type:'weapon', value:'pirate_pistol',  price:590, label:'Піратський пістолет' },
+  weapon_pilum:       { type:'weapon', value:'roman_pilum',    price:650, label:'Римський пілум' },
+  weapon_yumi:        { type:'weapon', value:'samurai_yumi',   price:720, label:'Самурайський юмі' },
+  weapon_musketeer:   { type:'weapon', value:'musketeer_rifle',price:820, label:'Мушкетерська рушниця' },
+
+  // Ефекти
   trail_gold:       { type:'trail', value:'gold',       price:120, label:'Золотий слід' },
   trail_fire:       { type:'trail', value:'fire',       price:220, label:'Вогняний слід' },
   trail_stars:      { type:'trail', value:'stars',      price:300, label:'Зоряний слід' },
   trail_lightning:  { type:'trail', value:'lightning',  price:380, label:'Блискавка' },
 
+  // Рамки
   frame_bronze:     { type:'frame', value:'bronze',     price:100, label:'Бронзова рамка' },
   frame_silver:     { type:'frame', value:'silver',     price:200, label:'Срібна рамка' },
   frame_gold:       { type:'frame', value:'gold',       price:350, label:'Золота рамка' },
   frame_historian:  { type:'frame', value:'historian',  price:450, label:'Історик' },
 
+  // Постійні бонуси
   boost_shield:     { type:'boost', value:'shield',     price:180, label:'Щит на старті' },
   boost_magnet:     { type:'boost', value:'magnet',     price:220, label:'Магніт на старті' },
   boost_heart:      { type:'boost', value:'heart',      price:300, label:'+1 життя на старті' }
@@ -101,10 +126,12 @@ function ensurePortalEconomy(data = {}) {
   data.portal_owned_items.skin_teacher = true;
   data.portal_owned_items.trail_none = true;
   data.portal_owned_items.frame_none = true;
+  data.portal_owned_items.weapon_training = true;
   data.portal_equipped = data.portal_equipped || {};
   data.portal_equipped.skin = data.portal_equipped.skin || 'teacher';
   data.portal_equipped.trail = data.portal_equipped.trail || 'none';
   data.portal_equipped.frame = data.portal_equipped.frame || 'none';
+  data.portal_equipped.weapon = data.portal_equipped.weapon || 'training';
   data.portal_achievements = data.portal_achievements || {};
   data.portal_weekly_claims = data.portal_weekly_claims || {};
   return data;
@@ -139,7 +166,7 @@ function applyPortalProgressRewards(data) {
   const ach = data.portal_achievements;
   const score = Math.max(0, Number(data.score) || 0);
   const dino = Math.max(0, Number(data.dino_best) || 0);
-  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_teacher','trail_none','frame_none'].includes(id)).length;
+  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_teacher','trail_none','frame_none','weapon_training'].includes(id)).length;
 
   if (score >= 1)   rewardOnce(data, ach, 'first_step', 10, { label:'Перший крок' });
   if (score >= 50)  rewardOnce(data, ach, 'scholar_50', 20, { label:'50 балів знань' });
@@ -585,10 +612,10 @@ async function purchasePortalItem(itemId) {
 }
 
 async function equipPortalItem(slot, itemId) {
-  const safeSlot = ['skin','trail','frame'].includes(slot) ? slot : '';
+  const safeSlot = ['skin','weapon','trail','frame'].includes(slot) ? slot : '';
   const id = String(itemId || '');
   const item = PORTAL_STORE_CATALOG[id];
-  const freeMap = { skin:'skin_teacher', trail:'trail_none', frame:'frame_none' };
+  const freeMap = { skin:'skin_teacher', weapon:'weapon_training', trail:'trail_none', frame:'frame_none' };
   if (!safeSlot) return { ok:false, reason:'invalid_slot' };
   const isFree = id === freeMap[safeSlot];
   if (!isFree && (!item || item.type !== safeSlot)) return { ok:false, reason:'invalid_item' };
@@ -600,11 +627,11 @@ async function equipPortalItem(slot, itemId) {
       data = data || {};
       ensurePortalEconomy(data);
       if (!data.portal_owned_items[id]) return;
-      data.portal_equipped[safeSlot] = isFree ? ({skin:'teacher',trail:'none',frame:'none'}[safeSlot]) : item.value;
+      data.portal_equipped[safeSlot] = isFree ? ({skin:'teacher',weapon:'training',trail:'none',frame:'none'}[safeSlot]) : item.value;
       equipped = true;
       return data;
     });
-    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'teacher',trail:'none',frame:'none'}[safeSlot]) : item?.value };
+    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'teacher',weapon:'training',trail:'none',frame:'none'}[safeSlot]) : item?.value };
   } catch (error) {
     console.error('Портал: equip item', error);
     return { ok:false, reason:'firebase' };
