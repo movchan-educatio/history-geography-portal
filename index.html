@@ -2264,34 +2264,46 @@ img, svg, canvas, video, iframe {
 
       const fallbackByTheme = escapeSmartWrongAnswers[scenario.id] || {};
 
-      unique.forEach((x, idx) => {
-        const correct = x.correctText ?? x.options?.[x.answer] ?? '';
-        let wrong = [];
+      const curatedPools = {
+        kyiv1240:['Золоті ворота','Десятинна церква','Софійський собор','Дніпро','Воєвода Дмитро','Данило Романович','Батий','Ярослав Мудрий','1240','988','Монгольська імперія','Кіннота','Штурм','Дерев’яно-земляні укріплення'],
+        baptism988:['Володимир Великий','Княгиня Ольга','Дніпро','988','Константинополь','Візантія','Десятинна церква','Християнство','Церковнослов’янська','X століття','Книжність і освіта','Храмове будівництво'],
+        sich:['Запорозька Січ','Кошовий отаман','Козацька рада','Чайка','Булава','Курінь','Паланка','Дніпро','Нижнє Подніпров’я','Виборність старшини','Побратимство','Кінь','Шабля'],
+        khmel1648:['Богдан Хмельницький','Жовті Води','Корсунська битва','Пилявецька битва','Берестецька битва','Батозька битва','Кримське ханство','Гетьманщина','Чигирин','Зборівський договір','Булава','Козацтво','Дніпро'],
+        revolution1917:['Михайло Грушевський','Павло Скоропадський','Симон Петлюра','Євген Петрушевич','Центральна Рада','УНР','ЗУНР','IV Універсал','III Універсал','Акт Злуки','Тризуб','Гривня','Софійська площа','Берестейський мир'],
+        kruty1918:['29 січня 1918','УНР','Київ','Крути','Чернігівщина','Залізниця','IV Універсал','22 січня 1918','Тризуб','Синьо-жовтий прапор','Більшовицький наступ','Оборона'],
+        egypt:['Ніл','Фараон','Ієрогліфи','Піраміди','Муміфікація','Папірус','Анубіс','Гіза','Сфінкс','Шампольйон','Розетський камінь','Жерці','Ра','Африка'],
+        pompeii79:['Везувій','79','Римська імперія','Пліній Молодший','Неаполь','Латина','Форум','Амфітеатр','Фрески','Юпітер','Геркуланум','Терми','Атріум','Археологія'],
+        medieval:['Донжон','Лицар','Мури й брами','Цех','Феодальні відносини','Васал','Феод','Підйомний міст','Гільдія','Готика','Собор','Селяни','Турнір','Герб','Монахи','Меч'],
+        paris1789:['Бастилія','Людовік XVI','Третій стан','Декларація прав людини і громадянина','14 липня','Версаль','Марія-Антуанетта','Національні збори','Республіка','Париж','Фригійський ковпак','Дворянство'],
+        discoveries1492:['Христофор Колумб','Васко да Гама','Фернан Магеллан','Бартоломеу Діаш','Каравела','Компас','Портолани','Атлантичний океан','Азія','Амеріго Веспуччі','Мис Доброї Надії','Калікут','Прянощі','Санта-Марія','Вікторія','Тихий океан']
+      };
 
-        if (Array.isArray(x.options)) {
-          wrong = x.options.filter((opt, i) => i !== x.answer && !escapeSameMeaning(opt, correct));
+      unique.forEach((x, idx) => {
+        if (Array.isArray(x.options) && x.options.length >= 4) {
+          // Preserve teacher-authored distractors from the original question bank.
+          return;
         }
 
-        const themed = fallbackByTheme[x.visualKey] || [];
-        themed.forEach(opt => {
-          if (wrong.length < 3 && !escapeSameMeaning(opt, correct) && !wrong.some(w => escapeSameMeaning(w,opt))) wrong.push(opt);
+        const correct = x.correctText ?? x.options?.[x.answer] ?? '';
+        const pool = curatedPools[scenario.id] || [];
+        const wrong = [];
+
+        for (let step=1; wrong.length<3 && step<pool.length+5; step++) {
+          const cand = pool[(idx*5 + step*3) % pool.length];
+          if (!cand) continue;
+          if (escapeSameMeaning(cand, correct)) continue;
+          if (wrong.some(w => escapeSameMeaning(w,cand))) continue;
+          wrong.push(cand);
+        }
+
+        // Final fallback only if the topic pool was too small.
+        const fallback=['Інша історична особа','Інша історична подія','Інше історичне поняття'];
+        fallback.forEach(cand=>{
+          if(wrong.length<3 && !escapeSameMeaning(cand,correct)) wrong.push(cand);
         });
 
-        // Generic but type-aware fallback.
-        const q = x.question.toLowerCase();
-        let generic = [];
-        if (/якому році|який рік|коли/.test(q)) generic = ['1054','1362','1648','1918','1789'];
-        else if (/хто|ким|який князь|який правитель/.test(q)) generic = ['Ярослав Мудрий','Іван Мазепа','Симон Петлюра','Перікл'];
-        else if (/яка річка|яке море|де |яке місто/.test(q)) generic = ['Дунай','Львів','Константинополь','Афіни'];
-        else generic = ['Інша історична подія','Інший політичний устрій','Інше історичне поняття'];
-
-        generic.forEach(opt => {
-          if (wrong.length < 3 && !escapeSameMeaning(opt, correct) && !wrong.some(w => escapeSameMeaning(w,opt))) wrong.push(opt);
-        });
-
-        wrong = wrong.slice(0,3);
-        x.options = [correct, ...wrong];
-        x.answer = 0;
+        x.options=[correct,...wrong.slice(0,3)];
+        x.answer=0;
       });
 
       return unique;
@@ -2299,7 +2311,7 @@ img, svg, canvas, video, iframe {
 
     function getEscapeRunQuestions(scenario) {
       const pool = buildEscapeQuestionPool(scenario);
-      const key = `escape_fact_cycle_v8_${scenario.id}`;
+      const key = `escape_fact_cycle_v9_${scenario.id}`;
       let state = null;
       try { state = JSON.parse(localStorage.getItem(key) || 'null'); } catch(e) {}
 
@@ -2604,154 +2616,143 @@ img, svg, canvas, video, iframe {
       }
     };
 
-    const escapeCommonsQueries = {
+    const escapeWikiPages = {
       kyiv1240: {
-        gate:'Golden Gate Kyiv reconstruction',
-        church:'Tithe Church Kyiv reconstruction',
-        cavalry:'Mongol cavalry medieval illustration',
-        defender:'medieval Rus warrior Kyiv',
-        river:'Dnipro Kyiv historical',
-        ruins:'medieval Kyiv reconstruction'
+        gate:'Golden_Gate,_Kyiv',
+        church:'Church_of_the_Tithes',
+        cavalry:'Mongol_invasion_of_Kievan_Rus%27',
+        defender:'Siege_of_Kyiv_(1240)',
+        river:'Dnipro',
+        ruins:'Siege_of_Kyiv_(1240)'
       },
       baptism988: {
-        prince:'Vladimir the Great portrait',
-        river:'Baptism of Rus Vasnetsov',
-        church:'Tithe Church Kyiv reconstruction',
-        byzantium:'Constantinople Byzantine illustration',
-        book:'medieval Slavic manuscript'
+        prince:'Vladimir_the_Great',
+        river:'Christianization_of_Kievan_Rus%27',
+        church:'Church_of_the_Tithes',
+        byzantium:'Byzantine_Empire',
+        book:'Old_Church_Slavonic'
       },
       sich: {
-        sich:'Zaporizhian Sich reconstruction',
-        rada:'Reply of the Zaporozhian Cossacks Repin',
-        otaman:'Zaporozhian Cossack portrait',
-        chaika:'Cossack chaika boat',
-        horse:'Zaporozhian Cossack horse',
-        weapons:'Zaporozhian Cossack weapons'
+        sich:'Zaporizhian_Sich',
+        rada:'Zaporizhian_Sich',
+        otaman:'Kosh_otaman',
+        chaika:'Chaika_(boat)',
+        horse:'Cossacks',
+        weapons:'Cossacks'
       },
       khmel1648: {
-        khmel:'Bohdan Khmelnytsky portrait',
-        battle:'Khmelnytsky uprising battle painting',
-        alliance:'Crimean Tatar Cossack 1648',
-        hetmanate:'Chyhyryn historical',
-        document:'Bohdan Khmelnytsky document',
-        river:'Dnipro Cossacks'
+        khmel:'Bohdan_Khmelnytsky',
+        battle:'Khmelnytsky_Uprising',
+        alliance:'Khmelnytsky_Uprising',
+        hetmanate:'Cossack_Hetmanate',
+        document:'Bohdan_Khmelnytsky',
+        river:'Dnipro'
       },
       revolution1917: {
-        rada1917:'Ukrainian Central Rada 1917',
-        universal:'Fourth Universal Ukrainian Central Rada',
-        skoropadsky:'Pavlo Skoropadsky portrait',
-        petliura:'Symon Petliura portrait',
-        zunr:'West Ukrainian Peoples Republic 1918 Lviv',
-        unity:'Act Zluky 1919 Kyiv',
-        sofia:'Sofia Square Kyiv 1919 Act Zluky',
-        trident:'Ukrainian Peoples Republic trident 1918',
-        flag:'Ukrainian Peoples Republic flag',
-        kruty:'Battle of Kruty 1918'
+        rada1917:'Central_Council_of_Ukraine',
+        universal:'Fourth_Universal_of_the_Ukrainian_Central_Council',
+        skoropadsky:'Pavlo_Skoropadskyi',
+        petliura:'Symon_Petliura',
+        zunr:'West_Ukrainian_People%27s_Republic',
+        unity:'Unification_Act',
+        sofia:'Sofiivska_Square',
+        trident:'Coat_of_arms_of_Ukraine',
+        flag:'Flag_of_Ukraine',
+        kruty:'Battle_of_Kruty'
       },
       kruty1918: {
-        rail:'Kruty railway station 1918',
-        kruty:'Battle of Kruty 1918',
-        memorial:'Kruty memorial Ukraine',
-        flag:'Ukrainian Peoples Republic flag 1918',
-        enemy:'Battle of Kruty map',
-        document:'Fourth Universal Ukrainian Central Rada',
-        snow:'Kruty winter railway'
+        rail:'Battle_of_Kruty',
+        kruty:'Battle_of_Kruty',
+        memorial:'Battle_of_Kruty',
+        flag:'Flag_of_Ukraine',
+        enemy:'Battle_of_Kruty',
+        document:'Fourth_Universal_of_the_Ukrainian_Central_Council',
+        snow:'Battle_of_Kruty'
       },
       egypt: {
-        nile:'Nile River ancient Egypt',
-        pharaoh:'Egyptian pharaoh statue',
-        hieroglyph:'Egyptian hieroglyphs wall',
-        pyramids:'Great Pyramid of Giza',
-        mummy:'Egyptian mummy museum',
-        sphinx:'Great Sphinx of Giza',
-        temple:'Karnak temple Egypt',
-        papyrus:'ancient Egyptian papyrus',
-        anubis:'Anubis ancient Egypt',
-        cat:'Bastet cat ancient Egypt',
-        sun:'Ra ancient Egyptian god'
+        nile:'Nile',
+        pharaoh:'Pharaoh',
+        hieroglyph:'Egyptian_hieroglyphs',
+        pyramids:'Giza_pyramid_complex',
+        mummy:'Mummy',
+        sphinx:'Great_Sphinx_of_Giza',
+        temple:'Karnak',
+        papyrus:'Papyrus',
+        anubis:'Anubis',
+        cat:'Cats_in_ancient_Egypt',
+        sun:'Ra'
       },
       pompeii79: {
-        vesuvius:'Pompeii Vesuvius ruins',
-        pompeii:'Pompeii ruins street',
-        forum:'Pompeii forum ruins',
-        amphitheatre:'Pompeii amphitheatre',
-        fresco:'Pompeii fresco',
-        temple:'Pompeii temple ruins',
-        bath:'Pompeii baths',
-        house:'Pompeii house atrium',
-        market:'Pompeii macellum',
-        street:'Pompeii street'
+        vesuvius:'Eruption_of_Mount_Vesuvius_in_79_AD',
+        pompeii:'Pompeii',
+        forum:'Pompeii',
+        amphitheatre:'Amphitheatre_of_Pompeii',
+        fresco:'Pompeii',
+        temple:'Pompeii',
+        bath:'Pompeii',
+        house:'Pompeii',
+        market:'Pompeii',
+        street:'Pompeii'
       },
       medieval: {
-        castle:'medieval castle Europe',
-        knight:'medieval knight armor',
-        guild:'medieval guild illustration',
-        market:'medieval market illustration',
-        cathedral:'Gothic cathedral medieval',
-        monastery:'medieval monastery',
-        book:'medieval illuminated manuscript',
-        feudal:'medieval feudal society illustration',
-        heraldry:'medieval heraldry shield',
-        village:'medieval village illustration'
+        castle:'Castle',
+        knight:'Knight',
+        guild:'Guild',
+        market:'Medieval_market',
+        cathedral:'Gothic_architecture',
+        monastery:'Monastery',
+        book:'Illuminated_manuscript',
+        feudal:'Feudalism',
+        heraldry:'Heraldry',
+        village:'Village'
       },
       paris1789: {
-        bastille:'Storming of the Bastille 1789',
-        king:'Louis XVI portrait',
-        versailles:'Palace of Versailles 18th century',
-        tricolor:'French Revolution tricolor cockade',
-        declaration:'Declaration of the Rights of Man 1789',
-        assembly:'French National Assembly 1789',
-        crowd:'French Revolution crowd painting',
-        cap:'Phrygian cap French Revolution',
-        republic:'French First Republic allegory',
-        paris:'Paris 1789 engraving'
+        bastille:'Storming_of_the_Bastille',
+        king:'Louis_XVI',
+        versailles:'Palace_of_Versailles',
+        tricolor:'Flag_of_France',
+        declaration:'Declaration_of_the_Rights_of_Man_and_of_the_Citizen',
+        assembly:'National_Constituent_Assembly_(France)',
+        crowd:'French_Revolution',
+        cap:'Phrygian_cap',
+        republic:'French_First_Republic',
+        paris:'French_Revolution'
       },
       discoveries1492: {
-        columbus:'Christopher Columbus 1492 painting',
-        gama:'Vasco da Gama portrait ship',
-        magellan:'Ferdinand Magellan portrait',
-        ship:'caravel Age of Discovery',
-        map:'Age of Discovery world map',
-        compass:'historical compass navigation',
-        ocean:'caravel Atlantic Ocean',
-        cape:'Cape of Good Hope historical map',
-        market:'spice trade Age of Discovery',
-        colony:'European colonization early modern map'
+        columbus:'Christopher_Columbus',
+        gama:'Vasco_da_Gama',
+        magellan:'Ferdinand_Magellan',
+        ship:'Caravel',
+        map:'Age_of_Discovery',
+        compass:'Compass',
+        ocean:'Atlantic_Ocean',
+        cape:'Cape_of_Good_Hope',
+        market:'Spice_trade',
+        colony:'Colonization'
       }
     };
 
     let escapeImageRequestToken = 0;
 
-    async function escapeCommonsImage(query) {
-      const cacheKey = 'escape_commons_v2_' + query;
+    async function escapeWikiImage(pageTitle) {
+      const cacheKey = 'escape_wiki_v3_' + pageTitle;
       try {
         const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
         if (cached?.url) return cached;
       } catch(e) {}
 
-      const endpoint =
-        'https://commons.wikimedia.org/w/api.php?action=query&generator=search' +
-        '&gsrnamespace=6&gsrlimit=8&gsrsearch=' + encodeURIComponent(query) +
-        '&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=1100&format=json&formatversion=2&origin=*';
-
-      const res = await fetch(endpoint);
-      if (!res.ok) throw new Error('Commons HTTP ' + res.status);
+      const url = 'https://en.wikipedia.org/api/rest_v1/page/summary/' + pageTitle;
+      const res = await fetch(url, {headers:{'accept':'application/json'}});
+      if (!res.ok) throw new Error('Wikipedia HTTP ' + res.status);
       const data = await res.json();
-      const pages = data?.query?.pages || [];
 
-      const good = pages.find(p => {
-        const ii = p.imageinfo?.[0];
-        const mime = ii?.mime || '';
-        return ii?.thumburl && /^image\/(jpeg|png|webp)$/i.test(mime);
-      }) || pages.find(p => p.imageinfo?.[0]?.thumburl);
+      const imageUrl = data?.thumbnail?.source || data?.originalimage?.source;
+      if (!imageUrl) throw new Error('No Wikipedia thumbnail');
 
-      if (!good) throw new Error('No Commons image');
-
-      const ii = good.imageinfo[0];
       const result = {
-        url: ii.thumburl,
-        page: 'https://commons.wikimedia.org/wiki/' + encodeURIComponent(good.title.replace(/ /g,'_')),
-        title: good.title.replace(/^File:/,'')
+        url:imageUrl,
+        page:data?.content_urls?.desktop?.page || ('https://en.wikipedia.org/wiki/' + pageTitle),
+        title:data?.title || pageTitle.replace(/_/g,' ')
       };
       try { localStorage.setItem(cacheKey, JSON.stringify(result)); } catch(e) {}
       return result;
@@ -2762,9 +2763,9 @@ img, svg, canvas, video, iframe {
       if (!wrap || !stage || !escapeCurrentScenario) return;
 
       const id = escapeCurrentScenario.id;
-      const query =
-        escapeCommonsQueries[id]?.[stage.visualKey] ||
-        `${escapeCurrentScenario.title} ${stage.question}`;
+      const pageTitle =
+        escapeWikiPages[id]?.[stage.visualKey] ||
+        escapeWikiPages[id]?.[Object.keys(escapeWikiPages[id] || {})[0]];
 
       const token = ++escapeImageRequestToken;
 
@@ -2776,13 +2777,13 @@ img, svg, canvas, video, iframe {
       `;
 
       try {
-        const img = await escapeCommonsImage(query);
+        const img = await escapeWikiImage(pageTitle);
         if (token !== escapeImageRequestToken) return;
 
         wrap.innerHTML = `
           <img class="escape-history-photo" src="${img.url}" alt="${escapeCurrentScenario.title}" loading="eager">
           <div class="escape-photo-shade"></div>
-          <a class="escape-photo-credit" href="${img.page}" target="_blank" rel="noopener">Wikimedia Commons · ${img.title}</a>
+          <a class="escape-photo-credit" href="${img.page}" target="_blank" rel="noopener">Wikipedia · ${img.title}</a>
         `;
       } catch (err) {
         if (token !== escapeImageRequestToken) return;
