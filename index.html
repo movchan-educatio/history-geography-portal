@@ -1500,7 +1500,7 @@ img, svg, canvas, video, iframe {
 </style>
 
 <style id="dino-runner-22-style">
-/* Dino Runner 2.6 ULTRA: велике ігрове поле */
+/* Dino Runner 2.7: велике ігрове поле */
 .dino-game-card{
   grid-column:1 / -1!important;
   height:auto!important;
@@ -1826,6 +1826,62 @@ body.dino-no-scroll{overflow:hidden!important;}
   color:#64748b;text-align:center;margin-top:4px;
 }
 </style>
+
+<style id="dino-runner-27-controls">
+/* Чисті мобільні кнопки керування */
+.dino-run-controls{
+  width:100%;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:9px;
+  margin-top:9px;
+}
+.dino-run-control{
+  min-height:52px;
+  border:0;
+  border-radius:14px;
+  color:#fff;
+  font-size:14px;
+  font-weight:950;
+  cursor:pointer;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  box-shadow:0 8px 18px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.dino-jump-btn{
+  background:linear-gradient(135deg,#075985,#0ea5e9);
+}
+.dino-duck-btn{
+  background:linear-gradient(135deg,#334155,#64748b);
+}
+.dino-run-control:active{
+  transform:translateY(1px) scale(.985);
+}
+.dino-start-compact{
+  width:100%;
+  margin-top:9px;
+}
+#dinoStartBtn{
+  width:100%!important;
+}
+.dino-fire-btn{display:none!important;}
+.dino-combat-chip.auto-chip button{display:none!important;}
+.dino2-controls-note,.dino-ultra-note{display:none!important;}
+.dino-combat-hud{
+  grid-template-columns:minmax(0,1.5fr) minmax(110px,.8fr) minmax(85px,.65fr)!important;
+}
+@media(max-width:700px){
+  .dino-run-controls{grid-template-columns:1fr 1fr;gap:8px;}
+  .dino-run-control{min-height:54px;font-size:15px;}
+  .dino2-actions{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .dino2-actions #dinoStartBtn{
+    grid-column:1 / -1!important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -2005,19 +2061,27 @@ body.dino-no-scroll{overflow:hidden!important;}
           </div>
         </div>
 
-        <!-- Блок 2: Dino Runner 2.6 ULTRA -->
+        <!-- Блок 2: Dino Runner 2.7 -->
         <div class="dino-game-card">
-          <div class="dino2-top"><div class="dino2-title">🦖 Dino Runner 2.6 ULTRA</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
+          <div class="dino2-top"><div class="dino2-title">🦖 Dino Runner 2.7</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
           <div class="dino2-stats"><div class="dino2-stat">Очки<strong id="dinoScore">0</strong></div><div class="dino2-stat">Рекорд<strong id="dinoHighScore">0</strong></div><div class="dino2-stat">Артефакти<strong id="dinoArtifactsTotal">0</strong></div></div>
-          <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="960" height="420"></canvas><button id="dinoFireBtn" class="dino-fire-btn" type="button" onpointerdown="event.preventDefault();event.stopPropagation();dinoFireButtonAction();" disabled>🎯 Вогонь</button><div id="dinoLockOverlay"><span style="font-size:30px">🔒</span><strong style="font-size:13px;color:#7dd3fc;margin-top:5px">Dino Runner заблоковано</strong><span style="font-size:10px;color:#cbd5e1;margin-top:5px;max-width:310px">Виконайте будь-яке навчальне завдання на порталі — гра відкриється для вашого профілю.</span></div></div>
+          <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="960" height="420"></canvas><div id="dinoLockOverlay"><span style="font-size:30px">🔒</span><strong style="font-size:13px;color:#7dd3fc;margin-top:5px">Dino Runner заблоковано</strong><span style="font-size:10px;color:#cbd5e1;margin-top:5px;max-width:310px">Виконайте будь-яке навчальне завдання на порталі — гра відкриється для вашого профілю.</span></div></div>
           <div class="dino2-hudline"><span id="dinoLives">❤️❤️❤️</span><span id="dinoLocation">🏰 Київська Русь</span><span id="dinoPowerStatus">Бонусів немає</span></div>
           <div class="dino-combat-hud">
             <div class="dino-combat-chip"><span>Зброя</span><strong id="dinoWeaponName">—</strong></div>
             <div class="dino-combat-chip"><span>Заряд</span><span id="dinoAmmo" class="dino-ammo-dots"></span></div>
-            <div class="dino-combat-chip auto-chip"><span>Вороги <strong id="dinoKills">0</strong></span><button id="dinoAutoFireBtn" class="dino-auto-btn on" type="button" onclick="toggleDinoAutoFire()">🤖 AUTO</button></div>
+            <div class="dino-combat-chip"><span>Вороги</span><strong id="dinoKills">0</strong></div>
           </div>
-          <div class="dino2-controls-note">Автовогонь і автоприціл увімкнені за замовчуванням: ви зосереджуєтеся на стрибках і ухиленні. ПК: Space/↑ — стрибок · ↓ — пригнутися · F/X — ручний постріл. Телефон: тап — стрибок · свайп вниз — пригнутися.</div><div class="dino-ultra-note">Vector Ultra • 5-layer Parallax • Dynamic Light • Weather • Combat FX</div>
           <div class="dino2-mission"><span>🎯 <span id="dinoMissionText">Місія з’явиться після старту</span></span><strong id="dinoMissionProgress"></strong></div>
+          <div class="dino-run-controls">
+            <button id="dinoJumpBtn" class="dino-run-control dino-jump-btn" type="button"
+              onpointerdown="dinoJumpControl(event)">⬆️ Стрибок</button>
+            <button id="dinoDuckBtn" class="dino-run-control dino-duck-btn" type="button"
+              onpointerdown="dinoDuckStart(event)"
+              onpointerup="dinoDuckEnd(event)"
+              onpointercancel="dinoDuckEnd(event)"
+              onpointerleave="dinoDuckEnd(event)">⬇️ Присісти</button>
+          </div>
           <div class="dino-loadout">
             <label>🎭 Скін <select id="dinoSkinSelect" onchange="setDinoSkin(this.value)"></select></label>
             <label>⚔️ Зброя <select id="dinoWeaponSelect" onchange="setDinoWeapon(this.value)"></select></label>
@@ -4101,7 +4165,7 @@ body.dino-no-scroll{overflow:hidden!important;}
     function portalAchievementsDesc(id){return ({first_step:'Отримайте перший навчальний бал.',scholar_50:'Наберіть 50 балів на порталі.',prime_100:'Наберіть 100 балів на порталі.',expert_250:'Наберіть 250 балів на порталі.',runner_500:'Поставте рекорд Dino Runner 500+.',runner_1500:'Поставте рекорд Dino Runner 1500+.',collector_3:'Придбайте 3 предмети в магазині.'})[id]||'';}
     function renderPortalShop(){const body=document.getElementById('portalShopBody');if(!body)return;const p=window.portalEconomyProfile||{};const coins=Number(p.portal_coins)||0;const sc=document.getElementById('portalShopCoins');if(sc)sc.textContent=coins;const cc=document.getElementById('portalCollectionCount');if(cc)cc.textContent=portalOwnedCount(p);const ac=document.getElementById('portalAchievementCount');if(ac)ac.textContent=Object.keys(p.portal_achievements||{}).length;if(portalShopCurrentTab==='store'){body.innerHTML=renderPortalStoreItems(portalShopItems);return;}if(portalShopCurrentTab==='collection'){const own=portalShopItems.filter(x=>p.portal_owned_items?.[x.id]);body.innerHTML=own.length?renderPortalStoreItems(own):'<div class="portal-shop-empty">Колекція поки порожня. Заробляйте бали й відкривайте предмети.</div>';return;}if(portalShopCurrentTab==='quests'){body.innerHTML=renderPortalQuests();return;}body.innerHTML=renderPortalAchievements();}
 
-    /* DINO RUNNER 2.6 ULTRA */
+    /* DINO RUNNER 2.7 */
     const canvas = document.getElementById('dinoCanvas');
     const ctx = canvas.getContext('2d');
     const DINO_W = canvas.width;
@@ -4150,7 +4214,7 @@ body.dino-no-scroll{overflow:hidden!important;}
     let dinoLastShotAt = 0;
     let dinoMuzzleFlashUntil = 0;
     let enemySerial = 0;
-    let dinoAutoFire = localStorage.getItem('dino_auto_fire') !== '0';
+    let dinoAutoFire = true;
     let dinoLockedTargetId = null;
     let dinoAimPulse = 0;
     let ultraFx = [];
@@ -4316,7 +4380,6 @@ body.dino-no-scroll{overflow:hidden!important;}
       const btn=document.getElementById('dinoStartBtn');
       if(overlay) overlay.style.display='none';
       if(btn){btn.disabled=false;btn.textContent='▶️ Старт';}
-      const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=true;
       drawDinoIdleScreen();
     }
 
@@ -4357,22 +4420,20 @@ body.dino-no-scroll{overflow:hidden!important;}
 
 
     function dinoFireButtonAction(){
-      if(dinoAutoFire){
-        toggleDinoAutoFire();
-        return;
-      }
-      fireDinoWeapon(false,null);
+      dinoAutoFire=true;
+      updateCombatHUD();
+      return true;
     }
 
     function toggleDinoAutoFire(){
-      dinoAutoFire=!dinoAutoFire;
-      localStorage.setItem('dino_auto_fire',dinoAutoFire?'1':'0');
+      dinoAutoFire=true;
       updateCombatHUD();
-      portalToast(dinoAutoFire?'🤖 Автовогонь увімкнено':'🎯 Автовогонь вимкнено');
+      return true;
     }
 
     function updateDinoAutoTarget(now){
-      if(!dinoGameRunning || !dinoAutoFire) { dinoLockedTargetId=null;dinoWasAirborne=false; return; }
+      if(!dinoGameRunning){dinoLockedTargetId=null;return;}
+      dinoAutoFire=true;
       const target=getDinoTarget();
       if(!target) return;
       fireDinoWeapon(true,target);
@@ -4387,26 +4448,14 @@ body.dino-no-scroll{overflow:hidden!important;}
       const nameEl=document.getElementById('dinoWeaponName');
       const ammoEl=document.getElementById('dinoAmmo');
       const killsEl=document.getElementById('dinoKills');
-      const fireBtn=document.getElementById('dinoFireBtn');
-      const autoBtn=document.getElementById('dinoAutoFireBtn');
-      const now=performance.now();
 
       if(nameEl) nameEl.textContent=weapon.name;
       if(killsEl) killsEl.textContent=String(dinoKills);
       if(ammoEl){
-        ammoEl.innerHTML=Array.from({length:dinoMaxAmmo},(_,i)=>`<i class="${i<dinoAmmo?'':'empty'}"></i>`).join('');
-      }
-      if(autoBtn){
-        autoBtn.classList.toggle('on',dinoAutoFire);
-        autoBtn.classList.toggle('off',!dinoAutoFire);
-        autoBtn.textContent=dinoAutoFire?'🤖 AUTO ✓':'🎯 AUTO ✕';
-      }
-      if(fireBtn){
-        const reloading=dinoReloadUntil>now;
-        fireBtn.disabled=!dinoGameRunning || reloading;
-        fireBtn.classList.toggle('reloading',reloading);
-        fireBtn.classList.toggle('auto-active',dinoAutoFire&&!reloading);
-        fireBtn.textContent=reloading?`↻ ${Math.max(1,Math.ceil((dinoReloadUntil-now)/100)/10).toFixed(1)}с`:dinoAutoFire?'🤖 AUTO':'🎯 Вогонь';
+        ammoEl.innerHTML=Array.from(
+          {length:dinoMaxAmmo},
+          (_,i)=>`<i class="${i<dinoAmmo?'':'empty'}"></i>`
+        ).join('');
       }
     }
 
@@ -4471,16 +4520,43 @@ body.dino-no-scroll{overflow:hidden!important;}
       }
     }
 
+
+    function dinoJumpControl(event){
+      event?.preventDefault?.();
+      event?.stopPropagation?.();
+      if(!isGameUnlocked) return;
+      if(!dinoGameRunning){
+        startDinoGame();
+        jumpDino();
+        return;
+      }
+      jumpDino();
+    }
+
+    function dinoDuckStart(event){
+      event?.preventDefault?.();
+      event?.stopPropagation?.();
+      if(!isGameUnlocked) return;
+      if(!dinoGameRunning) startDinoGame();
+      duckDino(true);
+    }
+
+    function dinoDuckEnd(event){
+      event?.preventDefault?.();
+      event?.stopPropagation?.();
+      duckDino(false);
+    }
+
     function startDinoGame(){
       if(!isGameUnlocked) return;
-      if(dinoGameRunning){jumpDino();return;}
+      if(dinoGameRunning) return;
       resetDinoRun();
       dinoGameRunning=true; dinoGameOver=false;
       dinoRunStartedAt=Date.now();
       dinoRunId=`${window.currentUserUid||'guest'}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
       dinoLastFrame=performance.now();
-      const btn=document.getElementById('dinoStartBtn'); if(btn) btn.textContent='⬆️ Стрибок';
-      const fireBtn=document.getElementById('dinoFireBtn'); if(fireBtn) fireBtn.disabled=false; updateCombatHUD();
+      const btn=document.getElementById('dinoStartBtn'); if(btn){btn.textContent='🏃 Забіг триває';btn.disabled=true;}
+      updateCombatHUD();
       dinoAnimationId=requestAnimationFrame(gameLoop);
     }
 
@@ -4488,7 +4564,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       dinoScore=0; dinoArtifactsRun=0; dinoElapsed=0; gameSpeed=300; worldOffset=0;
       obstacleTimer=500; collectibleTimer=1200; powerTimer=5000; themeIndex=0; previousThemeIndex=0; themeTransition=1; lastThemeIndex=-1; screenShake=0; dodgeCount=0;
       obstacles=[];collectibles=[];powerups=[];particles=[];floatTexts=[];enemies=[];projectiles=[];ultraFx=[];
-      enemySpawnTimer=1900;dinoKills=0;dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;dinoReloadUntil=0;dinoLastShotAt=0;dinoMuzzleFlashUntil=0;dinoLockedTargetId=null;
+      enemySpawnTimer=1900;dinoKills=0;dinoAutoFire=true;dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;dinoReloadUntil=0;dinoLastShotAt=0;dinoMuzzleFlashUntil=0;dinoLockedTargetId=null;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
       dinoMaxLives=owned.boost_heart?4:3;
       const now=performance.now();
@@ -4626,6 +4702,124 @@ body.dino-no-scroll{overflow:hidden!important;}
       floatText(enemy.x-5,enemy.y-13,`+${reward}`,'#f59e0b');
       screenShake=Math.max(screenShake,4);
       updateCombatHUD();
+    }
+
+
+
+    function spawnCollectible(){
+      const icons=dinoThemes[themeIndex]?.artifact||['🪙','🏺','📜'];
+      collectibles.push({
+        x:DINO_W+25,
+        y:rand(72,Math.max(90,GROUND_Y-48)),
+        w:26,h:26,
+        icon:icons[Math.floor(Math.random()*icons.length)],
+        spin:0
+      });
+    }
+
+    function spawnPowerup(){
+      const types=[
+        {type:'shield',icon:'🛡️'},
+        {type:'double',icon:'⭐'},
+        {type:'magnet',icon:'🧲'},
+        {type:'heart',icon:'❤️'}
+      ];
+      let choice=types[Math.floor(Math.random()*types.length)];
+      if(choice.type==='heart'&&player.lives>=dinoMaxLives){
+        choice=types[Math.floor(Math.random()*3)];
+      }
+      powerups.push({
+        x:DINO_W+25,
+        y:rand(76,Math.max(110,GROUND_Y-90)),
+        w:28,h:28,
+        ...choice
+      });
+    }
+
+    function applyPowerup(type){
+      const now=performance.now();
+      if(type==='shield') player.shield=1;
+      if(type==='double') player.doubleUntil=Math.max(player.doubleUntil,now)+8000;
+      if(type==='magnet') player.magnetUntil=Math.max(player.magnetUntil,now)+8000;
+      if(type==='heart') player.lives=Math.min(dinoMaxLives,player.lives+1);
+      floatText(
+        player.x+20,
+        player.y-12,
+        type==='shield'?'ЩИТ!':type==='double'?'x2!':type==='magnet'?'МАГНІТ!':'+1 ❤️',
+        '#2563eb'
+      );
+      updateDinoHUD();
+    }
+
+    function handleCollision(o,now){
+      if(now<player.invulnerableUntil) return;
+
+      if(player.shield){
+        player.shield=0;
+        player.invulnerableUntil=now+650;
+        floatText(player.x,player.y-8,'🛡 ВРЯТОВАНО','#0ea5e9');
+        burst(player.x+20,player.y+25,'#38bdf8',14);
+        screenShake=4;
+        return;
+      }
+
+      player.lives--;
+      player.invulnerableUntil=now+1400;
+      screenShake=7;
+      burst(player.x+20,player.y+30,'#ef4444',16);
+      floatText(player.x+4,player.y-8,'-1 ❤️','#dc2626');
+      updateDinoHUD();
+
+      if(player.lives<=0) endDinoGame();
+    }
+
+    function endDinoGame(){
+      if(!dinoGameRunning) return;
+      dinoGameRunning=false;
+      dinoGameOver=true;
+      dinoLockedTargetId=null;
+      cancelAnimationFrame(dinoAnimationId);
+
+      const finalScore=Math.max(0,Math.floor(dinoScore));
+      if(finalScore>dinoHighScore){
+        dinoHighScore=finalScore;
+        localStorage.setItem('dino_high_score',String(dinoHighScore));
+      }
+
+      dinoArtifactsTotal+=dinoArtifactsRun;
+      localStorage.setItem('dino_artifacts_total',String(dinoArtifactsTotal));
+
+      updateDinoHighScoreUI();
+      updateDinoHUD();
+      updateMissionUI();
+
+      const duration=Math.max(1,Date.now()-dinoRunStartedAt);
+      saveDinoLeaderboard(finalScore,dinoArtifactsRun,duration,dinoRunId);
+      drawGameOver(finalScore);
+
+      const btn=document.getElementById('dinoStartBtn');
+      if(btn){
+        btn.disabled=false;
+        btn.textContent='🔄 Ще раз';
+      }
+    }
+
+    function burst(x,y,color,count=8){
+      for(let i=0;i<count;i++){
+        particles.push({
+          x,y,
+          vx:rand(-90,90),
+          vy:rand(-150,-30),
+          life:rand(.35,.8),
+          max:.8,
+          color,
+          size:rand(2,5)
+        });
+      }
+    }
+
+    function floatText(x,y,text,color){
+      floatTexts.push({x,y,text,color,life:1});
     }
 
 
@@ -5442,7 +5636,7 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     function drawDinoIdleScreen(){
-      if(!canvas) return; const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawDinoAtmosphere(performance.now());ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.8)';ctx.font='900 18px Inter,sans-serif';ctx.fillText('DINO RUNNER 2.6 ULTRA',DINO_W/2,70);ctx.font='12px Inter,sans-serif';ctx.fillText('ULTRA-графіка • автоприціл • історичні локації • зброя та скіни',DINO_W/2,92);ctx.restore();
+      if(!canvas) return; const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawDinoAtmosphere(performance.now());ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.8)';ctx.font='900 18px Inter,sans-serif';ctx.fillText('DINO RUNNER 2.7',DINO_W/2,70);ctx.font='12px Inter,sans-serif';ctx.fillText('Стрибайте, присідайте та збирайте артефакти',DINO_W/2,92);ctx.restore();
     }
 
     function gameLoop(now){
@@ -5594,7 +5788,6 @@ body.dino-no-scroll{overflow:hidden!important;}
       const kids=document.getElementById('kids-club');if(!kids)return;const r=kids.getBoundingClientRect();if(!(r.top<innerHeight&&r.bottom>0))return;
       if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();if(!dinoGameRunning)startDinoGame();else jumpDino();}
       if(e.code==='ArrowDown'){e.preventDefault();duckDino(true);}
-      if(e.code==='KeyF'||e.code==='KeyX'||e.code==='Enter'){e.preventDefault();fireDinoWeapon();}
     });
     document.addEventListener('keyup',e=>{if(e.code==='ArrowDown')duckDino(false);});
 
