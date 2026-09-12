@@ -360,12 +360,25 @@ async function unlockDinoForUser() {
 }
 
 
-async function saveDinoBest(score) {
+async function saveDinoBest(score, artifacts = 0, durationMs = 0, runId = '') {
   const safeScore = Math.max(0, Math.floor(Number(score) || 0));
+  const safeArtifacts = Math.max(0, Math.min(100, Math.floor(Number(artifacts) || 0)));
+  const safeDuration = Math.max(0, Math.floor(Number(durationMs) || 0));
+  const safeRunId = String(runId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 100);
   if (!safeScore) return false;
+
+  // Basic anti-cheat sanity check. Normal runs stay far below this ceiling.
+  if (safeDuration > 0) {
+    const maxPlausibleScore = 350 + Math.floor((safeDuration / 1000) * 55);
+    if (safeScore > maxPlausibleScore || safeArtifacts > Math.floor(safeDuration / 1800) + 8) {
+      console.warn('Portal: Dino result rejected by sanity check', { safeScore, safeArtifacts, safeDuration });
+      return false;
+    }
+  }
 
   const user = await requireUser();
   if (!user) return false;
+  const weekKey = getCurrentWeekKey();
 
   try {
     await runTransaction(ref(database, `users/${user.uid}`), data => {
@@ -378,11 +391,26 @@ async function saveDinoBest(score) {
       }
       data.role = data.role || 'student';
       data.dino_best = Math.max(Number(data.dino_best) || 0, safeScore);
+      if (data.dino_week_key !== weekKey) {
+        data.dino_week_key = weekKey;
+        data.dino_week_best = 0;
+      }
+      data.dino_week_best = Math.max(Number(data.dino_week_best) || 0, safeScore);
+
+      // Artifacts are credited once per run id.
+      const duplicateRun = safeRunId && data.dino_last_run_id === safeRunId;
+      if (!duplicateRun) {
+        data.dino_artifacts_total = (Number(data.dino_artifacts_total) || 0) + safeArtifacts;
+        data.dino_runs_total = (Number(data.dino_runs_total) || 0) + 1;
+        if (safeRunId) data.dino_last_run_id = safeRunId;
+      }
+      data.dino_last_score = safeScore;
+      data.dino_last_run_at = Date.now();
       return data;
     });
     return true;
   } catch (error) {
-    console.error('Портал: не вдалося зберегти рекорд Динорейсера', error);
+    console.error('Портал: не вдалося зберегти рекорд Dino Runner', error);
     return false;
   }
 }
