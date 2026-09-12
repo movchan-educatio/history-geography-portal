@@ -638,7 +638,149 @@
       .dino-leader-row{grid-template-columns:54px minmax(0,1fr) 64px;font-size:11px!important;padding:7px 8px!important;}
     }
 
-  </style>
+  
+    /* --- ВТЕЧА З МИНУЛОГО --- */
+    .escape-past-card{
+      grid-column:1 / -1;
+      position:relative;
+      overflow:hidden;
+      border:1px solid #c7a46b;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at 12% 5%, rgba(250,204,21,.16), transparent 26%),
+        linear-gradient(135deg,#20150f 0%,#4b2d1e 44%,#18324b 100%);
+      box-shadow:0 12px 28px rgba(47,31,21,.18);
+      color:#fff;
+      min-height:560px;
+    }
+    .escape-past-head{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+      padding:18px 18px 12px;
+      background:linear-gradient(180deg,rgba(0,0,0,.22),transparent);
+    }
+    .escape-past-kicker{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 9px;border:1px solid rgba(255,255,255,.22);border-radius:999px;
+      background:rgba(255,255,255,.09);font-size:10px;font-weight:900;
+      letter-spacing:.06em;text-transform:uppercase;color:#fde68a;
+    }
+    .escape-past-title{margin:7px 0 3px;font-size:22px;font-weight:950;line-height:1.1;}
+    .escape-past-subtitle{font-size:12px;color:#dbeafe;line-height:1.4;max-width:680px;}
+    .escape-hud{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
+    .escape-hud span{
+      white-space:nowrap;padding:6px 9px;border-radius:10px;
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);
+      font-size:11px;font-weight:900;
+    }
+
+    .escape-scene{
+      position:relative;
+      margin:0 16px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.16);
+      min-height:225px;
+      background:#1e3a5f;
+    }
+    .escape-scene svg{display:block;width:100%;height:230px;}
+    .escape-scene-label{
+      position:absolute;left:12px;bottom:11px;z-index:3;
+      padding:7px 10px;border-radius:10px;
+      background:rgba(15,23,42,.78);backdrop-filter:blur(5px);
+      border:1px solid rgba(255,255,255,.18);
+      font-size:11px;font-weight:900;color:#fff;
+    }
+    .escape-torch{
+      position:absolute;right:15px;top:14px;z-index:3;font-size:25px;
+      filter:drop-shadow(0 0 9px rgba(251,191,36,.75));
+      animation:escapeTorch 1.3s ease-in-out infinite alternate;
+    }
+    @keyframes escapeTorch{from{transform:scale(.96) rotate(-3deg)}to{transform:scale(1.07) rotate(3deg)}}
+
+    .escape-route{
+      position:relative;display:grid;grid-template-columns:repeat(5,1fr);
+      gap:4px;margin:14px 18px 8px;padding-top:6px;
+    }
+    .escape-route:before{
+      content:"";position:absolute;left:8%;right:8%;top:25px;height:3px;
+      background:rgba(255,255,255,.18);border-radius:99px;
+    }
+    .escape-route-step{position:relative;text-align:center;z-index:1;}
+    .escape-route-dot{
+      width:38px;height:38px;margin:0 auto 5px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:#334155;border:2px solid #64748b;font-size:17px;
+      transition:.25s ease;box-shadow:0 5px 12px rgba(0,0,0,.22);
+    }
+    .escape-route-step.active .escape-route-dot{
+      background:#f59e0b;border-color:#fde68a;color:#1e293b;
+      transform:scale(1.08);box-shadow:0 0 0 4px rgba(245,158,11,.16);
+    }
+    .escape-route-step.done .escape-route-dot{background:#16a34a;border-color:#86efac;}
+    .escape-route-name{font-size:9px;font-weight:800;color:#cbd5e1;line-height:1.15;}
+    .escape-route-step.active .escape-route-name{color:#fde68a;}
+
+    .escape-mission-panel{
+      margin:10px 16px 16px;padding:15px;border-radius:14px;
+      background:rgba(255,255,255,.96);color:#1f2937;
+      box-shadow:0 10px 22px rgba(0,0,0,.15);
+    }
+    .escape-story{
+      font-size:12px;line-height:1.5;color:#6b4a33;margin-bottom:10px;
+      padding:9px 10px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;
+    }
+    .escape-question{font-size:15px;font-weight:950;line-height:1.35;color:#3f2418;margin-bottom:10px;}
+    .escape-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .escape-option{
+      border:1px solid #d6c2b4;background:#fff;color:#4b2d1e;
+      border-radius:10px;padding:10px 9px;font-weight:850;font-size:12px;
+      cursor:pointer;transition:.15s ease;text-align:left;
+    }
+    .escape-option:hover:not(:disabled){transform:translateY(-1px);background:#fff7ed;border-color:#c08457;}
+    .escape-option.correct{background:#dcfce7;border-color:#22c55e;color:#166534;}
+    .escape-option.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+    .escape-option:disabled{cursor:default;}
+    .escape-feedback{
+      min-height:38px;margin-top:9px;padding:8px 10px;border-radius:9px;
+      font-size:12px;font-weight:750;line-height:1.4;background:#f8fafc;color:#475569;
+    }
+    .escape-actions{display:flex;gap:8px;margin-top:10px;}
+    .escape-btn{
+      border:0;border-radius:10px;padding:9px 12px;font-weight:900;font-size:12px;cursor:pointer;
+    }
+    .escape-btn-primary{background:#7c3f1d;color:white;flex:1;}
+    .escape-btn-primary:disabled{opacity:.45;cursor:not-allowed;}
+    .escape-btn-secondary{background:#e2e8f0;color:#334155;}
+    .escape-complete{
+      display:none;text-align:center;padding:18px 12px 8px;
+    }
+    .escape-complete.show{display:block;}
+    .escape-complete-badge{font-size:45px;margin-bottom:5px;}
+    .escape-complete h4{margin:0 0 7px;font-size:20px;color:#3f2418;}
+    .escape-complete p{margin:0 auto 12px;max-width:620px;color:#64748b;font-size:12px;line-height:1.5;}
+    .escape-reward{
+      display:inline-flex;gap:8px;align-items:center;background:#fef3c7;color:#92400e;
+      border:1px solid #fcd34d;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:900;
+    }
+
+    @media(max-width:700px){
+      .escape-past-card{min-height:0;}
+      .escape-past-head{padding:14px 13px 10px;flex-direction:column;}
+      .escape-past-title{font-size:18px;}
+      .escape-hud{justify-content:flex-start;}
+      .escape-scene{margin:0 11px;min-height:185px;}
+      .escape-scene svg{height:190px;}
+      .escape-route{margin:12px 10px 6px;}
+      .escape-route-dot{width:32px;height:32px;font-size:14px;}
+      .escape-route:before{top:22px;}
+      .escape-route-name{font-size:8px;}
+      .escape-mission-panel{margin:8px 11px 12px;padding:12px;}
+      .escape-options{grid-template-columns:1fr;}
+      .escape-question{font-size:14px;}
+    }
+
+</style>
   <link rel="stylesheet" href="modern-theme.css?v=300">
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
@@ -1029,6 +1171,122 @@
           <div id="flagsOptions" class="flags-options"></div>
           <div id="flagsStatus" class="flags-status">Оберіть правильну відповідь.</div>
         </div>
+
+        <!-- Блок 6: Втеча з минулого -->
+        <div class="escape-past-card" id="escapePastGame">
+          <div class="escape-past-head">
+            <div>
+              <div class="escape-past-kicker">🏃 Історичний escape room</div>
+              <div class="escape-past-title">Втеча з минулого: Київ, 1240 рік</div>
+              <div class="escape-past-subtitle">Пройдіть п’ять історичних точок, знайдіть безпечний шлях із міста та перевірте знання про оборону Києва.</div>
+            </div>
+            <div class="escape-hud">
+              <span id="escapeHearts">❤️❤️❤️</span>
+              <span>⭐ <b id="escapeScore">0</b>/10</span>
+              <span>📍 <b id="escapeStageCounter">1</b>/5</span>
+            </div>
+          </div>
+
+          <div class="escape-scene" aria-label="Стилізована панорама Києва 1240 року">
+            <div class="escape-torch">🔥</div>
+            <svg viewBox="0 0 900 260" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+              <defs>
+                <linearGradient id="escapeSky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#223b5b"/>
+                  <stop offset="62%" stop-color="#8b5e42"/>
+                  <stop offset="100%" stop-color="#d59a55"/>
+                </linearGradient>
+                <linearGradient id="escapeRiver" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#254e70"/>
+                  <stop offset="100%" stop-color="#4d82a8"/>
+                </linearGradient>
+                <filter id="escapeGlow">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <rect width="900" height="260" fill="url(#escapeSky)"/>
+              <circle cx="735" cy="53" r="26" fill="#f8d778" opacity=".9" filter="url(#escapeGlow)"/>
+              <path d="M0 170 Q120 126 230 162 T460 156 T700 168 T900 148 V260 H0Z" fill="#2c2b29"/>
+              <rect x="0" y="205" width="900" height="55" fill="#34271f"/>
+              <path d="M600 210 C680 194 760 198 900 180 V260 H600Z" fill="url(#escapeRiver)" opacity=".9"/>
+
+              <!-- wooden palisade -->
+              <g fill="#4b2e1d">
+                <rect x="22" y="158" width="16" height="54"/><polygon points="22,158 30,142 38,158"/>
+                <rect x="48" y="153" width="16" height="59"/><polygon points="48,153 56,137 64,153"/>
+                <rect x="74" y="157" width="16" height="55"/><polygon points="74,157 82,141 90,157"/>
+                <rect x="100" y="151" width="16" height="61"/><polygon points="100,151 108,135 116,151"/>
+              </g>
+
+              <!-- Golden Gate inspired silhouette -->
+              <g transform="translate(150,83)">
+                <rect x="0" y="58" width="135" height="72" rx="3" fill="#6a4b32"/>
+                <rect x="15" y="44" width="105" height="24" fill="#7c5839"/>
+                <polygon points="8,44 68,6 127,44" fill="#493427"/>
+                <rect x="48" y="80" width="39" height="50" rx="18" fill="#171717"/>
+                <rect x="59" y="21" width="18" height="24" fill="#9a754c"/>
+                <polygon points="56,21 68,8 80,21" fill="#38281f"/>
+              </g>
+
+              <!-- church -->
+              <g transform="translate(365,58)">
+                <rect x="0" y="74" width="130" height="88" fill="#a77b54"/>
+                <rect x="22" y="54" width="86" height="28" fill="#b88b60"/>
+                <path d="M35 55 Q65 9 95 55Z" fill="#4a3426"/>
+                <rect x="62" y="19" width="6" height="25" fill="#d7b979"/>
+                <rect x="55" y="27" width="20" height="4" fill="#d7b979"/>
+                <rect x="18" y="96" width="20" height="34" fill="#3f3028"/>
+                <rect x="55" y="96" width="20" height="34" fill="#3f3028"/>
+                <rect x="92" y="96" width="20" height="34" fill="#3f3028"/>
+              </g>
+
+              <!-- houses -->
+              <g fill="#5a3d2a">
+                <rect x="300" y="163" width="54" height="42"/><polygon points="294,163 327,139 360,163" fill="#39281f"/>
+                <rect x="520" y="156" width="62" height="49"/><polygon points="514,156 551,129 588,156" fill="#39281f"/>
+                <rect x="105" y="177" width="48" height="28"/><polygon points="100,177 129,155 158,177" fill="#39281f"/>
+              </g>
+
+              <!-- route/path -->
+              <path d="M214 222 C305 195 355 222 438 194 C528 164 604 211 702 190" fill="none" stroke="#facc15" stroke-width="4" stroke-dasharray="10 8" opacity=".78"/>
+              <circle id="escapeMapMarker" cx="214" cy="222" r="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="4" filter="url(#escapeGlow)"/>
+            </svg>
+            <div class="escape-scene-label" id="escapeSceneLabel">📍 Золоті ворота — початок шляху</div>
+          </div>
+
+          <div class="escape-route" id="escapeRoute">
+            <div class="escape-route-step active" data-escape-step="0"><div class="escape-route-dot">🚪</div><div class="escape-route-name">Золоті ворота</div></div>
+            <div class="escape-route-step" data-escape-step="1"><div class="escape-route-dot">🛡️</div><div class="escape-route-name">Оборона</div></div>
+            <div class="escape-route-step" data-escape-step="2"><div class="escape-route-dot">🐎</div><div class="escape-route-name">Ворог</div></div>
+            <div class="escape-route-step" data-escape-step="3"><div class="escape-route-dot">⛪</div><div class="escape-route-name">Десятинна</div></div>
+            <div class="escape-route-step" data-escape-step="4"><div class="escape-route-dot">🌊</div><div class="escape-route-name">Дніпро</div></div>
+          </div>
+
+          <div class="escape-mission-panel">
+            <div id="escapeGamePlay">
+              <div class="escape-story" id="escapeStory">Над містом здіймається дим. Щоб знайти шлях до безпечного виходу, потрібно правильно пройти історичні точки.</div>
+              <div class="escape-question" id="escapeQuestion">Натисніть «Почати місію».</div>
+              <div class="escape-options" id="escapeOptions"></div>
+              <div class="escape-feedback" id="escapeFeedback">За кожен етап можна отримати до 2 балів у тижневий рейтинг. Повторне проходження того самого етапу цього тижня балів не додає.</div>
+              <div class="escape-actions">
+                <button class="escape-btn escape-btn-secondary" id="escapeRestartBtn" type="button">↻ Спочатку</button>
+                <button class="escape-btn escape-btn-primary" id="escapeNextBtn" type="button">Почати місію</button>
+              </div>
+            </div>
+
+            <div class="escape-complete" id="escapeComplete">
+              <div class="escape-complete-badge">🏆</div>
+              <h4>Ви вибралися з Києва!</h4>
+              <p id="escapeCompleteText">Місію завершено. Ви пройшли п’ять історичних точок і дісталися Дніпра.</p>
+              <div class="escape-reward">⭐ Результат: <span id="escapeFinalScore">0/10</span></div>
+              <div style="margin-top:12px;">
+                <button class="escape-btn escape-btn-primary" id="escapePlayAgainBtn" type="button" style="max-width:260px;">Пройти ще раз</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1065,6 +1323,282 @@
       <button class="modal-close-btn" onclick="closeModal()" style="margin-top:15px; background:#2563eb; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer;">Зрозуміло</button>
     </div>
   </div>
+
+
+  <script>
+    // ======================================================
+    // 🏃 ВТЕЧА З МИНУЛОГО: КИЇВ, 1240
+    // ======================================================
+    const escapePastStages = [
+      {
+        id: 'kyiv1240_gate',
+        icon: '🚪',
+        label: 'Золоті ворота',
+        scene: '📍 Золоті ворота — початок шляху',
+        marker: [214,222],
+        story: 'Ви біля головної брами давнього Києва. Перш ніж рушити далі, треба впізнати оборонну споруду міста.',
+        question: 'Яка споруда була однією з головних брам Києва княжої доби?',
+        options: ['Золоті ворота', 'Луцький замок', 'Хотинська фортеця', 'Аккерманська фортеця'],
+        answer: 0,
+        explanation: '✅ Золоті ворота були головною урочистою та оборонною брамою Києва часів Ярослава Мудрого.'
+      },
+      {
+        id: 'kyiv1240_defender',
+        icon: '🛡️',
+        label: 'Оборона',
+        scene: '🛡️ На міських укріпленнях',
+        marker: [334,207],
+        story: 'На валах триває оборона. Вам потрібно знайти воєводу, який керує захистом міста.',
+        question: 'Хто очолював оборону Києва під час монгольського штурму 1240 року?',
+        options: ['Воєвода Дмитро', 'Богдан Хмельницький', 'Князь Олег', 'Петро Конашевич-Сагайдачний'],
+        answer: 0,
+        explanation: '✅ Обороною Києва керував воєвода Дмитро, залишений у місті Данилом Романовичем.'
+      },
+      {
+        id: 'kyiv1240_enemy',
+        icon: '🐎',
+        label: 'Ворог',
+        scene: '🐎 Біля міських валів',
+        marker: [438,194],
+        story: 'За валами видно численне військо. Щоб вибрати безпечніший напрямок, треба визначити, хто атакує місто.',
+        question: 'Війська якого правителя штурмували Київ у 1240 році?',
+        options: ['Хана Батия', 'Карла Великого', 'Сулеймана І', 'Наполеона Бонапарта'],
+        answer: 0,
+        explanation: '✅ Київ був узятий монгольським військом під проводом хана Батия.'
+      },
+      {
+        id: 'kyiv1240_church',
+        icon: '⛪',
+        label: 'Десятинна',
+        scene: '⛪ Біля Десятинної церкви',
+        marker: [548,184],
+        story: 'Ви наближаєтесь до місця останнього запеклого опору. Тут укривалися оборонці та жителі міста.',
+        question: 'З якою київською святинею літопис пов’язує останній етап оборони міста?',
+        options: ['Десятинною церквою', 'Андріївською церквою', 'Володимирським собором', 'Кирилівською церквою'],
+        answer: 0,
+        explanation: '✅ Літописна традиція пов’язує останній опір із Десятинною церквою, яка була зруйнована під час штурму.'
+      },
+      {
+        id: 'kyiv1240_escape',
+        icon: '🌊',
+        label: 'Дніпро',
+        scene: '🌊 Шлях до Дніпра — останній рубіж',
+        marker: [702,190],
+        story: 'Попереду Дніпро. Залишилося останнє завдання — правильно визначити наслідок подій 1240 року.',
+        question: 'Яким був один із головних наслідків монгольського захоплення Києва?',
+        options: ['Місто зазнало великих руйнувань і втрат', 'Київ став столицею Монгольської імперії', 'Русь одразу об’єднала всі князівства', 'Почалася промислова революція'],
+        answer: 0,
+        explanation: '✅ Після штурму Київ зазнав масштабних руйнувань і значних людських втрат.'
+      }
+    ];
+
+    let escapeStage = -1;
+    let escapeHearts = 3;
+    let escapeScore = 0;
+    let escapeAnswered = false;
+    let escapeFirstTry = true;
+
+    function escapeEls() {
+      return {
+        question: document.getElementById('escapeQuestion'),
+        story: document.getElementById('escapeStory'),
+        options: document.getElementById('escapeOptions'),
+        feedback: document.getElementById('escapeFeedback'),
+        next: document.getElementById('escapeNextBtn'),
+        restart: document.getElementById('escapeRestartBtn'),
+        hearts: document.getElementById('escapeHearts'),
+        score: document.getElementById('escapeScore'),
+        counter: document.getElementById('escapeStageCounter'),
+        sceneLabel: document.getElementById('escapeSceneLabel'),
+        marker: document.getElementById('escapeMapMarker'),
+        complete: document.getElementById('escapeComplete'),
+        play: document.getElementById('escapeGamePlay'),
+        finalScore: document.getElementById('escapeFinalScore'),
+        completeText: document.getElementById('escapeCompleteText')
+      };
+    }
+
+    function updateEscapeHud() {
+      const el = escapeEls();
+      if (el.hearts) el.hearts.textContent = escapeHearts > 0 ? '❤️'.repeat(escapeHearts) : '💔';
+      if (el.score) el.score.textContent = escapeScore;
+      if (el.counter) el.counter.textContent = Math.min(5, Math.max(1, escapeStage + 1));
+    }
+
+    function updateEscapeRoute() {
+      document.querySelectorAll('[data-escape-step]').forEach((node, i) => {
+        node.classList.toggle('done', escapeStage > i);
+        node.classList.toggle('active', escapeStage === i);
+      });
+    }
+
+    function moveEscapeMarker(stage) {
+      const el = escapeEls();
+      if (!el.marker || !stage) return;
+      const [cx, cy] = stage.marker;
+      el.marker.setAttribute('cx', cx);
+      el.marker.setAttribute('cy', cy);
+    }
+
+    function renderEscapeStage() {
+      const el = escapeEls();
+      const stage = escapePastStages[escapeStage];
+      if (!stage || !el.question) return;
+
+      escapeAnswered = false;
+      escapeFirstTry = true;
+      el.complete?.classList.remove('show');
+      if (el.play) el.play.style.display = '';
+      el.story.textContent = stage.story;
+      el.question.textContent = stage.question;
+      el.sceneLabel.textContent = stage.scene;
+      el.feedback.textContent = 'Оберіть відповідь. За правильну відповідь із першої спроби — 2 бали.';
+      el.feedback.style.background = '#f8fafc';
+      el.feedback.style.color = '#475569';
+
+      el.options.innerHTML = '';
+      stage.options.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'escape-option';
+        btn.textContent = option;
+        btn.addEventListener('click', () => answerEscape(index, btn));
+        el.options.appendChild(btn);
+      });
+
+      el.next.textContent = escapeStage === escapePastStages.length - 1 ? 'Завершити втечу' : 'Далі →';
+      el.next.disabled = true;
+      updateEscapeHud();
+      updateEscapeRoute();
+      moveEscapeMarker(stage);
+    }
+
+    async function answerEscape(index, clickedBtn) {
+      if (escapeAnswered) return;
+      const stage = escapePastStages[escapeStage];
+      const el = escapeEls();
+      if (!stage || !el.feedback) return;
+
+      if (index === stage.answer) {
+        escapeAnswered = true;
+        const earned = escapeFirstTry ? 2 : 1;
+        escapeScore += earned;
+
+        document.querySelectorAll('#escapeOptions .escape-option').forEach((btn, i) => {
+          btn.disabled = true;
+          if (i === stage.answer) btn.classList.add('correct');
+        });
+
+        let syncText = '';
+        try {
+          if (window.portalScore?.awardEscapeStage) {
+            const result = await window.portalScore.awardEscapeStage(stage.id, earned);
+            if (result?.reason === 'login') {
+              syncText = ' Увійдіть через Google, щоб результат потрапив у рейтинг.';
+            } else if (result?.awarded === false && result?.ok) {
+              syncText = ' Цей етап уже давав вам бали цього тижня — повторне проходження не нараховується.';
+            } else if (result?.awarded) {
+              syncText = ` +${earned} до тижневого рейтингу.`;
+            } else if (result?.ok === false) {
+              syncText = ' Результат гри збережено локально, але синхронізація не вдалася.';
+            }
+          } else {
+            syncText = ' Увійдіть через Google, щоб синхронізувати результат.';
+          }
+        } catch (err) {
+          console.warn('Втеча з минулого: помилка синхронізації', err);
+          syncText = ' Не вдалося синхронізувати рейтинг.';
+        }
+
+        el.feedback.textContent = stage.explanation + syncText;
+        el.feedback.style.background = '#dcfce7';
+        el.feedback.style.color = '#166534';
+        el.next.disabled = false;
+        updateEscapeHud();
+      } else {
+        escapeFirstTry = false;
+        escapeHearts = Math.max(0, escapeHearts - 1);
+        clickedBtn.classList.add('wrong');
+        clickedBtn.disabled = true;
+        el.feedback.textContent = escapeHearts > 0
+          ? '❌ Це не той шлях. Спробуйте інший варіант — за правильну відповідь тепер можна отримати 1 бал.'
+          : '💔 Життя закінчилися, але місію можна продовжити без додаткового штрафу.';
+        el.feedback.style.background = '#fee2e2';
+        el.feedback.style.color = '#991b1b';
+        updateEscapeHud();
+      }
+    }
+
+    function finishEscapeGame() {
+      const el = escapeEls();
+      if (el.play) el.play.style.display = 'none';
+      el.complete?.classList.add('show');
+      if (el.finalScore) el.finalScore.textContent = `${escapeScore}/10`;
+      if (el.completeText) {
+        el.completeText.textContent =
+          escapeScore >= 9
+            ? 'Блискуче! Ви пройшли маршрут майже без помилок і добре орієнтуєтеся в подіях 1240 року.'
+            : escapeScore >= 6
+              ? 'Місію виконано! Ви вибралися з міста й успішно пройшли більшість історичних випробувань.'
+              : 'Ви дісталися Дніпра. Спробуйте пройти місію ще раз і покращити результат.';
+      }
+      document.querySelectorAll('[data-escape-step]').forEach(n => n.classList.add('done'));
+    }
+
+    function nextEscapeStage() {
+      if (escapeStage < 0) {
+        escapeStage = 0;
+        renderEscapeStage();
+        return;
+      }
+      if (!escapeAnswered) return;
+      if (escapeStage >= escapePastStages.length - 1) {
+        finishEscapeGame();
+        return;
+      }
+      escapeStage += 1;
+      renderEscapeStage();
+    }
+
+    function resetEscapeGame() {
+      escapeStage = -1;
+      escapeHearts = 3;
+      escapeScore = 0;
+      escapeAnswered = false;
+      escapeFirstTry = true;
+
+      const el = escapeEls();
+      if (el.play) el.play.style.display = '';
+      el.complete?.classList.remove('show');
+      if (el.question) el.question.textContent = 'Натисніть «Почати місію».';
+      if (el.story) el.story.textContent = 'Над містом здіймається дим. Щоб знайти шлях до безпечного виходу, потрібно правильно пройти історичні точки.';
+      if (el.options) el.options.innerHTML = '';
+      if (el.feedback) {
+        el.feedback.textContent = 'За кожен етап можна отримати до 2 балів у тижневий рейтинг. Повторне проходження того самого етапу цього тижня балів не додає.';
+        el.feedback.style.background = '#f8fafc';
+        el.feedback.style.color = '#475569';
+      }
+      if (el.next) {
+        el.next.textContent = 'Почати місію';
+        el.next.disabled = false;
+      }
+      if (el.sceneLabel) el.sceneLabel.textContent = '📍 Золоті ворота — початок шляху';
+      document.querySelectorAll('[data-escape-step]').forEach((node, i) => {
+        node.classList.remove('done');
+        node.classList.toggle('active', i === 0);
+      });
+      moveEscapeMarker(escapePastStages[0]);
+      updateEscapeHud();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('escapeNextBtn')?.addEventListener('click', nextEscapeStage);
+      document.getElementById('escapeRestartBtn')?.addEventListener('click', resetEscapeGame);
+      document.getElementById('escapePlayAgainBtn')?.addEventListener('click', resetEscapeGame);
+      resetEscapeGame();
+    });
+  </script>
+
 
   <!-- FIREBASE SCRIPTS -->
   <script type="module">
@@ -1174,6 +1708,7 @@
         if (data.map_activity_points === undefined) data.map_activity_points = 0;
         if (data.history_activity_points === undefined) data.history_activity_points = 0;
         if (data.flags_points === undefined) data.flags_points = 0;
+        if (data.escape_points === undefined) data.escape_points = 0;
         if (data.dino_best === undefined) data.dino_best = 0;
         if (data.truth_or_lie_locked_until === undefined) data.truth_or_lie_locked_until = 0;
         if (data.truth_or_lie_lock_reason === undefined) data.truth_or_lie_lock_reason = '';
@@ -1190,6 +1725,7 @@
           if (data.week_map_activity_points === undefined) data.week_map_activity_points = 0;
           if (data.week_history_activity_points === undefined) data.week_history_activity_points = 0;
           if (data.week_flags_points === undefined) data.week_flags_points = 0;
+          if (data.week_escape_points === undefined) data.week_escape_points = 0;
           data.week_key = currentWeek;
         } else if (data.week_key !== currentWeek) {
           data.week_history_points = 0;
@@ -1200,6 +1736,7 @@
           data.week_map_activity_points = 0;
           data.week_history_activity_points = 0;
           data.week_flags_points = 0;
+          data.week_escape_points = 0;
           data.week_score = 0;
           data.week_key = currentWeek;
         }
@@ -1211,7 +1748,8 @@
           (Number(data.week_truth_or_lie_points) || 0) +
            (Number(data.week_map_activity_points) || 0) +
            (Number(data.week_history_activity_points) || 0) +
-           (Number(data.week_flags_points) || 0);
+           (Number(data.week_flags_points) || 0) +
+           (Number(data.week_escape_points) || 0);
         return data;
       });
     }
@@ -1244,6 +1782,7 @@
         ['🗺️ Географічна карта', Number(student.map_activity_points)||0],
         ['⏳ Історичний хронолог', Number(student.history_activity_points)||0],
         ['🚩 Прапори', Number(student.flags_points)||0],
+        ['🏃 Втеча з минулого', Number(student.escape_points)||0],
         ['🦖 Динорейсер — рекорд', dino ? Number(dino.score)||0 : '—']
       ];
       const weekly = [
@@ -1253,7 +1792,8 @@
         ['Правда чи Брехня', Number(student.week_truth_or_lie_points)||0],
         ['Карта', Number(student.week_map_activity_points)||0],
         ['Хронолог', Number(student.week_history_activity_points)||0],
-        ['Прапори', Number(student.week_flags_points)||0]
+        ['Прапори', Number(student.week_flags_points)||0],
+        ['Втеча з минулого', Number(student.week_escape_points)||0]
       ];
       body.innerHTML = `<h4 style="margin:0 0 10px;color:#475569;">Усього</h4><div class="stats-grid">${cards.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]}${typeof c[1]==='number'?' балів':''}</strong></div>`).join('')}</div><h4 style="margin:20px 0 10px;color:#475569;">Розшифровка за поточний тиждень</h4><div class="stats-grid">${weekly.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]} балів</strong></div>`).join('')}</div>${student.truth_or_lie_locked_until && Number(student.truth_or_lie_locked_until)>Date.now()?`<div class="anti-cheat-badge">🔒 «Правда чи Брехня» заблоковано до ${new Date(Number(student.truth_or_lie_locked_until)).toLocaleString('uk-UA')}</div>`:''}`;
       modal.style.display = 'flex';
@@ -1281,6 +1821,7 @@
         const map = Number(student.week_map_activity_points) || 0;
         const chronology = Number(student.week_history_activity_points) || 0;
         const flags = Number(student.week_flags_points) || 0;
+        const escapePast = Number(student.week_escape_points) || 0;
         const isMe = student.uid === window.currentUserUid;
         const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
         const name = student.name || student.displayName || student.email || 'Учень';
@@ -1296,7 +1837,7 @@
             <span class="leaderboard-avatar-wrap">${avatarHtml}</span>
             <div>
               <span>${escapeHtml(name)}${isMe ? ' (Ви)' : ''}</span>
-              <div style="font-size:11px;color:#64748b;margin-top:3px;line-height:1.55;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology} • Прапори ${flags}</div>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;line-height:1.55;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology} • Прапори ${flags} • Втеча ${escapePast}</div>
             </div>
           </div>
           <span class="student-score">${score} балів</span>

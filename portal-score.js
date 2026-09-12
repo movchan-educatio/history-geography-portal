@@ -56,7 +56,8 @@ function calculateWeekScore(data = {}) {
     (Number(data.week_truth_or_lie_points) || 0) +
     (Number(data.week_map_activity_points) || 0) +
     (Number(data.week_history_activity_points) || 0) +
-    (Number(data.week_flags_points) || 0);
+    (Number(data.week_flags_points) || 0) +
+    (Number(data.week_escape_points) || 0);
 }
 
 async function awardActivityPoint(kind, points = 1) {
@@ -234,6 +235,59 @@ async function awardNmt(subject, score, total) {
   }
 }
 
+
+async function awardEscapeStage(stageId, points = 2) {
+  const safeStage = String(stageId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 40);
+  const safePoints = Math.max(0, Math.min(2, Math.floor(Number(points) || 0)));
+  if (!safeStage || !safePoints) {
+    return { ok: false, awarded: false, reason: 'invalid' };
+  }
+
+  const user = await requireUser();
+  if (!user) {
+    return { ok: false, awarded: false, reason: 'login' };
+  }
+
+  const weekKey = getCurrentWeekKey();
+  const awardKey = `${weekKey}_${safeStage}`;
+  let awarded = false;
+
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+
+      data.escape_stage_awards = data.escape_stage_awards || {};
+      if (data.escape_stage_awards[awardKey]) {
+        awarded = false;
+        return data;
+      }
+
+      data.escape_stage_awards[awardKey] = Date.now();
+      data.escape_points = (Number(data.escape_points) || 0) + safePoints;
+      data.week_escape_points = (Number(data.week_escape_points) || 0) + safePoints;
+      data.score = (Number(data.score) || 0) + safePoints;
+      data.week_score = calculateWeekScore(data);
+      data.lastScoreSource = 'escape_from_past';
+      data.lastScorePoints = safePoints;
+      data.lastScoreAt = Date.now();
+
+      // Успішне навчальне завдання також відкриває Динорейсер.
+      data.dino_unlocked = true;
+      data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
+
+      awarded = true;
+      return data;
+    });
+
+    return { ok: true, awarded, points: awarded ? safePoints : 0 };
+  } catch (error) {
+    console.error('Портал: помилка Втечі з минулого', error);
+    return { ok: false, awarded: false, reason: 'firebase' };
+  }
+}
+
 async function unlockDinoForUser() {
   const user = await requireUser();
   if (!user) return false;
@@ -307,6 +361,7 @@ window.portalScore = {
   awardMapPoint: points => awardActivityPoint('map', points),
   awardHistoryActivityPoint: points => awardActivityPoint('history_activity', points),
   awardFlagsPoint: points => awardActivityPoint('flags', points),
+  awardEscapeStage: awardEscapeStage,
   awardTruthOrLiePoint: awardTruthOrLiePoint,
   lockTruthOrLie: lockTruthOrLie,
   unlockDinoForUser: unlockDinoForUser,
