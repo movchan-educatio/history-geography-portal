@@ -527,9 +527,39 @@
     .map-next { background:#0284c7; color:#fff; }
     .map-next:disabled { opacity:.5; cursor:not-allowed; }
     .dino-leaderboard { width:100%; margin-top:8px; border:1px solid #e2e8f0; border-radius:9px; overflow:hidden; background:#f8fafc; }
-    .dino-leaderboard-title { padding:6px 9px; font-size:12px; font-weight:900; color:#0369a1; background:#e0f2fe; }
-    .dino-leader-row { display:flex; justify-content:space-between; align-items:center; padding:5px 9px; font-size:11px; border-top:1px solid #e2e8f0; }
-    .dino-leader-row strong { color:#2563eb; }
+    .dino-leaderboard-title { padding:9px 11px; font-size:12px; font-weight:900; color:#0369a1; background:#e0f2fe; }
+    .dino-leader-head,
+    .dino-leader-row {
+      display:grid;
+      grid-template-columns:58px minmax(0,1fr) 78px;
+      align-items:center;
+      column-gap:8px;
+      padding:8px 10px;
+    }
+    .dino-leader-head {
+      background:#f1f5f9;
+      color:#64748b;
+      font-size:10px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.03em;
+      border-top:1px solid #dbe4ee;
+    }
+    .dino-leader-row {
+      font-size:11px;
+      border-top:1px solid #e2e8f0;
+      color:#334155;
+    }
+    .dino-leader-row:nth-child(even) { background:#fff; }
+    .dino-leader-rank { font-weight:900; color:#64748b; }
+    .dino-leader-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:700; }
+    .dino-leader-score { justify-self:end; color:#2563eb; font-weight:900; }
+    .dino-leader-empty { padding:12px 10px; text-align:center; color:#64748b; font-size:11px; border-top:1px solid #e2e8f0; }
+    @media (max-width:700px) {
+      .dino-leader-head,
+      .dino-leader-row { grid-template-columns:48px minmax(0,1fr) 68px; padding:9px 8px; }
+      .dino-leaderboard-title { font-size:11px; line-height:1.35; }
+    }
     .history-activity-card {
       background:#ffffff; border:1px solid #e7c9b8; border-radius:14px; padding:15px;
       display:flex; flex-direction:column; gap:10px; min-height:320px;
@@ -794,8 +824,13 @@
           <button id="dinoStartBtn" onclick="startDinoGame()" disabled style="background: #94a3b8; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: not-allowed; font-size: 12px; width: 100%;">Старт / Стрибок (Пробіл або Тап)</button>
 
           <div class="dino-leaderboard">
-            <div class="dino-leaderboard-title">🏆 Лідери Динозаврика-Ранера • усі учні</div>
-            <div id="dinoLeaderboardList"></div>
+            <div class="dino-leaderboard-title">🏆 Лідери Динозаврика-Ранера</div>
+            <div class="dino-leader-head" aria-hidden="true">
+              <span>Місце</span><span>Гравець</span><span>Рекорд</span>
+            </div>
+            <div id="dinoLeaderboardList" class="dino-leaderboard-list">
+              <div class="dino-leader-empty">Завантаження таблиці…</div>
+            </div>
           </div>
         </div>
 
@@ -1195,9 +1230,9 @@
       }
 
       if (isTeacher) {
-        text.textContent = `👑 БОС НА САЙТІ 😎 • Учнів онлайн: ${users.length}`;
+        text.textContent = `😎 Учнів онлайн: ${users.length}`;
       } else if (teacherOnline) {
-        text.textContent = `👑 БОС ЗАРАЗ НА САЙТІ! 😎 • Учнів онлайн: ${users.length}`;
+        text.textContent = `😎 Учнів онлайн: ${users.length}`;
       } else {
         text.textContent = users.length
           ? `Учнів онлайн: ${users.length}`
@@ -1318,6 +1353,12 @@
         }
         restoreTruthOrLieLock(profileData.truth_or_lie_locked_until ? { until: profileData.truth_or_lie_locked_until } : null);
         if (profileData.dino_unlocked === true) unlockDinoGame();
+        // Переносимо старий локальний рекорд у спільну таблицю після входу.
+        // Це потрібно для користувачів, які грали до появи Firebase-таблиці.
+        const savedLocalDino = parseInt(localStorage.getItem('dino_high_score') || '0', 10);
+        if (Number.isFinite(savedLocalDino) && savedLocalDino > 0) {
+          Promise.resolve(saveDinoLeaderboard(savedLocalDino)).catch(() => {});
+        }
       } catch (e) {
         console.error('Профіль Firebase:', e);
       }
@@ -1639,21 +1680,26 @@
       const box = document.getElementById('dinoLeaderboardList');
       if (!box) return;
       const cleanBoard = (Array.isArray(board) ? board : [])
-        .filter(p => p && p.name && Number.isFinite(Number(p.score)))
+        .filter(p => p && p.name && Number.isFinite(Number(p.score)) && Number(p.score) > 0)
         .sort((a,b) => Number(b.score) - Number(a.score))
         .slice(0, 10);
       if (!cleanBoard.length) {
-        box.innerHTML = '<div class="dino-leader-row"><span>Поки що немає результатів</span><span>—</span></div>';
+        box.innerHTML = '<div class="dino-leader-empty">Поки що немає результатів. Перший завершений забіг з’явиться тут автоматично.</div>';
         return;
       }
       box.innerHTML = cleanBoard.map((p,i) => {
-        const me = p.uid === window.currentUserUid ? ' (Ви)' : '';
-        return `<div class="dino-leader-row"><span>${i+1}. ${escapeHtml(p.name)}${me}</span><strong>${Math.floor(Number(p.score))}</strong></div>`;
+        const me = p.uid === window.currentUserUid ? ' • Ви' : '';
+        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
+        return `<div class="dino-leader-row">
+          <span class="dino-leader-rank">${medal}</span>
+          <span class="dino-leader-name">${escapeHtml(p.name)}${me}</span>
+          <strong class="dino-leader-score">${Math.floor(Number(p.score))}</strong>
+        </div>`;
       }).join('');
     }
 
     function loadDinoLeaderboard() {
-      if (typeof database === 'undefined' || !window.currentUserUid) return;
+      if (typeof database === 'undefined') return;
       onValue(ref(database, 'dinoLeaderboard'), snapshot => {
         const raw = snapshot.val() || {};
         dinoLeaderboardData = Object.entries(raw).map(([uid, value]) => ({
@@ -4479,7 +4525,7 @@
 
 
     // --- ГРА «ПРАПОРИ СВІТУ» ---
-    const flagsCountries = [["🇺🇦", "Україна"], ["🇵🇱", "Польща"], ["🇩🇪", "Німеччина"], ["🇫🇷", "Франція"], ["🇮🇹", "Італія"], ["🇪🇸", "Іспанія"], ["🇵🇹", "Португалія"], ["🇬🇧", "Велика Британія"], ["🇺🇸", "США"], ["🇨🇦", "Канада"], ["🇧🇷", "Бразилія"], ["🇦🇷", "Аргентина"], ["🇲🇽", "Мексика"], ["🇨🇱", "Чилі"], ["🇵🇪", "Перу"], ["🇨🇴", "Колумбія"], ["🇯🇵", "Японія"], ["🇨🇳", "Китай"], ["🇮🇳", "Індія"], ["🇰🇷", "Південна Корея"], ["🇹🇷", "Туреччина"], ["🇬🇷", "Греція"], ["🇳🇱", "Нідерланди"], ["🇧🇪", "Бельгія"], ["🇨🇭", "Швейцарія"], ["🇦🇹", "Австрія"], ["🇨🇿", "Чехія"], ["🇸🇰", "Словаччина"], ["🇭🇺", "Угорщина"], ["🇷🇴", "Румунія"], ["🇧🇬", "Болгарія"], ["🇷🇸", "Сербія"], ["🇭🇷", "Хорватія"], ["🇸🇮", "Словенія"], ["🇳🇴", "Норвегія"], ["🇸🇪", "Швеція"], ["🇫🇮", "Фінляндія"], ["🇩🇰", "Данія"], ["🇮🇸", "Ісландія"], ["🇮🇪", "Ірландія"], ["🇪🇪", "Естонія"], ["🇱🇻", "Латвія"], ["🇱🇹", "Литва"], ["🇲🇩", "Молдова"], ["🇬🇪", "Грузія"], ["🇦🇲", "Вірменія"], ["🇦🇿", "Азербайджан"], ["🇰🇿", "Казахстан"], ["🇺🇿", "Узбекистан"], ["🇮🇱", "Ізраїль"], ["🇪🇬", "Єгипет"], ["🇲🇦", "Марокко"], ["🇿🇦", "Південна Африка"], ["🇳🇬", "Нігерія"], ["🇰🇪", "Кенія"], ["🇦🇺", "Австралія"], ["🇳🇿", "Нова Зеландія"], ["🇹🇭", "Таїланд"], ["🇻🇳", "В'єтнам"], ["🇮🇩", "Індонезія"], ["🇵🇭", "Філіппіни"], ["🇸🇬", "Сінгапур"], ["🇲🇾", "Малайзія"], ["🇵🇰", "Пакистан"], ["🇸🇦", "Саудівська Аравія"], ["🇦🇪", "ОАЕ"], ["🇮🇷", "Іран"], ["🇮🇶", "Ірак"], ["🇯🇴", "Йорданія"], ["🇨🇺", "Куба"], ["🇯🇲", "Ямайка"], ["🇨🇷", "Коста-Рика"], ["🇵🇦", "Панама"], ["🇺🇾", "Уругвай"], ["🇵🇾", "Парагвай"], ["🇧🇴", "Болівія"], ["🇪🇨", "Еквадор"], ["🇻🇪", "Венесуела"], ["🇬🇹", "Гватемала"], ["🇩🇴", "Домініканська Республіка"], ["🇭🇳", "Гондурас"], ["🇳🇮", "Нікарагуа"], ["🇸🇻", "Сальвадор"], ["🇬🇭", "Гана"], ["🇸🇳", "Сенегал"], ["🇪🇹", "Ефіопія"], ["🇹🇿", "Танзанія"], ["🇺🇬", "Уганда"], ["🇿🇲", "Замбія"], ["🇿🇼", "Зімбабве"], ["🇲🇬", "Мадагаскар"], ["🇫🇯", "Фіджі"], ["🇵🇬", "Папуа-Нова Гвінея"], ["🇳🇵", "Непал"], ["🇲🇳", "Монголія"], ["🇻🇦", "Ватикан"], ["🇱🇺", "Люксембург"], ["🇲🇹", "Мальта"], ["🇨🇾", "Кіпр"], ["🇦🇱", "Албанія"], ["🇧🇦", "Боснія і Герцеговина"], ["🇲🇪", "Чорногорія"], ["🇲🇰", "Північна Македонія"], ["🇽🇰", "Косово"], ["🇧🇾", "Білорусь"], ["🇷🇺", "Росія"]];
+    const flagsCountries = [["🇺🇦", "Україна"], ["🇵🇱", "Польща"], ["🇩🇪", "Німеччина"], ["🇫🇷", "Франція"], ["🇮🇹", "Італія"], ["🇪🇸", "Іспанія"], ["🇵🇹", "Португалія"], ["🇬🇧", "Велика Британія"], ["🇺🇸", "США"], ["🇨🇦", "Канада"], ["🇧🇷", "Бразилія"], ["🇦🇷", "Аргентина"], ["🇲🇽", "Мексика"], ["🇨🇱", "Чилі"], ["🇵🇪", "Перу"], ["🇨🇴", "Колумбія"], ["🇯🇵", "Японія"], ["🇨🇳", "Китай"], ["🇮🇳", "Індія"], ["🇰🇷", "Південна Корея"], ["🇹🇷", "Туреччина"], ["🇬🇷", "Греція"], ["🇳🇱", "Нідерланди"], ["🇧🇪", "Бельгія"], ["🇨🇭", "Швейцарія"], ["🇦🇹", "Австрія"], ["🇨🇿", "Чехія"], ["🇸🇰", "Словаччина"], ["🇭🇺", "Угорщина"], ["🇷🇴", "Румунія"], ["🇧🇬", "Болгарія"], ["🇷🇸", "Сербія"], ["🇭🇷", "Хорватія"], ["🇸🇮", "Словенія"], ["🇳🇴", "Норвегія"], ["🇸🇪", "Швеція"], ["🇫🇮", "Фінляндія"], ["🇩🇰", "Данія"], ["🇮🇸", "Ісландія"], ["🇮🇪", "Ірландія"], ["🇪🇪", "Естонія"], ["🇱🇻", "Латвія"], ["🇱🇹", "Литва"], ["🇲🇩", "Молдова"], ["🇬🇪", "Грузія"], ["🇦🇲", "Вірменія"], ["🇦🇿", "Азербайджан"], ["🇰🇿", "Казахстан"], ["🇺🇿", "Узбекистан"], ["🇮🇱", "Ізраїль"], ["🇪🇬", "Єгипет"], ["🇲🇦", "Марокко"], ["🇿🇦", "Південна Африка"], ["🇳🇬", "Нігерія"], ["🇰🇪", "Кенія"], ["🇦🇺", "Австралія"], ["🇳🇿", "Нова Зеландія"], ["🇹🇭", "Таїланд"], ["🇻🇳", "В'єтнам"], ["🇮🇩", "Індонезія"], ["🇵🇭", "Філіппіни"], ["🇸🇬", "Сінгапур"], ["🇲🇾", "Малайзія"], ["🇵🇰", "Пакистан"], ["🇸🇦", "Саудівська Аравія"], ["🇦🇪", "ОАЕ"], ["🇮🇷", "Іран"], ["🇮🇶", "Ірак"], ["🇯🇴", "Йорданія"], ["🇨🇺", "Куба"], ["🇯🇲", "Ямайка"], ["🇨🇷", "Коста-Рика"], ["🇵🇦", "Панама"], ["🇺🇾", "Уругвай"], ["🇵🇾", "Парагвай"], ["🇧🇴", "Болівія"], ["🇪🇨", "Еквадор"], ["🇻🇪", "Венесуела"], ["🇬🇹", "Гватемала"], ["🇩🇴", "Домініканська Республіка"], ["🇭🇳", "Гондурас"], ["🇳🇮", "Нікарагуа"], ["🇸🇻", "Сальвадор"], ["🇬🇭", "Гана"], ["🇸🇳", "Сенегал"], ["🇪🇹", "Ефіопія"], ["🇹🇿", "Танзанія"], ["🇺🇬", "Уганда"], ["🇿🇲", "Замбія"], ["🇿🇼", "Зімбабве"], ["🇲🇬", "Мадагаскар"], ["🇫🇯", "Фіджі"], ["🇵🇬", "Папуа-Нова Гвінея"], ["🇳🇵", "Непал"], ["🇲🇳", "Монголія"], ["🇻🇦", "Ватикан"], ["🇱🇺", "Люксембург"], ["🇲🇹", "Мальта"], ["🇨🇾", "Кіпр"], ["🇦🇱", "Албанія"], ["🇧🇦", "Боснія і Герцеговина"], ["🇲🇪", "Чорногорія"], ["🇲🇰", "Північна Македонія"], ["🇽🇰", "Косово"]];
     let flagsCurrent = null;
     let flagsAnswered = false;
     let flagsPreviousIndex = -1;
