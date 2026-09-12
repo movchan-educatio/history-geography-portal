@@ -237,7 +237,7 @@ async function awardNmt(subject, score, total) {
 
 
 async function awardEscapeStage(stageId, points = 2) {
-  const safeStage = String(stageId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 40);
+  const safeStage = String(stageId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80);
   const safePoints = Math.max(0, Math.min(2, Math.floor(Number(points) || 0)));
   if (!safeStage || !safePoints) {
     return { ok: false, awarded: false, reason: 'invalid' };
@@ -250,7 +250,10 @@ async function awardEscapeStage(stageId, points = 2) {
 
   const weekKey = getCurrentWeekKey();
   const awardKey = `${weekKey}_${safeStage}`;
+  const escapeId = safeStage.includes('__') ? safeStage.split('__')[0] : '';
+  const completionKey = escapeId ? `${weekKey}_${escapeId}` : '';
   let awarded = false;
+  let alreadyCompleted = false;
 
   try {
     await runTransaction(ref(database, `users/${user.uid}`), data => {
@@ -259,6 +262,14 @@ async function awardEscapeStage(stageId, points = 2) {
       data.role = data.role || 'student';
 
       data.escape_stage_awards = data.escape_stage_awards || {};
+      data.escape_weekly_completed = data.escape_weekly_completed || {};
+
+      if (completionKey && data.escape_weekly_completed[completionKey]) {
+        alreadyCompleted = true;
+        awarded = false;
+        return data;
+      }
+
       if (data.escape_stage_awards[awardKey]) {
         awarded = false;
         return data;
@@ -273,7 +284,6 @@ async function awardEscapeStage(stageId, points = 2) {
       data.lastScorePoints = safePoints;
       data.lastScoreAt = Date.now();
 
-      // Успішне навчальне завдання також відкриває Динорейсер.
       data.dino_unlocked = true;
       data.dino_unlocked_at = Number(data.dino_unlocked_at) || Date.now();
 
@@ -281,10 +291,52 @@ async function awardEscapeStage(stageId, points = 2) {
       return data;
     });
 
-    return { ok: true, awarded, points: awarded ? safePoints : 0 };
+    return {
+      ok: true,
+      awarded,
+      points: awarded ? safePoints : 0,
+      reason: alreadyCompleted ? 'completed' : (awarded ? 'awarded' : 'duplicate')
+    };
   } catch (error) {
     console.error('Портал: помилка Втечі з минулого', error);
     return { ok: false, awarded: false, reason: 'firebase' };
+  }
+}
+
+async function completeEscapeGame(escapeId) {
+  const safeEscape = String(escapeId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 50);
+  if (!safeEscape) return { ok: false, completed: false, reason: 'invalid' };
+
+  const user = await requireUser();
+  if (!user) return { ok: false, completed: false, reason: 'login' };
+
+  const weekKey = getCurrentWeekKey();
+  const completionKey = `${weekKey}_${safeEscape}`;
+  let newlyCompleted = false;
+
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+      data.escape_weekly_completed = data.escape_weekly_completed || {};
+
+      if (data.escape_weekly_completed[completionKey]) {
+        newlyCompleted = false;
+        return data;
+      }
+
+      data.escape_weekly_completed[completionKey] = Date.now();
+      data.last_escape_completed = safeEscape;
+      data.last_escape_completed_at = Date.now();
+      newlyCompleted = true;
+      return data;
+    });
+
+    return { ok: true, completed: true, newlyCompleted, key: completionKey };
+  } catch (error) {
+    console.error('Портал: не вдалося зафіксувати завершення Втечі', error);
+    return { ok: false, completed: false, reason: 'firebase' };
   }
 }
 
@@ -362,6 +414,7 @@ window.portalScore = {
   awardHistoryActivityPoint: points => awardActivityPoint('history_activity', points),
   awardFlagsPoint: points => awardActivityPoint('flags', points),
   awardEscapeStage: awardEscapeStage,
+  completeEscapeGame: completeEscapeGame,
   awardTruthOrLiePoint: awardTruthOrLiePoint,
   lockTruthOrLie: lockTruthOrLie,
   unlockDinoForUser: unlockDinoForUser,
