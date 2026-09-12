@@ -566,12 +566,62 @@
     .home-user-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .home-score-badge{white-space:nowrap;flex:0 0 auto;}
     @media (max-width:700px){
-      #authBox.user-login-bar{width:100%;display:flex;flex-direction:column;align-items:stretch;gap:8px;}
-      #authBox .home-user-chip{width:100%;box-sizing:border-box;display:grid!important;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:8px!important;border-radius:16px!important;}
-      #authBox .home-user-name{white-space:normal;line-height:1.15;}
-      #authBox .home-role-badge{grid-column:2;justify-self:start;}
-      #authBox .home-score-badge{grid-column:3;grid-row:1 / span 2;align-self:center;}
-      #authBox > .user-login-btn{width:100%;min-height:42px;}
+      #authBox.user-login-bar{
+        width:100%;
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) auto;
+        align-items:center;
+        gap:8px;
+      }
+      #authBox .home-user-chip{
+        min-width:0;
+        width:100%;
+        box-sizing:border-box;
+        display:grid!important;
+        grid-template-columns:24px minmax(52px,1fr) auto auto;
+        align-items:center;
+        gap:5px!important;
+        padding:6px 8px!important;
+        border-radius:999px!important;
+      }
+      #authBox .home-user-avatar{width:24px!important;height:24px!important;}
+      #authBox .home-user-name{
+        min-width:0;
+        white-space:nowrap!important;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        line-height:1.1;
+        font-size:12px!important;
+      }
+      #authBox .home-role-badge{
+        grid-column:auto!important;
+        justify-self:auto!important;
+        white-space:nowrap;
+        padding:3px 6px!important;
+        font-size:9px!important;
+      }
+      #authBox .home-score-badge{
+        grid-column:auto!important;
+        grid-row:auto!important;
+        align-self:center;
+        white-space:nowrap;
+        font-size:11px!important;
+      }
+      #authBox > .user-login-btn{
+        width:auto!important;
+        min-width:68px;
+        min-height:38px!important;
+        padding:8px 12px!important;
+        font-size:12px!important;
+      }
+    }
+    @media (max-width:430px){
+      #authBox .home-user-chip{grid-template-columns:22px minmax(42px,1fr) auto auto;gap:4px!important;padding:5px 7px!important;}
+      #authBox .home-user-avatar{width:22px!important;height:22px!important;}
+      #authBox .home-user-name{font-size:11px!important;}
+      #authBox .home-role-badge{font-size:8px!important;padding:3px 5px!important;}
+      #authBox .home-score-badge{font-size:10px!important;}
+      #authBox > .user-login-btn{min-width:62px;padding:7px 9px!important;font-size:11px!important;}
     }
 
     /* --- FIX: повноцінна таблиця Dino Runner --- */
@@ -1692,11 +1742,14 @@
     }
 
     function syncDinoLeaderboardFromUsers(rawUsers = {}) {
-      dinoLeaderboardData = Object.entries(rawUsers || {}).map(([uid, p]) => ({
-        uid,
-        name: p?.name || p?.displayName || p?.email || 'Гравець',
-        score: Number(p?.dino_best) || 0
-      })).filter(p => p.score > 0);
+      dinoLeaderboardData = Object.entries(rawUsers || {})
+        .map(([uid, p]) => ({
+          uid,
+          name: p?.name || p?.displayName || p?.email || 'Гравець',
+          score: Number(p?.dino_best) || 0
+        }))
+        .filter(p => p.score > 0)
+        .sort((a, b) => b.score - a.score);
       renderDinoLeaderboard();
     }
 
@@ -1717,31 +1770,43 @@
       const newScore = Math.floor(Number(score));
       const uid = window.currentUserUid;
       if (!uid || !Number.isFinite(newScore) || newScore <= 0) return false;
-      const playerName = (window.currentStudent || 'Гравець').trim().slice(0,40) || 'Гравець';
 
-      // Оптимістично показуємо результат одразу.
+      const playerName = (window.currentStudent || 'Гравець').trim().slice(0,40) || 'Гравець';
+      const box = document.getElementById('dinoLeaderboardList');
+      box?.querySelector('.dino-save-warning')?.remove();
+
       const existing = dinoLeaderboardData.find(p => p.uid === uid);
-      if (!existing) dinoLeaderboardData.push({ uid, name: playerName, score: newScore });
-      else if (newScore > Number(existing.score || 0)) existing.score = newScore;
+      if (!existing) {
+        dinoLeaderboardData.push({ uid, name: playerName, score: newScore });
+      } else {
+        existing.name = existing.name || playerName;
+        existing.score = Math.max(Number(existing.score) || 0, newScore);
+      }
       renderDinoLeaderboard();
 
       try {
-        const userRef = ref(database, 'users/' + uid);
-        await runTransaction(userRef, profile => {
-          profile = profile || {};
-          const oldBest = Number(profile.dino_best) || 0;
-          profile.name = profile.name || playerName;
-          if (newScore > oldBest) profile.dino_best = newScore;
-          return profile;
-        });
+        const bestRef = ref(database, 'users/' + uid + '/dino_best');
+        const currentSnap = await get(bestRef);
+        const currentBest = Number(currentSnap.val()) || 0;
+        const bestToSave = Math.max(currentBest, newScore);
+
+        if (bestToSave !== currentBest) {
+          await set(bestRef, bestToSave);
+        }
+
+        const nameRef = ref(database, 'users/' + uid + '/name');
+        const nameSnap = await get(nameRef);
+        if (!nameSnap.exists()) {
+          await set(nameRef, playerName);
+        }
         return true;
       } catch (e) {
         console.error('Збереження рекорду Динозаврика:', e);
-        const box = document.getElementById('dinoLeaderboardList');
-        if (box && !box.querySelector('.dino-save-warning')) {
+        if (box) {
           const warning = document.createElement('div');
           warning.className = 'dino-save-warning';
-          warning.textContent = '⚠️ Не вдалося зберегти рекорд у Firebase. Перевірте правила Database.';
+          const code = e && e.code ? ` (${e.code})` : '';
+          warning.textContent = `⚠️ Рекорд видно локально, але не вдалося синхронізувати з Firebase${code}.`;
           box.appendChild(warning);
         }
         return false;
