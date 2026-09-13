@@ -2886,7 +2886,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       <div id="bellClashLobby" class="bell-clash-lobby">
         <div class="bell-clash-shell">
           <div class="bell-clash-head">
-            <div><span class="bell-clash-kicker">ARENA XL • STABLE MP 6.9.2</span><h2>LYCEUM CLASH</h2><p>Короткий матч • 75 секунд</p></div>
+            <div><span class="bell-clash-kicker">ARENA XL • STABLE MP 6.9.3</span><h2>LYCEUM CLASH</h2><p>Короткий матч • 75 секунд</p></div>
             <button type="button" class="bell-clash-close" onclick="bellClashLeaveUI()">×</button>
           </div>
           <div id="bellClashConnect" class="bell-clash-connect">
@@ -5600,7 +5600,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       local:{x:240,y:360,vx:0,vy:0,angle:0,hp:100,maxHp:100,alive:true,score:0,slot:1,hero:localStorage.getItem('bell_clash_hero')||'blaster',skin:localStorage.getItem('bell_clash_skin')||localStorage.getItem('dino_skin')||'student',weapon:localStorage.getItem('bell_clash_weapon')||localStorage.getItem('dino_weapon')||'school_blaster',weaponSkin:localStorage.getItem('bell_clash_weapon_skin')||'default',perk:localStorage.getItem('bell_clash_perk')||'assault'},
       players:{}, bots:{}, localBotShots:{}, botBrain:{}, botHitShots:new Set(), remoteVisual:{}, shots:{}, input:{x:0,y:0}, move:{x:0,y:0}, fireHeld:false, lastShot:0,
       dashReadyAt:0, zoneTickAt:0, resultShown:false,
-      superCharge:35, speedBoostUntil:0, stunnedUntil:0, teacherHitKey:'', flashUntil:0, fx:[], shake:0, damageTexts:[], impacts:[], visualPose:{}, shotVisual:{}, renderFrame:0, camera:{x:0,y:0,tx:0,ty:0}, arenaEventKey:'', bellRushUntil:0, bellRushKey:''
+      superCharge:35, speedBoostUntil:0, stunnedUntil:0, teacherHitKey:'', flashUntil:0, fx:[], shake:0, damageTexts:[], impacts:[], visualPose:{}, shotVisual:{}, renderFrame:0, camera:{x:0,y:0,tx:0,ty:0}, arenaEventKey:'', bellRushUntil:0, bellRushKey:'', startSyncUnsub:null, startSyncTimer:0, enteringMatch:false
     };
     const clashCanvas=document.getElementById('bellClashCanvas');
     const clashCtx=clashCanvas?.getContext('2d');
@@ -5962,7 +5962,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     window.bellClashCreateRoomUI=async function(){
       try{
-        const code=await window.bellClashCreateRoom();bellClash.roomCode=code;bellClashWatch(code);
+        const code=await window.bellClashCreateRoom();bellClash.roomCode=code;bellClashWatch(code);bellClashStartStartSync(code);
         document.getElementById('bellClashConnect').style.display='none';document.getElementById('bellClashRoom').style.display='block';bellClashCloseSetups();bellClashToast('✨ Кімнату створено');
       }catch(e){bellClashHandleError(e);}
     };
@@ -5978,6 +5978,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         await window.bellClashJoinRoom(code);
         bellClash.roomCode=code;
         bellClashWatch(code);
+        bellClashStartStartSync(code);
         document.getElementById('bellClashConnect').style.display='none';
         document.getElementById('bellClashRoom').style.display='block';
         bellClashCloseSetups();
@@ -5989,6 +5990,91 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       }
     };
     function bellClashHandleError(e){const m=String(e?.message||e);const map={LOGIN_REQUIRED:'Спочатку увійдіть через Google.',BAD_CODE:'Код має містити 5 символів.',ROOM_NOT_FOUND:'Кімнату не знайдено.',ROOM_FULL:'У кімнаті вже 5 гравців.',MATCH_STARTED:'Матч уже почався.',START_FAILED:'Не вдалося почати матч.',SAME_ACCOUNT:'На другому пристрої потрібно увійти ІНШИМ Google-акаунтом. Один Firebase UID = один гравець.',JOIN_PERMISSION:'Firebase не дозволив цьому учневі записати свій слот у кімнаті.',JOIN_READ_FAILED:'Не вдалося прочитати кімнату з Firebase.',JOIN_WRITE_FAILED:'Не вдалося додати гравця в кімнату.',JOIN_VERIFY_FAILED:'Гравця не знайдено після підключення. Спробуйте ще раз.'};console.error('Clash room:',e);bellClashToast('⚠️ '+(map[m]||`Помилка кімнати: ${m}`));}
+
+
+    function bellClashStopStartSync(){
+      if(bellClash.startSyncUnsub){
+        try{bellClash.startSyncUnsub();}catch(_){}
+        bellClash.startSyncUnsub=null;
+      }
+      if(bellClash.startSyncTimer){
+        clearInterval(bellClash.startSyncTimer);
+        bellClash.startSyncTimer=0;
+      }
+    }
+
+    async function bellClashForceJoinedIntoMatch(code,source='poll'){
+      if(!code||bellClash.roomCode!==code||bellClash.running||bellClash.enteringMatch)return false;
+      try{
+        const roomSnap=await get(ref(database,`${bellClashRoot}/${code}`));
+        if(!roomSnap.exists())return false;
+        const room=roomSnap.val()||{};
+        if(room.status!=='playing')return false;
+
+        const roomPlayers=room.players||{};
+        const mine=roomPlayers[window.currentUserUid];
+        if(!mine||mine.isBot||String(window.currentUserUid).startsWith('BOT_'))return false;
+
+        // Adopt the complete server snapshot before entering.
+        bellClash.room=room;
+        bellClash.players=Object.fromEntries(
+          Object.entries(roomPlayers).filter(([id,p])=>!String(id).startsWith('BOT_')&&!p?.isBot)
+        );
+        bellClash.bots=Object.fromEntries(
+          Object.entries(roomPlayers).filter(([id,p])=>String(id).startsWith('BOT_')||p?.isBot)
+        );
+        bellClash.local={...bellClash.local,...mine};
+        bellClashApplyArenaMap(room.map||'hall');
+
+        bellClash.enteringMatch=true;
+        try{
+          bellClashEnterMatch();
+          bellClashStopStartSync();
+          return true;
+        }catch(err){
+          console.error('Clash joined enter failed:',source,err);
+          bellClashToast(`⚠️ Не вдалося відкрити матч: ${String(err?.message||err).slice(0,90)}`);
+          return false;
+        }finally{
+          bellClash.enteringMatch=false;
+        }
+      }catch(err){
+        console.warn('Clash joined start sync:',source,err);
+        return false;
+      }
+    }
+
+    function bellClashStartStartSync(code){
+      bellClashStopStartSync();
+      if(!code)return;
+
+      // Listener only on /status. It is independent of the full-room lobby watcher.
+      try{
+        bellClash.startSyncUnsub=onValue(
+          ref(database,`${bellClashRoot}/${code}/status`),
+          snap=>{
+            if(snap.val()==='playing'){
+              bellClashForceJoinedIntoMatch(code,'status-listener');
+            }
+          },
+          err=>console.warn('Clash status listener:',err)
+        );
+      }catch(err){
+        console.warn('Clash status listener attach:',err);
+      }
+
+      // Poll fallback. Join already proves get() works on this device.
+      bellClash.startSyncTimer=setInterval(()=>{
+        if(!bellClash.roomCode||bellClash.roomCode!==code||bellClash.running){
+          if(bellClash.running)bellClashStopStartSync();
+          return;
+        }
+        bellClashForceJoinedIntoMatch(code,'500ms-poll');
+      },500);
+
+      // Immediate check handles the case where HOST pressed Start at nearly the same moment.
+      setTimeout(()=>bellClashForceJoinedIntoMatch(code,'immediate'),80);
+    }
 
     function bellClashWatch(code){
       bellClash.unsub=window.bellClashWatchRoom(code,room=>{
@@ -6005,20 +6091,26 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         const mine=bellClash.players[window.currentUserUid];
         if(mine){bellClash.local={...bellClash.local,...mine};}
         if(room.status==='lobby'){bellClashRenderLobby();}
-        if(room.status==='playing'&&(room.hostUid===window.currentUserUid||mine))bellClashGuaranteeSoloBots?.();
 
-        // STABLE MP FIX:
-        // A joined player must enter whenever Firebase says the match is playing.
-        // We no longer depend on catching the exact lobby -> playing transition.
+        // Enter FIRST. Joined clients must not depend on bot code or a single
+        // realtime transition to reach the actual game screen.
         if(room.status==='playing'&&mine&&!bellClash.running){
-          bellClashEnterMatch();
+          bellClashForceJoinedIntoMatch(code,'room-watcher');
           return;
         }
 
+        if(room.status==='playing'&&room.hostUid===window.currentUserUid)bellClashGuaranteeSoloBots?.();
         if(room.status==='finished'&&previousStatus!=='finished')bellClashShowResult();
       });
     }
 
+
+
+    document.addEventListener('visibilitychange',()=>{
+      if(document.visibilityState==='visible'&&bellClash.roomCode&&!bellClash.running){
+        bellClashForceJoinedIntoMatch(bellClash.roomCode,'visibility-resume');
+      }
+    });
 
     function bellClashRenderBotControls(){
       const room=bellClash.room||{},host=room.hostUid===window.currentUserUid,toggle=document.getElementById('bellClashBotToggle');
@@ -6087,8 +6179,8 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     window.bellClashStartMatchUI=async function(){try{await window.bellClashStartRoom(bellClash.roomCode);}catch(e){bellClashHandleError(e);}};
     window.bellClashCopyCode=async function(){try{await navigator.clipboard.writeText(bellClash.roomCode);bellClashToast('📋 Код скопійовано');}catch(_){bellClashToast('Код: '+bellClash.roomCode);}};
-    window.bellClashLeaveRoomOnly=async function(){const code=bellClash.roomCode;if(code)await window.bellClashLeaveRoom(code);bellClash.roomCode='';bellClash.room=null;bellClash.bots={};bellClash.localBotShots={};bellClashCloseSetups();document.getElementById('bellClashConnect').style.display='block';document.getElementById('bellClashRoom').style.display='none';};
-    window.bellClashLeaveUI=async function(){window.__bellClashActive=false;window.__bellClashMusicIntensity=0;try{if(!dinoGameRunning)bellStopMusic?.(.22);}catch(_){}bellClashStopGame(false);const code=bellClash.roomCode;if(code)await window.bellClashLeaveRoom(code);bellClash.roomCode='';bellClash.room=null;const app=document.getElementById('bellClashApp');if(app){app.style.display='none';app.setAttribute('aria-hidden','true');}bellAudioSetDuck?.(false);showBellGameHome(false);};
+    window.bellClashLeaveRoomOnly=async function(){bellClashStopStartSync();const code=bellClash.roomCode;if(code)await window.bellClashLeaveRoom(code);bellClash.roomCode='';bellClash.room=null;bellClash.bots={};bellClash.localBotShots={};bellClashCloseSetups();document.getElementById('bellClashConnect').style.display='block';document.getElementById('bellClashRoom').style.display='none';};
+    window.bellClashLeaveUI=async function(){bellClashStopStartSync();window.__bellClashActive=false;window.__bellClashMusicIntensity=0;try{if(!dinoGameRunning)bellStopMusic?.(.22);}catch(_){}bellClashStopGame(false);const code=bellClash.roomCode;if(code)await window.bellClashLeaveRoom(code);bellClash.roomCode='';bellClash.room=null;const app=document.getElementById('bellClashApp');if(app){app.style.display='none';app.setAttribute('aria-hidden','true');}bellAudioSetDuck?.(false);showBellGameHome(false);};
 
     function bellClashEnterMatch(){
       const lobby=document.getElementById('bellClashLobby'),game=document.getElementById('bellClashGame');if(lobby)lobby.style.display='none';if(game)game.style.display='block';
