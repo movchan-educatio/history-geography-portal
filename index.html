@@ -2712,7 +2712,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
   <script type="module">
     import "./portal-score.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
@@ -2733,12 +2733,6 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     const auth = getAuth(app);
     const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({prompt:'select_account'});
-    try {
-      await getRedirectResult(auth);
-    } catch (error) {
-      console.warn('Google redirect:', error);
-    }
     const PORTAL_OWNER_UID = 'LGw3zPR7w4SdN8zvi4LWExYTfFh2';
 
     window.currentStudent = null;
@@ -2859,25 +2853,63 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     document.getElementById('characterUnequipBtn')?.addEventListener('click',unequipCharacterItem);
 
     window.loginWithGoogle = async function () {
+      const btn = document.getElementById('googleLoginBtn');
+      const oldHtml = btn?.innerHTML || '';
+      if (btn) {
+        btn.disabled = true;
+        btn.setAttribute('aria-busy', 'true');
+        btn.innerHTML = '<span class="google-mark" aria-hidden="true">G</span><span class="google-signin-copy"><strong>Відкриваємо Google…</strong><small>Оберіть свій акаунт</small></span>';
+      }
       try {
-        // Popup запускається безпосередньо натисканням і на мобільних браузерах
-        // надійніше повертає сесію на домен сайту. Redirect лишається запасним шляхом.
+        // Основний шлях — popup. Він не блокує запуск Auth/рейтингу під час
+        // завантаження сторінки та стабільно працював у попередній версії порталу.
         await signInWithPopup(auth, provider);
       } catch (error) {
         console.error('Google Auth:', error);
         if (error && ['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(error.code)) {
-          await signInWithRedirect(auth, provider);
-          return;
+          try {
+            await signInWithRedirect(auth, provider);
+            return;
+          } catch (redirectError) {
+            console.error('Google Redirect Auth:', redirectError);
+            alert('Не вдалося відкрити вхід Google. Перевірте, чи дозволені спливаючі вікна для цього сайту.');
+          }
+        } else if (error?.code === 'auth/unauthorized-domain') {
+          alert(`Google-вхід заблокований для домену ${location.hostname}. Додайте цей домен у Firebase Authentication → Settings → Authorized domains.`);
+        } else if (error?.code !== 'auth/popup-closed-by-user' && error?.code !== 'auth/cancelled-popup-request') {
+          const code = error?.code ? ` (${error.code})` : '';
+          alert('Помилка входу через Google' + code + ': ' + (error?.message || error));
         }
-        alert('Помилка входу через Google: ' + (error?.message || error));
+      } finally {
+        if (btn && document.body.contains(btn)) {
+          btn.disabled = false;
+          btn.removeAttribute('aria-busy');
+          if (oldHtml) btn.innerHTML = oldHtml;
+        }
       }
     };
 
     const googleLoginBtn = document.getElementById('googleLoginBtn');
     if (googleLoginBtn) googleLoginBtn.addEventListener('click', () => window.loginWithGoogle());
 
-    window.logoutGoogle = function () {
-      signOut(auth);
+    // Страховка для повільних/обмежених браузерів: інтерфейс не повинен
+    // назавжди залишатися на «Перевіряємо вхід…». Справжній Auth observer
+    // нижче все одно має пріоритет і перемалює блок, щойно Firebase відповість.
+    setTimeout(() => {
+      const authBox = document.getElementById('authBox');
+      if (!authBox || !authBox.querySelector('.auth-checking')) return;
+      if (auth.currentUser) return;
+      authBox.innerHTML = '<button id="googleLoginBtn" type="button" class="user-login-btn google-signin-btn"><span class="google-mark" aria-hidden="true">G</span><span class="google-signin-copy"><strong>Увійти через Google</strong><small>Бали та прогрес збережуться</small></span><i class="fas fa-arrow-right google-signin-arrow" aria-hidden="true"></i></button>';
+      document.getElementById('googleLoginBtn')?.addEventListener('click', () => window.loginWithGoogle());
+      const leaderboard = document.getElementById('leaderboardList');
+      if (leaderboard && /Завантажуємо таблицю активності/.test(leaderboard.textContent || '')) {
+        leaderboard.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>🔐 Увійдіть через Google, щоб побачити таблицю активності.</span></div></div>';
+      }
+    }, 4500);
+
+    window.logoutGoogle = async function () {
+      try { await signOut(auth); }
+      catch (error) { console.error('Google logout:', error); }
     };
 
     function getWeekKey(date = new Date()) {
@@ -3131,7 +3163,10 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
         }, error => {
           usersRealtimeUnsubscribe = null;
           console.error('Firebase рейтинг:', error);
-          if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Оновіть сторінку або увійдіть повторно.</span></div></div>';
+          if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Повторюємо підключення…</span></div></div>';
+          if (auth.currentUser && window.currentUserUid) {
+            setTimeout(() => { if (!usersRealtimeUnsubscribe && auth.currentUser) startRealtimeData(); }, 2500);
+          }
         });
       }
 

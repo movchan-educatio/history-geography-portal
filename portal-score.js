@@ -1,6 +1,6 @@
 /* Portal score synchronization — single Firebase scoring layer */
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -15,11 +15,9 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
-try {
-  await setPersistence(auth, browserLocalPersistence);
-} catch (error) {
-  console.warn('Портал: браузер не дозволив постійне збереження входу', error);
-}
+// Firebase Auth у браузері за замовчуванням використовує локальну persistence.
+// Не блокуємо завантаження порталу через await setPersistence(): у деяких
+// мобільних/приватних браузерах це могло затримати запуск Auth і рейтингу.
 const database = getDatabase(app);
 let currentUser = null;
 let authReadyResolve;
