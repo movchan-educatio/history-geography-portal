@@ -1931,6 +1931,270 @@ img, svg, canvas, video, iframe {
 }
 </style>
 
+
+<style id="v23-11-leaderboard-layout-reset">
+/* V23.11 — єдина остаточна геометрія рейтингу. Перекриває старі V23.8–V23.10 правила. */
+#leaderboardList{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+  width:100%!important;
+  max-height:430px!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  padding:0 2px 2px 0!important;
+}
+#leaderboardList .leaderboard-item{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:14px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:82px!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:8px 12px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  background:#f8fafc!important;
+  border:1px solid #dbe4ee!important;
+  border-radius:12px!important;
+}
+#leaderboardList .leaderboard-item.current-user{
+  background:#eff6ff!important;
+  border-color:#93c5fd!important;
+}
+#leaderboardList .student-info{
+  display:grid!important;
+  grid-template-columns:34px 68px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:10px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+}
+#leaderboardList .student-rank{
+  display:block!important;
+  width:34px!important;
+  min-width:34px!important;
+  text-align:center!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:900!important;
+}
+#leaderboardList .leaderboard-avatar-wrap{
+  display:grid!important;
+  place-items:center!important;
+  width:68px!important;
+  height:68px!important;
+  min-width:68px!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+#leaderboardList .leaderboard-character-avatar{
+  display:inline-grid!important;
+  place-items:end center!important;
+  width:62px!important;
+  height:66px!important;
+  max-width:62px!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+#leaderboardList .leaderboard-character-avatar>img.character-body{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+}
+#leaderboardList .leaderboard-student-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  min-width:0!important;
+  width:100%!important;
+  overflow:visible!important;
+}
+#leaderboardList .leaderboard-student-name{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  color:#334155!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  line-height:1.2!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere!important;
+}
+#leaderboardList .leaderboard-open-hint{
+  display:block!important;
+  margin-top:4px!important;
+  color:#7b8798!important;
+  font-size:9px!important;
+  font-weight:700!important;
+  line-height:1.2!important;
+  white-space:normal!important;
+}
+#leaderboardList .leaderboard-rewards{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+#leaderboardList .student-score,
+#leaderboardList .student-coins{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  min-width:96px!important;
+  width:auto!important;
+  min-height:40px!important;
+  height:40px!important;
+  max-height:none!important;
+  padding:7px 11px!important;
+  margin:0!important;
+  border-radius:12px!important;
+  box-sizing:border-box!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+#leaderboardList .student-score{
+  background:#2f6fec!important;
+  color:#fff!important;
+  border:1px solid #2f6fec!important;
+}
+#leaderboardList .student-coins{
+  background:#fff7da!important;
+  color:#75430a!important;
+  border:1px solid #efc14f!important;
+}
+#leaderboardList .reward-value{
+  display:inline!important;
+  max-width:none!important;
+  font-size:15px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+#leaderboardList .reward-label{
+  display:inline!important;
+  margin:0!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+  opacity:.95!important;
+}
+
+/* Телефон: верхній рядок — місце + герой + ПІБ; нижній — бали + коіни. */
+@media (max-width:700px){
+  .leaderboard-section{padding:12px!important;margin:18px auto!important;width:calc(100% - 16px)!important;max-width:calc(100% - 16px)!important;}
+  .leaderboard-header{gap:8px!important;margin-bottom:12px!important;}
+  .leaderboard-header h3{font-size:16px!important;line-height:1.2!important;}
+  #leaderboardList{
+    max-height:500px!important;
+    gap:9px!important;
+    padding-right:1px!important;
+  }
+  #leaderboardList .leaderboard-item{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:9px!important;
+    overflow:visible!important;
+  }
+  #leaderboardList .student-info{
+    display:grid!important;
+    grid-template-columns:24px 58px minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:7px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  #leaderboardList .student-rank{
+    width:24px!important;
+    min-width:24px!important;
+    font-size:11px!important;
+  }
+  #leaderboardList .leaderboard-avatar-wrap{
+    width:58px!important;
+    height:62px!important;
+    min-width:58px!important;
+  }
+  #leaderboardList .leaderboard-character-avatar{
+    width:54px!important;
+    height:60px!important;
+    max-width:54px!important;
+  }
+  #leaderboardList .leaderboard-student-name{
+    font-size:13px!important;
+    line-height:1.18!important;
+  }
+  #leaderboardList .leaderboard-open-hint{
+    display:none!important;
+  }
+  #leaderboardList .leaderboard-rewards{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:7px!important;
+    width:100%!important;
+    margin-top:7px!important;
+    padding:0!important;
+  }
+  #leaderboardList .student-score,
+  #leaderboardList .student-coins{
+    display:flex!important;
+    width:100%!important;
+    min-width:0!important;
+    height:38px!important;
+    min-height:38px!important;
+    padding:6px 6px!important;
+    border-radius:10px!important;
+  }
+  #leaderboardList .reward-value{
+    font-size:14px!important;
+  }
+  #leaderboardList .reward-label{
+    font-size:9px!important;
+  }
+}
+@media (max-width:390px){
+  #leaderboardList .leaderboard-item{padding:8px!important;}
+  #leaderboardList .student-info{grid-template-columns:21px 50px minmax(0,1fr)!important;gap:6px!important;}
+  #leaderboardList .student-rank{width:21px!important;min-width:21px!important;font-size:10px!important;}
+  #leaderboardList .leaderboard-avatar-wrap{width:50px!important;height:55px!important;min-width:50px!important;}
+  #leaderboardList .leaderboard-character-avatar{width:47px!important;height:53px!important;max-width:47px!important;}
+  #leaderboardList .leaderboard-student-name{font-size:12px!important;}
+  #leaderboardList .leaderboard-rewards{gap:6px!important;margin-top:6px!important;}
+  #leaderboardList .student-score,#leaderboardList .student-coins{height:36px!important;min-height:36px!important;padding:5px 4px!important;}
+  #leaderboardList .reward-value{font-size:13px!important;}
+  #leaderboardList .reward-label{font-size:8px!important;}
+}
+@media (max-width:330px){
+  #leaderboardList .student-info{grid-template-columns:19px 44px minmax(0,1fr)!important;gap:5px!important;}
+  #leaderboardList .student-rank{width:19px!important;min-width:19px!important;font-size:9px!important;}
+  #leaderboardList .leaderboard-avatar-wrap{width:44px!important;height:49px!important;min-width:44px!important;}
+  #leaderboardList .leaderboard-character-avatar{width:41px!important;height:47px!important;max-width:41px!important;}
+  #leaderboardList .leaderboard-student-name{font-size:11px!important;}
+  #leaderboardList .student-score,#leaderboardList .student-coins{height:34px!important;min-height:34px!important;}
+  #leaderboardList .reward-value{font-size:12px!important;}
+  #leaderboardList .reward-label{font-size:7.5px!important;}
+}
+</style>
 </head>
 <body>
 
