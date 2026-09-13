@@ -2195,6 +2195,117 @@ img, svg, canvas, video, iframe {
   #leaderboardList .reward-label{font-size:7.5px!important;}
 }
 </style>
+
+
+<style id="v23-12-isolated-leaderboard-cards">
+/* V23.12 — рейтинг ізольований від усіх старих leaderboard-item/student-info правил. */
+#leaderboardList > .portal-rank-card{
+  display:grid!important;
+  grid-template-columns:42px 76px minmax(0,1fr) auto!important;
+  grid-template-areas:"place avatar identity rewards"!important;
+  align-items:center!important;
+  column-gap:12px!important;
+  row-gap:0!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:96px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:9px 12px!important;
+  box-sizing:border-box!important;
+  position:relative!important;
+  overflow:hidden!important;
+  float:none!important;
+  transform:none!important;
+  background:#f8fafc!important;
+  border:1px solid #dbe4ee!important;
+  border-radius:14px!important;
+  cursor:pointer!important;
+  transition:box-shadow .15s ease,border-color .15s ease,background .15s ease!important;
+}
+#leaderboardList > .portal-rank-card:hover{box-shadow:0 5px 16px rgba(15,23,42,.08)!important;border-color:#c6d5e5!important;}
+#leaderboardList > .portal-rank-card.portal-rank-card--me{background:#eff6ff!important;border-color:#93c5fd!important;}
+#leaderboardList .portal-rank-place{
+  grid-area:place!important;display:block!important;position:static!important;transform:none!important;float:none!important;
+  width:42px!important;min-width:42px!important;margin:0!important;padding:0!important;text-align:center!important;
+  color:#334155!important;font-size:14px!important;font-weight:950!important;line-height:1!important;white-space:nowrap!important;
+}
+#leaderboardList .portal-rank-avatar{
+  grid-area:avatar!important;display:grid!important;place-items:center!important;position:static!important;transform:none!important;float:none!important;
+  width:76px!important;height:76px!important;min-width:76px!important;margin:0!important;padding:0!important;overflow:visible!important;
+}
+#leaderboardList .portal-rank-avatar .leaderboard-character-avatar{
+  width:68px!important;height:74px!important;max-width:68px!important;margin:0!important;
+}
+#leaderboardList .portal-rank-avatar .leaderboard-character-avatar>img.character-body{width:100%!important;height:100%!important;object-fit:contain!important;}
+#leaderboardList .portal-rank-identity{
+  grid-area:identity!important;display:flex!important;flex-direction:column!important;justify-content:center!important;position:static!important;transform:none!important;float:none!important;
+  min-width:0!important;width:100%!important;margin:0!important;padding:0!important;overflow:hidden!important;
+}
+#leaderboardList .portal-rank-name{
+  display:block!important;min-width:0!important;width:100%!important;margin:0!important;padding:0!important;color:#334155!important;
+  font-size:16px!important;font-weight:950!important;line-height:1.18!important;white-space:normal!important;overflow-wrap:anywhere!important;
+}
+#leaderboardList .portal-rank-hint{
+  display:block!important;margin-top:5px!important;color:#64748b!important;font-size:10px!important;font-weight:750!important;line-height:1.2!important;white-space:normal!important;
+}
+#leaderboardList .portal-rank-rewards{
+  grid-area:rewards!important;display:grid!important;grid-template-columns:108px 124px!important;align-items:stretch!important;gap:8px!important;
+  position:static!important;transform:none!important;float:none!important;width:auto!important;min-width:0!important;height:auto!important;
+  margin:0!important;padding:0!important;overflow:visible!important;
+}
+#leaderboardList .portal-rank-score,#leaderboardList .portal-rank-coins{
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;position:static!important;transform:none!important;float:none!important;
+  width:100%!important;min-width:0!important;height:46px!important;min-height:46px!important;margin:0!important;padding:6px 9px!important;
+  box-sizing:border-box!important;border-radius:13px!important;white-space:nowrap!important;overflow:hidden!important;
+}
+#leaderboardList .portal-rank-score{background:#2f6fec!important;border:1px solid #2f6fec!important;color:#fff!important;}
+#leaderboardList .portal-rank-coins{background:#fff7da!important;border:1px solid #efc14f!important;color:#75430a!important;}
+#leaderboardList .portal-rank-score strong,#leaderboardList .portal-rank-coins strong{font-size:16px!important;font-weight:950!important;line-height:1!important;white-space:nowrap!important;}
+#leaderboardList .portal-rank-score small,#leaderboardList .portal-rank-coins small{font-size:10px!important;font-weight:850!important;line-height:1!important;white-space:nowrap!important;}
+
+@media (max-width:700px){
+  .leaderboard-section{padding:12px 10px!important;margin:16px auto!important;width:calc(100% - 12px)!important;max-width:calc(100% - 12px)!important;box-sizing:border-box!important;}
+  #leaderboardList{gap:10px!important;max-height:560px!important;padding:0 1px 2px 0!important;overflow-x:hidden!important;}
+  #leaderboardList > .portal-rank-card{
+    grid-template-columns:28px 68px minmax(0,1fr)!important;
+    grid-template-areas:"place avatar identity" "rewards rewards rewards"!important;
+    align-items:center!important;column-gap:8px!important;row-gap:10px!important;
+    min-height:136px!important;height:auto!important;padding:10px!important;overflow:hidden!important;
+  }
+  #leaderboardList .portal-rank-place{width:28px!important;min-width:28px!important;font-size:12px!important;}
+  #leaderboardList .portal-rank-avatar{width:68px!important;height:72px!important;min-width:68px!important;}
+  #leaderboardList .portal-rank-avatar .leaderboard-character-avatar{width:62px!important;height:70px!important;max-width:62px!important;}
+  #leaderboardList .portal-rank-name{font-size:14px!important;line-height:1.2!important;}
+  #leaderboardList .portal-rank-hint{display:none!important;}
+  #leaderboardList .portal-rank-rewards{
+    width:100%!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;align-self:stretch!important;
+  }
+  #leaderboardList .portal-rank-score,#leaderboardList .portal-rank-coins{height:44px!important;min-height:44px!important;padding:6px 5px!important;border-radius:11px!important;}
+  #leaderboardList .portal-rank-score strong,#leaderboardList .portal-rank-coins strong{font-size:14px!important;}
+  #leaderboardList .portal-rank-score small,#leaderboardList .portal-rank-coins small{font-size:9px!important;}
+}
+@media (max-width:390px){
+  #leaderboardList > .portal-rank-card{grid-template-columns:25px 60px minmax(0,1fr)!important;column-gap:7px!important;row-gap:9px!important;min-height:128px!important;padding:9px!important;}
+  #leaderboardList .portal-rank-place{width:25px!important;min-width:25px!important;font-size:11px!important;}
+  #leaderboardList .portal-rank-avatar{width:60px!important;height:65px!important;min-width:60px!important;}
+  #leaderboardList .portal-rank-avatar .leaderboard-character-avatar{width:56px!important;height:63px!important;max-width:56px!important;}
+  #leaderboardList .portal-rank-name{font-size:13px!important;}
+  #leaderboardList .portal-rank-rewards{gap:6px!important;}
+  #leaderboardList .portal-rank-score,#leaderboardList .portal-rank-coins{height:42px!important;min-height:42px!important;padding:5px 4px!important;}
+  #leaderboardList .portal-rank-score strong,#leaderboardList .portal-rank-coins strong{font-size:13px!important;}
+  #leaderboardList .portal-rank-score small,#leaderboardList .portal-rank-coins small{font-size:8px!important;}
+}
+@media (max-width:340px){
+  #leaderboardList > .portal-rank-card{grid-template-columns:23px 54px minmax(0,1fr)!important;column-gap:6px!important;padding:8px!important;}
+  #leaderboardList .portal-rank-avatar{width:54px!important;height:60px!important;min-width:54px!important;}
+  #leaderboardList .portal-rank-avatar .leaderboard-character-avatar{width:50px!important;height:58px!important;max-width:50px!important;}
+  #leaderboardList .portal-rank-name{font-size:12px!important;}
+  #leaderboardList .portal-rank-score strong,#leaderboardList .portal-rank-coins strong{font-size:12px!important;}
+  #leaderboardList .portal-rank-score small,#leaderboardList .portal-rank-coins small{font-size:7.5px!important;}
+}
+</style>
+
 </head>
 <body>
 
@@ -3883,18 +3994,16 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
         // У рейтингу завжди показуємо персонажа з гри. Якщо учень ще не зберіг
         // власний образ, використовується базовий персонаж замість Google-фото/літери.
         const avatarHtml = characterAvatarMarkup(student.portal_character || CHARACTER_DEFAULT,'leaderboard');
-        return `<div class="leaderboard-item clickable-student ${isMe ? 'current-user' : ''}" onclick="showStudentDetails('${student.uid}')" title="Відкрити детальну статистику">
-          <div class="student-info">
-            <span class="student-rank ${rankClass}">#${index + 1}</span>
-            <span class="leaderboard-avatar-wrap">${avatarHtml}</span>
-            <div class="leaderboard-student-copy">
-              <span class="leaderboard-student-name">${escapeHtml(name)}${isMe ? ' (Ви)' : ''}${isPrime ? ' <span class="prime-badge"><span class="prime-fire">🔥</span> В ПРАЙМІ</span>' : ''}</span>
-              <span class="leaderboard-open-hint">Натисніть на учня → детально, за що отримано бали</span>
-            </div>
+        return `<div class="portal-rank-card ${isMe ? 'portal-rank-card--me' : ''}" onclick="showStudentDetails('${student.uid}')" title="Відкрити детальну статистику" role="button" tabindex="0">
+          <span class="portal-rank-place ${rankClass}">#${index + 1}</span>
+          <span class="portal-rank-avatar">${avatarHtml}</span>
+          <div class="portal-rank-identity">
+            <span class="portal-rank-name">${escapeHtml(name)}${isMe ? ' (Ви)' : ''}${isPrime ? ' <span class="prime-badge"><span class="prime-fire">🔥</span> В ПРАЙМІ</span>' : ''}</span>
+            <span class="portal-rank-hint">Натисніть на учня → детально, за що отримано бали</span>
           </div>
-          <div class="leaderboard-rewards" aria-label="Бали та коіни учня">
-            <span class="student-score"><strong class="reward-value">${score}</strong><small class="reward-label">балів</small></span>
-            <span class="student-coins"><strong class="reward-value">🪙 ${coins}</strong><small class="reward-label">коінів</small></span>
+          <div class="portal-rank-rewards" aria-label="Бали та коіни учня">
+            <span class="portal-rank-score"><strong>${score}</strong><small>балів</small></span>
+            <span class="portal-rank-coins"><strong>🪙 ${coins}</strong><small>коінів</small></span>
           </div>
         </div>`;
       }).join('');
