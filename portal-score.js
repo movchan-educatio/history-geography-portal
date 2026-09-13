@@ -581,7 +581,7 @@ async function awardEscapeStage(stageId, points = 2) {
   }
 }
 
-async function completeEscapeGame(escapeId) {
+async function completeEscapeGame(escapeId, questionIds = []) {
   const safeEscape = String(escapeId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 50);
   if (!safeEscape) return { ok: false, completed: false, reason: 'invalid' };
 
@@ -598,6 +598,7 @@ async function completeEscapeGame(escapeId) {
       data.name = data.name || user.displayName || 'Учень';
       data.role = data.role || 'student';
       data.escape_weekly_completed = data.escape_weekly_completed || {};
+      data.escape_question_history = data.escape_question_history || {};
 
       if (data.escape_weekly_completed[completionKey]) {
         newlyCompleted = false;
@@ -605,6 +606,13 @@ async function completeEscapeGame(escapeId) {
       }
 
       data.escape_weekly_completed[completionKey] = Date.now();
+      const safeQuestionIds = Array.isArray(questionIds)
+        ? questionIds.map(id => String(id || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80)).filter(Boolean).slice(0, 5)
+        : [];
+      data.escape_question_history[completionKey] = {
+        questions: safeQuestionIds,
+        completedAt: Date.now()
+      };
       data.last_escape_completed = safeEscape;
       data.last_escape_completed_at = Date.now();
       newlyCompleted = true;
