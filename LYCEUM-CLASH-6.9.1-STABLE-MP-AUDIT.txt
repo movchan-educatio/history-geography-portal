@@ -1,0 +1,57 @@
+LYCEUM CLASH 6.9.1 — STABLE MP
+
+ЧОМУ САМЕ 6.9
+Це точка з історії проєкту, де користувач підтвердив:
+• кімната створювалася;
+• другий пристрій приєднувався за кодом;
+• проблема була тільки в тому, що joined player не переходив із lobby у сам матч.
+
+Тому ця збірка зроблена БЕЗ 7.x room-експериментів.
+
+ЩО НЕ ЗМІНЕНО
+bellClashCreateRoom — byte-for-byte такий самий, як у 6.9.
+SHA256:
+22b3a866313c3acc09e89e9260c2bddec5ef7b45ac5bc344f5ed76c71f820602
+
+bellClashJoinRoom transaction — byte-for-byte такий самий, як у 6.9.
+SHA256:
+d1cb35888857294b44ee928a485eebbe35ec6d5f38de8d301c22599cf68ba663
+
+Тобто:
+• get(roomRef) залишився;
+• set(roomRef, room) залишився;
+• Firebase runTransaction join залишився;
+• onDisconnect залишився;
+• жодного REST / HTTP / ETag / timeout шару не додано.
+
+ЄДИНА МЕРЕЖЕВА ПРАВКА
+Було:
+if(room.status==='playing' && previousStatus!=='playing') bellClashEnterMatch();
+
+Стало:
+if(room.status==='playing' && mine && !bellClash.running) bellClashEnterMatch();
+
+ЧОМУ
+Приєднаний пристрій міг пропустити саме момент зміни lobby -> playing.
+Тепер достатньо фактичного стану Firebase:
+• room.status === playing
+• current UID присутній у room.players
+• матч ще локально не запущений
+
+Тоді joined player входить у гру.
+
+ЩО ЗБЕРЕЖЕНО З 6.9
+• до 5 героїв;
+• великі Arena XL;
+• менший battle scale;
+• 17 героїв;
+• покращені скіни та зброя;
+• SMART BOT код;
+• Focus UI;
+• 75 секунд.
+
+ПЕРЕВІРКА
+• CreateRoom hash до/після — IDENTICAL.
+• JoinRoom transaction hash до/після — IDENTICAL.
+• portal-score.js — node --check OK.
+• Усі inline JavaScript — node --check OK.
