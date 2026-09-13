@@ -2039,7 +2039,7 @@ body.dino-no-scroll{overflow:hidden!important;}
 </style>
 
 <style id="survive-bell-23-full-arena">
-.dino2-title:after{content:"FULL ARENA 2.3"!important;background:linear-gradient(135deg,#111827,#7c3aed 48%,#0891b2)!important;color:#fff!important;}
+.dino2-title:after{content:"FINAL POLISH 2.5"!important;background:linear-gradient(135deg,#111827,#7c3aed 48%,#0891b2)!important;color:#fff!important;}
 .bell-arena-dock{display:none;position:fixed;inset:0;z-index:1100000;background:radial-gradient(circle at 50% -20%,#172554 0,#07111f 48%,#020617 100%);color:#fff;flex-direction:column;overflow:hidden;}
 .bell-arena-dock.active{display:flex!important;}
 .bell-arena-toolbar{flex:0 0 52px;display:grid;grid-template-columns:minmax(180px,1fr) auto auto;align-items:center;gap:10px;padding:6px 10px;background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(2,6,23,.92));border-bottom:1px solid rgba(148,163,184,.22);box-shadow:0 8px 25px rgba(0,0,0,.24);z-index:4;}
@@ -2067,7 +2067,66 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 .bell-upgrade-card{min-height:155px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;}
 .bell-upgrade-card.bought{opacity:.48;filter:saturate(.65)}.bell-upgrade-card.locked{opacity:.55}.bell-upgrade-svg{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;margin-bottom:8px;background:linear-gradient(145deg,rgba(59,130,246,.20),rgba(124,58,237,.18));border:1px solid rgba(147,197,253,.22);box-shadow:0 7px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.08)}.bell-upgrade-svg svg{width:29px;height:29px;display:block}.bell-upgrade-buy{margin-top:auto;width:100%;min-height:30px;border:0;border-radius:8px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-size:8px;font-weight:1000}.bell-upgrade-buy:disabled{background:#334155;color:#94a3b8}.bell-upgrade-cost{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:8px;font-weight:950;color:#fde68a}.bell-upgrade-continue{margin-top:10px;min-height:36px;padding:0 22px;border:1px solid rgba(34,197,94,.35);border-radius:10px;background:linear-gradient(135deg,#047857,#16a34a);color:#fff;font-size:10px;font-weight:1000;box-shadow:0 8px 22px rgba(22,163,74,.18)}
 @media(max-width:760px){.bell-arena-toolbar{grid-template-columns:1fr auto;padding:5px 7px;gap:5px}.bell-arena-brand span{display:none}.bell-arena-metrics{grid-row:2;grid-column:1/-1;justify-content:center;margin-top:-2px}.bell-arena-toolbar{flex-basis:70px}.bell-arena-actions button{padding:0 8px}.bell-arena-actions button span{display:none}.bell-arena-mount{padding:3px}.bell-upgrade-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.bell-upgrade-card{min-height:126px!important;padding:8px!important}.bell-upgrade-svg{width:34px;height:34px;margin-bottom:5px}.bell-upgrade-svg svg{width:23px;height:23px}.bell-upgrade-title{font-size:14px!important}.bell-upgrade-wallet{padding:5px 8px}.bell-upgrade-continue{min-height:32px;margin-top:6px}.bell-arena-dock .dino-game-card.dino-expanded .dino2-mission{display:none!important}.bell-arena-dock .dino-game-card.dino-expanded .dino2-hudline{display:none!important}.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-hud{display:grid!important}.bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{max-height:100%!important;}}
-</style>\n</head>
+</style>\n
+<style id="survive-bell-24-audio-polish">
+.dino2-title:after{content:"FINAL POLISH 2.5"!important;background:linear-gradient(135deg,#020617,#6d28d9 42%,#0891b2 72%,#16a34a)!important;box-shadow:0 5px 20px rgba(109,40,217,.32)!important;}
+.bell-arena-dock:before{content:"";position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(circle at 18% 20%,rgba(59,130,246,.12),transparent 24%),radial-gradient(circle at 82% 28%,rgba(124,58,237,.10),transparent 26%),radial-gradient(circle at 50% 110%,rgba(14,165,233,.12),transparent 30%);animation:bellArenaAmbient 9s ease-in-out infinite alternate;}
+@keyframes bellArenaAmbient{from{transform:translate3d(-1.5%,0,0) scale(1)}to{transform:translate3d(1.5%,-1%,0) scale(1.025)}}
+.bell-arena-toolbar,.bell-arena-mount{position:relative;z-index:1}
+.bell-arena-toolbar{background:linear-gradient(180deg,rgba(15,23,42,.985),rgba(2,6,23,.96))!important;backdrop-filter:blur(16px);border-bottom-color:rgba(96,165,250,.20)!important;}
+.bell-arena-brand strong{background:linear-gradient(90deg,#fff,#bfdbfe 55%,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent!important;}
+.bell-arena-metrics span{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 5px 14px rgba(0,0,0,.12)}
+.bell-audio-btn{width:34px!important;min-width:34px!important;padding:0!important;font-size:14px!important;transition:.18s ease!important;}
+.bell-audio-btn.off{opacity:.48!important;filter:grayscale(.9)!important;box-shadow:none!important;}
+.bell-audio-btn:not(.off){border-color:rgba(34,211,238,.30)!important;box-shadow:0 0 18px rgba(34,211,238,.10)!important;}
+.bell-arena-dock .dino-canvas-wrap{position:relative!important;border-color:rgba(56,189,248,.48)!important;box-shadow:0 18px 52px rgba(0,0,0,.36),0 0 34px rgba(37,99,235,.10),0 0 0 1px rgba(255,255,255,.05) inset!important;}
+.bell-arena-dock .dino-canvas-wrap:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:inherit;box-shadow:inset 0 0 36px rgba(56,189,248,.08),inset 0 -28px 50px rgba(2,6,23,.18)}
+.bell-fire-btn{isolation:isolate;transition:transform .08s ease,filter .12s ease,box-shadow .12s ease!important;}
+.bell-fire-btn.firing{filter:saturate(1.28) brightness(1.08)!important;box-shadow:0 0 0 1px rgba(254,202,202,.38),0 0 28px rgba(239,68,68,.38),0 13px 32px rgba(127,29,29,.30)!important;animation:bellFirePulse .32s ease-in-out infinite alternate;}
+@keyframes bellFirePulse{from{transform:scale(.996)}to{transform:scale(1.004)}}
+.bell-upgrade-panel{background:radial-gradient(circle at 50% 8%,rgba(37,99,235,.22),transparent 28%),linear-gradient(180deg,rgba(3,7,18,.93),rgba(15,23,42,.985))!important;overflow:auto!important;}
+.bell-upgrade-card{transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease!important;}
+.bell-upgrade-card:not(.locked):not(.bought):active{transform:scale(.985)!important;}
+.bell-upgrade-svg{color:#93c5fd!important;box-shadow:0 7px 22px rgba(37,99,235,.14),inset 0 1px 0 rgba(255,255,255,.08)!important;}
+.bell-wave-banner{backdrop-filter:blur(10px);border:1px solid rgba(147,197,253,.18);box-shadow:0 14px 40px rgba(0,0,0,.32),0 0 24px rgba(59,130,246,.08)!important;}
+@media(max-width:760px){
+  .bell-arena-actions{gap:3px!important}.bell-audio-btn{width:31px!important;min-width:31px!important;height:31px!important;font-size:13px!important}
+  .bell-arena-toolbar{grid-template-columns:minmax(120px,1fr) auto!important}.bell-arena-actions button{height:31px!important;padding:0 7px!important}
+}
+</style>
+
+<style id="survive-bell-25-final-polish">
+.dino2-title:after{content:"FINAL POLISH 2.5"!important;background:linear-gradient(135deg,#020617,#5b21b6 38%,#0369a1 68%,#15803d)!important;box-shadow:0 6px 22px rgba(91,33,182,.30)!important;}
+#dinoCanvas{aspect-ratio:16/9!important;width:100%!important;height:auto!important;}
+.dino2-toptools{display:flex;align-items:center;gap:5px;margin-left:auto}.bell-mini-audio{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;border:1px solid #bfdbfe;background:linear-gradient(180deg,#fff,#eff6ff);font-size:14px;box-shadow:0 5px 13px rgba(15,23,42,.08)}.bell-mini-audio.off{opacity:.45;filter:grayscale(1)}
+.bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{aspect-ratio:16/9!important;max-width:100%!important;max-height:100%!important;}
+.bell-arena-dock .dino-canvas-wrap{background:radial-gradient(circle at 50% 30%,#0f2037,#030712 72%)!important;}
+
+/* BREAK MENU — no hidden functions. Header/footer stay visible, only cards scroll if necessary. */
+.bell-upgrade-panel{grid-template-rows:auto auto minmax(0,1fr) auto!important;align-items:stretch!important;justify-content:stretch!important;gap:6px!important;padding:10px!important;overflow:hidden!important;overscroll-behavior:contain!important;background:radial-gradient(circle at 50% 0%,rgba(37,99,235,.30),transparent 36%),linear-gradient(180deg,rgba(2,6,23,.965),rgba(15,23,42,.995))!important;}
+.bell-upgrade-kicker{text-align:center!important;font-size:9px!important;line-height:1.1!important;margin:0!important;color:#fde68a!important;}
+.bell-upgrade-title{text-align:center!important;font-size:14px!important;line-height:1.15!important;margin:0!important;color:#fff!important;}
+.bell-upgrade-wallet{width:100%!important;max-width:760px!important;justify-self:center!important;margin:0!important;padding:5px 9px!important;min-height:30px!important;}
+.bell-upgrade-choices{width:100%!important;max-width:920px!important;justify-self:center!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;align-content:start!important;padding:1px 2px 4px!important;scrollbar-width:thin;}
+.bell-upgrade-card{min-height:118px!important;padding:7px!important;border-radius:11px!important;}
+.bell-upgrade-svg{width:31px!important;height:31px!important;border-radius:9px!important;margin-bottom:4px!important}.bell-upgrade-svg svg{width:20px!important;height:20px!important}
+.bell-upgrade-name{font-size:9.5px!important;line-height:1.15!important;}.bell-upgrade-desc{font-size:7.8px!important;line-height:1.3!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:20px!important;}.bell-upgrade-level,.bell-upgrade-cost{font-size:7.5px!important}.bell-upgrade-rarity{font-size:6px!important;top:5px!important;right:5px!important}.bell-upgrade-buy{min-height:26px!important;font-size:7.5px!important;border-radius:7px!important}.bell-upgrade-continue{justify-self:center!important;width:min(100%,420px)!important;min-height:34px!important;margin:0!important;position:relative!important;z-index:3!important;box-shadow:0 8px 20px rgba(22,163,74,.25)!important;}
+
+/* More mobile-game feel */
+.dino-combat-chip{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 7px 20px rgba(37,99,235,.06)!important}.bell-wave-strip{border-color:#bfdbfe!important;background:linear-gradient(180deg,#fff,rgba(239,246,255,.94))!important}.bell-wave-progress span{box-shadow:0 0 14px rgba(14,165,233,.25)!important}.bell-fire-btn{min-height:50px!important;font-size:16px!important;text-shadow:0 1px 2px rgba(0,0,0,.25)!important;}
+
+@media(max-width:760px){
+  #dinoCanvas{aspect-ratio:16/9!important;}
+  .dino2-toptools{gap:3px}.bell-mini-audio{width:28px;height:28px;font-size:12px}.dino2-wallet{padding:4px 7px!important;font-size:9px!important}
+  .bell-upgrade-panel{padding:6px!important;gap:4px!important;}
+  .bell-upgrade-title{font-size:11px!important}.bell-upgrade-wallet{min-height:25px!important;padding:3px 7px!important;font-size:8px!important}.bell-upgrade-wallet strong{font-size:12px!important}
+  .bell-upgrade-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important;}
+  .bell-upgrade-card{min-height:100px!important;padding:6px!important}.bell-upgrade-svg{width:27px!important;height:27px!important;margin-bottom:3px!important}.bell-upgrade-svg svg{width:18px!important;height:18px!important}.bell-upgrade-name{font-size:9px!important}.bell-upgrade-desc{font-size:7.2px!important;line-height:1.25!important;min-height:18px!important}.bell-upgrade-buy{min-height:23px!important;font-size:7px!important}.bell-upgrade-continue{min-height:30px!important;font-size:9px!important;}
+  .bell-arena-dock .bell-upgrade-choices{grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+  .bell-arena-dock .bell-upgrade-card{min-height:96px!important;}
+}
+</style>
+</head>
 <body>
   <div id="bellArenaDock" class="bell-arena-dock" aria-hidden="true">
     <div class="bell-arena-toolbar">
@@ -2081,6 +2140,8 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         <span>⚡ <b id="bellArenaCredits">0</b></span>
       </div>
       <div class="bell-arena-actions">
+        <button id="bellSoundBtn" data-bell-sound-toggle class="bell-audio-btn" type="button" onclick="toggleBellSound()" title="Звуки" aria-label="Звуки">🔊</button>
+        <button id="bellMusicBtn" data-bell-music-toggle class="bell-audio-btn" type="button" onclick="toggleBellMusic()" title="Музика" aria-label="Музика">🎵</button>
         <button id="bellArenaRestartBtn" type="button" onclick="startDinoGame()" disabled title="Новий бій">↻</button>
         <button type="button" onclick="openPortalShop('skins')">🛍 <span>Магазин</span></button>
         <button type="button" onclick="exitBellArena()" title="Згорнути гру">✕</button>
@@ -2268,9 +2329,9 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
         <!-- Блок 2: Вижити до дзвінка 2.3 FULL ARENA -->
         <div class="dino-game-card">
-          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка 2.3</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
+          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка 2.5</div><div class="dino2-toptools"><button id="bellSoundMini" data-bell-sound-toggle class="bell-mini-audio" type="button" onclick="toggleBellSound()" aria-label="Звуки">🔊</button><button id="bellMusicMini" data-bell-music-toggle class="bell-mini-audio" type="button" onclick="toggleBellMusic()" aria-label="Музика">🎵</button><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div></div>
           <div class="dino2-stats"><div class="dino2-stat">Очки<strong id="dinoScore">0</strong></div><div class="dino2-stat">Рекорд<strong id="dinoHighScore">0</strong></div><div class="dino2-stat">Жетони<strong id="dinoArtifactsTotal">0</strong></div></div>
-          <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="1440" height="960"></canvas>
+          <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="1440" height="810"></canvas>
             <div id="bellWaveBanner" class="bell-wave-banner" style="display:none"></div>
             <div id="bellUpgradePanel" class="bell-upgrade-panel" style="display:none">
               <div class="bell-upgrade-kicker">🔔 ПЕРЕРВА • АПГРЕЙД-МАГАЗИН</div>
@@ -4362,12 +4423,12 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(!window.currentUserUid){portalToast('🔐 Спочатку увійдіть через Google.');return;}
       const allowed=['skins','weapons','other','collection','quests','achievements'];portalShopCurrentTab=allowed.includes(tab)?tab:'skins';
       document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===portalShopCurrentTab));
-      if(dinoGameRunning){bellShopPause=true;bellFireHeld=false;document.getElementById('dinoFireBtn')?.classList.remove('firing');dinoLastFrame=performance.now();}
+      if(dinoGameRunning){bellShopPause=true;bellCapturePauseState('shop');bellAudioSetDuck(true);} bellSfx('ui');
       const modal=document.getElementById('portalShopModal');if(modal)modal.style.display='flex';renderPortalShop();
     };
     window.closePortalShop=function(){
       const modal=document.getElementById('portalShopModal');if(modal)modal.style.display='none';
-      if(dinoGameRunning){bellShopPause=false;dinoLastFrame=performance.now();const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn&&!bellUpgradeOpen)fireBtn.disabled=false;}
+      if(dinoGameRunning){bellShopPause=false;bellReleasePauseState();const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn&&!bellUpgradeOpen)fireBtn.disabled=false;bellAudioSetDuck(bellUpgradeOpen||bellArenaPaused);}
     };
     document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(document.getElementById('portalShopModal')?.style.display==='flex'){e.preventDefault();window.closePortalShop();return;}if(dinoExpanded){e.preventDefault();exitBellArena();}});
     window.setPortalShopTab=function(tab){portalShopCurrentTab=tab;document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));renderPortalShop();};
@@ -4560,7 +4621,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       samurai:{label:'Самурай',icon:'⛩️',itemId:'skin_samurai'}
     };
 
-    const player = {x:122,y:GROUND_Y-92,w:64,h:92,vy:0,jumping:false,ducking:false,lives:3,invulnerableUntil:0,shield:0,doubleUntil:0,magnetUntil:0};
+    const player = {x:132,y:GROUND_Y-104,w:74,h:104,vy:0,jumping:false,ducking:false,lives:3,invulnerableUntil:0,shield:0,doubleUntil:0,magnetUntil:0};
     let obstacles = [];
     let collectibles = [];
     let powerups = [];
@@ -4670,6 +4731,190 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
 
 
+
+    // =========================
+    // AUDIO ULTRA 2.4 — procedural music + SFX, no external files
+    // =========================
+    let bellAudioCtx=null,bellMasterGain=null,bellMusicGain=null,bellSfxGain=null,bellNoiseBuffer=null;
+    let bellSoundEnabled=localStorage.getItem('bell_sound_enabled')!=='0';
+    let bellMusicEnabled=localStorage.getItem('bell_music_enabled')!=='0';
+    let bellMusicTimer=null,bellMusicNextTime=0,bellMusicTick=0;
+    let bellArenaPaused=false,bellVisibilityPause=false;
+    let bellPauseSnapshot=null;
+    let bellLoopSerial=0;
+    let bellFxQuality=1,bellPerfFrames=0,bellPerfStamp=performance.now(),bellPerfFps=60;
+    const bellAudioLast={shot:0,hit:0,kill:0,ui:0};
+
+
+    function bellCapturePauseState(reason='pause'){
+      if(!dinoGameRunning)return;
+      if(!bellPauseSnapshot){bellPauseSnapshot={score:dinoScore,elapsed:dinoElapsed,world:worldOffset,reason};}
+      else bellPauseSnapshot.reason=reason;
+      bellFireHeld=false;
+      document.getElementById('dinoFireBtn')?.classList.remove('firing');
+      dinoLastFrame=performance.now();
+    }
+    function bellReleasePauseState(){
+      if(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellVisibilityPause)return;
+      bellPauseSnapshot=null;dinoLastFrame=performance.now();
+    }
+    function bellEnforcePauseSnapshot(){
+      if(!bellPauseSnapshot)return;
+      dinoScore=bellPauseSnapshot.score;dinoElapsed=bellPauseSnapshot.elapsed;worldOffset=bellPauseSnapshot.world;
+    }
+
+    function bellAudioUpdateButtons(){
+      document.querySelectorAll('[data-bell-sound-toggle]').forEach(s=>{s.textContent=bellSoundEnabled?'🔊':'🔇';s.classList.toggle('off',!bellSoundEnabled);s.setAttribute('aria-pressed',String(bellSoundEnabled));});
+      document.querySelectorAll('[data-bell-music-toggle]').forEach(m=>{m.textContent=bellMusicEnabled?'🎵':'🎵';m.classList.toggle('off',!bellMusicEnabled);m.setAttribute('aria-pressed',String(bellMusicEnabled));});
+    }
+
+    function bellEnsureAudio(){
+      if(!bellAudioCtx){
+        const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+        bellAudioCtx=new AC();
+        bellMasterGain=bellAudioCtx.createGain();bellMusicGain=bellAudioCtx.createGain();bellSfxGain=bellAudioCtx.createGain();
+        bellMasterGain.gain.value=.82;bellMusicGain.gain.value=.0001;bellSfxGain.gain.value=.76;
+        bellMusicGain.connect(bellMasterGain);bellSfxGain.connect(bellMasterGain);bellMasterGain.connect(bellAudioCtx.destination);
+        bellNoiseBuffer=bellAudioCtx.createBuffer(1,bellAudioCtx.sampleRate,bellAudioCtx.sampleRate);
+        const d=bellNoiseBuffer.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      }
+      if(bellAudioCtx.state==='suspended')bellAudioCtx.resume().catch(()=>{});
+      bellAudioUpdateButtons();return true;
+    }
+
+    function bellAudioTone(freq,dur=.08,type='square',vol=.04,when=0,endFreq=null,bus='sfx'){
+      if(!bellAudioCtx||freq<=0)return;
+      const t=bellAudioCtx.currentTime+Math.max(0,when),osc=bellAudioCtx.createOscillator(),g=bellAudioCtx.createGain();
+      osc.type=type;osc.frequency.setValueAtTime(freq,t);
+      if(endFreq&&endFreq>0)osc.frequency.exponentialRampToValueAtTime(Math.max(20,endFreq),t+dur);
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      osc.connect(g);g.connect(bus==='music'?bellMusicGain:bellSfxGain);osc.start(t);osc.stop(t+dur+.025);
+    }
+
+    function bellAudioNoise(dur=.07,vol=.025,cutoff=3500,when=0,bus='sfx'){
+      if(!bellAudioCtx||!bellNoiseBuffer)return;
+      const t=bellAudioCtx.currentTime+Math.max(0,when),src=bellAudioCtx.createBufferSource(),f=bellAudioCtx.createBiquadFilter(),g=bellAudioCtx.createGain();
+      src.buffer=bellNoiseBuffer;f.type='lowpass';f.frequency.value=cutoff;
+      g.gain.setValueAtTime(Math.max(.0002,vol),t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      src.connect(f);f.connect(g);g.connect(bus==='music'?bellMusicGain:bellSfxGain);src.start(t);src.stop(t+dur+.02);
+    }
+
+    function bellSfx(name,data=null){
+      if(!bellSoundEnabled||!bellEnsureAudio())return;
+      const now=performance.now();
+      if(name==='shot'){
+        if(now-bellAudioLast.shot<38)return;bellAudioLast.shot=now;
+        const w=data||currentWeapon?.()||{};
+        const heavy=['musket','arquebus','fireball','sun'].includes(w.type);
+        const base=heavy?112:185;
+        bellAudioTone(base,.055,'square',heavy?.055:.036,0,heavy?62:105);
+        bellAudioNoise(heavy?.075:.045,heavy?.028:.014,heavy?1900:3200);
+      }else if(name==='reload'){
+        bellAudioTone(390,.055,'square',.024);bellAudioTone(520,.065,'square',.021,.075);
+      }else if(name==='reloadDone'){
+        bellAudioTone(620,.045,'square',.025);bellAudioTone(830,.07,'triangle',.024,.045);
+      }else if(name==='hit'){
+        if(now-bellAudioLast.hit<34)return;bellAudioLast.hit=now;
+        bellAudioTone(data?760:430,data?.055:.035,'triangle',data?.03:.018,0,data?980:330);bellAudioNoise(.025,.009,2500);
+      }else if(name==='kill'){
+        if(now-bellAudioLast.kill<55&&data==='normal')return;bellAudioLast.kill=now;
+        if(data==='boss'){[196,247,294,392].forEach((f,i)=>bellAudioTone(f,.20,'sawtooth',.035,i*.06,f*1.25));bellAudioNoise(.16,.035,1800);}
+        else if(data==='mini'){[220,277,330].forEach((f,i)=>bellAudioTone(f,.12,'triangle',.028,i*.045,f*1.18));}
+        else bellAudioTone(520,.07,'triangle',.018,0,700);
+      }else if(name==='hurt'){
+        bellAudioTone(150,.18,'sawtooth',.05,0,70);bellAudioNoise(.12,.032,950);navigator.vibrate?.(35);
+      }else if(name==='shield'){
+        bellAudioTone(520,.10,'sine',.034);bellAudioTone(780,.14,'sine',.028,.05,980);
+      }else if(name==='wave'){
+        bellAudioTone(294,.10,'triangle',.032);bellAudioTone(392,.11,'triangle',.034,.08);bellAudioTone(523,.15,'triangle',.035,.16);
+      }else if(name==='break'){
+        bellAudioTone(659,.10,'sine',.03);bellAudioTone(784,.12,'sine',.028,.08);bellAudioTone(988,.18,'sine',.026,.16);
+      }else if(name==='boss'){
+        bellAudioTone(92,.48,'sawtooth',.05,0,55);bellAudioNoise(.30,.032,850);bellAudioTone(185,.28,'square',.025,.18,110);navigator.vibrate?.([30,25,45]);
+      }else if(name==='upgrade'){
+        [523,659,784].forEach((f,i)=>bellAudioTone(f,.12,'triangle',.03,i*.055,f*1.06));
+      }else if(name==='victory'){
+        [392,523,659,784,1047].forEach((f,i)=>bellAudioTone(f,.32,'triangle',.042,i*.11,f*1.02));
+      }else if(name==='defeat'){
+        [294,247,196,147].forEach((f,i)=>bellAudioTone(f,.30,'sawtooth',.035,i*.11,f*.72));
+      }else if(name==='ui'){
+        if(now-bellAudioLast.ui<60)return;bellAudioLast.ui=now;bellAudioTone(680,.04,'sine',.018,0,760);
+      }
+    }
+
+    function bellMusicScheduleStep(step,t){
+      if(!bellAudioCtx||!bellMusicEnabled)return;
+      const bar=Math.floor(bellMusicTick/16),roots=[73.42,65.41,87.31,69.30],root=roots[bar%roots.length];
+      const intensity=clamp((bellWave-1)/Math.max(1,bellMaxWaves-1),0,1);
+      const boss=bellBossRequired&&!bellBossDefeated;
+      const off=t-bellAudioCtx.currentTime;
+
+      // bass + kick
+      if(step%4===0){
+        bellAudioTone(root,.24,'triangle',.038,off,root*.80,'music');
+        bellAudioTone(96,.10,'sine',.055,off,42,'music');
+      }
+      // warm chord stab every half bar
+      if(step===0||step===8){
+        const chord=step===0?[1,1.25,1.5]:[1,1.20,1.50];
+        chord.forEach((r,i)=>bellAudioTone(root*r*2,.34,'sine',.010+intensity*.003,off+i*.008,root*r*1.96,'music'));
+      }
+      // snare / hats
+      if(step===4||step===12){bellAudioNoise(.075,.022,2100,off,'music');bellAudioTone(185,.045,'triangle',.013,off);}
+      if(step%2===0)bellAudioNoise(.026,.008+intensity*.006,6800,off,'music');
+
+      // melody grows with waves
+      if(bellWave>=3&&step%2===0){
+        const seq=[2,2.38,2.67,3,3.56,3,2.67,2.38],freq=root*seq[(step/2+bar)%seq.length];
+        bellAudioTone(freq,.082,'square',.012+intensity*.010,off,freq*1.008,'music');
+      }
+      if(bellWave>=9&&(step===3||step===7||step===11||step===15))bellAudioTone(root*4,.055,'sawtooth',.011+intensity*.004,off,root*3.25,'music');
+      if(boss&&step%4===2){bellAudioTone(root*1.5,.18,'sawtooth',.022,off,root*1.30,'music');bellAudioNoise(.045,.012,1300,off,'music');}
+    }
+
+    function bellMusicScheduler(){
+      if(!bellAudioCtx||!bellMusicEnabled)return;
+      const horizon=bellAudioCtx.currentTime+.24;
+      while(bellMusicNextTime<horizon){
+        const step=bellMusicTick%16;bellMusicScheduleStep(step,bellMusicNextTime);
+        const bpm=Math.min(154,124+bellWave*1.35+((bellBossRequired&&!bellBossDefeated)?7:0));
+        bellMusicNextTime+=60/bpm/4;bellMusicTick++;
+      }
+    }
+
+    function bellStartMusic(){
+      if(!bellMusicEnabled||!bellEnsureAudio())return;
+      clearInterval(bellMusicTimer);bellMusicTick=0;bellMusicNextTime=bellAudioCtx.currentTime+.06;
+      bellAudioSetDuck(false);bellMusicTimer=setInterval(bellMusicScheduler,70);bellMusicScheduler();
+    }
+
+    function bellStopMusic(fade=.45){
+      clearInterval(bellMusicTimer);bellMusicTimer=null;
+      if(bellAudioCtx&&bellMusicGain){const t=bellAudioCtx.currentTime;bellMusicGain.gain.cancelScheduledValues(t);bellMusicGain.gain.setValueAtTime(Math.max(.0001,bellMusicGain.gain.value),t);bellMusicGain.gain.exponentialRampToValueAtTime(.0001,t+fade);}
+    }
+
+    function bellAudioSetDuck(duck=false){
+      if(!bellAudioCtx||!bellMusicGain)return;
+      const target=!bellMusicEnabled?.0001:(duck?.065:((bellBossRequired&&!bellBossDefeated)?.255:.205));
+      bellMusicGain.gain.cancelScheduledValues(bellAudioCtx.currentTime);bellMusicGain.gain.setTargetAtTime(target,bellAudioCtx.currentTime,.09);
+    }
+
+    window.toggleBellSound=function(){bellSoundEnabled=!bellSoundEnabled;localStorage.setItem('bell_sound_enabled',bellSoundEnabled?'1':'0');bellEnsureAudio();bellAudioUpdateButtons();if(bellSoundEnabled)bellSfx('ui');};
+    window.toggleBellMusic=function(){bellMusicEnabled=!bellMusicEnabled;localStorage.setItem('bell_music_enabled',bellMusicEnabled?'1':'0');bellEnsureAudio();bellAudioUpdateButtons();if(bellMusicEnabled&&dinoGameRunning)bellStartMusic();else bellStopMusic(.18);};
+
+    function bellPerfTick(now){
+      bellPerfFrames++;
+      if(now-bellPerfStamp>=1200){
+        bellPerfFps=bellPerfFrames*1000/(now-bellPerfStamp);bellPerfFrames=0;bellPerfStamp=now;
+        if(bellPerfFps<35)bellFxQuality=.58;else if(bellPerfFps<45)bellFxQuality=.74;else if(bellPerfFps<53)bellFxQuality=.88;else bellFxQuality=1;
+      }
+    }
+
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden&&dinoGameRunning){bellVisibilityPause=true;bellCapturePauseState('hidden');bellAudioSetDuck(true);}
+      else if(!document.hidden&&bellVisibilityPause){bellVisibilityPause=false;bellReleasePauseState();bellAudioSetDuck(bellUpgradeOpen||bellShopPause||bellArenaPaused);}
+    });
+
     function updateBellArenaToolbar(){
       const score=document.getElementById('bellArenaScore');if(score)score.textContent=Math.floor(dinoScore);
       const wave=document.getElementById('bellArenaWave');if(wave)wave.textContent=`Хвиля ${bellWave}/${bellMaxWaves}`;
@@ -4684,7 +4929,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(shop&&!bellShopOriginalParent){bellShopOriginalParent=shop.parentNode;bellShopOriginalNext=shop.nextSibling;}
       mount.appendChild(card);
       if(shop&&shop.parentNode!==dock)dock.appendChild(shop);
-      dinoExpanded=true;card.classList.add('dino-expanded');dock.classList.add('active');dock.setAttribute('aria-hidden','false');document.body.classList.add('dino-no-scroll','bell-arena-body');
+      dinoExpanded=true;bellArenaPaused=false;bellReleasePauseState();card.classList.add('dino-expanded');dock.classList.add('active');dock.setAttribute('aria-hidden','false');document.body.classList.add('dino-no-scroll','bell-arena-body');bellAudioSetDuck(bellUpgradeOpen||bellShopPause);
       const btn=document.getElementById('dinoExpandBtn');if(btn)btn.textContent='✕ Згорнути';
       updateBellArenaToolbar();
       try{if(dock.requestFullscreen&&!document.fullscreenElement)dock.requestFullscreen({navigationUI:'hide'}).catch(()=>{});}catch(_){}
@@ -4696,7 +4941,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(shop?.style.display==='flex')window.closePortalShop?.();
       if(card&&bellArenaOriginalParent){if(bellArenaOriginalNext&&bellArenaOriginalNext.parentNode===bellArenaOriginalParent)bellArenaOriginalParent.insertBefore(card,bellArenaOriginalNext);else bellArenaOriginalParent.appendChild(card);}
       if(shop&&bellShopOriginalParent){if(bellShopOriginalNext&&bellShopOriginalNext.parentNode===bellShopOriginalParent)bellShopOriginalParent.insertBefore(shop,bellShopOriginalNext);else bellShopOriginalParent.appendChild(shop);}
-      dinoExpanded=false;card?.classList.remove('dino-expanded');dock?.classList.remove('active');dock?.setAttribute('aria-hidden','true');document.body.classList.remove('dino-no-scroll','bell-arena-body');
+      dinoExpanded=false;if(dinoGameRunning){bellArenaPaused=true;bellCapturePauseState('arena');}bellFireHeld=false;card?.classList.remove('dino-expanded');dock?.classList.remove('active');dock?.setAttribute('aria-hidden','true');document.body.classList.remove('dino-no-scroll','bell-arena-body');bellAudioSetDuck(true);
       const btn=document.getElementById('dinoExpandBtn');if(btn)btn.textContent='⛶ Екран';
       try{if(document.fullscreenElement===dock)document.exitFullscreen?.().catch(()=>{});}catch(_){}
       setTimeout(()=>{if(!dinoGameRunning)drawDinoIdleScreen();},30);
@@ -4714,7 +4959,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       drawDinoIdleScreen();
     }
 
-    function dinoHitbox(){return {x:player.x+12,y:player.y+8,w:50,h:80};}
+    function dinoHitbox(){return {x:player.x+12,y:player.y+8,w:58,h:92};}
 
     function aabb(a,b){return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;}
 
@@ -4787,7 +5032,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     function beginDinoReload(){
       if(dinoReloadUntil>performance.now()) return;
       const weapon=currentWeapon();
-      dinoReloadUntil=performance.now()+(weapon.reload||1050)*bellReloadMult;
+      dinoReloadUntil=performance.now()+(weapon.reload||1050)*bellReloadMult;bellSfx('reload');
       updateCombatHUD();
     }
 
@@ -4845,7 +5090,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       // themed muzzle effect
       const muzzleColor=weapon.type==='fireball'?'#fb923c':weapon.type==='sun'?'#fbbf24':'#f8fafc';
       burst(originX+4,originY,muzzleColor,weapon.type==='musket'?12:7);
-      emitShotUltraFx(originX+12,originY,weapon);
+      emitShotUltraFx(originX+12,originY,weapon);bellSfx('shot',weapon);
       if(weapon.recoil) screenShake=Math.max(screenShake,isAuto?weapon.recoil*.45:weapon.recoil);
       else if(['musket','flare','pistol','arquebus'].includes(weapon.type)) screenShake=Math.max(screenShake,2.4);
 
@@ -4857,7 +5102,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     function completeDinoReload(now){
       if(dinoReloadUntil && now>=dinoReloadUntil){
         dinoReloadUntil=0;
-        dinoAmmo=dinoMaxAmmo;
+        dinoAmmo=dinoMaxAmmo;bellSfx('reloadDone');
         updateCombatHUD();
       }
     }
@@ -4949,7 +5194,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       const panel=document.getElementById('bellUpgradePanel');if(panel)panel.style.display='none';
       const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=false;
       bellUpdateWaveUI();
-      bellShowBanner(`⚠️ ХВИЛЯ ${wave}/${bellMaxWaves} • ${plan.count}${plan.boss?' + БОС':''}`,1550);
+      bellShowBanner(`⚠️ ХВИЛЯ ${wave}/${bellMaxWaves} • ${plan.count}${plan.boss?' + БОС':''}`,1550);bellSfx('wave');bellAudioSetDuck(false);
     }
 
     function bellUpgradeSvg(id){
@@ -4996,25 +5241,25 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function bellOpenUpgradePanel(){
-      bellUpgradeOpen=true;bellWaveActive=false;bellFireHeld=false;dinoLastFrame=performance.now();
+      bellUpgradeOpen=true;bellWaveActive=false;bellCapturePauseState('upgrade');
       const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.classList.remove('firing');fireBtn.disabled=true;}
-      bellUpgradeStock=bellPickUpgradeOptions(4);bellPurchasedThisBreak=new Set();
+      bellUpgradeStock=bellPickUpgradeOptions(4);bellPurchasedThisBreak=new Set();bellSfx('break');bellAudioSetDuck(true);
       const panel=document.getElementById('bellUpgradePanel');if(!panel)return;
-      bellRenderUpgradeShop();panel.style.display='flex';bellShowBanner('🔔 ПЕРЕРВА!',900);
+      bellRenderUpgradeShop();panel.style.display='grid';bellShowBanner('🔔 ПЕРЕРВА!',900);
     }
 
     window.bellChooseUpgrade=function(id){
       if(!bellUpgradeOpen||bellPurchasedThisBreak.has(id))return;
       const u=bellUpgradeCatalog.find(x=>x.id===id);if(!u)return;
       const cost=bellUpgradeCost(id);if(bellBattleCredits<cost){portalToast('⚡ Не вистачає бойових кредитів.');return;}
-      bellBattleCredits-=cost;bellPurchasedThisBreak.add(id);bellUpgradeLevels[id]=(Number(bellUpgradeLevels[id])||0)+1;u.apply();
+      bellBattleCredits-=cost;bellPurchasedThisBreak.add(id);bellUpgradeLevels[id]=(Number(bellUpgradeLevels[id])||0)+1;u.apply();bellSfx('upgrade');
       updateDinoHUD();updateCombatHUD();bellRenderUpgradeShop();
     };
 
     window.bellContinueAfterBreak=function(){
       if(!bellUpgradeOpen)return;
       bellUpgradeOpen=false;const panel=document.getElementById('bellUpgradePanel');if(panel)panel.style.display='none';
-      dinoLastFrame=performance.now();bellStartWave(Math.min(bellMaxWaves,bellWave+1));
+      bellReleasePauseState();bellSfx('ui');bellAudioSetDuck(false);bellStartWave(Math.min(bellMaxWaves,bellWave+1));
     };
 
     function bellMaybeFinishWave(){
@@ -5076,15 +5321,18 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     function startDinoGame(){
       if(!isGameUnlocked) return;
       if(dinoGameRunning) return;
-      resetDinoRun();
+      bellEnsureAudio();resetDinoRun();
       dinoGameRunning=true; dinoGameOver=false;
+      try{bellAudioCtx?.resume?.().then(()=>{if(dinoGameRunning&&bellMusicEnabled)bellStartMusic();}).catch(()=>{});}catch(_){}
+      bellStartMusic();bellSfx('wave');
       dinoRunStartedAt=Date.now();
       dinoRunId=`${window.currentUserUid||'guest'}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
       dinoLastFrame=performance.now();
+      try{cancelAnimationFrame(dinoAnimationId);}catch(_){} const bellThisLoop=++bellLoopSerial;
       enterBellArena();
       const btn=document.getElementById('dinoStartBtn'); if(btn){btn.textContent='⚔️ Бій триває';btn.disabled=true;} const arenaRestart=document.getElementById('bellArenaRestartBtn');if(arenaRestart)arenaRestart.disabled=true; const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=false;
       updateCombatHUD();
-      dinoAnimationId=requestAnimationFrame(gameLoop);
+      dinoAnimationId=requestAnimationFrame(t=>gameLoop(t,bellThisLoop));
     }
 
     function resetDinoRun(){
@@ -5093,11 +5341,11 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       obstacles=[];collectibles=[];powerups=[];particles=[];floatTexts=[];enemies=[];projectiles=[];enemyProjectiles=[];ultraFx=[];
       enemySpawnTimer=120;dinoKills=0;dinoAutoFire=false;bellBossSpawned=false;bellVictory=false;bellCombo=0;bellBestCombo=0;dinoReloadUntil=0;dinoLastShotAt=0;dinoMuzzleFlashUntil=0;dinoLockedTargetId=null;
       bellWave=1;bellWaveTarget=0;bellWaveSpawned=0;bellWaveKilled=0;bellWaveActive=false;bellUpgradeOpen=false;bellBossRequired=false;bellBossSpawnedThisWave=false;bellBossDefeated=true;bellMiniBossRequired=false;bellMiniBossSpawned=false;bellMiniBossDefeated=true;bellFireHeld=false;bellFirePointerId=null;
-      bellDamageBonus=0;bellFireRateMult=.92;bellReloadMult=.9;bellMagBonus=2;bellPierceBonus=0;bellSplashBonus=0;bellCritChance=.05;bellSlowChance=0;bellMultishot=0;bellDroneLevel=0;bellDroneNextShot=0;bellChainChance=0;bellUpgradeLevels={};bellBattleCredits=0;bellUpgradeStock=[];bellPurchasedThisBreak=new Set();bellShopPause=false;
+      bellDamageBonus=0;bellFireRateMult=.92;bellReloadMult=.9;bellMagBonus=2;bellPierceBonus=0;bellSplashBonus=0;bellCritChance=.05;bellSlowChance=0;bellMultishot=0;bellDroneLevel=0;bellDroneNextShot=0;bellChainChance=0;bellUpgradeLevels={};bellBattleCredits=0;bellUpgradeStock=[];bellPurchasedThisBreak=new Set();bellShopPause=false;bellPauseSnapshot=null;
       dinoMaxAmmo=(currentWeapon().mag||6)+bellMagBonus;dinoAmmo=dinoMaxAmmo;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
       dinoMaxLives=owned.boost_heart?4:3;
-      Object.assign(player,{y:GROUND_Y-92,vy:0,jumping:false,ducking:false,lives:dinoMaxLives,invulnerableUntil:0,shield:owned.boost_shield?1:0,doubleUntil:0,magnetUntil:0});
+      Object.assign(player,{y:GROUND_Y-104,vy:0,jumping:false,ducking:false,lives:dinoMaxLives,invulnerableUntil:0,shield:owned.boost_shield?1:0,doubleUntil:0,magnetUntil:0});
       currentMission={...missionPool[Math.floor(Math.random()*missionPool.length)]};missionComplete=false;
       const panel=document.getElementById('bellUpgradePanel');if(panel)panel.style.display='none';
       const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.disabled=false;fireBtn.classList.remove('firing');}
@@ -5167,11 +5415,11 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       const total=weighted.reduce((s,x)=>s+x[1],0);let pick=Math.random()*total,type='teacher';
       for(const [name,wgt] of weighted){pick-=wgt;if(pick<=0){type=name;break;}}
       const row=Math.floor(Math.random()*4);
-      let hp=1+plan.hpBonus,speed=106,w=58,h=86,ranged=false;
+      let hp=1+plan.hpBonus,speed=106,w=64,h=96,ranged=false;
       if(type==='physed'){hp=2+plan.hpBonus;speed=182;}
       if(type==='math'){hp=2+plan.hpBonus;speed=126;ranged=true;}
       if(type==='chemistry'){hp=3+plan.hpBonus;speed=114;ranged=true;}
-      if(type==='librarian'){hp=4+plan.hpBonus;speed=96;w=62;h=92;ranged=true;}
+      if(type==='librarian'){hp=4+plan.hpBonus;speed=96;w=78;h=112;ranged=true;}
       if(type==='informatics'){hp=3+plan.hpBonus;speed=121;ranged=true;}
       if(type==='history'){hp=4+plan.hpBonus;speed=102;ranged=true;}
       if(type==='geography'){hp=4+plan.hpBonus;speed=108;ranged=true;}
@@ -5193,13 +5441,13 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       const speed=(isDirector?70:64)+tier*3;
       enemies.push({
         id:++enemySerial,type:kind,theme:themeIndex,row:0,
-        x:DINO_W+185,y:GROUND_Y-132,w:isDirector?94:88,h:isDirector?132:126,
+        x:DINO_W+185,y:GROUND_Y-(isDirector?148:140),w:isDirector?108:100,h:isDirector?148:140,
         hp,maxHp:hp,speed,dead:false,hitFlash:0,walk:0,slowUntil:0,
         palette:{cloth:isDirector?'#1f2937':'#334155',accent:isDirector?'#7c3aed':'#0369a1',metal:'#fbbf24',skin:'#d2a177'},
         subject:isDirector?'Директор':'Заступник директора',ranged:true,nextAttackAt:performance.now()+700
       });
       bellBossSpawnedThisWave=true;bellBossDefeated=false;
-      bellShowBanner(finalBoss?'👑 ФІНАЛЬНИЙ БОС: ДИРЕКТОР!':(isDirector?'👔 БОС: ДИРЕКТОР!':'📋 БОС: ЗАСТУПНИК!'),1650);
+      bellShowBanner(finalBoss?'👑 ФІНАЛЬНИЙ БОС: ДИРЕКТОР!':(isDirector?'👔 БОС: ДИРЕКТОР!':'📋 БОС: ЗАСТУПНИК!'),1650);bellSfx('boss');bellAudioSetDuck(false);
       screenShake=7;
     }
 
@@ -5216,7 +5464,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         subject:'Класний керівник'
       });
       bellMiniBossSpawned=true;bellMiniBossDefeated=false;
-      bellShowBanner('⭐ МІНІБОС: КЛАСНИЙ КЕРІВНИК!',1300);screenShake=4;
+      bellShowBanner('⭐ МІНІБОС: КЛАСНИЙ КЕРІВНИК!',1300);bellSfx('boss');screenShake=4;
     }
 
     function enemyShotHitbox(s){return {x:s.x-s.r,y:s.y-s.r,w:s.r*2,h:s.r*2};}
@@ -5324,7 +5572,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(Math.random()<bellSlowChance)enemy.slowUntil=Math.max(enemy.slowUntil||0,performance.now()+1100);
       burst(projectile.x,projectile.y,projectile.accent||'#fff',projectile.crit?14:8);
       emitImpactUltraFx(projectile.x,projectile.y,projectile.accent||'#fff',projectile.damage>=3?1.35:1);
-      floatText(enemy.x+6,enemy.y-5,`${projectile.crit?'⭐ КРИТ ':'-'}${Math.round(projectile.damage*10)/10}`,projectile.crit?'#fbbf24':'#ef4444');
+      floatText(enemy.x+6,enemy.y-5,`${projectile.crit?'⭐ КРИТ ':'-'}${Math.round(projectile.damage*10)/10}`,projectile.crit?'#fbbf24':'#ef4444');bellSfx('hit',!!projectile.crit);
       if(bellChainChance>0&&Math.random()<bellChainChance){
         let chained=null,best=175;
         for(const other of enemies){
@@ -5358,7 +5606,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(enemy.dead)return;
       enemy.dead=true;dinoKills++;bellCombo++;bellBestCombo=Math.max(bellBestCombo,bellCombo);
       const boss=['director','viceprincipal'].includes(enemy.type);
-      const miniBoss=enemy.type==='headteacher';
+      const miniBoss=enemy.type==='headteacher';bellSfx('kill',boss?'boss':miniBoss?'mini':'normal');
       if(boss)bellBossDefeated=true;else if(miniBoss)bellMiniBossDefeated=true;else bellWaveKilled++;
       const mult=player.doubleUntil>performance.now()?2:1,comboMult=1+Math.min(1,bellCombo*.03);
       const baseReward={teacher:60,physed:78,math:88,chemistry:100,librarian:122,informatics:110,history:118,geography:118,music:124,art:130,brute:160,headteacher:380,viceprincipal:620,director:1250}[enemy.type]||65;
@@ -5429,14 +5677,14 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         player.invulnerableUntil=now+650;
         floatText(player.x,player.y-8,'🛡 ВРЯТОВАНО','#0ea5e9');
         burst(player.x+20,player.y+25,'#38bdf8',14);
-        screenShake=4;
+        screenShake=4;bellSfx('shield');
         return;
       }
 
       bellCombo=0;
       player.lives--;
       player.invulnerableUntil=now+1400;
-      screenShake=7;
+      screenShake=7;bellSfx('hurt');
       burst(player.x+20,player.y+30,'#ef4444',16);
       floatText(player.x+4,player.y-8,'-1 ❤️','#dc2626');
       updateDinoHUD();
@@ -5446,13 +5694,13 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     function endDinoGame(victory=false){
       if(!dinoGameRunning)return;
-      dinoGameRunning=false;dinoGameOver=true;bellVictory=!!victory;dinoLockedTargetId=null;
+      dinoGameRunning=false;bellLoopSerial++;dinoGameOver=true;bellVictory=!!victory;dinoLockedTargetId=null;bellArenaPaused=false;bellVisibilityPause=false;bellSfx(victory?'victory':'defeat');bellStopMusic(.85);
       cancelAnimationFrame(dinoAnimationId);
       if(victory){dinoScore+=500;dinoArtifactsRun+=3;}
       const finalScore=Math.max(0,Math.floor(dinoScore));
       if(finalScore>dinoHighScore){dinoHighScore=finalScore;localStorage.setItem('dino_high_score',String(dinoHighScore));}
       dinoArtifactsTotal+=dinoArtifactsRun;localStorage.setItem('dino_artifacts_total',String(dinoArtifactsTotal));
-      updateDinoHighScoreUI();updateDinoHUD();updateMissionUI();updateBellArenaToolbar();
+      updateDinoHighScoreUI();bellAudioUpdateButtons();updateDinoHUD();updateMissionUI();updateBellArenaToolbar();
       const duration=Math.max(1,Date.now()-dinoRunStartedAt);
       saveDinoLeaderboard(finalScore,dinoArtifactsRun,duration,dinoRunId);
       drawGameOver(finalScore,victory);
@@ -5460,17 +5708,11 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function burst(x,y,color,count=8){
-      for(let i=0;i<count;i++){
-        particles.push({
-          x,y,
-          vx:rand(-90,90),
-          vy:rand(-150,-30),
-          life:rand(.35,.8),
-          max:.8,
-          color,
-          size:rand(2,5)
-        });
+      const safeCount=Math.max(2,Math.round(count*bellFxQuality));
+      for(let i=0;i<safeCount;i++){
+        particles.push({x,y,vx:rand(-90,90),vy:rand(-150,-30),life:rand(.35,.8),max:.8,color,size:rand(2,5)});
       }
+      if(particles.length>320)particles.splice(0,particles.length-320);
     }
 
     function floatText(x,y,text,color){
@@ -6006,7 +6248,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     function drawRunner(){
       const now=performance.now();
       if(now<player.invulnerableUntil&&Math.floor(now/90)%2===0)return;
-      const duck=player.ducking&&!player.jumping,y=duck?GROUND_Y-55:player.y,h=duck?58:92;
+      const duck=false,y=player.y,h=104;
       ctx.save();ultraGlow(player.x+38,y+42,52,'rgba(96,165,250,.8)',.08);
       if(isSchoolOutfitSkin(currentDinoSkin)){
         drawStudentRunner(player.x-4,y,h,currentDinoSkin);drawPlayerWeapon(player.x-4,y,h,currentDinoSkin);
@@ -6063,7 +6305,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         else if(f.kind==='spark'||f.kind==='ember'){f.vy+=190*dt;}
         else if(f.kind==='chain'){f.vx=0;f.vy=0;}
       }
-      ultraFx=ultraFx.filter(f=>f.life>0);
+      ultraFx=ultraFx.filter(f=>f.life>0);if(ultraFx.length>180)ultraFx.splice(0,ultraFx.length-180);
     }
 
     function drawUltraFx(){
@@ -6297,7 +6539,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function drawBellHordeDepth(){
-      const count=Math.min(86,18+bellWave*5);
+      const count=Math.min(Math.round(86*bellFxQuality),Math.max(16,Math.round((18+bellWave*5)*bellFxQuality)));
       if(!dinoGameRunning&&bellWave<=1)return;
       ctx.save();
       for(let row=0;row<3;row++){
@@ -6312,6 +6554,76 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
           ctx.beginPath();ctx.moveTo(-8,-9);ctx.lineTo(-15,18);ctx.moveTo(8,-9);ctx.lineTo(16,18);ctx.stroke();ctx.restore();
         }
       }
+      ctx.restore();
+    }
+
+
+    function drawBellCinematicFX(now){
+      ctx.save();
+      const q=bellFxQuality;
+
+      // Aim beam: subtle, only while firing.
+      const target=enemies.find(e=>!e.dead&&e.id===dinoLockedTargetId);
+      if(target&&bellFireHeld){
+        const x1=currentDinoSkin==='dino'?player.x+82:player.x+101,y1=player.y+45,x2=target.x+target.w*.48,y2=target.y+target.h*.48;
+        const g=ctx.createLinearGradient(x1,y1,x2,y2);g.addColorStop(0,'rgba(34,211,238,.38)');g.addColorStop(.7,'rgba(96,165,250,.12)');g.addColorStop(1,'rgba(251,191,36,.05)');
+        ctx.strokeStyle=g;ctx.lineWidth=1.4;ctx.setLineDash([8,9]);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);
+      }
+
+      // Projectile energy trails.
+      ctx.globalCompositeOperation='screen';
+      const pLimit=Math.max(8,Math.round(26*q));
+      for(const p of projectiles.slice(-pLimit)){
+        const len=Math.min(58,20+Math.abs(p.vx||0)*.026),g=ctx.createLinearGradient(p.x-len,p.y,p.x,p.y);
+        g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(1,p.accent||'rgba(56,189,248,.8)');
+        ctx.strokeStyle=g;ctx.lineWidth=p.crit?4.2:2.2;ctx.beginPath();ctx.moveTo(p.x-len,p.y-(p.vy||0)*.015);ctx.lineTo(p.x,p.y);ctx.stroke();
+        if(p.crit){ultraGlow(p.x,p.y,18,p.accent||'rgba(251,191,36,.9)',.10);}
+      }
+      for(const s of enemyProjectiles.slice(-Math.max(6,Math.round(16*q)))){
+        const g=ctx.createLinearGradient(s.x+28,s.y,s.x,s.y);g.addColorStop(0,'rgba(239,68,68,0)');g.addColorStop(1,s.color||'#ef4444');
+        ctx.strokeStyle=g;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s.x+28,s.y);ctx.lineTo(s.x,s.y);ctx.stroke();
+      }
+
+      // Muzzle bloom and floor light.
+      if(now<dinoMuzzleFlashUntil){
+        const mx=currentDinoSkin==='dino'?player.x+88:player.x+108,my=player.y+45;
+        ultraGlow(mx,my,42,'rgba(251,191,36,.96)',.22);
+        const fg=ctx.createRadialGradient(mx,GROUND_Y,2,mx,GROUND_Y,100);fg.addColorStop(0,'rgba(251,191,36,.20)');fg.addColorStop(1,'rgba(251,191,36,0)');ctx.fillStyle=fg;ctx.fillRect(mx-110,GROUND_Y-28,220,58);
+      }
+      ctx.globalCompositeOperation='source-over';
+
+      // High-combo energy around player.
+      if(bellCombo>=10){
+        const a=.06+Math.min(.14,(bellCombo-10)*.004),r=42+Math.sin(now/90)*5;
+        const cg=ctx.createRadialGradient(player.x+38,player.y+45,8,player.x+38,player.y+45,r);cg.addColorStop(0,`rgba(251,191,36,${a})`);cg.addColorStop(1,'rgba(251,191,36,0)');ctx.fillStyle=cg;ctx.beginPath();ctx.arc(player.x+38,player.y+45,r,0,Math.PI*2);ctx.fill();
+      }
+
+      // Low-life danger vignette.
+      if(player.lives<=1&&dinoGameRunning){
+        const pulse=.12+.10*((Math.sin(now/150)+1)/2),vg=ctx.createRadialGradient(DINO_W*.5,DINO_H*.48,DINO_W*.28,DINO_W*.5,DINO_H*.48,DINO_W*.70);
+        vg.addColorStop(.48,'rgba(127,29,29,0)');vg.addColorStop(1,`rgba(220,38,38,${pulse})`);ctx.fillStyle=vg;ctx.fillRect(0,0,DINO_W,DINO_H);
+      }
+      ctx.restore();
+    }
+
+
+    function drawBellScenePolish(now){
+      ctx.save();
+      const danger=clamp((bellWave-1)/Math.max(1,bellMaxWaves-1),0,1);
+      const pulse=(Math.sin(now*.006)+1)/2;
+      // floor reflections under active characters
+      ctx.globalCompositeOperation='screen';
+      const pg=ctx.createRadialGradient(player.x+42,GROUND_Y+3,2,player.x+42,GROUND_Y+3,62);
+      pg.addColorStop(0,'rgba(56,189,248,.16)');pg.addColorStop(1,'rgba(56,189,248,0)');ctx.fillStyle=pg;ctx.fillRect(player.x-24,GROUND_Y-12,135,42);
+      enemies.slice(0,28).forEach(e=>{if(e.dead)return;const g=ctx.createRadialGradient(e.x+e.w/2,GROUND_Y+2,2,e.x+e.w/2,GROUND_Y+2,35);g.addColorStop(0,`rgba(239,68,68,${.045+.045*danger})`);g.addColorStop(1,'rgba(239,68,68,0)');ctx.fillStyle=g;ctx.fillRect(e.x-18,GROUND_Y-8,e.w+36,28);});
+      ctx.globalCompositeOperation='source-over';
+      // subtle animated emergency strips along the ceiling
+      ctx.globalAlpha=.12+.10*pulse;ctx.fillStyle=danger>.55?'#ef4444':'#38bdf8';
+      for(let i=0;i<7;i++){const x=((i*230-worldOffset*.10)%(DINO_W+260)+DINO_W+260)%(DINO_W+260)-130;ctx.fillRect(x,66,96,3);}
+      ctx.globalAlpha=1;
+      // cinematic foreground edge shadows
+      const left=ctx.createLinearGradient(0,0,85,0);left.addColorStop(0,'rgba(2,6,23,.24)');left.addColorStop(1,'rgba(2,6,23,0)');ctx.fillStyle=left;ctx.fillRect(0,0,90,DINO_H);
+      const right=ctx.createLinearGradient(DINO_W,0,DINO_W-85,0);right.addColorStop(0,'rgba(2,6,23,.24)');right.addColorStop(1,'rgba(2,6,23,0)');ctx.fillStyle=right;ctx.fillRect(DINO_W-90,0,90,DINO_H);
       ctx.restore();
     }
 
@@ -6332,13 +6644,13 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       ctx.globalAlpha=1;
 
       // flying papers / sparks
-      for(let i=0;i<18;i++){
+      for(let i=0;i<Math.max(8,Math.round(18*bellFxQuality));i++){
         const x=((i*111+worldOffset*(.6+i*.015)+ultraWeatherSeed*4)%(DINO_W+160))-80;
         const y=88+((i*49)%Math.max(110,GROUND_Y-132))+Math.sin(dinoElapsed*.0016+i)*10;
         ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(dinoElapsed*.002+i)*.8);ctx.globalAlpha=.12+.06*((i%3)/2);
         ctx.fillStyle=i%4===0?'#fde68a':'#f8fafc';ctx.fillRect(-6,-4,12,8);ctx.restore();
       }
-      for(let i=0;i<26;i++){
+      for(let i=0;i<Math.max(12,Math.round(26*bellFxQuality));i++){
         const x=((i*89+worldOffset*.12+ultraWeatherSeed)%(DINO_W+100))-50;
         const y=80+((i*53)%Math.max(100,GROUND_Y-120))+Math.sin(dinoElapsed*.001+i)*8;
         ctx.globalAlpha=.08+(i%3)*.025;ctx.fillStyle=themeIndex===4?'#a7f3d0':'#fff';ctx.beginPath();ctx.arc(x,y,1.5+(i%2),0,Math.PI*2);ctx.fill();
@@ -6348,7 +6660,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       // speed lines and battle noise intensify with wave
       const k=.18+panic*.48;
       ctx.strokeStyle=`rgba(255,255,255,${.10+k*.18})`;ctx.lineWidth=1.4;
-      for(let i=0;i<18;i++){
+      for(let i=0;i<Math.max(9,Math.round(18*bellFxQuality));i++){
         const y=72+(i*33)%Math.max(90,GROUND_Y-96),x=ultraParallaxX(i*117,1.9,DINO_W+190);
         ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-(46+k*72),y);ctx.stroke();
       }
@@ -6384,22 +6696,23 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function drawDinoIdleScreen(){
-      if(!canvas)return;const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawDinoAtmosphere(performance.now());
-      ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.92)';ctx.font='1000 35px Inter,sans-serif';ctx.fillText('🔔 ВИЖИТИ ДО ДЗВІНКА 2.3',DINO_W/2,94);ctx.font='800 16px Inter,sans-serif';ctx.fillStyle='#334155';ctx.fillText('20 хвиль • мінібоси • ворожі атаки • дрон • боси кожні 5 хвиль',DINO_W/2,126);ctx.restore();
+      if(!canvas)return;const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawBellScenePolish(performance.now());drawDinoAtmosphere(performance.now());
+      ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.92)';ctx.font='1000 35px Inter,sans-serif';ctx.fillText('🔔 ВИЖИТИ ДО ДЗВІНКА 2.5',DINO_W/2,94);ctx.font='800 16px Inter,sans-serif';ctx.fillStyle='#334155';ctx.fillText('20 хвиль • музика + SFX • повний екран • мінібоси • ультра FX',DINO_W/2,126);ctx.restore();
     }
 
-    function gameLoop(now){
-      if(!dinoGameRunning)return;
-      const dt=Math.min(.034,(now-dinoLastFrame)/1000||.016);dinoLastFrame=now;
-      if(bellUpgradeOpen||bellShopPause||!bellWaveActive){
+    function gameLoop(now,serial=bellLoopSerial){
+      if(serial!==bellLoopSerial||!dinoGameRunning)return;
+      const dt=Math.min(.034,(now-dinoLastFrame)/1000||.016);dinoLastFrame=now;bellPerfTick(now);
+      if(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellVisibilityPause||!bellWaveActive){
+        bellEnforcePauseSnapshot();dinoLastFrame=now;
         updateDinoHUD();bellUpdateWaveUI();updateBellArenaToolbar();
-        dinoAnimationId=requestAnimationFrame(gameLoop);return;
+        dinoAnimationId=requestAnimationFrame(t=>gameLoop(t,serial));return;
       }
       dinoElapsed+=dt*1000;
       const mult=player.doubleUntil>now?2:1;
       gameSpeed=185+bellWave*12;worldOffset+=gameSpeed*dt;dinoScore+=dt*(7+bellWave*.8+Math.min(8,bellCombo*.08))*mult;
 
-      player.y=GROUND_Y-92;player.vy=0;player.jumping=false;player.ducking=false;
+      player.y=GROUND_Y-104;player.vy=0;player.jumping=false;player.ducking=false;
       if(themeTransition<1)themeTransition=Math.min(1,themeTransition+dt*.95);
 
       completeDinoReload(now);updateDinoAutoTarget(now);bellUpdateHeldFire();updateBellDrone(now);updateEnemyAttacks(now);
@@ -6462,15 +6775,15 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       enemyProjectiles=enemyProjectiles.filter(s=>!s.dead&&s.life>0);
 
       bellThreatPulse=Math.max(0,bellThreatPulse-dt*1.7);
-      particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=320*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
-      updateUltraFx(dt);floatTexts.forEach(f=>{f.y-=22*dt;f.life-=dt*.9;});floatTexts=floatTexts.filter(f=>f.life>0);
+      particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=320*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);if(particles.length>320)particles.splice(0,particles.length-320);
+      updateUltraFx(dt);floatTexts.forEach(f=>{f.y-=22*dt;f.life-=dt*.9;});floatTexts=floatTexts.filter(f=>f.life>0);if(floatTexts.length>52)floatTexts.splice(0,floatTexts.length-52);
 
       bellMaybeFinishWave();updateMissionUI();updateDinoHUD();bellUpdateWaveUI();updateBellArenaToolbar();
 
       ctx.save();
       if(screenShake>0){ctx.translate(rand(-screenShake,screenShake),rand(-screenShake,screenShake));screenShake*=.82;if(screenShake<.4)screenShake=0;}
-      ctx.clearRect(-20,-20,DINO_W+40,DINO_H+40);drawBackground(dinoThemes[themeIndex],dt);drawRunner();drawEntities(now);drawDinoAtmosphere(now);drawBattleOverlay(now);ctx.restore();
-      dinoAnimationId=requestAnimationFrame(gameLoop);
+      ctx.clearRect(-20,-20,DINO_W+40,DINO_H+40);drawBackground(dinoThemes[themeIndex],dt);drawRunner();drawEntities(now);drawBellCinematicFX(now);drawDinoAtmosphere(now);drawBattleOverlay(now);ctx.restore();
+      dinoAnimationId=requestAnimationFrame(t=>gameLoop(t,serial));
     }
 
     function escapeHtml(value){return String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}
