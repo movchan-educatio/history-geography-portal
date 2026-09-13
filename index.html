@@ -2839,12 +2839,43 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 .bell-clash-join-match{background:linear-gradient(135deg,#0891b2,#2563eb)!important}
 </style>
 
+
+<style id="lyceum-clash-colyseus-portal">
+#colyseusClashOverlay{
+  position:fixed;inset:0;z-index:2147483000;background:#020712;display:none;
+}
+#colyseusClashOverlay.active{display:block}
+#colyseusClashFrame{
+  position:absolute;inset:0;width:100%;height:100%;border:0;background:#020712;
+}
+#colyseusClashPortalClose{
+  position:fixed;right:10px;top:10px;z-index:2147483646;border:1px solid rgba(148,163,184,.36);
+  border-radius:12px;background:rgba(2,6,23,.74);backdrop-filter:blur(12px);color:#fff;
+  font:900 11px Inter,system-ui,sans-serif;padding:9px 12px;box-shadow:0 8px 26px rgba(0,0,0,.35)
+}
+#colyseusClashReward{
+  position:fixed;left:50%;top:14px;transform:translate(-50%,-20px);z-index:2147483646;
+  opacity:0;pointer-events:none;background:rgba(5,20,35,.92);border:1px solid rgba(74,222,128,.45);
+  color:#bbf7d0;border-radius:999px;padding:9px 15px;font:900 12px Inter,system-ui,sans-serif;
+  transition:.28s ease;box-shadow:0 10px 35px rgba(0,0,0,.4)
+}
+#colyseusClashReward.show{opacity:1;transform:translate(-50%,0)}
+body.colyseus-clash-open{overflow:hidden!important}
+</style>
+
 </head>
 <body>
+
+<div id="colyseusClashOverlay" aria-hidden="true">
+  <iframe id="colyseusClashFrame" title="LYCEUM CLASH multiplayer" allow="autoplay; fullscreen; gamepad"></iframe>
+  <button id="colyseusClashPortalClose" type="button" onclick="closeColyseusClash()">← ПОРТАЛ</button>
+  <div id="colyseusClashReward"></div>
+</div>
+
   <div id="bellArenaDock" class="bell-arena-dock bell-game-app" aria-hidden="true">
     <div class="bell-arena-toolbar bell-game-topbar clash-focus-topbar">
       <button type="button" class="clash-focus-brand" onclick="showBellGameHome(false)" title="Головна">
-        <span>⚔️</span><strong>LYCEUM CLASH</strong><small>6.9</small>
+        <span>⚔️</span><strong>LYCEUM CLASH</strong><small>COLYSEUS</small>
       </button>
       <div class="clash-focus-wallet">🪙 <b id="bellArenaCoins">0</b></div>
       <div class="bell-arena-actions clash-focus-actions">
@@ -2863,9 +2894,9 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     <div id="bellGameHome" class="bell-game-home" style="display:none" aria-hidden="true">
       <div class="bell-home-card clash-clean-home clash-focus-home">
-        <div class="bell-home-badge">LYCEUM CLASH 6.9</div>
+        <div class="bell-home-badge">LYCEUM CLASH • COLYSEUS</div>
         <h2>LYCEUM CLASH</h2>
-        <p>Arena XL • 75 секунд • PvP + SMART BOTS</p>
+        <p>Colyseus Arena • 75 секунд • PvP + SMART BOTS</p>
 
         <div class="clash-focus-hero">
           <canvas id="bellHomeHeroCanvas" width="220" height="190"></canvas>
@@ -2883,7 +2914,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         </div>
 
         <button id="bellHomePrimary" class="bell-home-primary clash-main-play clash-focus-play" type="button" onclick="bellHomePrimaryAction()">⚔️ ГРАТИ</button>
-        <div class="clash-focus-hint">Героя та магазин відкривайте нижнім меню</div>
+        <div class="clash-focus-hint">🌐 Multiplayer: Colyseus WebSocket • SMART BOTS на сервері</div>
       </div>
     </div>
 
@@ -8122,6 +8153,101 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       }catch(_){}
     }
 
+    const COLYSEUS_CLASH_ORIGIN='https://lyceum-clash-serve.onrender.com';
+    let colyseusClashRewardTimer=0;
+
+    function colyseusClashPortalName(){
+      return String(window.currentStudent||'Учень').trim().slice(0,20)||'Учень';
+    }
+
+    function colyseusClashPortalHero(){
+      return localStorage.getItem('bell_clash_hero')||'blaster';
+    }
+
+    window.openColyseusClash=function(){
+      if(!window.currentUserUid){
+        try{bellSetNavActive('game');openBellAppPanel('account');}catch(_){}
+        return;
+      }
+      const overlay=document.getElementById('colyseusClashOverlay');
+      const frame=document.getElementById('colyseusClashFrame');
+      if(!overlay||!frame)return;
+
+      try{bellClashCloseHeroPicker?.();bellClashCloseShop?.();closeBellAppPanel(false);}catch(_){}
+      try{hideBellGameHome(false);}catch(_){}
+
+      const qs=new URLSearchParams({
+        embed:'1',
+        v:'210',
+        name:colyseusClashPortalName(),
+        hero:colyseusClashPortalHero()
+      });
+      frame.src=COLYSEUS_CLASH_ORIGIN+'/game?'+qs.toString();
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden','false');
+      document.body.classList.add('colyseus-clash-open');
+      window.__bellClashActive=true;
+      try{bellAudioSetDuck?.(true);}catch(_){}
+    };
+
+    window.closeColyseusClash=function(){
+      const overlay=document.getElementById('colyseusClashOverlay');
+      const frame=document.getElementById('colyseusClashFrame');
+      if(frame)frame.src='about:blank';
+      if(overlay){overlay.classList.remove('active');overlay.setAttribute('aria-hidden','true');}
+      document.body.classList.remove('colyseus-clash-open');
+      window.__bellClashActive=false;
+      try{bellAudioSetDuck?.(false);showBellGameHome(false);bellUpdatePortalClashCard?.();}catch(_){}
+    };
+
+    function colyseusClashRewardToast(text){
+      const el=document.getElementById('colyseusClashReward');if(!el)return;
+      el.textContent=text;el.classList.add('show');
+      clearTimeout(colyseusClashRewardTimer);
+      colyseusClashRewardTimer=setTimeout(()=>el.classList.remove('show'),3200);
+    }
+
+    window.addEventListener('message',async event=>{
+      if(event.origin!==COLYSEUS_CLASH_ORIGIN)return;
+      const data=event.data||{};
+      if(data.source!=='LYCEUM_CLASH')return;
+
+      if(data.type==='READY'){
+        window.__bellClashActive=true;
+        return;
+      }
+
+      if(data.type==='MATCH_RESULT'){
+        const key=String(data.matchKey||'').replace(/[^A-Za-z0-9_-]/g,'').slice(0,64);
+        const place=Math.max(1,Math.min(5,Number(data.place)||5));
+        const score=Math.max(0,Math.floor(Number(data.score)||0));
+        if(!key)return;
+
+        const localKey='colyseus_clash_result_'+key;
+        if(!localStorage.getItem(localKey)){
+          const matches=Number(localStorage.getItem('bell_clash_matches')||0)+1;
+          const wins=Number(localStorage.getItem('bell_clash_wins')||0)+(place===1?1:0);
+          const best=Math.max(Number(localStorage.getItem('bell_clash_best_score')||0),score);
+          localStorage.setItem('bell_clash_matches',String(matches));
+          localStorage.setItem('bell_clash_wins',String(wins));
+          localStorage.setItem('bell_clash_best_score',String(best));
+          localStorage.setItem(localKey,'1');
+        }
+
+        try{
+          const rewardPlace=Math.min(3,place);
+          const res=await window.portalScore?.awardClashMatchReward?.(key,rewardPlace,score);
+          if(res?.ok){
+            const reward=Number(res.reward)||0;
+            colyseusClashRewardToast(reward>0?'🪙 +'+reward+' Portal Coins • місце #'+place:'✅ Результат матчу збережено');
+            if(res.profile)window.portalEconomyProfile=res.profile;
+          }
+        }catch(e){console.warn('Colyseus Clash reward:',e);}
+
+        try{bellUpdatePortalClashCard?.();updateBellGameHome?.();}catch(_){}
+      }
+    });
+
     window.showBellGameHome=function(pause=true){
       const home=document.getElementById('bellGameHome');if(!home)return;
       bellGameHomeOpen=true;bellSetNavActive('game');
@@ -8134,7 +8260,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(resume&&dinoGameRunning){bellReleasePauseState();bellAudioSetDuck(false);dinoLastFrame=performance.now();}
     };
     window.bellHomePrimaryAction=function(){
-      bellSfx('ui');hideBellGameHome(false);openBellClashLobby();
+      bellSfx('ui');openColyseusClash();
     };
     window.bellStartSurvivalFromHome=function(){
       bellSfx('ui');
@@ -8185,7 +8311,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       bellEnsureAudio();enterBellArena();
       try{bellClashCloseHeroPicker?.();bellClashCloseShop?.();}catch(_){}
       closeBellAppPanel(false);
-      if(autoStart){hideBellGameHome(false);bellSetNavActive('game');openBellClashLobby();return;}
+      if(autoStart){bellSetNavActive('game');openColyseusClash();return;}
       bellSetNavActive('game');showBellGameHome(false);
     };
 
@@ -8222,8 +8348,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(section==='game'){
         bellCloseClashOverlays();
         bellSetNavActive('game');
-        hideBellGameHome(false);
-        openBellClashLobby();
+        openColyseusClash();
         return;
       }
 

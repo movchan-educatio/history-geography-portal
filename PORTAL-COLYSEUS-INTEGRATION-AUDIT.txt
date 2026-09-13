@@ -1,0 +1,34 @@
+HISTORY-GEOGRAPHY PORTAL — LYCEUM CLASH COLYSEUS INTEGRATION
+
+Base portal:
+index_6_9_6_server_safe.html
+
+New multiplayer:
+https://lyceum-clash-serve.onrender.com/game
+
+WHAT CHANGED
+1. The visible PLAY action no longer opens the old Firebase room system.
+2. PLAY opens the working Colyseus game in a full-screen iframe overlay.
+3. Existing Firebase code remains in the file for compatibility, but it is no longer the live multiplayer path.
+4. Portal Google/Firebase remains for:
+   - login;
+   - activity leaderboard;
+   - online presence;
+   - Escape Room;
+   - Portal Coins;
+   - weekly winner;
+   - other portal activities.
+5. Player display name and selected portal hero are passed into Colyseus.
+6. Colyseus sends match result back to the portal with postMessage.
+7. Parent verifies the exact Render origin.
+8. Portal Coins use the existing awardClashMatchReward(matchKey, place, score).
+9. Local Clash wins/matches/best score are updated for the portal card.
+10. A visible PORTAL button closes the iframe and returns to the portal.
+
+IMPORTANT
+Deploy server v2.1 FIRST, then deploy the portal integration.
+
+Validation:
+- portal-score.js node --check OK.
+- every inline portal JavaScript block node --check OK.
+- server main/browser JavaScript node --check OK.
