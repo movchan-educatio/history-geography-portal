@@ -2710,7 +2710,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
   <!-- FIREBASE SCRIPTS -->
   <script type="module">
-    import "./portal-score.js";
+    import "./portal-score-v23-5.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -2785,6 +2785,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     function selectedCharacterPurchase(){const id=characterDraft[characterCategory];return characterOwned(characterCategory,id)?null:characterItem(characterCategory,id)}
     function setCharacterNotice(text,type=''){characterNotice={text,type};const el=document.getElementById('characterInlineNotice');if(el){el.textContent=text;el.className=`character-inline-notice ${type}`.trim()}}
     function renderCharacterStudio(){
+      updateCurrentCoinBadge(Number(characterProfile?.portal_coins)||0);
       const isOwner=window.currentUserUid===PORTAL_OWNER_UID;
       const announcement=document.getElementById('characterAnnouncement'),editor=document.getElementById('characterOwnerEditor'),badge=document.getElementById('characterStudioBadge');
       if(!announcement||!editor)return;
@@ -2846,7 +2847,36 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       }catch(error){console.error('Character unequip:',error);setCharacterNotice('Не вдалося зняти атрибут. Перевір з’єднання та спробуй ще раз.','warn')}
       finally{characterBusy=false;renderCharacterStudio()}
     }
-    function syncCharacterStudio(profile={}){characterProfile=profile;characterDraft=normalizeCharacter(profile.portal_character||CHARACTER_DEFAULT);renderCharacterStudio()}
+    function syncCharacterStudio(profile={}){
+      characterProfile=profile||{};
+      characterDraft=normalizeCharacter(characterProfile.portal_character||CHARACTER_DEFAULT);
+      updateCurrentCoinBadge(Number(characterProfile.portal_coins)||0);
+      renderCharacterStudio();
+    }
+
+    function mergeCurrentProfileIntoLeaderboard(profile={}){
+      const uid=window.currentUserUid;
+      if(!uid||window.currentUserRole==='teacher')return;
+      window.studentsData=Array.isArray(window.studentsData)?window.studentsData:[];
+      const row={...(profile||{}),uid};
+      const index=window.studentsData.findIndex(item=>item?.uid===uid);
+      if(index>=0) window.studentsData[index]={...window.studentsData[index],...row};
+      else if(row.name||row.displayName||row.email) window.studentsData.push(row);
+      renderRealtimeLeaderboard();
+    }
+
+    // portal-score повідомляє про кожну успішну транзакцію. Завдяки цьому
+    // бал і монети змінюються одразу, без перезавантаження сторінки та без
+    // залежності від загального realtime-рейтингу.
+    window.addEventListener('portal-profile-updated',event=>{
+      const profile=event?.detail?.profile||{};
+      if(!window.currentUserUid)return;
+      updateCurrentScoreBadge(Number(profile.week_score)||0);
+      updateCurrentCoinBadge(Number(profile.portal_coins)||0);
+      if(window.syncEscapeWeeklyLocks)window.syncEscapeWeeklyLocks(profile);
+      syncCharacterStudio(profile);
+      mergeCurrentProfileIntoLeaderboard(profile);
+    });
     document.getElementById('characterCategoryTabs')?.addEventListener('click',e=>{const b=e.target.closest('[data-character-category]');if(b){characterCategory=b.dataset.characterCategory;setCharacterNotice('Натисни на будь-яку річ, щоб одразу приміряти її.');renderCharacterStudio()}});
     document.getElementById('characterItems')?.addEventListener('click',e=>{const b=e.target.closest('[data-character-item]');if(b)chooseCharacterItem(characterCategory,b.dataset.characterItem)});
     document.getElementById('characterBuyBtn')?.addEventListener('click',buyCharacterItem);
@@ -2980,6 +3010,14 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
         data.portal_coins = Math.max(0, Math.floor(Number(data.portal_coins) || 0));
         data.portal_coins_earned = Math.max(data.portal_coins, Math.floor(Number(data.portal_coins_earned) || 0));
         data.portal_coins_spent = Math.max(0, Math.floor(Number(data.portal_coins_spent) || 0));
+        // Самовідновлення економіки: якщо в одній із попередніх версій бали
+        // були записані без відповідних монет, повертаємо лише пропущену різницю.
+        const scoreForCoins = Math.max(0, Math.floor(Number(data.score) || 0));
+        if (data.portal_coins_earned < scoreForCoins) {
+          const missedCoins = scoreForCoins - data.portal_coins_earned;
+          data.portal_coins += missedCoins;
+          data.portal_coins_earned += missedCoins;
+        }
         data.portal_character_owned = data.portal_character_owned || {};
         data.portal_economy_version = 5;
 
@@ -3122,22 +3160,29 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       if (badge) badge.textContent = `${Number(score) || 0} балів`;
     }
 
+    function updateCurrentCoinBadge(coins) {
+      const badge = document.getElementById('currentUserCoins');
+      if (badge) badge.textContent = `🪙 ${Math.max(0, Math.floor(Number(coins) || 0))}`;
+    }
+
     function renderSundayWinner(rawUsers) {
       // На головній сторінці протягом усього поточного тижня
       // показуємо зафіксованого переможця ПОПЕРЕДНЬОГО тижня.
       updateSundayWinnerPanelFromSaved();
     }
 
-    // Realtime-дані підключаємо лише ПІСЛЯ підтвердження Google-входу.
-    // Інакше захищені Database Rules скасовують слухач ще до відновлення сесії.
+    // Рейтинг і поточний профіль більше не залежать один від одного.
+    // Рейтинг спершу читаємо одноразово через Firebase SDK, потім вмикаємо
+    // realtime. Це повертає стабільну поведінку старої робочої версії.
     let usersRealtimeUnsubscribe = null;
     let chatRealtimeUnsubscribe = null;
+    let leaderboardRetryTimer = null;
+    const LEADERBOARD_CACHE_KEY = 'portal_leaderboard_cache_v23_5';
 
     function stopRealtimeData() {
-      leaderboardLoadSerial++;
-      if (leaderboardFallbackTimer) {
-        clearTimeout(leaderboardFallbackTimer);
-        leaderboardFallbackTimer = null;
+      if (leaderboardRetryTimer) {
+        clearTimeout(leaderboardRetryTimer);
+        leaderboardRetryTimer = null;
       }
       if (usersRealtimeUnsubscribe) {
         try { usersRealtimeUnsubscribe(); } catch (_) {}
@@ -3149,80 +3194,141 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       }
     }
 
-    function applyUsersSnapshot(raw) {
+    function leaderboardSafeCopy(raw={}) {
+      const safe = {};
+      Object.entries(raw || {}).forEach(([uid,p]) => {
+        if (!p || typeof p !== 'object') return;
+        safe[uid] = {
+          name:p.name||'', displayName:p.displayName||'', role:p.role||'student',
+          photoURL:p.photoURL||'', googlePhotoURL:p.googlePhotoURL||'',
+          score:Number(p.score)||0, week_score:Number(p.week_score)||0,
+          week_history_points:Number(p.week_history_points)||0,
+          week_geography_points:Number(p.week_geography_points)||0,
+          week_nmt_history_score:Number(p.week_nmt_history_score)||0,
+          week_nmt_geography_score:Number(p.week_nmt_geography_score)||0,
+          week_truth_or_lie_points:Number(p.week_truth_or_lie_points)||0,
+          week_map_activity_points:Number(p.week_map_activity_points)||0,
+          week_history_activity_points:Number(p.week_history_activity_points)||0,
+          week_flags_points:Number(p.week_flags_points)||0,
+          week_escape_points:Number(p.week_escape_points)||0,
+          total_history_points:Number(p.total_history_points)||0,
+          total_geography_points:Number(p.total_geography_points)||0,
+          nmt_history_score:Number(p.nmt_history_score)||0,
+          nmt_geography_score:Number(p.nmt_geography_score)||0,
+          truth_or_lie_points:Number(p.truth_or_lie_points)||0,
+          map_activity_points:Number(p.map_activity_points)||0,
+          history_activity_points:Number(p.history_activity_points)||0,
+          flags_points:Number(p.flags_points)||0,
+          escape_points:Number(p.escape_points)||0,
+          truth_or_lie_locked_until:Number(p.truth_or_lie_locked_until)||0,
+          portal_character:p.portal_character||null
+        };
+      });
+      return safe;
+    }
+
+    function saveLeaderboardCache(raw) {
+      try { localStorage.setItem(LEADERBOARD_CACHE_KEY, JSON.stringify(leaderboardSafeCopy(raw))); }
+      catch (_) {}
+    }
+
+    function readLeaderboardCache() {
+      try { return JSON.parse(localStorage.getItem(LEADERBOARD_CACHE_KEY) || '{}') || {}; }
+      catch (_) { return {}; }
+    }
+
+    function applyUsersSnapshot(raw, {cache=true, syncCurrent=true}={}) {
       raw = raw || {};
+      if (cache) saveLeaderboardCache(raw);
       renderSundayWinner(raw);
-      window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
+      window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...(p || {}), uid }))
         .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
       renderRealtimeLeaderboard();
 
       const mine = raw[window.currentUserUid] || {};
-      updateCurrentScoreBadge(Number(mine.week_score) || 0);
-      if (window.syncEscapeWeeklyLocks) window.syncEscapeWeeklyLocks(mine);
-      syncCharacterStudio(mine);
+      if (syncCurrent && Object.keys(mine).length) {
+        updateCurrentScoreBadge(Number(mine.week_score) || 0);
+        updateCurrentCoinBadge(Number(mine.portal_coins) || 0);
+        if (window.syncEscapeWeeklyLocks) window.syncEscapeWeeklyLocks(mine);
+        syncCharacterStudio(mine);
+      }
     }
 
-    let leaderboardFallbackTimer = null;
-    let leaderboardLoadSerial = 0;
+    function withTimeout(promise, ms) {
+      return Promise.race([
+        promise,
+        new Promise(resolve => setTimeout(() => resolve(false), ms))
+      ]);
+    }
 
-    async function loadLeaderboardViaRest(serial) {
-      if (!auth.currentUser || !window.currentUserUid || serial !== leaderboardLoadSerial) return false;
+    async function loadLeaderboardViaSdk() {
+      if (!window.currentUserUid) return false;
       try {
-        const token = await auth.currentUser.getIdToken(false);
-        if (!token || serial !== leaderboardLoadSerial) return false;
-        const url = `${firebaseConfig.databaseURL}/users.json?auth=${encodeURIComponent(token)}`;
-        const response = await fetch(url, { cache:'no-store', credentials:'omit' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const raw = await response.json();
-        if (serial !== leaderboardLoadSerial || !auth.currentUser) return false;
-        applyUsersSnapshot(raw || {});
+        const snapshot = await get(ref(database, 'users'));
+        applyUsersSnapshot(snapshot.val() || {});
         return true;
       } catch (error) {
-        console.error('Firebase рейтинг REST fallback:', error);
+        console.warn('Firebase рейтинг: одноразове SDK-читання не вдалося', error);
         return false;
       }
     }
 
-    function startRealtimeData() {
-      if (!window.currentUserUid || !auth.currentUser) return;
-      const serial = ++leaderboardLoadSerial;
-      if (!usersRealtimeUnsubscribe) {
-        const box = document.getElementById('leaderboardList');
-        if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Завантажуємо таблицю активності…</span></div></div>';
+    async function loadLeaderboardViaRest() {
+      const user = auth.currentUser;
+      if (!user || !window.currentUserUid) return false;
+      try {
+        // forceRefresh=true усуває випадок, коли браузер тримає старий ID-token.
+        const token = await user.getIdToken(true);
+        const url = `${firebaseConfig.databaseURL}/users.json?auth=${encodeURIComponent(token)}`;
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 5000);
+        try {
+          const response = await fetch(url, { cache:'no-store', credentials:'omit', signal:controller.signal });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          applyUsersSnapshot((await response.json()) || {});
+          return true;
+        } finally {
+          clearTimeout(timer);
+        }
+      } catch (error) {
+        console.warn('Firebase рейтинг: REST-читання не вдалося', error);
+        return false;
+      }
+    }
 
-        let realtimeDelivered = false;
-        usersRealtimeUnsubscribe = onValue(ref(database, 'users'), snapshot => {
-          realtimeDelivered = true;
-          if (leaderboardFallbackTimer) {
-            clearTimeout(leaderboardFallbackTimer);
-            leaderboardFallbackTimer = null;
-          }
-          applyUsersSnapshot(snapshot.val() || {});
-        }, async error => {
-          usersRealtimeUnsubscribe = null;
-          console.error('Firebase рейтинг realtime:', error);
-          const restored = await loadLeaderboardViaRest(serial);
-          if (!restored && box) {
-            box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Повторюємо підключення…</span></div></div>';
-          }
-          if (auth.currentUser && window.currentUserUid) {
-            setTimeout(() => { if (!usersRealtimeUnsubscribe && auth.currentUser) startRealtimeData(); }, 3000);
-          }
-        });
+    function attachUsersRealtime() {
+      if (!window.currentUserUid || usersRealtimeUnsubscribe) return;
+      usersRealtimeUnsubscribe = onValue(ref(database, 'users'), snapshot => {
+        applyUsersSnapshot(snapshot.val() || {});
+      }, error => {
+        console.warn('Firebase рейтинг realtime:', error);
+        usersRealtimeUnsubscribe = null;
+        if (!leaderboardRetryTimer && auth.currentUser) {
+          leaderboardRetryTimer = setTimeout(() => {
+            leaderboardRetryTimer = null;
+            if (auth.currentUser && window.currentUserUid) attachUsersRealtime();
+          }, 5000);
+        }
+      });
+    }
 
-        // Деякі браузери/мережі можуть тримати WebSocket Firebase у стані очікування
-        // без callback і без error. Через 2.5 с підтягуємо ті самі дані через
-        // авторизований REST-запит; realtime-слухач лишається для подальших змін.
-        if (leaderboardFallbackTimer) clearTimeout(leaderboardFallbackTimer);
-        leaderboardFallbackTimer = setTimeout(async () => {
-          leaderboardFallbackTimer = null;
-          if (!realtimeDelivered && auth.currentUser && window.currentUserUid) {
-            const restored = await loadLeaderboardViaRest(serial);
-            if (!restored && box && /Завантажуємо таблицю активності/.test(box.textContent || '')) {
-              box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Рейтинг не відповідає. Перевіряємо підключення…</span></div></div>';
-            }
-          }
-        }, 2500);
+    async function startRealtimeData() {
+      if (!window.currentUserUid) return;
+      const box = document.getElementById('leaderboardList');
+      if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Завантажуємо таблицю активності…</span></div></div>';
+
+      // Якщо браузер уже має останній успішний список, показуємо його одразу,
+      // але паралельно обов'язково оновлюємо дані з Firebase.
+      const cached = readLeaderboardCache();
+      if (Object.keys(cached).length) applyUsersSnapshot(cached, {cache:false, syncCurrent:false});
+
+      // Realtime запускаємо одразу, а одноразові читання мають тайм-аут.
+      // Жоден завислий транспорт більше не блокує інший.
+      attachUsersRealtime();
+      let loaded = await withTimeout(loadLeaderboardViaSdk(), 3000);
+      if (!loaded) loaded = await withTimeout(loadLeaderboardViaRest(), 6500);
+      if (!loaded && !Object.keys(cached).length && box && /Завантажуємо таблицю активності/.test(box.textContent || '')) {
+        box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося прочитати загальний рейтинг Firebase. Повторюємо підключення…</span></div></div>';
       }
 
       if (!chatRealtimeUnsubscribe) {
@@ -3232,7 +3338,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           renderChat();
         }, error => {
           chatRealtimeUnsubscribe = null;
-          console.error('Firebase чат:', error);
+          console.warn('Firebase чат:', error);
         });
       }
     }
@@ -3426,6 +3532,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
       const snap = await get(ref(database, 'users/' + user.uid));
       updateCurrentScoreBadge(Number(snap.val()?.week_score) || 0);
+      updateCurrentCoinBadge(Number(snap.val()?.portal_coins) || 0);
       syncCharacterStudio(snap.val() || {});
       renderRealtimeLeaderboard();
     });
