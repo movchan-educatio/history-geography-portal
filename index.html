@@ -8262,7 +8262,7 @@ body.colyseus-clash-open{overflow:hidden!important}
 
       const qs=new URLSearchParams({
         embed:'1',
-        v:'290',
+        v:'291',
         name:colyseusClashPortalName(),
         hero:colyseusClashPortalHero(),
         skin:localStorage.getItem('bell_clash_skin')||localStorage.getItem('dino_skin')||'student',
@@ -8272,6 +8272,13 @@ body.colyseus-clash-open{overflow:hidden!important}
         quality:localStorage.getItem('bell_graphics_mode')||'auto'
       });
       frame.src=COLYSEUS_CLASH_ORIGIN+'/game?'+qs.toString();
+      frame.dataset.clashReady='0';
+      clearTimeout(window.__clashFrameReadyTimer);
+      window.__clashFrameReadyTimer=setTimeout(()=>{
+        if(frame.dataset.clashReady!=='1'&&overlay.classList.contains('active')){
+          colyseusClashRewardToast('⚠️ Сервер гри не підтвердив готовність. Перевірте Render /health.');
+        }
+      },9000);
       overlay.classList.add('active');
       overlay.setAttribute('aria-hidden','false');
       document.body.classList.add('colyseus-clash-open');
@@ -8302,6 +8309,8 @@ body.colyseus-clash-open{overflow:hidden!important}
       if(data.source!=='LYCEUM_CLASH')return;
 
       if(data.type==='READY'){
+        const frame=document.getElementById('colyseusClashFrame');if(frame)frame.dataset.clashReady='1';
+        clearTimeout(window.__clashFrameReadyTimer);
         window.__bellClashActive=true;
         return;
       }
