@@ -1,0 +1,10 @@
+PORTAL LYCEUM CLASH v2.6
+
+- Legacy SERVER SAFE lobby is permanently hidden from live navigation.
+- All GAME actions go to Colyseus.
+- HEROES / SHOP use loadout-only overlays, without opening the old room UI.
+- Portal game card version updated to 2.6.
+- Portal stat/loadout/action columns are equalized.
+- iframe cache bumped to v260.
+- portal-score cache bumped to colyseus26.
+- Existing login, rating, Portal Coins and other site activities untouched.
