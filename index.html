@@ -467,7 +467,18 @@
     .character-category-tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:7px;scrollbar-width:thin}.character-tab{flex:0 0 auto;border:1px solid #d9c4b8;border-radius:9px;background:#fff;color:#6b2f1f;padding:7px 9px;font-size:10px;font-weight:850;cursor:pointer}.character-tab.active{background:#0284c7;border-color:#0284c7;color:#fff}.character-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:194px;overflow:auto;padding-right:2px}.character-item{min-height:58px;border:1px solid #e6d6cc;border-radius:11px;background:#fff;color:#3f261e;padding:7px;text-align:left;cursor:pointer;transition:.18s}.character-item:hover{transform:translateY(-1px);border-color:#7dd3fc}.character-item.selected{border-color:#0284c7;background:#eff8ff;box-shadow:0 0 0 2px rgba(2,132,199,.1)}.character-item.locked{background:#fffaf5}.character-item-preview{display:flex;align-items:center;gap:7px}.character-item-thumb{width:42px;height:50px;flex:0 0 42px;object-fit:contain;border-radius:8px;background:linear-gradient(#eaf7ff,#fff7ed)}.character-item-icon{display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;border-radius:9px;background:#f1f5f9;font-size:20px}.character-item strong,.character-item small{display:block}.character-item strong{font-size:10px;line-height:1.2}.character-item small{margin-top:3px;color:#64748b;font-size:9px}.character-inline-notice{min-height:34px;margin-top:7px;padding:7px 9px;border:1px solid #bae6fd;border-radius:9px;background:#eff8ff;color:#075985;font-size:9px;line-height:1.35}.character-inline-notice.warn{border-color:#fed7aa;background:#fff7ed;color:#9a3412}.character-inline-notice.success{border-color:#bbf7d0;background:#f0fdf4;color:#166534}.character-buy-btn{width:100%;margin-top:7px;border:0;border-radius:10px;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:9px 10px;font-size:11px;font-weight:950;cursor:pointer}.character-buy-btn.purchase{background:linear-gradient(135deg,#facc15,#f59e0b);color:#5b3107}.character-buy-btn:disabled{opacity:.58;cursor:not-allowed}.character-editor-status{min-height:15px;margin-top:5px;color:#64748b;font-size:9px}
     .portal-character-avatar{position:relative;display:inline-grid;place-items:end center;overflow:visible;vertical-align:middle}.portal-character-avatar>img.character-body{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 8px rgba(15,23,42,.2))}.character-preview-frame .portal-character-avatar{width:225px;height:275px}.character-wearable{position:absolute;z-index:3;display:grid;place-items:center;filter:drop-shadow(0 2px 2px rgba(15,23,42,.22));line-height:1}.character-wearable.hair{left:50%;top:12%;transform:translateX(-50%);font-size:34px}.character-wearable.glasses{left:50%;top:35%;transform:translateX(-50%);font-size:30px}.character-wearable.gloves{left:50%;bottom:27%;transform:translateX(-50%);width:92%;display:flex;justify-content:space-between;font-size:23px}.character-wearable.boots{left:50%;bottom:3%;transform:translateX(-50%);font-size:22px;letter-spacing:22px;padding-left:22px}.character-wearable.necklace{left:50%;top:49%;transform:translateX(-50%);font-size:22px}.character-wearable.backpack{left:-4%;top:37%;font-size:29px;z-index:0}.character-wearable.weapon{right:-4%;bottom:23%;font-size:31px}.character-wearable.artifact{left:-4%;bottom:18%;font-size:29px}.character-aura{position:absolute;inset:17% 7% 3%;border-radius:50%;filter:blur(12px);opacity:.44;z-index:-1}.leaderboard-character-avatar{width:48px;height:52px}.student-character-hero{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:12px;border:1px solid #bae6fd;border-radius:14px;background:linear-gradient(135deg,#f0f9ff,#fff7ed)}.student-character-hero .portal-character-avatar{width:90px;height:105px;flex:0 0 90px}.student-character-hero strong{display:block;color:#075985;font-size:17px}.student-character-hero span{color:#64748b;font-size:12px}
     .home-user-chip>.portal-character-avatar{width:34px;height:38px;margin:-6px 0}.home-user-chip>.portal-character-avatar .character-wearable,.leaderboard-character-avatar .character-wearable{display:none}
-    @media(max-width:620px){.character-editor-layout{grid-template-columns:1fr}.character-preview-frame{height:260px}.character-preview-frame .portal-character-avatar{width:205px;height:250px}.character-items{grid-template-columns:repeat(2,minmax(0,1fr));max-height:220px}}
+    @media(max-width:620px){
+      .character-studio-card,.character-studio-inner,.character-owner-editor,.character-editor-layout,.character-preview-column,.character-editor-layout>div{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+      .character-studio-inner{padding:11px!important}.character-studio-title{font-size:14px!important}.character-editor-layout{display:block!important}
+      .character-preview-frame{width:100%!important;height:238px!important;min-width:0!important;overflow:hidden!important}
+      .character-preview-frame .portal-character-avatar{position:absolute!important;left:50%!important;bottom:2px!important;transform:translateX(-50%)!important;width:min(190px,78vw)!important;height:228px!important;margin:0!important}
+      .character-balance{width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important;font-size:11px!important}
+      .character-level{font-size:9px!important}.character-category-tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important;overflow:visible!important;margin-top:10px!important}
+      .character-tab{width:100%!important;min-width:0!important;white-space:normal!important;overflow-wrap:anywhere!important;padding:7px 5px!important;font-size:9px!important;line-height:1.15!important;text-align:center!important}
+      .character-items{grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important;max-height:280px!important;overflow-x:hidden!important}
+      .character-item,.character-item-preview,.character-item-preview>span{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}.character-item-preview>span:last-child{width:auto!important;flex:1 1 auto!important}
+      .character-item strong,.character-item small{white-space:normal!important;overflow-wrap:anywhere!important}.character-inline-notice,.character-buy-btn,.character-editor-status{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
+    }
 
     /* Картки турів */
     .grid-3-tours { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
@@ -1440,9 +1451,15 @@ img, svg, canvas, video, iframe {
 </style>
 <style id="v23-interface-styles">
 .activity-shortcuts{max-width:1200px;margin:-24px auto 24px;padding:0 20px;position:relative;z-index:12;display:flex;flex-wrap:wrap;justify-content:center;gap:9px}
-.activity-shortcut{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:9px 13px;border:1px solid #e7d6ca;border-radius:13px;background:rgba(255,255,255,.97);color:#5b2b1c;text-decoration:none;font-size:12px;font-weight:850;box-shadow:0 7px 20px rgba(74,35,20,.1);transition:transform .18s,border-color .18s,box-shadow .18s}
-.activity-shortcut:hover{transform:translateY(-2px);border-color:#38bdf8;box-shadow:0 10px 24px rgba(2,132,199,.15)}
-.activity-shortcut i{color:#0284c7}.google-signin-btn{display:inline-flex!important;align-items:center;justify-content:flex-start;gap:11px!important;min-width:238px!important;min-height:48px!important;padding:7px 14px 7px 9px!important;border:1px solid #d7dee7!important;border-radius:13px!important;background:#fff!important;color:#1f2937!important;box-shadow:0 5px 16px rgba(15,23,42,.1)!important;text-align:left;animation:none!important}
+.activity-shortcut{display:inline-flex!important;align-items:center!important;gap:7px!important;min-height:42px!important;padding:9px 13px!important;border:1px solid #d8c3b6!important;border-radius:13px!important;background:#fff!important;color:#4a251a!important;text-decoration:none!important;font-size:12px!important;font-weight:850!important;box-shadow:0 7px 20px rgba(74,35,20,.12)!important;transition:transform .18s,border-color .18s,box-shadow .18s!important;opacity:1!important;text-shadow:none!important}
+.activity-shortcut:hover{transform:translateY(-2px)!important;border-color:#0284c7!important;background:#eef8ff!important;color:#3b1d14!important;box-shadow:0 10px 24px rgba(2,132,199,.15)!important}
+.activity-shortcut i{color:#0284c7!important;opacity:1!important}.google-signin-btn{display:inline-flex!important;align-items:center;justify-content:flex-start;gap:11px!important;min-width:238px!important;min-height:48px!important;padding:7px 14px 7px 9px!important;border:1px solid #d7dee7!important;border-radius:13px!important;background:#fff!important;color:#1f2937!important;box-shadow:0 5px 16px rgba(15,23,42,.1)!important;text-align:left;animation:none!important}
+.auth-checking{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:9px 13px;border:1px solid #dbe3eb;border-radius:12px;background:#f8fafc;color:#526174;font-size:11px;font-weight:750}.auth-checking:before{content:"";width:15px;height:15px;border:2px solid #cbd5e1;border-top-color:#0284c7;border-radius:50%;animation:authSpin .8s linear infinite}@keyframes authSpin{to{transform:rotate(360deg)}}
+#leaderboardList{display:flex!important;flex-direction:column!important;gap:8px!important;width:100%!important;min-height:48px!important;visibility:visible!important;opacity:1!important}
+#leaderboardList .leaderboard-item{display:flex!important;width:100%!important;min-height:48px!important;background:#f8fafc!important;border:1px solid #e2e8f0!important;border-radius:10px!important;box-sizing:border-box!important}
+#leaderboardList .student-info,#leaderboardList .student-info span{color:#334155!important;opacity:1!important;visibility:visible!important}
+.character-studio-card,.character-studio-inner,.character-owner-editor,.character-editor-layout,.character-preview-column,.character-editor-layout>div{max-width:100%;min-width:0;box-sizing:border-box}
+@media(max-width:620px){#characterStudioCard{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}#characterStudioCard .character-studio-inner,#characterStudioCard .character-owner-editor,#characterStudioCard .character-editor-layout,#characterStudioCard .character-preview-column,#characterStudioCard .character-editor-layout>div{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}#characterStudioCard .character-studio-inner{padding:11px!important}#characterStudioCard .character-preview-frame{position:relative!important;width:100%!important;max-width:100%!important;height:238px!important;min-width:0!important;overflow:hidden!important}#characterStudioCard .character-preview-frame .portal-character-avatar{position:absolute!important;left:50%!important;right:auto!important;bottom:2px!important;top:auto!important;transform:translateX(-50%)!important;width:min(190px,72vw)!important;height:228px!important;margin:0!important}#characterStudioCard .character-category-tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important;overflow:visible!important;margin-top:10px!important}#characterStudioCard .character-tab{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;white-space:normal!important;overflow-wrap:anywhere!important;padding:8px 5px!important;font-size:9px!important;line-height:1.15!important;text-align:center!important}#characterStudioCard .character-items{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important;max-height:280px!important;overflow-x:hidden!important}#characterStudioCard .character-item,#characterStudioCard .character-item-preview{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}#characterStudioCard .character-item-preview>span:last-child{width:auto!important;min-width:0!important;flex:1 1 auto!important}#characterStudioCard .character-balance,#characterStudioCard .character-inline-notice,#characterStudioCard .character-buy-btn,#characterStudioCard .character-editor-status{width:100%!important;max-width:100%!important;box-sizing:border-box!important;white-space:normal!important;overflow-wrap:anywhere!important}}
 .google-signin-btn:hover{background:#f8fbff!important;border-color:#93c5fd!important;transform:translateY(-1px)!important}.google-mark{display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;border-radius:9px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 0 50%,#fbbc05 0 75%,#ea4335 0);color:#fff;font:900 20px/1 Arial;text-shadow:0 1px 2px rgba(0,0,0,.22)}
 .google-signin-copy{display:flex;flex-direction:column;min-width:0}.google-signin-copy strong{font-size:13px;line-height:1.15}.google-signin-copy small{margin-top:3px;color:#64748b;font-size:9px;font-weight:650}.google-signin-arrow{margin-left:auto;color:#0284c7;font-size:12px}
 @media(max-width:700px){.activity-shortcuts{margin:-17px auto 17px;padding:0 9px;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.activity-shortcuts::-webkit-scrollbar{display:none}.activity-shortcut{flex:0 0 auto;min-height:39px;padding:8px 11px}.leaderboard-header{align-items:flex-start!important}.leaderboard-header #authBox.user-login-bar{width:100%!important}.leaderboard-header #authBox>.google-signin-btn{flex:1 1 238px!important;width:auto!important;min-width:220px!important;max-width:310px!important;min-height:48px!important;height:48px!important;margin:0!important;padding:7px 14px 7px 9px!important;font-size:13px!important}}
@@ -1499,7 +1516,7 @@ img, svg, canvas, video, iframe {
     </div>
   </section>
 
-  <nav class="activity-shortcuts" aria-label="Швидкий перехід до активностей">
+  <div class="activity-shortcuts" role="navigation" aria-label="Швидкий перехід до активностей">
     <a class="activity-shortcut" href="#leaderboardList"><i class="fas fa-trophy"></i> Рейтинг</a>
     <a class="activity-shortcut" href="#truth-or-lie"><i class="fas fa-circle-check"></i> Правда чи брехня</a>
     <a class="activity-shortcut" href="#kids-club"><i class="fas fa-comments"></i> Клуб і персонаж</a>
@@ -1509,7 +1526,7 @@ img, svg, canvas, video, iframe {
     <a class="activity-shortcut" href="#escapeCatalog"><i class="fas fa-person-running"></i> Втечі</a>
     <a class="activity-shortcut" href="nmt.html"><i class="fas fa-graduation-cap"></i> НМТ</a>
     <a class="activity-shortcut" href="methodology.html"><i class="fas fa-book-open"></i> Матеріали</a>
-  </nav>
+  </div>
 
   <!-- Основний контент -->
   <main class="main-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
@@ -1549,10 +1566,7 @@ img, svg, canvas, video, iframe {
         <h3><i class="fas fa-medal" style="color: #2563eb;"></i> Рейтинг активності учнів</h3>
         <span id="weekResetTimer" class="reset-timer-badge">🔄 Оновлення тижня...</span>
         <div class="user-login-bar" id="authBox">
-          <!-- Кнопка Google відображається одразу, ще до завершення Firebase Auth. -->
-          <button id="googleLoginBtn" type="button" class="user-login-btn google-signin-btn">
-            <span class="google-mark" aria-hidden="true">G</span><span class="google-signin-copy"><strong>Увійти через Google</strong><small>Бали та прогрес збережуться</small></span><i class="fas fa-arrow-right google-signin-arrow" aria-hidden="true"></i>
-          </button>
+          <div class="auth-checking" role="status">Перевіряємо вхід…</div>
         </div>
       </div>
       <div id="onlinePresencePanel" class="online-presence-panel" aria-live="polite">
@@ -1562,7 +1576,7 @@ img, svg, canvas, video, iframe {
       </div>
       
 
-      <div id="leaderboardList" class="leaderboard-list"></div>
+      <div id="leaderboardList" class="leaderboard-list"><div class="leaderboard-item"><div class="student-info"><span>Завантажуємо таблицю активності…</span></div></div></div>
       <div id="weeklyWinnerPanel" style="display:none;margin-top:16px;padding:18px 20px;border:2px solid #e8d2c5;border-radius:16px;background:linear-gradient(135deg,#fffaf6,#f7eee8);text-align:center;box-shadow:0 6px 20px rgba(91,31,14,.08);">
         <div style="font-size:13px;font-weight:800;color:#9a604a;text-transform:uppercase;letter-spacing:.04em;">🏆 Переможець минулого тижня</div>
         <div id="weeklyWinnerName" style="font-size:24px;font-weight:900;color:#5b1f0e;margin-top:6px;"></div>
@@ -2698,7 +2712,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
   <script type="module">
     import "./portal-score.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
@@ -2719,6 +2733,12 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     const auth = getAuth(app);
     const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+    try {
+      await getRedirectResult(auth);
+    } catch (error) {
+      console.warn('Google redirect:', error);
+    }
     const PORTAL_OWNER_UID = 'LGw3zPR7w4SdN8zvi4LWExYTfFh2';
 
     window.currentStudent = null;
@@ -2827,13 +2847,15 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
     window.loginWithGoogle = async function () {
       try {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (isIOS) {
+          await signInWithRedirect(auth, provider);
+          return;
+        }
         await signInWithPopup(auth, provider);
       } catch (error) {
         console.error('Google Auth:', error);
-        // На iPhone/Safari popup інколи блокується. У такому випадку
-        // переходимо на redirect-вхід, щоб кнопка все одно працювала.
         if (error && error.code === 'auth/popup-blocked') {
-          const { signInWithRedirect } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
           await signInWithRedirect(auth, provider);
           return;
         }
