@@ -1,0 +1,59 @@
+LYCEUM CLASH 7.2 — ROOM FIX
+
+ПРОБЛЕМА
+Після 7.1 екран міг залишатися на «Створити кімнату», якщо Firebase або onDisconnect довго не повертали підтвердження.
+
+НАЙІМОВІРНІШЕ ВУЗЬКЕ МІСЦЕ
+bellClashCreateRoom() раніше:
+1. робив set(room);
+2. потім await bellClashAttachDisconnect();
+3. а bellClashAttachDisconnect() чекав server acknowledgement onDisconnect(...).set(null).
+
+Якщо onDisconnect registration зависав на мережі, кімната вже могла існувати у Firebase, але UI так і не переходив у lobby.
+
+ЩО ЗМІНЕНО
+
+1. onDisconnect БІЛЬШЕ НЕ БЛОКУЄ UI
+• Реєстрація onDisconnect тепер best-effort.
+• На неї НЕ робиться await.
+• Навіть якщо Firebase довго підтверджує disconnect hook, кімната відкривається одразу.
+
+2. NETWORK TIMEOUTS
+• get перевірка коду: максимум 3.5 с.
+• set кімнати: максимум 5.5 с.
+• join transaction: максимум 5.5 с.
+• Якщо set дав timeout, код додатково перевіряє, чи кімната все-таки записалася.
+
+3. UI-FIRST CREATE
+Після успішного set:
+• одразу ховається «Створити кімнату»;
+• одразу показується lobby;
+• одразу показується код;
+• створюється локальний lobby snapshot;
+• тільки ПІСЛЯ цього підключається realtime watcher і force sync.
+
+Тобто watcher більше не може затримати перехід на екран кімнати.
+
+4. JOIN ПРАЦЮЄ ТАК САМО
+• Після успішного join UI відкриває room panel відразу.
+• Firebase watcher і force sync запускаються асинхронно після цього.
+
+5. LOADING STATE
+Кнопка «Створити кімнату» показує:
+⏳ СТВОРЮЮ…
+і блокує повторне натискання.
+
+6. ПОМИЛКИ ТЕПЕР ВИДИМІ
+Замість безіменного зависання є окремі повідомлення:
+• Firebase не відповів;
+• запис кімнати перевищив таймаут;
+• join перевищив 5 секунд;
+• verify timeout.
+
+7. CACHE BUST
+portal-score.js?v=72
+
+8. ПЕРЕВІРКА
+• portal-score.js — node --check OK.
+• Усі inline JavaScript — node --check OK.
+• Blocking await bellClashAttachDisconnect у create/join відсутній.
