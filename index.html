@@ -2894,9 +2894,9 @@ body.colyseus-clash-open{overflow:hidden!important}
 
     <div id="bellGameHome" class="bell-game-home" style="display:none" aria-hidden="true">
       <div class="bell-home-card clash-clean-home clash-focus-home">
-        <div class="bell-home-badge">LYCEUM CLASH • COLYSEUS</div>
+        <div class="bell-home-badge">LYCEUM CLASH • ARENA XL</div>
         <h2>LYCEUM CLASH</h2>
-        <p>Colyseus Arena • 75 секунд • PvP + SMART BOTS</p>
+        <p>Arena XL • 75 секунд • PvP + SMART BOTS</p>
 
         <div class="clash-focus-hero">
           <canvas id="bellHomeHeroCanvas" width="220" height="190"></canvas>
@@ -2914,7 +2914,7 @@ body.colyseus-clash-open{overflow:hidden!important}
         </div>
 
         <button id="bellHomePrimary" class="bell-home-primary clash-main-play clash-focus-play" type="button" onclick="bellHomePrimaryAction()">⚔️ ГРАТИ</button>
-        <div class="clash-focus-hint">🌐 Multiplayer: Colyseus WebSocket • SMART BOTS на сервері</div>
+        <div class="clash-focus-hint">🌐 Multiplayer: Colyseus WebSocket • 8 арен • SMART BOTS</div>
       </div>
     </div>
 
@@ -8178,9 +8178,13 @@ body.colyseus-clash-open{overflow:hidden!important}
 
       const qs=new URLSearchParams({
         embed:'1',
-        v:'210',
+        v:'220',
         name:colyseusClashPortalName(),
-        hero:colyseusClashPortalHero()
+        hero:colyseusClashPortalHero(),
+        skin:localStorage.getItem('bell_clash_skin')||localStorage.getItem('dino_skin')||'student',
+        weapon:localStorage.getItem('bell_clash_weapon')||localStorage.getItem('dino_weapon')||'school_blaster',
+        weaponSkin:localStorage.getItem('bell_clash_weapon_skin')||'default',
+        perk:localStorage.getItem('bell_clash_perk')||'assault'
       });
       frame.src=COLYSEUS_CLASH_ORIGIN+'/game?'+qs.toString();
       overlay.classList.add('active');
