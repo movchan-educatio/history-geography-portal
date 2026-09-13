@@ -1816,6 +1816,121 @@ img, svg, canvas, video, iframe {
 }
 </style>
 
+
+<style id="v23-10-mobile-rewards-visible-fix">
+/* V23.10 — на портретному телефоні ПІБ, персонаж, бали та коіни завжди видимі. */
+@media (max-width:700px){
+  #leaderboardList .leaderboard-item{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding:9px!important;
+  }
+  #leaderboardList .student-info{
+    display:grid!important;
+    grid-template-columns:24px 56px minmax(0,1fr)!important;
+    align-items:center!important;
+    width:100%!important;
+    min-width:0!important;
+    flex:0 0 auto!important;
+    gap:7px!important;
+  }
+  #leaderboardList .leaderboard-student-copy{
+    width:100%!important;
+    min-width:0!important;
+    overflow:visible!important;
+  }
+  #leaderboardList .leaderboard-student-name{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+  }
+  #leaderboardList .leaderboard-rewards{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:stretch!important;
+    justify-content:stretch!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:42px!important;
+    height:auto!important;
+    max-height:none!important;
+    flex:0 0 auto!important;
+    gap:6px!important;
+    margin:0!important;
+    padding:0!important;
+    visibility:visible!important;
+    opacity:1!important;
+    overflow:visible!important;
+    position:static!important;
+  }
+  #leaderboardList .student-score,
+  #leaderboardList .student-coins{
+    display:flex!important;
+    flex:1 1 0!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:auto!important;
+    min-width:0!important;
+    min-height:42px!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:6px 5px!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+    visibility:visible!important;
+    opacity:1!important;
+    overflow:visible!important;
+    position:static!important;
+  }
+  #leaderboardList .reward-value{
+    display:block!important;
+    max-width:100%!important;
+    font-size:14px!important;
+    line-height:1.05!important;
+    font-weight:950!important;
+    white-space:nowrap!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+  #leaderboardList .reward-label{
+    display:block!important;
+    margin-top:3px!important;
+    font-size:7px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+}
+@media (max-width:390px){
+  #leaderboardList .student-info{grid-template-columns:21px 48px minmax(0,1fr)!important;gap:6px!important;}
+  #leaderboardList .leaderboard-rewards{gap:5px!important;}
+  #leaderboardList .student-score,#leaderboardList .student-coins{min-height:40px!important;padding:5px 4px!important;}
+  #leaderboardList .reward-value{font-size:13px!important;}
+  #leaderboardList .reward-label{font-size:6.5px!important;}
+}
+@media (max-width:340px){
+  #leaderboardList .student-info{grid-template-columns:19px 44px minmax(0,1fr)!important;gap:5px!important;}
+  #leaderboardList .student-score,#leaderboardList .student-coins{min-height:38px!important;}
+  #leaderboardList .reward-value{font-size:12px!important;}
+  #leaderboardList .reward-label{font-size:6px!important;}
+}
+</style>
+
 </head>
 <body>
 
