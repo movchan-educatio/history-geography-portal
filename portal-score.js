@@ -626,6 +626,45 @@ async function completeEscapeGame(escapeId, questionIds = []) {
   }
 }
 
+async function failEscapeGame(escapeId, questionIds = [], earnedScore = 0) {
+  const safeEscape = String(escapeId || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 50);
+  if (!safeEscape) return { ok: false, failed: false, reason: 'invalid' };
+  const user = await requireUser();
+  if (!user) return { ok: false, failed: false, reason: 'login' };
+  const weekKey = getCurrentWeekKey();
+  const completionKey = `${weekKey}_${safeEscape}`;
+  let newlyFailed = false;
+  try {
+    await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      data.name = data.name || user.displayName || 'Учень';
+      data.role = data.role || 'student';
+      data.escape_weekly_completed = data.escape_weekly_completed || {};
+      data.escape_question_history = data.escape_question_history || {};
+      if (data.escape_weekly_completed[completionKey]) return data;
+      const at = Date.now();
+      const safeQuestionIds = Array.isArray(questionIds)
+        ? questionIds.map(id => String(id || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80)).filter(Boolean).slice(0, 5)
+        : [];
+      data.escape_weekly_completed[completionKey] = { status: 'failed', at };
+      data.escape_question_history[completionKey] = {
+        questions: safeQuestionIds,
+        status: 'failed',
+        score: Math.max(0, Math.min(10, Math.floor(Number(earnedScore) || 0))),
+        failedAt: at
+      };
+      data.last_escape_failed = safeEscape;
+      data.last_escape_failed_at = at;
+      newlyFailed = true;
+      return data;
+    });
+    return { ok: true, failed: true, newlyFailed, key: completionKey };
+  } catch (error) {
+    console.error('Портал: не вдалося зафіксувати поразку у Втечі', error);
+    return { ok: false, failed: false, reason: 'firebase' };
+  }
+}
+
 async function unlockDinoForUser() {
   const user = await requireUser();
   if (!user) return false;
@@ -940,6 +979,7 @@ window.portalScore = {
   awardFlagsPoint: points => awardActivityPoint('flags', points),
   awardEscapeStage: awardEscapeStage,
   completeEscapeGame: completeEscapeGame,
+  failEscapeGame: failEscapeGame,
   awardTruthOrLiePoint: awardTruthOrLiePoint,
   lockTruthOrLie: lockTruthOrLie,
   unlockDinoForUser: unlockDinoForUser,
