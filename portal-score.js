@@ -73,6 +73,18 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   outfit_sport:       { type:'skin', value:'sport',         price:430, label:'Спортивний комплект' },
   outfit_cyber:       { type:'skin', value:'cyber',         price:650, label:'Cyber Student' },
   outfit_honor:       { type:'skin', value:'honor',         price:850, label:'Легенда ліцею' },
+  outfit_neon:        { type:'skin', value:'neon',          price:520, label:'Neon Pulse' },
+  outfit_shadow:      { type:'skin', value:'shadow',        price:560, label:'Shadow' },
+  outfit_frost:       { type:'skin', value:'frost',         price:620, label:'Frost Byte' },
+  outfit_solar:       { type:'skin', value:'solar',         price:700, label:'Solar Rush' },
+  outfit_pixel:       { type:'skin', value:'pixel',         price:760, label:'Pixel Hero' },
+  outfit_captain:     { type:'skin', value:'captain',       price:980, label:'Капітан ліцею' },
+  outfit_arcade:      { type:'skin', value:'arcade',        price:580, label:'Arcade Kid' },
+  outfit_street:      { type:'skin', value:'street',        price:640, label:'Street Crew' },
+  outfit_toxic:       { type:'skin', value:'toxic',         price:720, label:'Toxic Lab' },
+  outfit_galaxy:      { type:'skin', value:'galaxy',        price:820, label:'Galaxy' },
+  outfit_royal:       { type:'skin', value:'royal',         price:1050,label:'Royal Blue' },
+  outfit_glitch:      { type:'skin', value:'glitch',        price:930, label:'Glitch' },
 
   // Колекційні костюми
   skin_dino:          { type:'skin', value:'dino',          price:500, label:'Костюм Dino' },
@@ -99,6 +111,25 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   weapon_science:        { type:'weapon', value:'science_pulse',  price:480, label:'Науковий імпульс' },
   weapon_bell:           { type:'weapon', value:'bell_breaker',   price:650, label:'Дзвінкобій' },
   weapon_honor:          { type:'weapon', value:'honor_cannon',   price:900, label:'Бластер відмінника' },
+  weapon_pulse_smg:      { type:'weapon', value:'pulse_smg',      price:340, label:'Pulse SMG' },
+  weapon_prism:          { type:'weapon', value:'prism_rifle',    price:540, label:'Prism Rifle' },
+  weapon_gravity:        { type:'weapon', value:'gravity_disc',   price:620, label:'Gravity Disc' },
+  weapon_storm:          { type:'weapon', value:'storm_launcher', price:780, label:'Storm Launcher' },
+  weapon_echo:           { type:'weapon', value:'echo_bow',       price:860, label:'Echo Bow' },
+  weapon_twin:           { type:'weapon', value:'twin_sparks',    price:420, label:'Twin Sparks' },
+  weapon_nova:           { type:'weapon', value:'nova_shot',      price:590, label:'Nova Shot' },
+  weapon_rail:           { type:'weapon', value:'rail_driver',    price:760, label:'Rail Driver' },
+  weapon_sonic:          { type:'weapon', value:'sonic_burst',    price:680, label:'Sonic Burst' },
+  weapon_frost_ray:      { type:'weapon', value:'frost_ray',      price:840, label:'Frost Ray' },
+  weapon_comet:          { type:'weapon', value:'comet_cannon',   price:1080,label:'Comet Cannon' },
+
+  weapon_skin_default: { type:'weapon_skin', value:'default', price:0,   label:'Стандарт' },
+  weapon_skin_neon:    { type:'weapon_skin', value:'neon',    price:180, label:'Neon Flux' },
+  weapon_skin_gold:    { type:'weapon_skin', value:'gold',    price:260, label:'Gold Rush' },
+  weapon_skin_frost:   { type:'weapon_skin', value:'frost',   price:320, label:'Frost' },
+  weapon_skin_toxic:   { type:'weapon_skin', value:'toxic',   price:360, label:'Toxic' },
+  weapon_skin_shadow:  { type:'weapon_skin', value:'shadow',  price:420, label:'Shadow' },
+  weapon_skin_holo:    { type:'weapon_skin', value:'holo',    price:520, label:'Holo Prism' },
 
   // Колекційна зброя
   weapon_firebreath:  { type:'weapon', value:'firebreath',     price:420, label:'Вогняний плювок' },
@@ -183,11 +214,13 @@ function ensurePortalEconomy(data = {}) {
   data.portal_owned_items.weapon_school_blaster = true;
   data.portal_owned_items.trail_none = true;
   data.portal_owned_items.frame_none = true;
+  data.portal_owned_items.weapon_skin_default = true;
 
   data.portal_equipped.skin = data.portal_equipped.skin || 'student';
   data.portal_equipped.weapon = data.portal_equipped.weapon || 'school_blaster';
   data.portal_equipped.trail = data.portal_equipped.trail || 'none';
   data.portal_equipped.frame = data.portal_equipped.frame || 'none';
+  data.portal_equipped.weapon_skin = data.portal_equipped.weapon_skin || 'default';
 
   // Якщо після старої локальної конфігурації стоїть предмет, якого вже немає у власності,
   // повертаємо безпечний стартовий комплект.
@@ -203,6 +236,13 @@ function ensurePortalEconomy(data = {}) {
   );
   if (data.portal_equipped.weapon !== 'school_blaster' && (!weaponItemId || !data.portal_owned_items[weaponItemId])) {
     data.portal_equipped.weapon = 'school_blaster';
+  }
+
+  const weaponSkinItemId = Object.keys(PORTAL_STORE_CATALOG).find(
+    id => PORTAL_STORE_CATALOG[id]?.type === 'weapon_skin' && PORTAL_STORE_CATALOG[id]?.value === data.portal_equipped.weapon_skin
+  );
+  if (data.portal_equipped.weapon_skin !== 'default' && (!weaponSkinItemId || !data.portal_owned_items[weaponSkinItemId])) {
+    data.portal_equipped.weapon_skin = 'default';
   }
 
   data.portal_achievements = data.portal_achievements || {};
@@ -248,7 +288,7 @@ function applyPortalProgressRewards(data) {
   const ach = data.portal_achievements;
   const score = Math.max(0, Number(data.score) || 0);
   const dino = Math.max(0, Number(data.dino_best) || 0);
-  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_student','trail_none','frame_none','weapon_school_blaster'].includes(id)).length;
+  const ownedCount = Object.entries(data.portal_owned_items || {}).filter(([id,v]) => v && !['skin_student','trail_none','frame_none','weapon_school_blaster','weapon_skin_default'].includes(id)).length;
 
   if (score >= 1)   rewardOnce(data, ach, 'first_step', 10, { label:'Перший крок' });
   if (score >= 50)  rewardOnce(data, ach, 'scholar_50', 20, { label:'50 балів знань' });
@@ -699,10 +739,10 @@ async function purchasePortalItem(itemId) {
 }
 
 async function equipPortalItem(slot, itemId) {
-  const safeSlot = ['skin','weapon','trail','frame'].includes(slot) ? slot : '';
+  const safeSlot = ['skin','weapon','weapon_skin','trail','frame'].includes(slot) ? slot : '';
   const id = String(itemId || '');
   const item = PORTAL_STORE_CATALOG[id];
-  const freeMap = { skin:'skin_student', weapon:'weapon_school_blaster', trail:'trail_none', frame:'frame_none' };
+  const freeMap = { skin:'skin_student', weapon:'weapon_school_blaster', weapon_skin:'weapon_skin_default', trail:'trail_none', frame:'frame_none' };
   if (!safeSlot) return { ok:false, reason:'invalid_slot' };
   const isFree = id === freeMap[safeSlot];
   if (!isFree && (!item || item.type !== safeSlot)) return { ok:false, reason:'invalid_item' };
@@ -714,11 +754,11 @@ async function equipPortalItem(slot, itemId) {
       data = data || {};
       ensurePortalEconomy(data);
       if (!data.portal_owned_items[id]) return;
-      data.portal_equipped[safeSlot] = isFree ? ({skin:'student',weapon:'school_blaster',trail:'none',frame:'none'}[safeSlot]) : item.value;
+      data.portal_equipped[safeSlot] = isFree ? ({skin:'student',weapon:'school_blaster',weapon_skin:'default',trail:'none',frame:'none'}[safeSlot]) : item.value;
       equipped = true;
       return data;
     });
-    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'student',weapon:'school_blaster',trail:'none',frame:'none'}[safeSlot]) : item?.value };
+    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'student',weapon:'school_blaster',weapon_skin:'default',trail:'none',frame:'none'}[safeSlot]) : item?.value };
   } catch (error) {
     console.error('Портал: equip item', error);
     return { ok:false, reason:'firebase' };
