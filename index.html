@@ -2039,7 +2039,7 @@ body.dino-no-scroll{overflow:hidden!important;}
 </style>
 
 <style id="survive-bell-23-full-arena">
-.dino2-title:after{content:"FINAL POLISH 2.5"!important;background:linear-gradient(135deg,#111827,#7c3aed 48%,#0891b2)!important;color:#fff!important;}
+.dino2-title:after{content:"GAME APP 2.6"!important;background:linear-gradient(135deg,#111827,#7c3aed 48%,#0891b2)!important;color:#fff!important;}
 .bell-arena-dock{display:none;position:fixed;inset:0;z-index:1100000;background:radial-gradient(circle at 50% -20%,#172554 0,#07111f 48%,#020617 100%);color:#fff;flex-direction:column;overflow:hidden;}
 .bell-arena-dock.active{display:flex!important;}
 .bell-arena-toolbar{flex:0 0 52px;display:grid;grid-template-columns:minmax(180px,1fr) auto auto;align-items:center;gap:10px;padding:6px 10px;background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(2,6,23,.92));border-bottom:1px solid rgba(148,163,184,.22);box-shadow:0 8px 25px rgba(0,0,0,.24);z-index:4;}
@@ -2069,7 +2069,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 @media(max-width:760px){.bell-arena-toolbar{grid-template-columns:1fr auto;padding:5px 7px;gap:5px}.bell-arena-brand span{display:none}.bell-arena-metrics{grid-row:2;grid-column:1/-1;justify-content:center;margin-top:-2px}.bell-arena-toolbar{flex-basis:70px}.bell-arena-actions button{padding:0 8px}.bell-arena-actions button span{display:none}.bell-arena-mount{padding:3px}.bell-upgrade-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.bell-upgrade-card{min-height:126px!important;padding:8px!important}.bell-upgrade-svg{width:34px;height:34px;margin-bottom:5px}.bell-upgrade-svg svg{width:23px;height:23px}.bell-upgrade-title{font-size:14px!important}.bell-upgrade-wallet{padding:5px 8px}.bell-upgrade-continue{min-height:32px;margin-top:6px}.bell-arena-dock .dino-game-card.dino-expanded .dino2-mission{display:none!important}.bell-arena-dock .dino-game-card.dino-expanded .dino2-hudline{display:none!important}.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-hud{display:grid!important}.bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{max-height:100%!important;}}
 </style>\n
 <style id="survive-bell-24-audio-polish">
-.dino2-title:after{content:"FINAL POLISH 2.5"!important;background:linear-gradient(135deg,#020617,#6d28d9 42%,#0891b2 72%,#16a34a)!important;box-shadow:0 5px 20px rgba(109,40,217,.32)!important;}
+.dino2-title:after{content:"GAME APP 2.6"!important;background:linear-gradient(135deg,#020617,#6d28d9 42%,#0891b2 72%,#16a34a)!important;box-shadow:0 5px 20px rgba(109,40,217,.32)!important;}
 .bell-arena-dock:before{content:"";position:absolute;inset:-25%;pointer-events:none;background:radial-gradient(circle at 18% 20%,rgba(59,130,246,.12),transparent 24%),radial-gradient(circle at 82% 28%,rgba(124,58,237,.10),transparent 26%),radial-gradient(circle at 50% 110%,rgba(14,165,233,.12),transparent 30%);animation:bellArenaAmbient 9s ease-in-out infinite alternate;}
 @keyframes bellArenaAmbient{from{transform:translate3d(-1.5%,0,0) scale(1)}to{transform:translate3d(1.5%,-1%,0) scale(1.025)}}
 .bell-arena-toolbar,.bell-arena-mount{position:relative;z-index:1}
@@ -2096,7 +2096,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 </style>
 
 <style id="survive-bell-25-final-polish">
-.dino2-title:after{content:"FINAL POLISH 2.5"!important;background:linear-gradient(135deg,#020617,#5b21b6 38%,#0369a1 68%,#15803d)!important;box-shadow:0 6px 22px rgba(91,33,182,.30)!important;}
+.dino2-title:after{content:"GAME APP 2.6"!important;background:linear-gradient(135deg,#020617,#5b21b6 38%,#0369a1 68%,#15803d)!important;box-shadow:0 6px 22px rgba(91,33,182,.30)!important;}
 #dinoCanvas{aspect-ratio:16/9!important;width:100%!important;height:auto!important;}
 .dino2-toptools{display:flex;align-items:center;gap:5px;margin-left:auto}.bell-mini-audio{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;border:1px solid #bfdbfe;background:linear-gradient(180deg,#fff,#eff6ff);font-size:14px;box-shadow:0 5px 13px rgba(15,23,42,.08)}.bell-mini-audio.off{opacity:.45;filter:grayscale(1)}
 .bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{aspect-ratio:16/9!important;max-width:100%!important;max-height:100%!important;}
@@ -2126,10 +2126,57 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
   .bell-arena-dock .bell-upgrade-card{min-height:96px!important;}
 }
 </style>
+
+<style id="survive-bell-26-game-app">
+/* На сторінці лишається компактний лаунчер — усе меню живе всередині гри */
+.dino-game-card:not(.dino-expanded) .dino-canvas-wrap,
+.dino-game-card:not(.dino-expanded) .dino2-hudline,
+.dino-game-card:not(.dino-expanded) .dino-combat-hud,
+.dino-game-card:not(.dino-expanded) .dino2-mission,
+.dino-game-card:not(.dino-expanded) .bell-wave-strip,
+.dino-game-card:not(.dino-expanded) .bell-fire-controls,
+.dino-game-card:not(.dino-expanded) .dino-leader-tabs,
+.dino-game-card:not(.dino-expanded) .dino2-leaderboard{display:none!important}
+.dino-game-card:not(.dino-expanded) .dino2-actions{grid-template-columns:1fr!important;margin-top:10px!important}
+.dino-game-card:not(.dino-expanded) .dino-shop-btn,
+.dino-game-card:not(.dino-expanded) #dinoExpandBtn{display:none!important}
+.dino-game-card:not(.dino-expanded) #dinoStartBtn{display:block!important;width:100%!important;min-height:46px!important;background:linear-gradient(135deg,#0369a1,#2563eb 55%,#7c3aed)!important;box-shadow:0 12px 28px rgba(37,99,235,.22)!important}
+
+.bell-game-app{padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)!important;background:radial-gradient(circle at 50% -10%,#172554 0,#07111f 45%,#020617 100%)!important}
+.bell-game-topbar{flex:0 0 54px!important;min-height:54px!important}
+.bell-arena-mount{padding:4px!important;padding-bottom:64px!important}
+.bell-game-nav{position:absolute;z-index:35;left:8px;right:8px;bottom:max(7px,env(safe-area-inset-bottom));height:54px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:4px;border:1px solid rgba(148,163,184,.18);border-radius:16px;background:rgba(2,6,23,.88);backdrop-filter:blur(18px);box-shadow:0 14px 40px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.06)}
+.bell-game-nav button{border:0;border-radius:11px;background:transparent;color:#94a3b8;font-size:8px;font-weight:900;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:0}
+.bell-game-nav button span{font-size:17px;line-height:1}.bell-game-nav button b{font-size:7.5px;white-space:nowrap}
+.bell-game-nav button:active{background:rgba(59,130,246,.18);color:#fff;transform:scale(.98)}
+.bell-arena-dock .dino-game-card.dino-expanded{padding-bottom:1px!important}
+.bell-arena-dock .dino-game-card.dino-expanded .dino-canvas-wrap{border-radius:14px!important;border-color:rgba(56,189,248,.48)!important;box-shadow:0 18px 55px rgba(0,0,0,.40),0 0 42px rgba(37,99,235,.11)!important}
+.bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{aspect-ratio:16/9!important}
+
+.bell-game-home,.bell-app-panel{position:absolute;inset:54px 0 62px;z-index:60;align-items:center;justify-content:center;padding:12px;background:radial-gradient(circle at 50% 14%,rgba(37,99,235,.20),transparent 34%),linear-gradient(180deg,rgba(2,6,23,.80),rgba(2,6,23,.97));backdrop-filter:blur(12px);overflow:auto}
+.bell-game-home{display:flex}
+.bell-home-card{width:min(520px,96vw);padding:18px;border-radius:22px;background:linear-gradient(160deg,rgba(30,41,59,.94),rgba(15,23,42,.96));border:1px solid rgba(125,211,252,.22);box-shadow:0 26px 80px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.06);text-align:center;color:#fff}
+.bell-home-badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:linear-gradient(135deg,#2563eb,#7c3aed);font-size:8px;font-weight:1000;letter-spacing:.12em;color:#fff}
+.bell-home-logo{font-size:44px;margin:8px 0 0;filter:drop-shadow(0 8px 18px rgba(251,191,36,.25))}.bell-home-card h2{font-size:24px;margin:0;color:#fff}.bell-home-card>p{font-size:9px;color:#94a3b8;margin:5px 0 13px}
+.bell-home-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.bell-home-stats div{padding:9px 6px;border-radius:12px;background:rgba(255,255,255,.055);border:1px solid rgba(148,163,184,.13)}.bell-home-stats span{display:block;font-size:8px;color:#94a3b8}.bell-home-stats strong{display:block;margin-top:2px;font-size:16px;color:#fff}
+.bell-home-loadout{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.bell-home-loadout div{padding:8px;border-radius:11px;background:rgba(14,165,233,.06);border:1px solid rgba(56,189,248,.13);text-align:left}.bell-home-loadout span{display:block;font-size:7.5px;color:#7dd3fc}.bell-home-loadout strong{display:block;margin-top:2px;font-size:9px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bell-home-primary{width:100%;min-height:46px;margin-top:10px;border:0;border-radius:13px;background:linear-gradient(135deg,#0284c7,#2563eb 58%,#7c3aed);color:#fff;font-size:12px;font-weight:1000;box-shadow:0 12px 26px rgba(37,99,235,.26)}
+.bell-home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:7px}.bell-home-grid button{min-height:58px;border:1px solid rgba(148,163,184,.14);border-radius:11px;background:rgba(255,255,255,.045);color:#fff;font-size:18px;font-weight:900}.bell-home-grid button span{display:block;margin-top:3px;font-size:7.5px;color:#cbd5e1}
+
+.bell-app-panel{display:flex;z-index:70}.bell-app-panel-card{width:min(780px,96vw);max-height:94%;display:flex;flex-direction:column;border-radius:20px;background:linear-gradient(180deg,#111827,#0b1220);border:1px solid rgba(96,165,250,.20);box-shadow:0 25px 80px rgba(0,0,0,.48);overflow:hidden;color:#fff}.bell-app-panel-head{flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid rgba(148,163,184,.14)}.bell-app-panel-head h3{margin:0;font-size:14px}.bell-app-panel-head button{width:32px;height:32px;border:0;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;font-size:18px}.bell-app-panel-body{padding:12px;overflow:auto;min-height:0}
+.bell-app-lb-tabs{display:flex;gap:6px;margin-bottom:8px}.bell-app-lb-tabs button{flex:1;min-height:34px;border:1px solid rgba(96,165,250,.18);border-radius:9px;background:#172033;color:#cbd5e1;font-size:9px;font-weight:900}.bell-app-lb-tabs button.active{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff}
+#bellAppLeaderboardList .dino-leader-row{background:rgba(255,255,255,.045)!important;border-color:rgba(148,163,184,.10)!important;color:#e2e8f0!important}#bellAppLeaderboardList .dino-leader-head{background:rgba(59,130,246,.10)!important;color:#93c5fd!important}
+.bell-settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.bell-setting-card{padding:12px;border-radius:13px;background:rgba(255,255,255,.045);border:1px solid rgba(148,163,184,.12)}.bell-setting-card h4{margin:0 0 5px;font-size:11px}.bell-setting-card p{margin:0 0 8px;font-size:8px;color:#94a3b8;line-height:1.45}.bell-setting-card input[type=range]{width:100%;accent-color:#38bdf8}.bell-setting-actions{display:flex;gap:6px}.bell-setting-actions button{flex:1;min-height:34px;border:1px solid rgba(96,165,250,.18);border-radius:9px;background:#172033;color:#fff;font-size:9px;font-weight:900}
+
+/* Гра відчувається як окремий застосунок */
+@media(max-width:760px){
+  .bell-game-topbar{flex-basis:66px!important;min-height:66px!important}.bell-arena-mount{padding:2px 2px 62px!important}.bell-game-nav{left:5px;right:5px;height:52px;border-radius:14px}.bell-game-nav button span{font-size:16px}.bell-game-nav button b{font-size:7px}.bell-game-home,.bell-app-panel{inset:66px 0 60px;padding:8px}.bell-home-card{padding:13px;border-radius:18px}.bell-home-logo{font-size:38px}.bell-home-card h2{font-size:20px}.bell-home-grid{grid-template-columns:repeat(2,1fr)}.bell-home-grid button{min-height:50px}.bell-settings-grid{grid-template-columns:1fr}.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-hud{grid-template-columns:1fr 1fr 76px!important}.bell-arena-dock .dino-game-card.dino-expanded .bell-fire-btn{min-height:48px!important}
+}
+</style>
 </head>
 <body>
-  <div id="bellArenaDock" class="bell-arena-dock" aria-hidden="true">
-    <div class="bell-arena-toolbar">
+  <div id="bellArenaDock" class="bell-arena-dock bell-game-app" aria-hidden="true">
+    <div class="bell-arena-toolbar bell-game-topbar">
       <div class="bell-arena-brand">
         <strong>🔔 Вижити до дзвінка</strong>
         <span id="bellArenaWave">Хвиля 1/20</span>
@@ -2140,14 +2187,54 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         <span>⚡ <b id="bellArenaCredits">0</b></span>
       </div>
       <div class="bell-arena-actions">
-        <button id="bellSoundBtn" data-bell-sound-toggle class="bell-audio-btn" type="button" onclick="toggleBellSound()" title="Звуки" aria-label="Звуки">🔊</button>
-        <button id="bellMusicBtn" data-bell-music-toggle class="bell-audio-btn" type="button" onclick="toggleBellMusic()" title="Музика" aria-label="Музика">🎵</button>
-        <button id="bellArenaRestartBtn" type="button" onclick="startDinoGame()" disabled title="Новий бій">↻</button>
-        <button type="button" onclick="openPortalShop('skins')">🛍 <span>Магазин</span></button>
-        <button type="button" onclick="exitBellArena()" title="Згорнути гру">✕</button>
+        <button id="bellSoundBtn" data-bell-sound-toggle class="bell-audio-btn" type="button" onclick="toggleBellSound()" title="Звуки">🔊</button>
+        <button id="bellMusicBtn" data-bell-music-toggle class="bell-audio-btn" type="button" onclick="toggleBellMusic()" title="Музика">🎵</button>
+        <button type="button" onclick="showBellGameHome(true)" title="Меню">☰</button>
+        <button type="button" onclick="exitBellArena()" title="Закрити гру">✕</button>
       </div>
     </div>
+
     <div id="bellArenaMount" class="bell-arena-mount"></div>
+
+    <nav class="bell-game-nav" aria-label="Меню гри">
+      <button type="button" onclick="bellNavGame()"><span>🎮</span><b>Грати</b></button>
+      <button type="button" onclick="bellOpenShop('skins')"><span>🛍</span><b>Магазин</b></button>
+      <button type="button" onclick="openBellAppPanel('leaderboard')"><span>🏆</span><b>Рейтинг</b></button>
+      <button type="button" onclick="bellOpenShop('collection')"><span>🎒</span><b>Колекція</b></button>
+      <button type="button" onclick="openBellAppPanel('settings')"><span>⚙️</span><b>Налашт.</b></button>
+    </nav>
+
+    <div id="bellGameHome" class="bell-game-home" style="display:none" aria-hidden="true">
+      <div class="bell-home-card">
+        <div class="bell-home-badge">GAME APP 2.6</div>
+        <div class="bell-home-logo">🔔</div>
+        <h2>Вижити до дзвінка</h2>
+        <p>20 хвиль • орда вчителів • боси • магазин • прокачка</p>
+        <div class="bell-home-stats">
+          <div><span>Рекорд</span><strong id="bellHomeBest">0</strong></div>
+          <div><span>Монети</span><strong id="bellHomeCoins">0</strong></div>
+          <div><span>Жетони</span><strong id="bellHomeTokens">0</strong></div>
+        </div>
+        <div class="bell-home-loadout">
+          <div><span>👕 Образ</span><strong id="bellHomeSkin">Учень</strong></div>
+          <div><span>⚔️ Зброя</span><strong id="bellHomeWeapon">Імпульсний бластер</strong></div>
+        </div>
+        <button id="bellHomePrimary" class="bell-home-primary" type="button" onclick="bellHomePrimaryAction()">▶ ПОЧАТИ БІЙ</button>
+        <div class="bell-home-grid">
+          <button type="button" onclick="bellOpenShop('skins')">🛍<span>Магазин</span></button>
+          <button type="button" onclick="openBellAppPanel('leaderboard')">🏆<span>Рейтинг</span></button>
+          <button type="button" onclick="bellOpenShop('collection')">🎒<span>Колекція</span></button>
+          <button type="button" onclick="openBellAppPanel('settings')">⚙️<span>Налаштування</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="bellAppPanel" class="bell-app-panel" style="display:none" aria-hidden="true">
+      <div class="bell-app-panel-card">
+        <div class="bell-app-panel-head"><h3 id="bellAppPanelTitle">Меню</h3><button type="button" onclick="closeBellAppPanel()">×</button></div>
+        <div id="bellAppPanelBody" class="bell-app-panel-body"></div>
+      </div>
+    </div>
   </div>
 
 
@@ -2327,9 +2414,9 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
           </div>
         </div>
 
-        <!-- Блок 2: Вижити до дзвінка 2.3 FULL ARENA -->
+        <!-- Блок 2: Вижити до дзвінка 2.6 GAME APP -->
         <div class="dino-game-card">
-          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка 2.5</div><div class="dino2-toptools"><button id="bellSoundMini" data-bell-sound-toggle class="bell-mini-audio" type="button" onclick="toggleBellSound()" aria-label="Звуки">🔊</button><button id="bellMusicMini" data-bell-music-toggle class="bell-mini-audio" type="button" onclick="toggleBellMusic()" aria-label="Музика">🎵</button><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div></div>
+          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка 2.6</div><div class="dino2-toptools"><button id="bellSoundMini" data-bell-sound-toggle class="bell-mini-audio" type="button" onclick="toggleBellSound()" aria-label="Звуки">🔊</button><button id="bellMusicMini" data-bell-music-toggle class="bell-mini-audio" type="button" onclick="toggleBellMusic()" aria-label="Музика">🎵</button><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div></div>
           <div class="dino2-stats"><div class="dino2-stat">Очки<strong id="dinoScore">0</strong></div><div class="dino2-stat">Рекорд<strong id="dinoHighScore">0</strong></div><div class="dino2-stat">Жетони<strong id="dinoArtifactsTotal">0</strong></div></div>
           <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="1440" height="810"></canvas>
             <div id="bellWaveBanner" class="bell-wave-banner" style="display:none"></div>
@@ -2359,7 +2446,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
               onpointercancel="bellFireEnd(event)"
               onpointerleave="bellFireEnd(event)">🔥 ВОГОНЬ</button>
           </div>
-          <div class="dino2-actions"><button id="dinoStartBtn" onclick="startDinoGame()" disabled>▶ Старт</button><button class="dino-shop-btn" type="button" onclick="openPortalShop('skins')">🛍 Магазин</button><button id="dinoExpandBtn" class="dino-expand-btn" type="button" onclick="toggleDinoExpanded()">⛶ Екран</button></div>
+          <div class="dino2-actions"><button id="dinoStartBtn" onclick="openBellGameApp(true)" disabled>▶ Старт</button><button class="dino-shop-btn" type="button" onclick="openPortalShop('skins')">🛍 Магазин</button><button id="dinoExpandBtn" class="dino-expand-btn" type="button" onclick="toggleDinoExpanded()">⛶ Екран</button></div>
           <div class="dino-leader-tabs"><button id="dinoTabWeek" class="dino-leader-tab active" onclick="setDinoLeaderboardMode('week')">Цей тиждень</button><button id="dinoTabAll" class="dino-leader-tab" onclick="setDinoLeaderboardMode('all')">Увесь час</button></div>
           <div class="dino-leaderboard"><div class="dino-leaderboard-title">🏆 Лідери «Вижити до дзвінка»</div><div id="dinoLeaderboardList"></div></div>
         </div>
@@ -4417,7 +4504,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       applyPortalProfileFrame(p.portal_equipped?.frame||'none');
       if(typeof updateDinoSkinOptions==='function')updateDinoSkinOptions();
       if(typeof updateDinoWeaponOptions==='function')updateDinoWeaponOptions();
-      if(document.getElementById('portalShopModal')?.style.display==='flex')renderPortalShop();
+      if(document.getElementById('portalShopModal')?.style.display==='flex')renderPortalShop();if(typeof updateBellGameHome==='function')updateBellGameHome();
     };
     window.openPortalShop=function(tab='skins'){
       if(!window.currentUserUid){portalToast('🔐 Спочатку увійдіть через Google.');return;}
@@ -4428,7 +4515,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     };
     window.closePortalShop=function(){
       const modal=document.getElementById('portalShopModal');if(modal)modal.style.display='none';
-      if(dinoGameRunning){bellShopPause=false;bellReleasePauseState();const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn&&!bellUpgradeOpen)fireBtn.disabled=false;bellAudioSetDuck(bellUpgradeOpen||bellArenaPaused);}
+      if(dinoGameRunning){bellShopPause=false;bellReleasePauseState();const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn&&!bellUpgradeOpen)fireBtn.disabled=false;bellAudioSetDuck(bellUpgradeOpen||bellArenaPaused||bellGameHomeOpen||bellAppPanelOpen);}
     };
     document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(document.getElementById('portalShopModal')?.style.display==='flex'){e.preventDefault();window.closePortalShop();return;}if(dinoExpanded){e.preventDefault();exitBellArena();}});
     window.setPortalShopTab=function(tab){portalShopCurrentTab=tab;document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));renderPortalShop();};
@@ -4740,6 +4827,9 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     let bellMusicEnabled=localStorage.getItem('bell_music_enabled')!=='0';
     let bellMusicTimer=null,bellMusicNextTime=0,bellMusicTick=0;
     let bellArenaPaused=false,bellVisibilityPause=false;
+    let bellGameHomeOpen=false,bellAppPanelOpen=false;
+    let bellMusicVolume=Math.max(0,Math.min(1,Number(localStorage.getItem('bell_music_volume')??'.78')));
+    let bellSfxVolume=Math.max(0,Math.min(1,Number(localStorage.getItem('bell_sfx_volume')??'.86')));
     let bellPauseSnapshot=null;
     let bellLoopSerial=0;
     let bellFxQuality=1,bellPerfFrames=0,bellPerfStamp=performance.now(),bellPerfFps=60;
@@ -4755,7 +4845,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       dinoLastFrame=performance.now();
     }
     function bellReleasePauseState(){
-      if(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellVisibilityPause)return;
+      if(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellVisibilityPause||bellGameHomeOpen||bellAppPanelOpen)return;
       bellPauseSnapshot=null;dinoLastFrame=performance.now();
     }
     function bellEnforcePauseSnapshot(){
@@ -4773,7 +4863,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
         const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
         bellAudioCtx=new AC();
         bellMasterGain=bellAudioCtx.createGain();bellMusicGain=bellAudioCtx.createGain();bellSfxGain=bellAudioCtx.createGain();
-        bellMasterGain.gain.value=.82;bellMusicGain.gain.value=.0001;bellSfxGain.gain.value=.76;
+        bellMasterGain.gain.value=.86;bellMusicGain.gain.value=.0001;bellSfxGain.gain.value=.76*bellSfxVolume;
         bellMusicGain.connect(bellMasterGain);bellSfxGain.connect(bellMasterGain);bellMasterGain.connect(bellAudioCtx.destination);
         bellNoiseBuffer=bellAudioCtx.createBuffer(1,bellAudioCtx.sampleRate,bellAudioCtx.sampleRate);
         const d=bellNoiseBuffer.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
@@ -4844,32 +4934,49 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     function bellMusicScheduleStep(step,t){
       if(!bellAudioCtx||!bellMusicEnabled)return;
-      const bar=Math.floor(bellMusicTick/16),roots=[73.42,65.41,87.31,69.30],root=roots[bar%roots.length];
+      const bar=Math.floor(bellMusicTick/16);
+      const progressions=[
+        [73.42,65.41,87.31,69.30], // corridor
+        [65.41,73.42,82.41,61.74], // library
+        [69.30,77.78,58.27,65.41], // history
+        [73.42,87.31,65.41,82.41], // geography
+        [61.74,69.30,77.78,58.27]  // lab
+      ];
+      const roots=progressions[themeIndex%progressions.length],root=roots[bar%roots.length];
       const intensity=clamp((bellWave-1)/Math.max(1,bellMaxWaves-1),0,1);
       const boss=bellBossRequired&&!bellBossDefeated;
       const off=t-bellAudioCtx.currentTime;
 
-      // bass + kick
+      // cinematic pad at each bar
+      if(step===0){
+        [1,1.25,1.5,2].forEach((r,i)=>bellAudioTone(root*r,.70,i===0?'triangle':'sine',.008+.003*intensity,off+i*.010,root*r*.996,'music'));
+        bellAudioTone(root/2,.55,'sine',.020+.006*intensity,off,root*.42,'music');
+      }
+      // kick + bass
       if(step%4===0){
-        bellAudioTone(root,.24,'triangle',.038,off,root*.80,'music');
-        bellAudioTone(96,.10,'sine',.055,off,42,'music');
+        bellAudioTone(root,.22,'triangle',.040+intensity*.006,off,root*.76,'music');
+        bellAudioTone(92,.095,'sine',.058+intensity*.010,off,38,'music');
       }
-      // warm chord stab every half bar
-      if(step===0||step===8){
-        const chord=step===0?[1,1.25,1.5]:[1,1.20,1.50];
-        chord.forEach((r,i)=>bellAudioTone(root*r*2,.34,'sine',.010+intensity*.003,off+i*.008,root*r*1.96,'music'));
-      }
-      // snare / hats
-      if(step===4||step===12){bellAudioNoise(.075,.022,2100,off,'music');bellAudioTone(185,.045,'triangle',.013,off);}
-      if(step%2===0)bellAudioNoise(.026,.008+intensity*.006,6800,off,'music');
+      // snare and hats
+      if(step===4||step===12){bellAudioNoise(.080,.024+intensity*.006,2250,off,'music');bellAudioTone(178,.050,'triangle',.014,off,150,'music');}
+      if(step%2===0)bellAudioNoise(.022,.007+intensity*.007,7600,off,'music');
+      if(bellWave>=6&&step%2===1)bellAudioNoise(.018,.0045+intensity*.004,9800,off,'music');
 
-      // melody grows with waves
-      if(bellWave>=3&&step%2===0){
-        const seq=[2,2.38,2.67,3,3.56,3,2.67,2.38],freq=root*seq[(step/2+bar)%seq.length];
-        bellAudioTone(freq,.082,'square',.012+intensity*.010,off,freq*1.008,'music');
+      // location-sensitive arpeggio
+      if(bellWave>=2){
+        const scale=[1,1.125,1.25,1.5,1.667,2,1.667,1.5];
+        const idx=(step+bar+themeIndex*2)%scale.length,freq=root*2*scale[idx];
+        if(step%2===0)bellAudioTone(freq,.075,'square',.009+intensity*.010,off,freq*1.008,'music');
       }
-      if(bellWave>=9&&(step===3||step===7||step===11||step===15))bellAudioTone(root*4,.055,'sawtooth',.011+intensity*.004,off,root*3.25,'music');
-      if(boss&&step%4===2){bellAudioTone(root*1.5,.18,'sawtooth',.022,off,root*1.30,'music');bellAudioNoise(.045,.012,1300,off,'music');}
+      // late-wave synth layer
+      if(bellWave>=10&&(step===3||step===7||step===11||step===15)){
+        bellAudioTone(root*4,.070,'sawtooth',.010+intensity*.007,off,root*3.35,'music');
+      }
+      // boss motif
+      if(boss){
+        if(step%4===2){bellAudioTone(root*1.5,.20,'sawtooth',.024,off,root*1.20,'music');bellAudioNoise(.050,.014,1250,off,'music');}
+        if(step===0||step===8)bellAudioTone(root*.75,.42,'square',.020,off,root*.58,'music');
+      }
     }
 
     function bellMusicScheduler(){
@@ -4895,12 +5002,25 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     function bellAudioSetDuck(duck=false){
       if(!bellAudioCtx||!bellMusicGain)return;
-      const target=!bellMusicEnabled?.0001:(duck?.065:((bellBossRequired&&!bellBossDefeated)?.255:.205));
+      const target=!bellMusicEnabled?.0001:((duck?.060:((bellBossRequired&&!bellBossDefeated)?.270:.220))*bellMusicVolume);
       bellMusicGain.gain.cancelScheduledValues(bellAudioCtx.currentTime);bellMusicGain.gain.setTargetAtTime(target,bellAudioCtx.currentTime,.09);
     }
 
     window.toggleBellSound=function(){bellSoundEnabled=!bellSoundEnabled;localStorage.setItem('bell_sound_enabled',bellSoundEnabled?'1':'0');bellEnsureAudio();bellAudioUpdateButtons();if(bellSoundEnabled)bellSfx('ui');};
     window.toggleBellMusic=function(){bellMusicEnabled=!bellMusicEnabled;localStorage.setItem('bell_music_enabled',bellMusicEnabled?'1':'0');bellEnsureAudio();bellAudioUpdateButtons();if(bellMusicEnabled&&dinoGameRunning)bellStartMusic();else bellStopMusic(.18);};
+    window.setBellAudioVolume=function(kind,value){
+      const v=Math.max(0,Math.min(1,Number(value)||0));
+      if(kind==='music'){bellMusicVolume=v;localStorage.setItem('bell_music_volume',String(v));bellAudioSetDuck(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellGameHomeOpen||bellAppPanelOpen);}
+      else{bellSfxVolume=v;localStorage.setItem('bell_sfx_volume',String(v));if(bellEnsureAudio()&&bellSfxGain)bellSfxGain.gain.setTargetAtTime(.76*bellSfxVolume,bellAudioCtx.currentTime,.04);}
+      bellSyncSettingsUI();
+    };
+    function bellSyncSettingsUI(){
+      const mv=document.getElementById('bellMusicVolume');if(mv)mv.value=Math.round(bellMusicVolume*100);
+      const sv=document.getElementById('bellSfxVolume');if(sv)sv.value=Math.round(bellSfxVolume*100);
+      const ms=document.getElementById('bellMusicVolumeLabel');if(ms)ms.textContent=`${Math.round(bellMusicVolume*100)}%`;
+      const ss=document.getElementById('bellSfxVolumeLabel');if(ss)ss.textContent=`${Math.round(bellSfxVolume*100)}%`;
+    }
+
 
     function bellPerfTick(now){
       bellPerfFrames++;
@@ -4912,8 +5032,86 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
     document.addEventListener('visibilitychange',()=>{
       if(document.hidden&&dinoGameRunning){bellVisibilityPause=true;bellCapturePauseState('hidden');bellAudioSetDuck(true);}
-      else if(!document.hidden&&bellVisibilityPause){bellVisibilityPause=false;bellReleasePauseState();bellAudioSetDuck(bellUpgradeOpen||bellShopPause||bellArenaPaused);}
+      else if(!document.hidden&&bellVisibilityPause){bellVisibilityPause=false;bellReleasePauseState();bellAudioSetDuck(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellGameHomeOpen||bellAppPanelOpen);}
     });
+
+
+    function updateBellGameHome(){
+      const p=window.portalEconomyProfile||{};
+      const coins=Math.max(0,Number(p.portal_coins)||0);
+      const skinValue=p.portal_equipped?.skin||currentDinoSkin||'student';
+      const weaponValue=p.portal_equipped?.weapon||currentDinoWeapon||'school_blaster';
+      const skinName=portalShopItems.find(x=>x.type==='skin'&&x.value===skinValue)?.name||dinoSkins?.[skinValue]?.label||'Учень';
+      const weaponName=portalShopItems.find(x=>x.type==='weapon'&&x.value===weaponValue)?.name||dinoWeapons?.[weaponValue]?.name||'Імпульсний бластер';
+      const best=document.getElementById('bellHomeBest');if(best)best.textContent=Math.max(dinoHighScore,Math.floor(dinoScore||0));
+      const c=document.getElementById('bellHomeCoins');if(c)c.textContent=coins;
+      const tok=document.getElementById('bellHomeTokens');if(tok)tok.textContent=dinoArtifactsTotal;
+      const sk=document.getElementById('bellHomeSkin');if(sk)sk.textContent=skinName;
+      const wp=document.getElementById('bellHomeWeapon');if(wp)wp.textContent=weaponName;
+      const primary=document.getElementById('bellHomePrimary');if(primary)primary.textContent=dinoGameRunning?'▶ ПРОДОВЖИТИ':'▶ ПОЧАТИ БІЙ';
+    }
+
+    window.showBellGameHome=function(pause=true){
+      const home=document.getElementById('bellGameHome');if(!home)return;
+      bellGameHomeOpen=true;
+      if(dinoGameRunning&&pause){bellCapturePauseState('game-menu');bellAudioSetDuck(true);}
+      updateBellGameHome();home.style.display='flex';home.setAttribute('aria-hidden','false');
+    };
+    window.hideBellGameHome=function(resume=true){
+      const home=document.getElementById('bellGameHome');if(home){home.style.display='none';home.setAttribute('aria-hidden','true');}
+      bellGameHomeOpen=false;
+      if(resume&&dinoGameRunning){bellReleasePauseState();bellAudioSetDuck(false);dinoLastFrame=performance.now();}
+    };
+    window.bellHomePrimaryAction=function(){
+      bellSfx('ui');
+      if(dinoGameRunning){hideBellGameHome(true);return;}
+      hideBellGameHome(false);startDinoGame();
+    };
+    window.openBellGameApp=function(autoStart=false){
+      bellEnsureAudio();enterBellArena();
+      if(dinoGameRunning){hideBellGameHome(true);return;}
+      if(autoStart){hideBellGameHome(false);startDinoGame();}
+      else showBellGameHome(false);
+    };
+    window.bellNavGame=function(){
+      if(dinoGameRunning){hideBellGameHome(true);closeBellAppPanel(true);return;}
+      showBellGameHome(false);
+    };
+    window.bellOpenShop=function(tab='skins'){
+      hideBellGameHome(false);closeBellAppPanel(false);openPortalShop(tab);
+    };
+
+    function bellSyncArenaLeaderboard(){
+      const src=document.getElementById('dinoLeaderboardList'),dst=document.getElementById('bellAppLeaderboardList');
+      if(src&&dst)dst.innerHTML=src.innerHTML;
+      document.querySelectorAll('[data-bell-lb]').forEach(b=>b.classList.toggle('active',b.dataset.bellLb===dinoLeaderboardMode));
+    }
+    window.openBellAppPanel=function(type){
+      const panel=document.getElementById('bellAppPanel'),title=document.getElementById('bellAppPanelTitle'),body=document.getElementById('bellAppPanelBody');if(!panel||!body)return;
+      hideBellGameHome(false);
+      bellAppPanelOpen=true;
+      if(dinoGameRunning){bellCapturePauseState('app-panel');bellAudioSetDuck(true);}
+      if(type==='leaderboard'){
+        title.textContent='🏆 Рейтинг гравців';
+        body.innerHTML=`<div class="bell-app-lb-tabs"><button data-bell-lb="week" onclick="setDinoLeaderboardMode('week')">Цей тиждень</button><button data-bell-lb="all" onclick="setDinoLeaderboardMode('all')">Увесь час</button></div><div id="bellAppLeaderboardList"></div>`;
+        renderDinoLeaderboard();bellSyncArenaLeaderboard();
+      }else{
+        title.textContent='⚙️ Налаштування гри';
+        body.innerHTML=`<div class="bell-settings-grid">
+          <div class="bell-setting-card"><h4>🎵 Музика</h4><p>Динамічний саундтрек змінюється разом із хвилями та босами.</p><div class="bell-setting-actions"><button onclick="toggleBellMusic()">Увімк./вимк.</button><span id="bellMusicVolumeLabel">0%</span></div><input id="bellMusicVolume" type="range" min="0" max="100" value="78" oninput="setBellAudioVolume('music',this.value/100)"></div>
+          <div class="bell-setting-card"><h4>🔊 Звуки</h4><p>Постріли, перезарядка, удари, боси, перемога та UI.</p><div class="bell-setting-actions"><button onclick="toggleBellSound()">Увімк./вимк.</button><span id="bellSfxVolumeLabel">0%</span></div><input id="bellSfxVolume" type="range" min="0" max="100" value="86" oninput="setBellAudioVolume('sfx',this.value/100)"></div>
+          <div class="bell-setting-card"><h4>✨ Графіка</h4><p>Ефекти автоматично підлаштовуються під FPS iPhone. Висока якість дає більше glow, частинок і силуетів.</p><div class="bell-setting-actions"><button onclick="bellFxQuality=Math.max(bellFxQuality,.9);portalToast('✨ Висока якість увімкнена')">Висока</button><button onclick="bellFxQuality=1;portalToast('⚙️ Автоякість активна')">Авто</button></div></div>
+          <div class="bell-setting-card"><h4>📱 Екран</h4><p>Гра працює як окремий повноекранний застосунок поверх порталу.</p><div class="bell-setting-actions"><button onclick="try{document.getElementById('bellArenaDock')?.requestFullscreen?.({navigationUI:'hide'})}catch(_){}">Повний екран</button><button onclick="exitBellArena()">Закрити гру</button></div></div>
+        </div>`;
+        bellSyncSettingsUI();
+      }
+      panel.style.display='flex';panel.setAttribute('aria-hidden','false');bellSfx('ui');
+    };
+    window.closeBellAppPanel=function(resume=true){
+      const panel=document.getElementById('bellAppPanel');if(panel){panel.style.display='none';panel.setAttribute('aria-hidden','true');}
+      bellAppPanelOpen=false;
+      if(resume&&dinoGameRunning&&!bellGameHomeOpen){bellReleasePauseState();bellAudioSetDuck(false);dinoLastFrame=performance.now();}
+    };
 
     function updateBellArenaToolbar(){
       const score=document.getElementById('bellArenaScore');if(score)score.textContent=Math.floor(dinoScore);
@@ -4929,7 +5127,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(shop&&!bellShopOriginalParent){bellShopOriginalParent=shop.parentNode;bellShopOriginalNext=shop.nextSibling;}
       mount.appendChild(card);
       if(shop&&shop.parentNode!==dock)dock.appendChild(shop);
-      dinoExpanded=true;bellArenaPaused=false;bellReleasePauseState();card.classList.add('dino-expanded');dock.classList.add('active');dock.setAttribute('aria-hidden','false');document.body.classList.add('dino-no-scroll','bell-arena-body');bellAudioSetDuck(bellUpgradeOpen||bellShopPause);
+      dinoExpanded=true;bellArenaPaused=false;if(!bellGameHomeOpen&&!bellAppPanelOpen)bellReleasePauseState();card.classList.add('dino-expanded');dock.classList.add('active');dock.setAttribute('aria-hidden','false');document.body.classList.add('dino-no-scroll','bell-arena-body');bellAudioSetDuck(bellUpgradeOpen||bellShopPause);
       const btn=document.getElementById('dinoExpandBtn');if(btn)btn.textContent='✕ Згорнути';
       updateBellArenaToolbar();
       try{if(dock.requestFullscreen&&!document.fullscreenElement)dock.requestFullscreen({navigationUI:'hide'}).catch(()=>{});}catch(_){}
@@ -4941,7 +5139,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       if(shop?.style.display==='flex')window.closePortalShop?.();
       if(card&&bellArenaOriginalParent){if(bellArenaOriginalNext&&bellArenaOriginalNext.parentNode===bellArenaOriginalParent)bellArenaOriginalParent.insertBefore(card,bellArenaOriginalNext);else bellArenaOriginalParent.appendChild(card);}
       if(shop&&bellShopOriginalParent){if(bellShopOriginalNext&&bellShopOriginalNext.parentNode===bellShopOriginalParent)bellShopOriginalParent.insertBefore(shop,bellShopOriginalNext);else bellShopOriginalParent.appendChild(shop);}
-      dinoExpanded=false;if(dinoGameRunning){bellArenaPaused=true;bellCapturePauseState('arena');}bellFireHeld=false;card?.classList.remove('dino-expanded');dock?.classList.remove('active');dock?.setAttribute('aria-hidden','true');document.body.classList.remove('dino-no-scroll','bell-arena-body');bellAudioSetDuck(true);
+      bellGameHomeOpen=false;bellAppPanelOpen=false;document.getElementById('bellGameHome')?.setAttribute('aria-hidden','true');document.getElementById('bellAppPanel')?.setAttribute('aria-hidden','true');if(document.getElementById('bellGameHome'))document.getElementById('bellGameHome').style.display='none';if(document.getElementById('bellAppPanel'))document.getElementById('bellAppPanel').style.display='none';dinoExpanded=false;if(dinoGameRunning){bellArenaPaused=true;bellCapturePauseState('arena');}bellFireHeld=false;card?.classList.remove('dino-expanded');dock?.classList.remove('active');dock?.setAttribute('aria-hidden','true');document.body.classList.remove('dino-no-scroll','bell-arena-body');bellAudioSetDuck(true);
       const btn=document.getElementById('dinoExpandBtn');if(btn)btn.textContent='⛶ Екран';
       try{if(document.fullscreenElement===dock)document.exitFullscreen?.().catch(()=>{});}catch(_){}
       setTimeout(()=>{if(!dinoGameRunning)drawDinoIdleScreen();},30);
@@ -4955,7 +5153,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       const overlay=document.getElementById('dinoLockOverlay');
       const btn=document.getElementById('dinoStartBtn');
       if(overlay) overlay.style.display='none';
-      if(btn){btn.disabled=false;btn.textContent='▶️ Старт';} const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=true;
+      if(btn){btn.disabled=false;btn.textContent='▶ Старт';} const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=true;
       drawDinoIdleScreen();
     }
 
@@ -5321,6 +5519,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     function startDinoGame(){
       if(!isGameUnlocked) return;
       if(dinoGameRunning) return;
+      bellGameHomeOpen=false;bellAppPanelOpen=false;const home=document.getElementById('bellGameHome');if(home)home.style.display='none';const appPanel=document.getElementById('bellAppPanel');if(appPanel)appPanel.style.display='none';
       bellEnsureAudio();resetDinoRun();
       dinoGameRunning=true; dinoGameOver=false;
       try{bellAudioCtx?.resume?.().then(()=>{if(dinoGameRunning&&bellMusicEnabled)bellStartMusic();}).catch(()=>{});}catch(_){}
@@ -5470,7 +5669,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     function enemyShotHitbox(s){return {x:s.x-s.r,y:s.y-s.r,w:s.r*2,h:s.r*2};}
 
     function spawnEnemyShot(enemy,kind='book',angleOffset=0){
-      if(!dinoGameRunning||bellUpgradeOpen||bellShopPause)return;
+      if(!dinoGameRunning||bellUpgradeOpen||bellShopPause||bellGameHomeOpen||bellAppPanelOpen)return;
       const sx=enemy.x+8,sy=enemy.y+enemy.h*.45,tx=player.x+36,ty=player.y+42;
       const dx=tx-sx,dy=ty-sy,a=Math.atan2(dy,dx)+angleOffset;
       const speed={order:345,flask:375,pixel:445,note:405,paint:355,formula:400,book:390}[kind]||390;
@@ -5480,7 +5679,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function updateEnemyAttacks(now){
-      if(bellUpgradeOpen||bellShopPause)return;
+      if(bellUpgradeOpen||bellShopPause||bellGameHomeOpen||bellAppPanelOpen)return;
       for(const e of enemies){
         if(e.dead||!e.ranged||e.x<DINO_W*.28||e.x>DINO_W*.98||now<(e.nextAttackAt||0))continue;
         e.attackCycle=(e.attackCycle||0)+1;
@@ -5704,7 +5903,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       const duration=Math.max(1,Date.now()-dinoRunStartedAt);
       saveDinoLeaderboard(finalScore,dinoArtifactsRun,duration,dinoRunId);
       drawGameOver(finalScore,victory);
-      const btn=document.getElementById('dinoStartBtn');if(btn){btn.disabled=false;btn.textContent='🔄 Ще раз';} const arenaRestart=document.getElementById('bellArenaRestartBtn');if(arenaRestart)arenaRestart.disabled=false; const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.disabled=true;fireBtn.classList.remove('firing');} bellFireHeld=false;
+      const btn=document.getElementById('dinoStartBtn');if(btn){btn.disabled=false;btn.textContent='▶ Старт';} const arenaRestart=document.getElementById('bellArenaRestartBtn');if(arenaRestart)arenaRestart.disabled=false; const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.disabled=true;fireBtn.classList.remove('firing');} bellFireHeld=false; setTimeout(()=>{if(dinoExpanded&&!dinoGameRunning)showBellGameHome(false);},1100);
     }
 
     function burst(x,y,color,count=8){
@@ -6627,6 +6826,41 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       ctx.restore();
     }
 
+
+    function drawBellGameAppFX(now){
+      ctx.save();
+      const q=bellFxQuality,danger=clamp((bellWave-1)/Math.max(1,bellMaxWaves-1),0,1),pulse=(Math.sin(now*.008)+1)/2;
+
+      // projectile reflections on polished school floor
+      ctx.globalCompositeOperation='screen';
+      for(const p of projectiles.slice(-Math.max(8,Math.round(24*q)))){
+        const rx=p.x,ry=GROUND_Y+10;
+        const g=ctx.createRadialGradient(rx,ry,1,rx,ry,26+(p.crit?16:0));
+        g.addColorStop(0,p.crit?'rgba(251,191,36,.20)':'rgba(56,189,248,.12)');g.addColorStop(1,'rgba(56,189,248,0)');
+        ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(rx,ry,38,7,0,0,Math.PI*2);ctx.fill();
+      }
+      ctx.globalCompositeOperation='source-over';
+
+      // animated fluorescent bloom across the corridor
+      for(let i=0;i<6;i++){
+        const x=((i*270-worldOffset*.08)%(DINO_W+300)+DINO_W+300)%(DINO_W+300)-150;
+        const g=ctx.createLinearGradient(x,0,x+110,0);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.5,`rgba(219,234,254,${.035+.025*pulse})`);g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.fillRect(x,74,160,GROUND_Y-100);
+      }
+
+      // enemy rim glow close to player for better readability
+      const close=enemies.filter(e=>!e.dead&&e.x<player.x+520).slice(0,Math.max(6,Math.round(14*q)));
+      close.forEach(e=>{const c=['director','viceprincipal','headteacher'].includes(e.type)?'rgba(251,191,36,.16)':'rgba(239,68,68,.08)';ultraGlow(e.x+e.w/2,e.y+e.h*.48,26,c,.10);});
+
+      // combo streak flare
+      if(bellCombo>=15){
+        const a=Math.min(.18,.04+(bellCombo-15)*.003);const g=ctx.createLinearGradient(0,0,DINO_W,0);g.addColorStop(0,'rgba(245,158,11,0)');g.addColorStop(.5,`rgba(251,191,36,${a})`);g.addColorStop(1,'rgba(245,158,11,0)');ctx.fillStyle=g;ctx.fillRect(0,82,DINO_W,3);
+      }
+
+      // subtle blue/red app-game color grade
+      const lg=ctx.createLinearGradient(0,0,DINO_W,0);lg.addColorStop(0,`rgba(37,99,235,${.025+.025*danger})`);lg.addColorStop(.50,'rgba(0,0,0,0)');lg.addColorStop(1,`rgba(220,38,38,${.02+.04*danger})`);ctx.fillStyle=lg;ctx.fillRect(0,0,DINO_W,DINO_H);
+      ctx.restore();
+    }
+
     function drawDinoAtmosphere(now){
       drawBellHordeDepth();
       ctx.save();
@@ -6696,14 +6930,14 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function drawDinoIdleScreen(){
-      if(!canvas)return;const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawBellScenePolish(performance.now());drawDinoAtmosphere(performance.now());
+      if(!canvas)return;const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawBellScenePolish(performance.now());drawDinoAtmosphere(performance.now());drawBellGameAppFX(performance.now());
       ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.92)';ctx.font='1000 35px Inter,sans-serif';ctx.fillText('🔔 ВИЖИТИ ДО ДЗВІНКА 2.5',DINO_W/2,94);ctx.font='800 16px Inter,sans-serif';ctx.fillStyle='#334155';ctx.fillText('20 хвиль • музика + SFX • повний екран • мінібоси • ультра FX',DINO_W/2,126);ctx.restore();
     }
 
     function gameLoop(now,serial=bellLoopSerial){
       if(serial!==bellLoopSerial||!dinoGameRunning)return;
       const dt=Math.min(.034,(now-dinoLastFrame)/1000||.016);dinoLastFrame=now;bellPerfTick(now);
-      if(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellVisibilityPause||!bellWaveActive){
+      if(bellUpgradeOpen||bellShopPause||bellArenaPaused||bellVisibilityPause||bellGameHomeOpen||bellAppPanelOpen||!bellWaveActive){
         bellEnforcePauseSnapshot();dinoLastFrame=now;
         updateDinoHUD();bellUpdateWaveUI();updateBellArenaToolbar();
         dinoAnimationId=requestAnimationFrame(t=>gameLoop(t,serial));return;
@@ -6782,7 +7016,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 
       ctx.save();
       if(screenShake>0){ctx.translate(rand(-screenShake,screenShake),rand(-screenShake,screenShake));screenShake*=.82;if(screenShake<.4)screenShake=0;}
-      ctx.clearRect(-20,-20,DINO_W+40,DINO_H+40);drawBackground(dinoThemes[themeIndex],dt);drawRunner();drawEntities(now);drawBellCinematicFX(now);drawDinoAtmosphere(now);drawBattleOverlay(now);ctx.restore();
+      ctx.clearRect(-20,-20,DINO_W+40,DINO_H+40);drawBackground(dinoThemes[themeIndex],dt);drawRunner();drawEntities(now);drawBellCinematicFX(now);drawDinoAtmosphere(now);drawBellGameAppFX(now);drawBattleOverlay(now);ctx.restore();
       dinoAnimationId=requestAnimationFrame(t=>gameLoop(t,serial));
     }
 
@@ -6796,12 +7030,12 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     }
 
     function renderDinoLeaderboard(board=dinoLeaderboardData){
-      const box=document.getElementById('dinoLeaderboardList');if(!box)return;
       const currentWeek=currentDinoWeekKey();
       const clean=(Array.isArray(board)?board:[]).map(p=>({...p,score:dinoLeaderboardMode==='week'?(p.weekKey===currentWeek?Number(p.weekScore)||0:0):Number(p.allScore)||0})).filter(p=>p.name&&p.score>0).sort((a,b)=>b.score-a.score).slice(0,10);
       const header='<div class="dino-leader-row dino-leader-head"><span>Місце</span><span>Гравець</span><span>Рекорд</span></div>';
-      if(!clean.length){box.innerHTML=header+'<div class="dino-leader-empty">Поки немає результатів у цьому рейтингу.</div>';return;}
-      box.innerHTML=header+clean.map((p,i)=>{const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;const me=p.uid===window.currentUserUid?' <small>(Ви)</small>':'';return `<div class="dino-leader-row"><span class="dino-place">${medal}</span><span class="dino-player">${escapeHtml(p.name)}${me}${i===0&&dinoLeaderboardMode==='week'?'<span class="dino2-run-badge">🔥 ЛІДЕР</span>':''}</span><strong>${Math.floor(p.score)}</strong></div>`;}).join('');
+      const rows=!clean.length?header+'<div class="dino-leader-empty">Поки немає результатів у цьому рейтингу.</div>':header+clean.map((p,i)=>{const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;const me=p.uid===window.currentUserUid?' <small>(Ви)</small>':'';return `<div class="dino-leader-row"><span class="dino-place">${medal}</span><span class="dino-player">${escapeHtml(p.name)}${me}${i===0&&dinoLeaderboardMode==='week'?'<span class="dino2-run-badge">🔥 ЛІДЕР</span>':''}</span><strong>${Math.floor(p.score)}</strong></div>`;}).join('');
+      ['dinoLeaderboardList','bellAppLeaderboardList'].forEach(id=>{const box=document.getElementById(id);if(box)box.innerHTML=rows;});
+      document.querySelectorAll('[data-bell-lb]').forEach(b=>b.classList.toggle('active',b.dataset.bellLb===dinoLeaderboardMode));
     }
 
     function syncDinoLeaderboardFromUsers(rawUsers={}){
