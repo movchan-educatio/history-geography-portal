@@ -1,0 +1,18 @@
+ЯК ЗАВАНТАЖИТИ V23 У GITHUB
+
+Найпростіший спосіб:
+1. Розпакуйте ZIP на комп’ютері.
+2. Відкрийте корінь свого репозиторію на GitHub.
+3. Натисніть Add file → Upload files.
+4. Перетягніть УСІ файли з розпакованої папки разом із папкою character-assets.
+5. Дочекайтеся завершення завантаження й натисніть Commit changes.
+
+Якщо папку character-assets потрібно створити вручну:
+1. У корені репозиторію натисніть Add file → Create new file.
+2. У полі назви введіть character-assets/.gitkeep
+3. Натисніть Commit changes.
+4. Відкрийте створену папку character-assets → Add file → Upload files.
+5. Завантажте в неї всі 19 PNG-файлів із папки character-assets у ZIP.
+6. Файл .gitkeep після цього можна видалити.
+
+Важливо: папка має називатися саме character-assets і лежати поруч з index.html. Назви PNG-файлів змінювати не можна.
