@@ -1,0 +1,48 @@
+LYCEUM CLASH 7.4 — VERSION SYNC
+
+ЗНАЙДЕНА ПРИЧИНА
+У index_7_3.html одночасно були різні жорстко прописані версії:
+
+• Lobby: v7.3
+• Game HUD: v7.1
+• Canvas watermark: LYCEUM CLASH • 7.1
+• Gamebar pseudo-label: CLASH 7.1
+• Portal card: LYCEUM CLASH 7.0
+
+Тобто це була не одна «версія гри 7.0», а залишки старих hardcoded labels із попередніх оновлень.
+
+ЩО ЗРОБЛЕНО
+
+1. ЄДИНЕ ДЖЕРЕЛО ВЕРСІЇ
+Додано:
+const CLASH_BUILD_VERSION='7.4';
+
+2. ОДНАКОВА ВЕРСІЯ В УСІХ ЕКРАНАХ
+Runtime синхронізує:
+• верхню панель;
+• головний екран;
+• Lobby;
+• Room;
+• Game HUD;
+• картку Clash на порталі.
+
+3. ПРИБРАНО ВЕРСІЇ З CSS PSEUDO-ELEMENTS
+Canvas watermark тепер просто:
+LYCEUM CLASH
+
+Gamebar pseudo-label:
+CLASH
+
+Тобто прихований CSS більше не зможе показати стару цифру після наступного апдейту.
+
+4. CACHE BUST
+portal-score.js?v=74
+
+5. ВАЖЛИВО
+Цей патч не повертає стару гру і не змінює механіку кімнат.
+Він виправляє саме ситуацію, коли різні частини одного index.html показували 7.0 / 7.1 / 7.3 одночасно.
+
+ПЕРЕВІРКА
+• portal-score.js — node --check OK.
+• Всі inline JavaScript — node --check OK.
+• Старі Clash labels 7.0 / 7.1 у UI відсутні.
