@@ -2863,6 +2863,42 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
 body.colyseus-clash-open{overflow:hidden!important}
 </style>
 
+
+<style id="clash-launch-v23-style">
+.clash-launch-v23{
+  width:min(620px,95vw)!important;padding:16px!important;text-align:left!important;
+  background:
+    radial-gradient(circle at 20% 0,rgba(14,165,233,.18),transparent 35%),
+    radial-gradient(circle at 100% 70%,rgba(16,185,129,.12),transparent 35%),
+    linear-gradient(160deg,rgba(17,24,39,.98),rgba(3,7,18,.99))!important;
+  border:1px solid rgba(103,232,249,.20)!important;box-shadow:0 28px 90px rgba(0,0,0,.55)!important;
+}
+.clash-launch-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.clash-launch-top h2{font-size:30px!important;letter-spacing:-.05em;margin:5px 0 0!important}
+.clash-launch-top p{font-size:9px!important;color:#94a3b8;margin:3px 0 0!important}
+.clash-live-pill{padding:6px 9px;border-radius:999px;background:rgba(16,185,129,.10);border:1px solid rgba(74,222,128,.22);color:#86efac;font:1000 8px Inter,sans-serif;letter-spacing:.08em}
+.clash-launch-stage{margin-top:10px;min-height:220px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;border-radius:18px;
+ background:linear-gradient(135deg,rgba(37,99,235,.09),rgba(15,23,42,.58));border:1px solid rgba(148,163,184,.10);overflow:hidden;position:relative}
+.clash-launch-stage:after{content:"ARENA XL";position:absolute;right:12px;bottom:-8px;font:1000 44px Inter,sans-serif;color:rgba(255,255,255,.025);letter-spacing:-.06em}
+#bellHomeHeroCanvas{width:100%!important;height:210px!important;max-height:none!important;filter:drop-shadow(0 18px 30px rgba(0,0,0,.48))}
+.clash-launch-info{display:flex;flex-direction:column;gap:5px;position:relative;z-index:2;padding-right:12px}
+.clash-launch-info strong{font-size:16px;color:#fff}.clash-launch-info span:not(.clash-launch-label){font-size:9px;color:#b6c8da}
+.clash-launch-label{font-size:7px!important;color:#67e8f9!important;font-weight:1000;letter-spacing:.12em}
+.clash-launch-features{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}
+.clash-launch-features div{padding:8px 5px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.09);text-align:center}
+.clash-launch-features b{display:block;color:#fff;font-size:16px}.clash-launch-features span{font-size:6.5px;color:#94a3b8;font-weight:900}
+.clash-launch-v23 .bell-home-stats{margin-top:8px}
+.clash-launch-v23 .bell-home-primary{min-height:54px!important;font-size:13px!important;background:linear-gradient(135deg,#0284c7,#2563eb 55%,#059669)!important}
+@media(max-width:600px){
+  .clash-launch-v23{padding:11px!important}
+  .clash-launch-top h2{font-size:23px!important}
+  .clash-launch-stage{grid-template-columns:1fr .8fr;min-height:175px}
+  #bellHomeHeroCanvas{height:175px!important}
+  .clash-launch-info strong{font-size:13px}
+  .clash-launch-features{gap:5px}.clash-launch-features div{padding:6px 3px}
+}
+</style>
+
 </head>
 <body>
 
@@ -2893,18 +2929,31 @@ body.colyseus-clash-open{overflow:hidden!important}
     </nav>
 
     <div id="bellGameHome" class="bell-game-home" style="display:none" aria-hidden="true">
-      <div class="bell-home-card clash-clean-home clash-focus-home">
-        <div class="bell-home-badge">LYCEUM CLASH • ARENA XL</div>
-        <h2>LYCEUM CLASH</h2>
-        <p>Arena XL • 75 секунд • PvP + SMART BOTS</p>
+      <div class="bell-home-card clash-launch-v23">
+        <div class="clash-launch-top">
+          <div>
+            <div class="bell-home-badge">LYCEUM CLASH • ONLINE ARENA</div>
+            <h2>LYCEUM CLASH</h2>
+            <p>Colyseus multiplayer • 8 арен • до 5 бійців</p>
+          </div>
+          <div class="clash-live-pill">● LIVE</div>
+        </div>
 
-        <div class="clash-focus-hero">
-          <canvas id="bellHomeHeroCanvas" width="220" height="190"></canvas>
-          <div class="clash-focus-loadout">
+        <div class="clash-launch-stage">
+          <canvas id="bellHomeHeroCanvas" width="300" height="210"></canvas>
+          <div class="clash-launch-info">
+            <span class="clash-launch-label">ТВІЙ БОЄЦЬ</span>
             <strong id="bellHomeHero">⚡ Штурмовик</strong>
             <span id="bellHomeSkin">👕 Учень</span>
             <span id="bellHomeWeapon">⚔️ Імпульсний бластер</span>
           </div>
+        </div>
+
+        <div class="clash-launch-features">
+          <div><b>5</b><span>бійців</span></div>
+          <div><b>8</b><span>арен</span></div>
+          <div><b>75с</b><span>матч</span></div>
+          <div><b>AI</b><span>SMART BOTS</span></div>
         </div>
 
         <div class="bell-home-stats clash-home-stats clash-focus-stats">
@@ -2913,8 +2962,8 @@ body.colyseus-clash-open{overflow:hidden!important}
           <div><span>🪙</span><strong id="bellHomeCoins">0</strong><small>монет</small></div>
         </div>
 
-        <button id="bellHomePrimary" class="bell-home-primary clash-main-play clash-focus-play" type="button" onclick="bellHomePrimaryAction()">⚔️ ГРАТИ</button>
-        <div class="clash-focus-hint">🌐 Multiplayer: Colyseus WebSocket • 8 арен • SMART BOTS</div>
+        <button id="bellHomePrimary" class="bell-home-primary clash-main-play clash-focus-play" type="button" onclick="bellHomePrimaryAction()">⚔️ У БІЙ</button>
+        <div class="clash-focus-hint">Синхронний WebSocket multiplayer • серверні боти • Portal Coins</div>
       </div>
     </div>
 
@@ -8178,7 +8227,7 @@ body.colyseus-clash-open{overflow:hidden!important}
 
       const qs=new URLSearchParams({
         embed:'1',
-        v:'220',
+        v:'230',
         name:colyseusClashPortalName(),
         hero:colyseusClashPortalHero(),
         skin:localStorage.getItem('bell_clash_skin')||localStorage.getItem('dino_skin')||'student',
