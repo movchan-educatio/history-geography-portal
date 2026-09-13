@@ -1,0 +1,49 @@
+LYCEUM CLASH 6.7 — BOT GUARANTEE
+
+ПРОБЛЕМА
+У попередній версії боти могли створюватися локально, але наступний Firebase snapshot знову замінював bellClash.bots на порожній об'єкт, якщо synthetic BOT_X запис не зберігся або ще не встиг синхронізуватися.
+Також постріли ботів залежали від успішного запису в Firebase.
+
+ЩО ЗМІНЕНО
+
+1. HOST-LOCAL AI ТЕПЕР АВТОРИТЕТНИЙ
+• Під час активного матчу Firebase snapshot більше не може стерти вже створених ботів HOST.
+• Remote bot snapshot зливається з локальним станом, а не замінює його.
+• У соло-матчі ботів створюємо примусово навіть як fallback.
+
+2. БОТИ СТВОРЮЮТЬСЯ ДО ПЕРШОГО КАДРУ
+• bellClashGuaranteeSoloBots() викликається безпосередньо в bellClashEnterMatch().
+• Якщо в кімнаті один реальний учень — два боти гарантовано створюються локально.
+• Не потрібно чекати Firebase або наступного AI tick.
+
+3. FIREBASE ТЕПЕР BEST-EFFORT ДЛЯ БОТІВ
+• bellClashWriteBot() спочатку змінює локальний стан.
+• Потім пробує синхронізувати його в /players/BOT_X.
+• Якщо Firebase відхилив synthetic BOT_X, локальна гра не ламається.
+
+4. ПОСТРІЛИ БОТІВ ТЕЖ ГАРАНТОВАНІ
+• Додано localBotShots.
+• Постріл бота з'являється локально одразу.
+• Після цього відправляється у Firebase.
+• Якщо Firebase write не спрацював, бот все одно реально стріляє у HOST-гравця.
+• Collision, render, incoming damage і threat detection читають об'єднаний список Firebase + local bot shots.
+
+5. ШКОДА БОТАМ
+• HOST застосовує шкоду до local bot state одразу.
+• Firebase використовується як replication layer, а не як умова того, чи відбулося влучання.
+• KO / respawn працюють локально навіть при проблемі синхронізації BOT_X.
+
+6. ВИДИМИЙ ІНДИКАТОР
+• У верхньому HUD матчу є рядок «🤖 Боти: N».
+• Якщо ботів створено, індикатор світиться блакитним.
+• Scoreboard також показує BOT Nova / BOT Vector / BOT Flash.
+
+7. МЕНЮ
+• Меню 6.6 Focus UI не розширювалося.
+• Нових зайвих кнопок не додано.
+
+ПЕРЕВІРКА
+• portal-score.js — node --check OK.
+• Усі inline JavaScript-блоки index.html — node --check OK.
+• localBotShots підключені до draw та incoming collision.
+• bellClashGuaranteeSoloBots() викликається перед першим requestAnimationFrame матчу.
