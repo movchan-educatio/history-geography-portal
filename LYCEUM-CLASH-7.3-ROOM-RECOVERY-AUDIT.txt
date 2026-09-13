@@ -1,0 +1,54 @@
+LYCEUM CLASH 7.3 — ROOM RECOVERY
+
+Після повідомлення, що 7.2 усе ще не створює кімнату, механізм створення спрощено радикально.
+
+ЩО ЗМІНЕНО
+
+1. ОДИН FIREBASE WRITE
+Створення кімнати тепер робить тільки:
+set(lyceumClashRooms/CODE, payload)
+
+Перед цим більше НЕ виконується get().
+Немає Promise.race timeout.
+Немає verify-read.
+
+2. ПОВЕРНЕННЯ ДО МІНІМАЛЬНОЇ СХЕМИ
+Room payload знову максимально схожий на версію 6.9, у якій створення кімнат працювало:
+• code
+• hostUid
+• status
+• createdAt
+• maxPlayers
+• durationMs
+• map
+• botFill
+• botDifficulty
+• players
+
+protocol/schema не пишуться у Firebase room.
+
+3. UI ВІДКРИВАЄ ROOM ОДРАЗУ ПІСЛЯ set()
+Realtime watcher не є умовою показу lobby.
+
+4. JOIN СПРОЩЕНО
+Join transaction лише додає учня в players.
+Вона не переписує protocol/schema.
+
+5. WATCHER ERROR
+Помилка onValue більше НЕ передається як callback(null).
+Тобто тимчасова помилка Firebase більше не виглядає як «кімнату видалено».
+
+6. ДІАГНОСТИКА FIREBASE RULES
+Якщо Firebase поверне permission denied, гра прямо напише:
+«Firebase заборонив створення кімнати. Це проблема правил Realtime Database, а не кнопки гри.»
+
+Це важливо: якщо саме це повідомлення з'явиться, наступний крок — виправити Firebase Realtime Database Rules, а не знову міняти UI.
+
+7. CACHE
+portal-score.js?v=73
+На екрані версія v7.3.
+
+ПЕРЕВІРКА
+• portal-score.js — node --check OK.
+• Всі inline JS — node --check OK.
+• Create path не містить get()/Promise.race/protocol/schema.
