@@ -581,8 +581,9 @@ async function saveDinoBest(score, artifacts = 0, durationMs = 0, runId = '') {
 
   // Basic anti-cheat sanity check. Normal runs stay far below this ceiling.
   if (safeDuration > 0) {
-    const maxPlausibleScore = 350 + Math.floor((safeDuration / 1000) * 55);
-    if (safeScore > maxPlausibleScore || safeArtifacts > Math.floor(safeDuration / 1800) + 8) {
+    // Horde mode produces denser legitimate scoring than the old runner.
+    const maxPlausibleScore = 1200 + Math.floor((safeDuration / 1000) * 220);
+    if (safeScore > maxPlausibleScore || safeArtifacts > 24) {
       console.warn('Portal: Dino result rejected by sanity check', { safeScore, safeArtifacts, safeDuration });
       return false;
     }
@@ -624,7 +625,7 @@ async function saveDinoBest(score, artifacts = 0, durationMs = 0, runId = '') {
     });
     return true;
   } catch (error) {
-    console.error('Портал: не вдалося зберегти рекорд Dino Runner', error);
+    console.error('Портал: не вдалося зберегти рекорд «Вижити до дзвінка»', error);
     return false;
   }
 }
