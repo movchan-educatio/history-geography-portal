@@ -1,0 +1,90 @@
+LYCEUM CLASH 6.9.6 — SERVER SAFE START
+
+ЦЕ НЕ ЩЕ ОДИН TIMER/FALLBACK PATCH.
+ЗМІНЕНО САМЕ МІСЦЕ, ЯКЕ ЛАМАЛО MULTIPLAYER START.
+
+ЩО БУЛО НЕ ТАК
+
+Старий bellClashStartRoom робив runTransaction() НА ВСІЙ КІМНАТІ та всередині:
+• змінював HP/score/alive/invulnerableUntil КОЖНОГО реального гравця;
+• створював players/BOT_2, BOT_3 тощо;
+• змінював room.status.
+
+Це пояснює симптом:
+• HOST міг побачити локальний optimistic Firebase event і потрапити у гру;
+• другий пристрій залишався у lobby, бо сервер міг відхилити transaction через validation/rules для чужого UID або BOT_X.
+
+Тобто проблема була не в тому, що другий телефон "не ловив" status.
+Ймовірно status взагалі НЕ ПІДТВЕРДЖУВАВСЯ сервером.
+
+ЩО ЗРОБЛЕНО
+
+1. CREATE ROOM НЕ ЗМІНЕНО
+SHA256:
+22b3a866313c3acc09e89e9260c2bddec5ef7b45ac5bc344f5ed76c71f820602
+
+2. JOIN ROOM НЕ ЗМІНЕНО
+SHA256:
+026d7294d19a2d0cd53b3b468409cb8ebd7979a2f73555bb7f06461ff70738dd
+
+3. STARTROOM ПОВНІСТЮ СПРОЩЕНО
+HOST тепер змінює тільки metadata кімнати:
+• status = playing
+• startedAt
+• durationMs
+• round
+• winnerUid
+• winnerName
+
+StartRoom НЕ торкається:
+• players/UID іншого учня;
+• HP іншого учня;
+• BOT_X;
+• shots.
+
+4. SERVER CONFIRMATION
+Після update() виконується get(.../status).
+HOST не входить у матч, доки сервер реально не підтвердив "playing".
+
+Це прибирає оманливий optimistic start.
+
+5. КОЖЕН ГРАВЕЦЬ ІНІЦІАЛІЗУЄ ТІЛЬКИ СЕБЕ
+Коли клієнт входить у матч, bellClashWritePlayer пише у власний UID:
+• spawn x/y;
+• hp/maxHp;
+• alive;
+• score/deaths;
+• invulnerableUntil.
+
+Тобто користувач A не переписує дані користувача B.
+
+6. БОТИ НЕ СТВОРЮЮТЬСЯ У START TRANSACTION
+Вони залишаються local-authoritative через існуючий bellClashGuaranteeSoloBots().
+Firebase sync BOT_X — лише best effort і не може блокувати старт матчу.
+
+7. ДРУГИЙ ГРАВЕЦЬ
+Після Join запускається окремий onValue на:
+lyceumClashRooms/CODE/status
+
+Як тільки сервер реально показує "playing":
+• клієнт читає кімнату;
+• знаходить свій UID;
+• відкриває battle screen.
+
+8. HOST
+Після успішного server-confirmed StartRoom HOST також читає кімнату і входить через той самий bellClashLoadServerMatch().
+Тобто HOST і JOINED PLAYER мають ОДИН шлях входу.
+
+9. РУЧНА СТРАХОВКА
+У non-HOST lobby є:
+▶ УВІЙТИ В МАТЧ
+
+Вона не вигадує локальний start, а перевіряє сервер.
+Якщо status не playing — пише, що матч ще не підтверджений.
+
+ПЕРЕВІРКА
+• CreateRoom byte-for-byte НЕ ЗМІНЕНО.
+• JoinRoom byte-for-byte НЕ ЗМІНЕНО.
+• Whole-room runTransaction видалений саме зі StartRoom.
+• portal-score.js — node --check OK.
+• Усі inline JavaScript — node --check OK.
