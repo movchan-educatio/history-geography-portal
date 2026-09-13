@@ -965,6 +965,153 @@
   #characterStudioCard .character-balance,#characterStudioCard #characterCoinBalance,#characterStudioCard #characterScoreBalance{font-size:8px!important;}
 }
 
+/* ===== V23.7: коіни в рейтингу + чистий мобільний макет ===== */
+#leaderboardList .student-info{
+  flex:1 1 auto;
+  min-width:0;
+}
+#leaderboardList .leaderboard-student-copy{
+  min-width:0;
+  flex:1 1 auto;
+}
+#leaderboardList .leaderboard-student-name{
+  display:block;
+  min-width:0;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.25;
+  color:#334155;
+  overflow-wrap:anywhere;
+}
+#leaderboardList .leaderboard-stats{
+  margin-top:3px;
+  font-size:11px;
+  line-height:1.45;
+  font-weight:650;
+  color:#64748b!important;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+#leaderboardList .leaderboard-rewards{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  flex:0 0 auto;
+  margin-left:10px;
+}
+#leaderboardList .student-score,
+#leaderboardList .student-coins{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  white-space:nowrap;
+  border-radius:999px;
+  padding:4px 10px;
+  font-size:12px;
+  font-weight:900;
+  line-height:1;
+}
+#leaderboardList .student-coins{
+  background:#fff7d6;
+  border:1px solid #f1c75b;
+  color:#7c4a03;
+}
+
+@media(max-width:700px){
+  #leaderboardList{gap:7px!important;}
+  #leaderboardList .leaderboard-item{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:7px!important;
+    min-height:0!important;
+    padding:9px 10px!important;
+    overflow:hidden!important;
+  }
+  #leaderboardList .student-info{
+    display:grid!important;
+    grid-template-columns:22px 38px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:7px!important;
+    row-gap:2px!important;
+    width:100%!important;
+    min-width:0!important;
+    font-size:12px!important;
+  }
+  #leaderboardList .student-rank{
+    width:22px!important;
+    min-width:22px!important;
+    font-size:12px!important;
+    text-align:left!important;
+  }
+  #leaderboardList .leaderboard-avatar-wrap{
+    width:38px!important;
+    height:38px!important;
+    flex:0 0 38px!important;
+    margin-right:0!important;
+  }
+  #leaderboardList .leaderboard-avatar,
+  #leaderboardList .leaderboard-avatar-fallback{
+    width:38px!important;
+    height:38px!important;
+    font-size:14px!important;
+  }
+  #leaderboardList .leaderboard-character-avatar{
+    width:38px!important;
+    height:42px!important;
+  }
+  #leaderboardList .leaderboard-student-copy{
+    width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  #leaderboardList .leaderboard-student-name{
+    font-size:13px!important;
+    line-height:1.2!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  #leaderboardList .leaderboard-stats{
+    margin-top:4px!important;
+    font-size:9px!important;
+    line-height:1.35!important;
+    letter-spacing:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  #leaderboardList .leaderboard-rewards{
+    width:100%!important;
+    margin:0!important;
+    padding-left:67px!important;
+    justify-content:flex-start!important;
+    gap:5px!important;
+    flex-wrap:wrap!important;
+  }
+  #leaderboardList .student-score,
+  #leaderboardList .student-coins{
+    min-height:23px!important;
+    padding:3px 7px!important;
+    font-size:10px!important;
+    line-height:1!important;
+  }
+}
+@media(max-width:390px){
+  #leaderboardList .leaderboard-item{padding:8px!important;}
+  #leaderboardList .student-info{grid-template-columns:20px 34px minmax(0,1fr)!important;column-gap:6px!important;}
+  #leaderboardList .student-rank{width:20px!important;min-width:20px!important;font-size:11px!important;}
+  #leaderboardList .leaderboard-avatar-wrap,
+  #leaderboardList .leaderboard-avatar,
+  #leaderboardList .leaderboard-avatar-fallback{width:34px!important;height:34px!important;}
+  #leaderboardList .leaderboard-character-avatar{width:34px!important;height:38px!important;}
+  #leaderboardList .leaderboard-student-name{font-size:12px!important;}
+  #leaderboardList .leaderboard-stats{font-size:8px!important;line-height:1.35!important;}
+  #leaderboardList .leaderboard-rewards{padding-left:60px!important;}
+  #leaderboardList .student-score,#leaderboardList .student-coins{font-size:9px!important;padding:3px 6px!important;}
+}
+
 </style>
 
 
@@ -3109,6 +3256,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       subtitle.textContent = `Загальні результати та результат поточного тижня`;
       const cards = [
         ['🏆 Загальні бали', Number(student.score)||0],
+        ['🪙 Коіни', `${getStudentCoinBalance(student)} коінів`],
         ['📅 За цей тиждень', Number(student.week_score)||0],
         ['🏛️ Історія', Number(student.total_history_points)||0],
         ['🌍 Географія', Number(student.total_geography_points)||0],
@@ -3135,6 +3283,17 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       modal.style.display = 'flex';
     };
 
+    function getStudentCoinBalance(student = {}) {
+      if (student.portal_coins !== undefined && student.portal_coins !== null && student.portal_coins !== '') {
+        return Math.max(0, Math.floor(Number(student.portal_coins) || 0));
+      }
+      const earned = Math.max(0, Math.floor(Number(student.portal_coins_earned) || 0));
+      const spent = Math.max(0, Math.floor(Number(student.portal_coins_spent) || 0));
+      if (earned > 0 || spent > 0) return Math.max(0, earned - spent);
+      // Старі профілі до появи економіки: 1 бал = 1 зароблений коін.
+      return Math.max(0, Math.floor(Number(student.score) || 0) - spent);
+    }
+
     function renderRealtimeLeaderboard() {
       const box = document.getElementById('leaderboardList');
       if (!box) return;
@@ -3150,6 +3309,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
       box.innerHTML = students.map((student, index) => {
         const score = Number(student.week_score) || 0;
+        const coins = getStudentCoinBalance(student);
         const hist = Number(student.week_history_points) || 0;
         const geo = Number(student.week_geography_points) || 0;
         const nmt = (Number(student.week_nmt_history_score) || 0) + (Number(student.week_nmt_geography_score) || 0);
@@ -3174,12 +3334,15 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           <div class="student-info">
             <span class="student-rank ${rankClass}">#${index + 1}</span>
             <span class="leaderboard-avatar-wrap">${avatarHtml}</span>
-            <div>
-              <span>${escapeHtml(name)}${isMe ? ' (Ви)' : ''}${isPrime ? ' <span class="prime-badge"><span class="prime-fire">🔥</span> В ПРАЙМІ</span>' : ''}</span>
-              <div style="font-size:11px;color:#64748b;margin-top:3px;line-height:1.55;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology} • Прапори ${flags} • Втеча ${escapePast}</div>
+            <div class="leaderboard-student-copy">
+              <span class="leaderboard-student-name">${escapeHtml(name)}${isMe ? ' (Ви)' : ''}${isPrime ? ' <span class="prime-badge"><span class="prime-fire">🔥</span> В ПРАЙМІ</span>' : ''}</span>
+              <div class="leaderboard-stats">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology} • Прапори ${flags} • Втеча ${escapePast}</div>
             </div>
           </div>
-          <span class="student-score">${score} балів</span>
+          <div class="leaderboard-rewards" aria-label="Бали та коіни учня">
+            <span class="student-score">${score} балів</span>
+            <span class="student-coins">🪙 ${coins}</span>
+          </div>
         </div>`;
       }).join('');
     }
@@ -3231,6 +3394,9 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           name:p.name||'', displayName:p.displayName||'', role:p.role||'student',
           photoURL:p.photoURL||'', googlePhotoURL:p.googlePhotoURL||'',
           score:Number(p.score)||0, week_score:Number(p.week_score)||0,
+          portal_coins:p.portal_coins === undefined ? undefined : Math.max(0,Math.floor(Number(p.portal_coins)||0)),
+          portal_coins_earned:Number(p.portal_coins_earned)||0,
+          portal_coins_spent:Number(p.portal_coins_spent)||0,
           week_history_points:Number(p.week_history_points)||0,
           week_geography_points:Number(p.week_geography_points)||0,
           week_nmt_history_score:Number(p.week_nmt_history_score)||0,
