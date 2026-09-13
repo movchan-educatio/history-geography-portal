@@ -3374,10 +3374,27 @@ const escapeFixedBanksV14 = {"paleolithic":[["Який матеріал дав �
           sourceId:`fixed_v20_${i}`,
           icon:meta.icon,
           label:meta.label,
-          question:r[0],
-          options:[r[1], ...r[2]],
+          question:(()=>{
+            const base = String(r[0]||'').replace(/\s+/g,' ').trim();
+            const advanced = [
+              `Працюючи з реконструкцією теми «${scenario.title}», визначте історично найточніший висновок. ${base}`,
+              `Уявіть, що перед вами фрагмент історичного дослідження про «${scenario.title}». ${base} Оберіть варіант, який найкраще узгоджується з контекстом епохи.`,
+              `Проаналізуйте тему «${scenario.title}» не як набір окремих фактів, а як історичний процес. ${base}`,
+              `Для пояснення причин, умов і наслідків у темі «${scenario.title}» потрібно відкинути анахронізми. ${base}`,
+              `Історик перевіряє достовірність реконструкції «${scenario.title}». ${base} Який варіант витримує таку перевірку?`
+            ];
+            return advanced[i % advanced.length];
+          })(),
+          options:[r[1], ...r[2]].map((value)=>{
+            const text=String(value||'').trim();
+            if(text.includes(';')){
+              const parts=text.split(';').map(x=>x.trim()).filter(Boolean);
+              return parts.length>1 ? `${parts[0]} — у поєднанні з ознакою «${parts.slice(1).join('; ')}»` : text;
+            }
+            return `${text} — як історично обґрунтована характеристика цієї ситуації`;
+          }),
           answer:0,
-          explanation:`✅ Правильна відповідь: ${r[1]}.`,
+          explanation:`✅ Правильний висновок: ${r[1]}. Він відповідає історичному контексту теми «${scenario.title}» і не переносить до неї ознаки іншої епохи.`,
           visualKey,
           wikiQuery:r[4] || `${r[1]} ${scenario.title}`
         };
