@@ -1,0 +1,61 @@
+LYCEUM CLASH 6.9.5 — SAFE START
+
+ЦЯ ЗБІРКА ВІДКОЧЕНА ВІД НЕВДАЛОЇ 6.9.4 ДО 6.9.3, ДЕ HOST ЩЕ НОРМАЛЬНО ПОТРАПЛЯВ У МАТЧ.
+
+ВАЖЛИВО
+Ніяких нових Firebase-полів у StartRoom НЕ додається.
+
+CreateRoom SHA256:
+22b3a866313c3acc09e89e9260c2bddec5ef7b45ac5bc344f5ed76c71f820602
+
+JoinRoom SHA256:
+026d7294d19a2d0cd53b3b468409cb8ebd7979a2f73555bb7f06461ff70738dd
+
+StartRoom SHA256:
+59a5a0aafd8ecc397fafeb858eed0180419548ea3450499edbc7502d026e1639
+
+Усі три блоки byte-for-byte такі самі, як у 6.9.3.
+
+ЧОМУ 6.9.4 ЗЛАМАЛА СТАРТ
+У 6.9.4 ми додали matchToken/matchStartedAt/matchMap у player nodes всередині StartRoom.
+Якщо Firebase Rules/validation не дозволяють нові поля, уся room transaction може не commit-нутися.
+Саме тому після 6.9.4 у матч перестали входити навіть HOST.
+
+6.9.5 НЕ ДОДАЄ НОВИХ ПОЛІВ.
+
+ЯК ТЕПЕР ВИЗНАЧАЄТЬСЯ START
+У робочому StartRoom 6.9.3 вже змінюється існуюче поле:
+invulnerableUntil = room.startedAt + 1000
+
+При першому вході player payload має:
+invulnerableUntil ≈ joinedAt + 1600
+
+Тому другий клієнт слухає ВЛАСНИЙ player node і визначає старт так:
+invulnerableUntil > joinedAt + 2500
+
+Це використовує тільки старі поля, які Firebase вже приймає.
+
+4 ШЛЯХИ ВХОДУ ДРУГОГО ГРАВЦЯ
+1. full-room realtime watcher;
+2. /status listener;
+3. get(room) poll кожні 500 мс;
+4. власний players/UID listener через existing invulnerableUntil.
+
+ДОДАТКОВО
+Для non-HOST тепер реально є кнопка:
+▶ УВІЙТИ В МАТЧ
+
+До старту:
+⏳ ЧЕКАЮ HOST
+
+Кнопка:
+• перевіряє власний player node;
+• потім room.status;
+• якщо матч уже стартував — примусово відкриває battle screen.
+
+ПЕРЕВІРКА
+• CreateRoom — НЕ ЗМІНЕНО.
+• JoinRoom — НЕ ЗМІНЕНО.
+• StartRoom — НЕ ЗМІНЕНО.
+• portal-score.js — node --check OK.
+• Усі inline JavaScript — node --check OK.
