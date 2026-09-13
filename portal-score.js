@@ -697,6 +697,45 @@ async function saveDinoBest(score, artifacts = 0, durationMs = 0, runId = '') {
 }
 
 
+
+async function awardClashMatchReward(matchKey, place=3, score=0) {
+  const user = await requireUser();
+  if (!user) return {ok:false, reason:'login'};
+  const key = String(matchKey||'').replace(/[^A-Za-z0-9_-]/g,'').slice(0,64);
+  if (!key) return {ok:false, reason:'invalid'};
+  const safePlace = Math.max(1, Math.min(3, Number(place)||3));
+  const safeScore = Math.max(0, Math.min(200, Math.floor(Number(score)||0)));
+  const today = new Date().toISOString().slice(0,10);
+  let result={ok:false,reason:'unknown'};
+  try {
+    const tx=await runTransaction(ref(database,`users/${user.uid}`),data=>{
+      data=data||{};ensurePortalEconomy(data);
+      data.clash_match_rewards=data.clash_match_rewards||{};
+      if(data.clash_match_rewards[key]){
+        result={ok:true,already:true,reward:Number(data.clash_match_rewards[key].reward)||0,balance:data.portal_coins};
+        return data;
+      }
+      data.clash_daily_rewards=data.clash_daily_rewards||{};
+      const daily=data.clash_daily_rewards[today]||{coins:0,matches:0};
+      const dailyCap=50,remaining=Math.max(0,dailyCap-(Number(daily.coins)||0));
+      const participation=4,placeBonus=safePlace===1?8:safePlace===2?4:1,scoreBonus=Math.min(4,Math.floor(safeScore/8));
+      const reward=Math.min(remaining,participation+placeBonus+scoreBonus);
+      data.clash_match_rewards[key]={reward,place:safePlace,score:safeScore,at:Date.now()};
+      daily.coins=(Number(daily.coins)||0)+reward;daily.matches=(Number(daily.matches)||0)+1;data.clash_daily_rewards[today]=daily;
+      data.clash_matches_total=(Number(data.clash_matches_total)||0)+1;
+      if(safePlace===1)data.clash_wins_total=(Number(data.clash_wins_total)||0)+1;
+      if(reward>0){data.portal_coins+=reward;data.portal_coins_earned+=reward;}
+      result={ok:true,reward,balance:data.portal_coins,dailyCoins:daily.coins,dailyCap};
+      return data;
+    });
+    if(tx.snapshot?.exists())result.profile=tx.snapshot.val();
+    return result;
+  } catch(error) {
+    console.error('Портал: clash match reward',error);
+    return {ok:false,reason:'firebase'};
+  }
+}
+
 async function refreshPortalEconomy() {
   const user = await requireUser();
   if (!user) return { ok:false, reason:'login' };
@@ -902,6 +941,7 @@ window.portalScore = {
   equipPortalItem: equipPortalItem,
   upgradePortalWeapon: upgradePortalWeapon,
   claimBellDailyMission: claimBellDailyMission,
+  awardClashMatchReward: awardClashMatchReward,
   storeCatalog: PORTAL_STORE_CATALOG,
   calculateWeekScore
 };
