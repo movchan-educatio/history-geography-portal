@@ -2937,6 +2937,16 @@ body.colyseus-clash-open{overflow:hidden!important}
 }
 </style>
 
+
+<style id="lyceum-clash-stable294-clickfix">
+#bellArenaDock .bell-game-nav,#bellArenaDock .bell-game-nav button,
+#bellClashHeroPicker .bell-clash-overlay-panel,#bellClashHeroPicker .bell-hero-roster,
+#bellClashHeroPicker .bell-hero-roster button,#bellClashHeroPicker .bell-hero-confirm{pointer-events:auto!important}
+#bellArenaDock .bell-game-nav{z-index:300!important}
+#bellClashHeroPicker{z-index:2147482000!important}
+#bellClashHeroPicker .bell-clash-overlay-panel{position:relative;z-index:2}
+#bellClashHeroPicker .bell-hero-roster button{cursor:pointer!important;touch-action:manipulation}
+</style>
 </head>
 <body>
 
@@ -8262,7 +8272,7 @@ body.colyseus-clash-open{overflow:hidden!important}
 
       const qs=new URLSearchParams({
         embed:'1',
-        v:'293',
+        v:'294',
         name:colyseusClashPortalName(),
         hero:colyseusClashPortalHero(),
         skin:localStorage.getItem('bell_clash_skin')||localStorage.getItem('dino_skin')||'student',
@@ -8272,13 +8282,6 @@ body.colyseus-clash-open{overflow:hidden!important}
         quality:localStorage.getItem('bell_graphics_mode')||'auto'
       });
       frame.src=COLYSEUS_CLASH_ORIGIN+'/game?'+qs.toString();
-      frame.dataset.clashReady='0';
-      clearTimeout(window.__clashFrameReadyTimer);
-      window.__clashFrameReadyTimer=setTimeout(()=>{
-        if(frame.dataset.clashReady!=='1'&&overlay.classList.contains('active')){
-          colyseusClashRewardToast('⚠️ Гра не завантажила інтерфейс. Оновіть сторінку або перевірте Render /health.');
-        }
-      },9000);
       overlay.classList.add('active');
       overlay.setAttribute('aria-hidden','false');
       document.body.classList.add('colyseus-clash-open');
@@ -8309,8 +8312,6 @@ body.colyseus-clash-open{overflow:hidden!important}
       if(data.source!=='LYCEUM_CLASH')return;
 
       if(data.type==='READY'){
-        const frame=document.getElementById('colyseusClashFrame');if(frame)frame.dataset.clashReady='1';
-        clearTimeout(window.__clashFrameReadyTimer);
         window.__bellClashActive=true;
         return;
       }
@@ -8477,6 +8478,41 @@ body.colyseus-clash-open{overflow:hidden!important}
       bellSetNavActive('game');
       showBellGameHome(false);
     };
+
+    // v2.9.4 STABLE: robust controls independent of fragile inline handlers.
+    function bellBindStable294Controls(){
+      const nav=document.querySelector('.bell-game-nav');
+      if(nav&&!nav.dataset.stable294){
+        nav.dataset.stable294='1';
+        nav.addEventListener('click',e=>{
+          const b=e.target.closest('[data-bell-nav]');
+          if(!b)return;
+          e.preventDefault();e.stopPropagation();
+          window.bellAppNavigate?.(b.dataset.bellNav||'game');
+        },true);
+      }
+      const roster=document.getElementById('bellClashHeroRoster');
+      if(roster&&!roster.dataset.stable294){
+        roster.dataset.stable294='1';
+        roster.addEventListener('click',e=>{
+          const b=e.target.closest('[data-clash-hero]');
+          if(!b)return;
+          e.preventDefault();e.stopPropagation();
+          const id=b.dataset.clashHero;
+          if(id) Promise.resolve(window.bellClashSelectHero?.(id)).finally(()=>bellClashRenderHeroPicker?.());
+        },true);
+      }
+      const frame=document.getElementById('colyseusClashFrame');
+      if(frame&&!frame.dataset.stable294){
+        frame.dataset.stable294='1';
+        frame.addEventListener('load',()=>{
+          try{frame.contentWindow?.postMessage({source:'LYCEUM_PORTAL',type:'READY_REQUEST'},COLYSEUS_CLASH_ORIGIN);}catch(_){}
+          setTimeout(()=>{try{frame.contentWindow?.postMessage({source:'LYCEUM_PORTAL',type:'READY_REQUEST'},COLYSEUS_CLASH_ORIGIN);}catch(_){}},500);
+        });
+      }
+    }
+    document.addEventListener('DOMContentLoaded',bellBindStable294Controls);
+    setTimeout(bellBindStable294Controls,250);
 
     window.bellNavGame=function(){
       bellCloseClashOverlays();
