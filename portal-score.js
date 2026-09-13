@@ -85,6 +85,14 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   outfit_galaxy:      { type:'skin', value:'galaxy',        price:820, label:'Galaxy' },
   outfit_royal:       { type:'skin', value:'royal',         price:1050,label:'Royal Blue' },
   outfit_glitch:      { type:'skin', value:'glitch',        price:930, label:'Glitch' },
+  outfit_ember:       { type:'skin', value:'ember',         price:680, label:'Ember Core' },
+  outfit_mint:        { type:'skin', value:'mint',          price:720, label:'Mint Rush' },
+  outfit_void:        { type:'skin', value:'void',          price:980, label:'Void Walker' },
+  outfit_academy:     { type:'skin', value:'academy',       price:620, label:'Academy Pro' },
+  outfit_spectrum:    { type:'skin', value:'spectrum',      price:1120,label:'Spectrum' },
+  outfit_stealth:     { type:'skin', value:'stealth',       price:900, label:'Stealth' },
+  outfit_champion:    { type:'skin', value:'champion',      price:1320,label:'Champion 01' },
+  outfit_crimson:     { type:'skin', value:'crimson',       price:780, label:'Crimson Ace' },
 
   // Колекційні костюми
   skin_dino:          { type:'skin', value:'dino',          price:500, label:'Костюм Dino' },
@@ -122,6 +130,12 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   weapon_sonic:          { type:'weapon', value:'sonic_burst',    price:680, label:'Sonic Burst' },
   weapon_frost_ray:      { type:'weapon', value:'frost_ray',      price:840, label:'Frost Ray' },
   weapon_comet:          { type:'weapon', value:'comet_cannon',   price:1080,label:'Comet Cannon' },
+  weapon_vector:         { type:'weapon', value:'vector_pulse',   price:520, label:'Vector Pulse' },
+  weapon_arc:            { type:'weapon', value:'arc_blaster',    price:720, label:'Arc Blaster' },
+  weapon_meteor_disc:    { type:'weapon', value:'meteor_disc',    price:820, label:'Meteor Disc' },
+  weapon_volt:           { type:'weapon', value:'volt_caster',    price:940, label:'Volt Caster' },
+  weapon_rapid_marker:   { type:'weapon', value:'rapid_marker',   price:460, label:'Rapid Marker' },
+  weapon_crystal_bow:    { type:'weapon', value:'crystal_bow',    price:1180,label:'Crystal Bow' },
 
   weapon_skin_default: { type:'weapon_skin', value:'default', price:0,   label:'Стандарт' },
   weapon_skin_neon:    { type:'weapon_skin', value:'neon',    price:180, label:'Neon Flux' },
@@ -130,6 +144,9 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   weapon_skin_toxic:   { type:'weapon_skin', value:'toxic',   price:360, label:'Toxic' },
   weapon_skin_shadow:  { type:'weapon_skin', value:'shadow',  price:420, label:'Shadow' },
   weapon_skin_holo:    { type:'weapon_skin', value:'holo',    price:520, label:'Holo Prism' },
+  weapon_skin_plasma:  { type:'weapon_skin', value:'plasma',  price:460, label:'Plasma' },
+  weapon_skin_lava:    { type:'weapon_skin', value:'lava',    price:540, label:'Lava Core' },
+  weapon_skin_mint:    { type:'weapon_skin', value:'minttech',price:390, label:'Mint Tech' },
 
   // Колекційна зброя
   weapon_firebreath:  { type:'weapon', value:'firebreath',     price:420, label:'Вогняний плювок' },
