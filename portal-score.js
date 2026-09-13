@@ -582,8 +582,8 @@ async function saveDinoBest(score, artifacts = 0, durationMs = 0, runId = '') {
   // Basic anti-cheat sanity check. Normal runs stay far below this ceiling.
   if (safeDuration > 0) {
     // Horde mode produces denser legitimate scoring than the old runner.
-    const maxPlausibleScore = 6000 + Math.floor((safeDuration / 1000) * 550);
-    if (safeScore > maxPlausibleScore || safeArtifacts > 80) {
+    const maxPlausibleScore = 9000 + Math.floor((safeDuration / 1000) * 720);
+    if (safeScore > maxPlausibleScore || safeArtifacts > 100) {
       console.warn('Portal: Dino result rejected by sanity check', { safeScore, safeArtifacts, safeDuration });
       return false;
     }

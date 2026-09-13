@@ -1952,7 +1952,7 @@ body.dino-no-scroll{overflow:hidden!important;}
 </style>
 
 <style id="survive-bell-horde-20">
-.dino2-title:after{content:"HORDE 2.0"!important;background:linear-gradient(135deg,#7f1d1d,#dc2626)!important;color:#fff7ed!important;border-color:rgba(254,202,202,.65)!important;}
+.dino2-title:after{content:"ARENA 2.2"!important;background:linear-gradient(135deg,#7f1d1d,#dc2626)!important;color:#fff7ed!important;border-color:rgba(254,202,202,.65)!important;}
 .dino-canvas-wrap{position:relative!important;overflow:hidden!important;box-shadow:0 22px 60px rgba(15,23,42,.25),0 0 0 1px rgba(255,255,255,.55) inset!important;}
 .bell-fire-controls{width:100%;display:flex;justify-content:center;margin-top:8px;}
 .bell-fire-btn{width:min(100%,520px);min-height:48px;border:0;border-radius:13px;background:linear-gradient(135deg,#991b1b,#ef4444 58%,#fb923c);color:#fff;font-size:16px;font-weight:1000;letter-spacing:.04em;box-shadow:0 10px 24px rgba(220,38,38,.26),inset 0 1px 0 rgba(255,255,255,.28);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;}
@@ -2005,8 +2005,90 @@ body.dino-no-scroll{overflow:hidden!important;}
   .bell-fire-btn{min-height:48px!important;font-size:15px!important;}
 }
 </style>
-</head>
+
+<style id="survive-bell-22-arena">
+.dino2-title:after{content:"ARENA 2.2"!important;background:linear-gradient(135deg,#111827,#7c3aed 52%,#2563eb)!important;color:#fff!important;box-shadow:0 5px 16px rgba(124,58,237,.28)!important;}
+.dino-game-card.dino-expanded{position:fixed!important;inset:0!important;z-index:1000000!important;width:100vw!important;height:100vh!important;max-width:none!important;margin:0!important;padding:8px!important;border-radius:0!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;background:radial-gradient(circle at 50% -20%,#dbeafe,#f8fbff 62%)!important;}
+.dino-game-card.dino-expanded .dino2-top,.dino-game-card.dino-expanded .dino2-stats,.dino-game-card.dino-expanded .dino2-mission,.dino-game-card.dino-expanded .dino-leader-tabs,.dino-game-card.dino-expanded .dino2-leaderboard{display:none!important;}
+.dino-game-card.dino-expanded .dino-canvas-wrap{flex:1 1 auto!important;min-height:0!important;border-radius:12px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#07111f!important;}
+.dino-game-card.dino-expanded #dinoCanvas{width:100%!important;height:auto!important;max-height:calc(100vh - 168px)!important;aspect-ratio:3/2!important;}
+.dino-game-card.dino-expanded .dino2-hudline{margin-top:4px!important;font-size:9px!important;}
+.dino-game-card.dino-expanded .dino-combat-hud{margin-top:4px!important;}
+.dino-game-card.dino-expanded .bell-wave-strip{margin-top:4px!important;}
+.dino-game-card.dino-expanded .bell-fire-controls{margin-top:5px!important;}
+.dino-game-card.dino-expanded .dino2-actions{margin-top:5px!important;}
+.dino-game-card.dino-expanded .dino-shop-btn{display:none!important;}
+.dino-game-card.dino-expanded #dinoStartBtn{display:none!important;}
+.dino-game-card.dino-expanded #dinoExpandBtn{grid-column:1/-1!important;width:auto!important;min-width:110px!important;justify-self:center!important;background:#0f172a!important;color:#fff!important;border-color:#334155!important;}
+.bell-upgrade-card{position:relative!important;overflow:hidden!important;border-color:rgba(148,163,184,.30)!important;background:radial-gradient(circle at 90% 0%,rgba(96,165,250,.18),transparent 36%),linear-gradient(180deg,rgba(30,41,59,.97),rgba(15,23,42,.98))!important;}
+.bell-upgrade-card:before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,#38bdf8,#8b5cf6,#f59e0b);opacity:.85;}
+.bell-upgrade-card:hover{border-color:rgba(96,165,250,.65)!important;box-shadow:0 12px 32px rgba(2,6,23,.32),0 0 0 1px rgba(96,165,250,.14) inset!important;}
+.bell-upgrade-level{display:inline-flex!important;padding:3px 6px!important;border-radius:999px!important;background:rgba(59,130,246,.14)!important;border:1px solid rgba(96,165,250,.24)!important;}
+.bell-upgrade-rarity{position:absolute;right:8px;top:8px;font-size:7px;font-weight:1000;letter-spacing:.08em;color:#fde68a;background:rgba(120,53,15,.45);border:1px solid rgba(251,191,36,.28);padding:3px 5px;border-radius:999px;}
+.bell-fire-btn{position:relative;overflow:hidden;}
+.bell-fire-btn:after{content:"";position:absolute;inset:-50% -20%;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.20) 48%,transparent 61%);transform:translateX(-80%);animation:bellFireSheen 2.4s linear infinite;pointer-events:none;}
+@keyframes bellFireSheen{to{transform:translateX(80%)}}
+@media(max-width:700px) and (orientation:portrait){
+  .dino-game-card.dino-expanded{width:100vh!important;height:100vw!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%) rotate(90deg)!important;padding:5px!important;}
+  .dino-game-card.dino-expanded #dinoCanvas{max-height:calc(100vw - 126px)!important;aspect-ratio:3/2!important;}
+  .dino-game-card.dino-expanded .dino-combat-hud{display:none!important;}
+  .dino-game-card.dino-expanded .dino2-hudline{display:none!important;}
+  .dino-game-card.dino-expanded .bell-fire-btn{min-height:40px!important;}
+  .dino-game-card.dino-expanded .bell-wave-strip{padding:4px 7px!important;}
+}
+</style>
+
+<style id="survive-bell-23-full-arena">
+.dino2-title:after{content:"FULL ARENA 2.3"!important;background:linear-gradient(135deg,#111827,#7c3aed 48%,#0891b2)!important;color:#fff!important;}
+.bell-arena-dock{display:none;position:fixed;inset:0;z-index:1100000;background:radial-gradient(circle at 50% -20%,#172554 0,#07111f 48%,#020617 100%);color:#fff;flex-direction:column;overflow:hidden;}
+.bell-arena-dock.active{display:flex!important;}
+.bell-arena-toolbar{flex:0 0 52px;display:grid;grid-template-columns:minmax(180px,1fr) auto auto;align-items:center;gap:10px;padding:6px 10px;background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(2,6,23,.92));border-bottom:1px solid rgba(148,163,184,.22);box-shadow:0 8px 25px rgba(0,0,0,.24);z-index:4;}
+.bell-arena-brand{display:flex;align-items:center;gap:9px;min-width:0}.bell-arena-brand strong{font-size:14px;white-space:nowrap}.bell-arena-brand span{font-size:9px;font-weight:900;color:#93c5fd;background:rgba(59,130,246,.12);border:1px solid rgba(96,165,250,.24);padding:4px 7px;border-radius:999px;white-space:nowrap;}
+.bell-arena-metrics{display:flex;gap:5px;align-items:center}.bell-arena-metrics span{display:flex;gap:4px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:9px;padding:5px 7px;font-size:9px;font-weight:900;color:#dbeafe}.bell-arena-metrics b{color:#fff;font-size:10px;}
+.bell-arena-actions{display:flex;gap:5px}.bell-arena-actions button{height:34px;border:1px solid rgba(148,163,184,.22);border-radius:9px;background:linear-gradient(180deg,#1e293b,#0f172a);color:#fff;font-size:9px;font-weight:950;padding:0 10px;box-shadow:0 5px 14px rgba(0,0,0,.18)}.bell-arena-actions button:disabled{opacity:.35}.bell-arena-actions button:active{transform:translateY(1px)}
+.bell-arena-mount{flex:1 1 auto;min-height:0;padding:5px;display:flex;}
+.bell-arena-dock .dino-game-card.dino-expanded{position:relative!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;transform:none!important;width:100%!important;height:100%!important;margin:0!important;padding:5px!important;border:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;background:linear-gradient(180deg,#08111f,#0b1627)!important;box-shadow:none!important;overflow:hidden!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino2-top,.bell-arena-dock .dino-game-card.dino-expanded .dino2-stats,.bell-arena-dock .dino-game-card.dino-expanded .dino-leader-tabs,.bell-arena-dock .dino-game-card.dino-expanded .dino2-leaderboard{display:none!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino-canvas-wrap{flex:1 1 auto!important;min-height:0!important;width:100%!important;border-radius:10px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#030712!important;border:1px solid rgba(96,165,250,.35)!important;box-shadow:0 12px 40px rgba(0,0,0,.30),0 0 0 1px rgba(255,255,255,.04) inset!important;}
+.bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{width:auto!important;height:auto!important;max-width:100%!important;max-height:100%!important;aspect-ratio:3/2!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino2-hudline,.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-hud,.bell-arena-dock .dino-game-card.dino-expanded .dino2-mission,.bell-arena-dock .dino-game-card.dino-expanded .bell-wave-strip,.bell-arena-dock .dino-game-card.dino-expanded .bell-fire-controls{display:flex!important;flex:0 0 auto!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino2-hudline{color:#dbeafe!important;margin:4px 4px 0!important;font-size:9px!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-hud{margin-top:4px!important;gap:4px!important}.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-chip{padding:5px 8px!important;min-height:34px!important;background:rgba(255,255,255,.06)!important;border-color:rgba(148,163,184,.18)!important;color:#cbd5e1!important}.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-chip strong{color:#fff!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino2-mission{margin-top:4px!important;padding:5px 8px!important;background:rgba(245,158,11,.10)!important;border-color:rgba(251,191,36,.26)!important;color:#fde68a!important;font-size:9px!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .bell-wave-strip{margin-top:4px!important;padding:5px 7px!important;background:rgba(255,255,255,.06)!important;border-color:rgba(96,165,250,.22)!important}.bell-arena-dock .dino-game-card.dino-expanded .bell-wave-title{color:#e2e8f0!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .bell-fire-controls{margin-top:5px!important}.bell-arena-dock .dino-game-card.dino-expanded .bell-fire-btn{min-height:44px!important;width:100%!important;max-width:none!important;border-radius:10px!important;}
+.bell-arena-dock .dino-game-card.dino-expanded .dino2-actions{display:none!important;}
+.bell-arena-dock #portalShopModal{position:absolute!important;inset:0!important;z-index:50!important;background:rgba(2,6,23,.82)!important;backdrop-filter:blur(7px)}
+.bell-arena-dock #portalShopModal .portal-shop-card{max-height:calc(100vh - 18px)!important;width:min(920px,96vw)!important;border-radius:15px!important;box-shadow:0 25px 70px rgba(0,0,0,.45)!important;}
+body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!important;}
+.bell-upgrade-panel{background:radial-gradient(circle at 50% 0%,rgba(37,99,235,.26),transparent 38%),linear-gradient(180deg,rgba(3,7,18,.94),rgba(15,23,42,.985))!important;}
+.bell-upgrade-wallet{display:flex;align-items:center;justify-content:space-between;gap:18px;width:min(100%,820px);margin:-3px 0 9px;padding:7px 10px;border-radius:10px;background:rgba(245,158,11,.10);border:1px solid rgba(251,191,36,.24);color:#fde68a;font-size:9px;font-weight:950}.bell-upgrade-wallet strong{font-size:15px;color:#fff;}
+.bell-upgrade-choices{grid-template-columns:repeat(4,minmax(0,1fr))!important;width:min(100%,940px)!important;}
+.bell-upgrade-card{min-height:155px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;}
+.bell-upgrade-card.bought{opacity:.48;filter:saturate(.65)}.bell-upgrade-card.locked{opacity:.55}.bell-upgrade-svg{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;margin-bottom:8px;background:linear-gradient(145deg,rgba(59,130,246,.20),rgba(124,58,237,.18));border:1px solid rgba(147,197,253,.22);box-shadow:0 7px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.08)}.bell-upgrade-svg svg{width:29px;height:29px;display:block}.bell-upgrade-buy{margin-top:auto;width:100%;min-height:30px;border:0;border-radius:8px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-size:8px;font-weight:1000}.bell-upgrade-buy:disabled{background:#334155;color:#94a3b8}.bell-upgrade-cost{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:8px;font-weight:950;color:#fde68a}.bell-upgrade-continue{margin-top:10px;min-height:36px;padding:0 22px;border:1px solid rgba(34,197,94,.35);border-radius:10px;background:linear-gradient(135deg,#047857,#16a34a);color:#fff;font-size:10px;font-weight:1000;box-shadow:0 8px 22px rgba(22,163,74,.18)}
+@media(max-width:760px){.bell-arena-toolbar{grid-template-columns:1fr auto;padding:5px 7px;gap:5px}.bell-arena-brand span{display:none}.bell-arena-metrics{grid-row:2;grid-column:1/-1;justify-content:center;margin-top:-2px}.bell-arena-toolbar{flex-basis:70px}.bell-arena-actions button{padding:0 8px}.bell-arena-actions button span{display:none}.bell-arena-mount{padding:3px}.bell-upgrade-choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.bell-upgrade-card{min-height:126px!important;padding:8px!important}.bell-upgrade-svg{width:34px;height:34px;margin-bottom:5px}.bell-upgrade-svg svg{width:23px;height:23px}.bell-upgrade-title{font-size:14px!important}.bell-upgrade-wallet{padding:5px 8px}.bell-upgrade-continue{min-height:32px;margin-top:6px}.bell-arena-dock .dino-game-card.dino-expanded .dino2-mission{display:none!important}.bell-arena-dock .dino-game-card.dino-expanded .dino2-hudline{display:none!important}.bell-arena-dock .dino-game-card.dino-expanded .dino-combat-hud{display:grid!important}.bell-arena-dock .dino-game-card.dino-expanded #dinoCanvas{max-height:100%!important;}}
+</style>\n</head>
 <body>
+  <div id="bellArenaDock" class="bell-arena-dock" aria-hidden="true">
+    <div class="bell-arena-toolbar">
+      <div class="bell-arena-brand">
+        <strong>🔔 Вижити до дзвінка</strong>
+        <span id="bellArenaWave">Хвиля 1/20</span>
+      </div>
+      <div class="bell-arena-metrics">
+        <span>⭐ <b id="bellArenaScore">0</b></span>
+        <span>🪙 <b id="bellArenaCoins">0</b></span>
+        <span>⚡ <b id="bellArenaCredits">0</b></span>
+      </div>
+      <div class="bell-arena-actions">
+        <button id="bellArenaRestartBtn" type="button" onclick="startDinoGame()" disabled title="Новий бій">↻</button>
+        <button type="button" onclick="openPortalShop('skins')">🛍 <span>Магазин</span></button>
+        <button type="button" onclick="exitBellArena()" title="Згорнути гру">✕</button>
+      </div>
+    </div>
+    <div id="bellArenaMount" class="bell-arena-mount"></div>
+  </div>
+
 
   <!-- Навігаційна шапка -->
   <header>
@@ -2184,16 +2266,18 @@ body.dino-no-scroll{overflow:hidden!important;}
           </div>
         </div>
 
-        <!-- Блок 2: Вижити до дзвінка 2.0 HORDE -->
+        <!-- Блок 2: Вижити до дзвінка 2.3 FULL ARENA -->
         <div class="dino-game-card">
-          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка 2.0</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
+          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка 2.3</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
           <div class="dino2-stats"><div class="dino2-stat">Очки<strong id="dinoScore">0</strong></div><div class="dino2-stat">Рекорд<strong id="dinoHighScore">0</strong></div><div class="dino2-stat">Жетони<strong id="dinoArtifactsTotal">0</strong></div></div>
           <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="1440" height="960"></canvas>
             <div id="bellWaveBanner" class="bell-wave-banner" style="display:none"></div>
             <div id="bellUpgradePanel" class="bell-upgrade-panel" style="display:none">
-              <div class="bell-upgrade-kicker">🔔 ПЕРЕРВА</div>
-              <div class="bell-upgrade-title">Оберіть одне покращення</div>
+              <div class="bell-upgrade-kicker">🔔 ПЕРЕРВА • АПГРЕЙД-МАГАЗИН</div>
+              <div class="bell-upgrade-title">Прокачайте спорядження перед наступною хвилею</div>
+              <div class="bell-upgrade-wallet"><span>⚡ Бойові кредити</span><strong id="bellUpgradeCredits">0</strong></div>
               <div id="bellUpgradeChoices" class="bell-upgrade-choices"></div>
+              <button id="bellUpgradeContinue" class="bell-upgrade-continue" type="button" onclick="bellContinueAfterBreak()">▶ Наступна хвиля</button>
             </div>
             <div id="dinoLockOverlay"><span style="font-size:30px">🔒</span><strong style="font-size:13px;color:#7dd3fc;margin-top:5px">«Вижити до дзвінка» заблоковано</strong><span style="font-size:10px;color:#cbd5e1;margin-top:5px;max-width:310px">Виконайте будь-яке навчальне завдання на порталі — після цього відкриється шкільний рейд.</span></div></div>
           <div class="dino2-hudline"><span id="dinoLives">❤️❤️❤️</span><span id="dinoLocation">🔔 До дзвінка: 01:30</span><span id="dinoPowerStatus">Бонусів немає</span></div>
@@ -2214,7 +2298,7 @@ body.dino-no-scroll{overflow:hidden!important;}
               onpointercancel="bellFireEnd(event)"
               onpointerleave="bellFireEnd(event)">🔥 ВОГОНЬ</button>
           </div>
-          <div class="dino2-actions"><button id="dinoStartBtn" onclick="startDinoGame()" disabled>▶ Старт</button><button class="dino-shop-btn" type="button" onclick="openPortalShop('skins')">🛍 Магазин</button><button id="dinoExpandBtn" class="dino-expand-btn" type="button" onclick="toggleDinoExpanded()">⛶</button></div>
+          <div class="dino2-actions"><button id="dinoStartBtn" onclick="startDinoGame()" disabled>▶ Старт</button><button class="dino-shop-btn" type="button" onclick="openPortalShop('skins')">🛍 Магазин</button><button id="dinoExpandBtn" class="dino-expand-btn" type="button" onclick="toggleDinoExpanded()">⛶ Екран</button></div>
           <div class="dino-leader-tabs"><button id="dinoTabWeek" class="dino-leader-tab active" onclick="setDinoLeaderboardMode('week')">Цей тиждень</button><button id="dinoTabAll" class="dino-leader-tab" onclick="setDinoLeaderboardMode('all')">Увесь час</button></div>
           <div class="dino-leaderboard"><div class="dino-leaderboard-title">🏆 Лідери «Вижити до дзвінка»</div><div id="dinoLeaderboardList"></div></div>
         </div>
@@ -4260,12 +4344,12 @@ body.dino-no-scroll{overflow:hidden!important;}
     window.syncPortalEconomy=function(profile){
       window.portalEconomyProfile=profile||window.portalEconomyProfile;
       const p=window.portalEconomyProfile||{};const coins=Math.max(0,Number(p.portal_coins)||0);
-      ['currentUserCoins','dinoPortalCoins','portalShopCoins'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=id==='currentUserCoins'?`🪙 ${coins}`:coins;});
+      ['currentUserCoins','dinoPortalCoins','portalShopCoins'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=id==='currentUserCoins'?`🪙 ${coins}`:coins;});const arenaCoins=document.getElementById('bellArenaCoins');if(arenaCoins)arenaCoins.textContent=coins;
       const cc=document.getElementById('portalCollectionCount');if(cc)cc.textContent=portalOwnedCount(p);
       const ac=document.getElementById('portalAchievementCount');if(ac)ac.textContent=Object.keys(p.portal_achievements||{}).length;
-      const skinValue=p.portal_equipped?.skin||'dino',weaponValue=p.portal_equipped?.weapon||'firebreath';
-      const skinEl=document.getElementById('portalActiveSkin');if(skinEl)skinEl.textContent=portalShopItems.find(x=>x.type==='skin'&&x.value===skinValue)?.name||'Dino';
-      const weaponEl=document.getElementById('portalActiveWeapon');if(weaponEl)weaponEl.textContent=portalShopItems.find(x=>x.type==='weapon'&&x.value===weaponValue)?.name||'Вогняний плювок';
+      const skinValue=p.portal_equipped?.skin||'student',weaponValue=p.portal_equipped?.weapon||'school_blaster';
+      const skinEl=document.getElementById('portalActiveSkin');if(skinEl)skinEl.textContent=portalShopItems.find(x=>x.type==='skin'&&x.value===skinValue)?.name||'Учень';
+      const weaponEl=document.getElementById('portalActiveWeapon');if(weaponEl)weaponEl.textContent=portalShopItems.find(x=>x.type==='weapon'&&x.value===weaponValue)?.name||'Імпульсний бластер';
       if(p.portal_equipped?.skin){currentDinoSkin=p.portal_equipped.skin;localStorage.setItem('dino_skin',currentDinoSkin);}
       if(p.portal_equipped?.weapon){currentDinoWeapon=p.portal_equipped.weapon;localStorage.setItem('dino_weapon',currentDinoWeapon);}
       currentDinoTrail=p.portal_equipped?.trail||'none';
@@ -4274,9 +4358,18 @@ body.dino-no-scroll{overflow:hidden!important;}
       if(typeof updateDinoWeaponOptions==='function')updateDinoWeaponOptions();
       if(document.getElementById('portalShopModal')?.style.display==='flex')renderPortalShop();
     };
-    window.openPortalShop=function(tab='skins'){if(!window.currentUserUid){portalToast('🔐 Спочатку увійдіть через Google.');return;}const allowed=['skins','weapons','other','collection','quests','achievements'];portalShopCurrentTab=allowed.includes(tab)?tab:'skins';document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===portalShopCurrentTab));document.getElementById('portalShopModal').style.display='flex';renderPortalShop();};
-    window.closePortalShop=function(){document.getElementById('portalShopModal').style.display='none';};
-    document.addEventListener('keydown',e=>{if(e.code==='Escape'&&dinoExpanded){e.preventDefault();toggleDinoExpanded();return;}if(e.key==='Escape'&&document.getElementById('portalShopModal')?.style.display==='flex')window.closePortalShop();});
+    window.openPortalShop=function(tab='skins'){
+      if(!window.currentUserUid){portalToast('🔐 Спочатку увійдіть через Google.');return;}
+      const allowed=['skins','weapons','other','collection','quests','achievements'];portalShopCurrentTab=allowed.includes(tab)?tab:'skins';
+      document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===portalShopCurrentTab));
+      if(dinoGameRunning){bellShopPause=true;bellFireHeld=false;document.getElementById('dinoFireBtn')?.classList.remove('firing');dinoLastFrame=performance.now();}
+      const modal=document.getElementById('portalShopModal');if(modal)modal.style.display='flex';renderPortalShop();
+    };
+    window.closePortalShop=function(){
+      const modal=document.getElementById('portalShopModal');if(modal)modal.style.display='none';
+      if(dinoGameRunning){bellShopPause=false;dinoLastFrame=performance.now();const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn&&!bellUpgradeOpen)fireBtn.disabled=false;}
+    };
+    document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(document.getElementById('portalShopModal')?.style.display==='flex'){e.preventDefault();window.closePortalShop();return;}if(dinoExpanded){e.preventDefault();exitBellArena();}});
     window.setPortalShopTab=function(tab){portalShopCurrentTab=tab;document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));renderPortalShop();};
     window.buyPortalItem=async function(id){const item=portalShopItems.find(x=>x.id===id);if(!item)return;const res=await window.portalScore?.purchasePortalItem?.(id);if(res?.ok){portalToast(`✅ ${item.name} додано до колекції!`);if(item.type==='weapon')updateDinoWeaponOptions?.();if(item.type==='skin')updateDinoSkinOptions?.();renderPortalShop();}else if(res?.reason==='not_enough'){portalToast(`🪙 Потрібно ${item.price} монет.`);}else if(res?.reason==='login'){portalToast('🔐 Увійдіть через Google.');}else portalToast('⚠️ Покупку не виконано.');};
     window.equipPortalItemUI=async function(id){const item=portalShopItems.find(x=>x.id===id);if(!item||item.type==='boost')return;const res=await window.portalScore?.equipPortalItem?.(item.type,id);if(res?.ok){portalToast(`✅ Активовано: ${item.name}`);if(item.type==='weapon'){currentDinoWeapon=item.value;localStorage.setItem('dino_weapon',currentDinoWeapon);dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;updateDinoWeaponOptions?.();}if(item.type==='skin'){currentDinoSkin=item.value;localStorage.setItem('dino_skin',currentDinoSkin);updateDinoSkinOptions?.();}if(!dinoGameRunning)drawDinoIdleScreen();renderPortalShop();}else portalToast('⚠️ Не вдалося активувати предмет.');};
@@ -4364,6 +4457,7 @@ body.dino-no-scroll{overflow:hidden!important;}
     let dinoExpanded = false;
     let enemies = [];
     let projectiles = [];
+    let enemyProjectiles = [];
     let enemySpawnTimer = 2100;
     let dinoKills = 0;
     let dinoAmmo = 6;
@@ -4390,6 +4484,17 @@ body.dino-no-scroll{overflow:hidden!important;}
     let bellFireHeld=false,bellFirePointerId=null;
     let bellDamageBonus=0,bellFireRateMult=.92,bellReloadMult=.9,bellMagBonus=2,bellPierceBonus=0,bellSplashBonus=0,bellCritChance=.05,bellSlowChance=0;
     let bellUpgradeLevels={};
+    const bellMiniBossWaves=new Set([3,8,13,18]);
+    let bellMiniBossRequired=false,bellMiniBossSpawned=false,bellMiniBossDefeated=true;
+    let bellMultishot=0,bellDroneLevel=0,bellDroneNextShot=0,bellChainChance=0;
+    let bellThreatPulse=0;
+    let bellShopPause=false;
+    let bellBattleCredits=0;
+    let bellUpgradeStock=[];
+    let bellPurchasedThisBreak=new Set();
+    let bellArenaOriginalParent=null,bellArenaOriginalNext=null;
+    let bellShopOriginalParent=null,bellShopOriginalNext=null;
+
 
     const dinoWeapons = {
       school_blaster:{name:'Імпульсний бластер',itemId:'weapon_school_blaster',type:'pistol',color:'#dbeafe',accent:'#38bdf8',speed:980,damage:1,cooldown:300,mag:8,reload:850,homing:.06},
@@ -4565,16 +4670,39 @@ body.dino-no-scroll{overflow:hidden!important;}
 
 
 
-    function toggleDinoExpanded(){
-      const card=document.querySelector('.dino-game-card');
-      const btn=document.getElementById('dinoExpandBtn');
-      if(!card) return;
-      dinoExpanded=!dinoExpanded;
-      card.classList.toggle('dino-expanded',dinoExpanded);
-      document.body.classList.toggle('dino-no-scroll',dinoExpanded);
-      if(btn) btn.textContent=dinoExpanded?'✕ Згорнути':'⛶ Розгорнути';
-      setTimeout(()=>{ if(!dinoGameRunning) drawDinoIdleScreen(); },40);
+    function updateBellArenaToolbar(){
+      const score=document.getElementById('bellArenaScore');if(score)score.textContent=Math.floor(dinoScore);
+      const wave=document.getElementById('bellArenaWave');if(wave)wave.textContent=`Хвиля ${bellWave}/${bellMaxWaves}`;
+      const credits=document.getElementById('bellArenaCredits');if(credits)credits.textContent=Math.floor(bellBattleCredits);
+      const coins=document.getElementById('bellArenaCoins');if(coins)coins.textContent=Math.max(0,Number(window.portalEconomyProfile?.portal_coins)||0);
     }
+
+    function enterBellArena(){
+      const card=document.querySelector('.dino-game-card'),dock=document.getElementById('bellArenaDock'),mount=document.getElementById('bellArenaMount'),shop=document.getElementById('portalShopModal');
+      if(!card||!dock||!mount)return;
+      if(!bellArenaOriginalParent){bellArenaOriginalParent=card.parentNode;bellArenaOriginalNext=card.nextSibling;}
+      if(shop&&!bellShopOriginalParent){bellShopOriginalParent=shop.parentNode;bellShopOriginalNext=shop.nextSibling;}
+      mount.appendChild(card);
+      if(shop&&shop.parentNode!==dock)dock.appendChild(shop);
+      dinoExpanded=true;card.classList.add('dino-expanded');dock.classList.add('active');dock.setAttribute('aria-hidden','false');document.body.classList.add('dino-no-scroll','bell-arena-body');
+      const btn=document.getElementById('dinoExpandBtn');if(btn)btn.textContent='✕ Згорнути';
+      updateBellArenaToolbar();
+      try{if(dock.requestFullscreen&&!document.fullscreenElement)dock.requestFullscreen({navigationUI:'hide'}).catch(()=>{});}catch(_){}
+      setTimeout(()=>{if(!dinoGameRunning)drawDinoIdleScreen();},30);
+    }
+
+    function exitBellArena(){
+      const card=document.querySelector('.dino-game-card'),dock=document.getElementById('bellArenaDock'),shop=document.getElementById('portalShopModal');
+      if(shop?.style.display==='flex')window.closePortalShop?.();
+      if(card&&bellArenaOriginalParent){if(bellArenaOriginalNext&&bellArenaOriginalNext.parentNode===bellArenaOriginalParent)bellArenaOriginalParent.insertBefore(card,bellArenaOriginalNext);else bellArenaOriginalParent.appendChild(card);}
+      if(shop&&bellShopOriginalParent){if(bellShopOriginalNext&&bellShopOriginalNext.parentNode===bellShopOriginalParent)bellShopOriginalParent.insertBefore(shop,bellShopOriginalNext);else bellShopOriginalParent.appendChild(shop);}
+      dinoExpanded=false;card?.classList.remove('dino-expanded');dock?.classList.remove('active');dock?.setAttribute('aria-hidden','true');document.body.classList.remove('dino-no-scroll','bell-arena-body');
+      const btn=document.getElementById('dinoExpandBtn');if(btn)btn.textContent='⛶ Екран';
+      try{if(document.fullscreenElement===dock)document.exitFullscreen?.().catch(()=>{});}catch(_){}
+      setTimeout(()=>{if(!dinoGameRunning)drawDinoIdleScreen();},30);
+    }
+    window.enterBellArena=enterBellArena;window.exitBellArena=exitBellArena;
+    function toggleDinoExpanded(){if(dinoExpanded)exitBellArena();else enterBellArena();}
 
     function unlockDinoGame(){
       if(isGameUnlocked) return;
@@ -4701,6 +4829,18 @@ body.dino-no-scroll{overflow:hidden!important;}
         rotation:0,life:2.35,pierce:(Number(weapon.pierce)||0)+bellPierceBonus,splash:(Number(weapon.splash)||0)+bellSplashBonus,
         homing:Math.max(Number(weapon.homing)||0,.12),hitIds:[]
       });
+      if(bellMultishot>0){
+        const extra=Math.min(3,bellMultishot);
+        for(let i=0;i<extra;i++){
+          const dir=(i%2===0?-1:1),tier=Math.floor(i/2)+1;
+          projectiles.push({
+            x:originX-2,y:originY+dir*4,w:16,h:9,vx:weapon.speed*.97,vy:vy+dir*(60+35*tier),
+            damage:shotDamage*.72,type:weapon.type,color:weapon.color,accent:weapon.accent,crit:false,
+            rotation:0,life:2.25,pierce:Math.max(0,(Number(weapon.pierce)||0)+bellPierceBonus-1),splash:Math.max(0,(Number(weapon.splash)||0)+bellSplashBonus*.55),
+            homing:Math.max(Number(weapon.homing)||0,.10),hitIds:[]
+          });
+        }
+      }
 
       // themed muzzle effect
       const muzzleColor=weapon.type==='fireball'?'#fb923c':weapon.type==='sun'?'#fbbf24':'#f8fafc';
@@ -4766,16 +4906,19 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     const bellUpgradeCatalog=[
-      {id:'damage',icon:'💥',name:'Потужніший заряд',desc:'+25% шкоди всіх пострілів.',apply(){bellDamageBonus+=.25;}},
-      {id:'firerate',icon:'⚡',name:'Швидший спуск',desc:'+15% до темпу стрільби.',apply(){bellFireRateMult*=.85;}},
-      {id:'mag',icon:'🔋',name:'Більший магазин',desc:'+3 заряди до магазину.',apply(){bellMagBonus+=3;dinoMaxAmmo=(currentWeapon().mag||6)+bellMagBonus;dinoAmmo=dinoMaxAmmo;}},
-      {id:'reload',icon:'🔄',name:'Швидка перезарядка',desc:'Перезарядка на 18% швидша.',apply(){bellReloadMult*=.82;}},
-      {id:'pierce',icon:'🎯',name:'Пробивний постріл',desc:'+1 ціль, яку пробиває снаряд.',apply(){bellPierceBonus+=1;}},
-      {id:'crit',icon:'⭐',name:'Критичний заряд',desc:'+10% шанс подвійної шкоди.',apply(){bellCritChance=Math.min(.55,bellCritChance+.10);}},
-      {id:'slow',icon:'🧊',name:'Гальмівний імпульс',desc:'+12% шанс сповільнити ворога.',apply(){bellSlowChance=Math.min(.60,bellSlowChance+.12);}},
-      {id:'splash',icon:'💫',name:'Ударна хвиля',desc:'+22 до радіусу вибуху.',apply(){bellSplashBonus+=22;}},
-      {id:'shield',icon:'🛡️',name:'Запасний щит',desc:'Одразу отримайте один щит.',apply(){player.shield=Math.min(3,(player.shield||0)+1);}},
-      {id:'heart',icon:'❤️',name:'Запас сил',desc:'+1 максимальне життя і відновлення.',apply(){dinoMaxLives=Math.min(6,dinoMaxLives+1);player.lives=Math.min(dinoMaxLives,player.lives+1);}}
+      {id:'damage',icon:'💥',rarity:'POWER',name:'Потужніший заряд',desc:'+25% шкоди всіх пострілів.',apply(){bellDamageBonus+=.25;}},
+      {id:'firerate',icon:'⚡',rarity:'SPEED',name:'Турбо-спуск',desc:'+18% до темпу стрільби.',apply(){bellFireRateMult*=.82;}},
+      {id:'mag',icon:'🔋',rarity:'AMMO',name:'Більший магазин',desc:'+4 заряди до магазину.',apply(){bellMagBonus+=4;dinoMaxAmmo=(currentWeapon().mag||6)+bellMagBonus;dinoAmmo=dinoMaxAmmo;}},
+      {id:'reload',icon:'🔄',rarity:'SPEED',name:'Миттєва перезарядка',desc:'Перезарядка на 20% швидша.',apply(){bellReloadMult*=.80;}},
+      {id:'pierce',icon:'🎯',rarity:'EPIC',name:'Пробивний постріл',desc:'+1 ціль, яку пробиває снаряд.',apply(){bellPierceBonus+=1;}},
+      {id:'crit',icon:'⭐',rarity:'EPIC',name:'Критичний заряд',desc:'+12% шанс подвійної шкоди.',apply(){bellCritChance=Math.min(.65,bellCritChance+.12);}},
+      {id:'slow',icon:'🧊',rarity:'TACTIC',name:'Гальмівний імпульс',desc:'+14% шанс сповільнити ворога.',apply(){bellSlowChance=Math.min(.70,bellSlowChance+.14);}},
+      {id:'splash',icon:'💫',rarity:'EPIC',name:'Ударна хвиля',desc:'+28 до радіусу вибуху.',apply(){bellSplashBonus+=28;}},
+      {id:'shield',icon:'🛡️',rarity:'DEF',name:'Запасний щит',desc:'Одразу отримайте один щит.',apply(){player.shield=Math.min(4,(player.shield||0)+1);}},
+      {id:'heart',icon:'❤️',rarity:'DEF',name:'Запас сил',desc:'+1 максимальне життя і відновлення.',apply(){dinoMaxLives=Math.min(7,dinoMaxLives+1);player.lives=Math.min(dinoMaxLives,player.lives+1);}},
+      {id:'multishot',icon:'🔱',rarity:'LEGEND',name:'Мультипостріл',desc:'Кожен залп отримує додатковий енергетичний заряд.',apply(){bellMultishot=Math.min(3,bellMultishot+1);}},
+      {id:'drone',icon:'🛸',rarity:'LEGEND',name:'Дрон-помічник',desc:'Дрон автоматично атакує орду між вашими пострілами.',apply(){bellDroneLevel=Math.min(4,bellDroneLevel+1);}},
+      {id:'chain',icon:'⚡',rarity:'MYTHIC',name:'Ланцюгова блискавка',desc:'+14% шанс перекинути шкоду на сусіднього ворога.',apply(){bellChainChance=Math.min(.60,bellChainChance+.14);}}
     ];
 
     function bellShowBanner(text,ms=1250){
@@ -4789,8 +4932,8 @@ body.dino-no-scroll{overflow:hidden!important;}
       const label=document.getElementById('bellWaveLabel'),remaining=document.getElementById('bellWaveRemaining'),bar=document.getElementById('bellWaveProgress');
       const total=Math.max(1,bellWaveTarget||bellWavePlan(bellWave).count);
       const killed=Math.min(total,bellWaveKilled);
-      const left=Math.max(0,total-killed)+(bellBossRequired&&!bellBossDefeated?1:0);
-      if(label)label.textContent=`Хвиля ${bellWave}/${bellMaxWaves}${bellBossRequired?' • 👔 БОС':''}`;
+      const left=Math.max(0,total-killed)+(bellBossRequired&&!bellBossDefeated?1:0)+(bellMiniBossRequired&&!bellMiniBossDefeated?1:0);
+      if(label)label.textContent=`Хвиля ${bellWave}/${bellMaxWaves}${bellBossRequired?' • 👔 БОС':bellMiniBossRequired?' • ⭐ МІНІБОС':''}`;
       if(remaining)remaining.textContent=`${left} ворогів`;
       if(bar)bar.style.width=`${Math.min(100,killed/total*100)}%`;
     }
@@ -4800,7 +4943,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       const plan=bellWavePlan(wave);
       bellWaveTarget=plan.count;bellWaveSpawned=0;bellWaveKilled=0;
       bellWaveActive=true;bellUpgradeOpen=false;
-      bellBossRequired=plan.boss;bellBossSpawnedThisWave=false;bellBossDefeated=!plan.boss;
+      bellBossRequired=plan.boss;bellBossSpawnedThisWave=false;bellBossDefeated=!plan.boss;bellMiniBossRequired=bellMiniBossWaves.has(wave);bellMiniBossSpawned=false;bellMiniBossDefeated=!bellMiniBossRequired;
       enemySpawnTimer=120;
       previousThemeIndex=themeIndex;themeIndex=Math.min(dinoThemes.length-1,Math.floor((wave-1)/2));themeTransition=previousThemeIndex===themeIndex?1:0;
       const panel=document.getElementById('bellUpgradePanel');if(panel)panel.style.display='none';
@@ -4809,39 +4952,82 @@ body.dino-no-scroll{overflow:hidden!important;}
       bellShowBanner(`⚠️ ХВИЛЯ ${wave}/${bellMaxWaves} • ${plan.count}${plan.boss?' + БОС':''}`,1550);
     }
 
-    function bellPickUpgradeOptions(){
+    function bellUpgradeSvg(id){
+      const common='viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"';
+      const map={
+        damage:`<svg ${common}><path d="M32 5l6 17 18-5-11 15 14 11-18 1 1 18-11-14-15 11 5-18-17-6 17-6-5-18 15 11z"/></svg>`,
+        firerate:`<svg ${common}><path d="M36 4L15 35h16l-3 25 21-33H33z"/></svg>`,
+        mag:`<svg ${common}><rect x="14" y="10" width="34" height="44" rx="7"/><path d="M25 18h12M25 27h12M25 36h12M25 45h12"/></svg>`,
+        reload:`<svg ${common}><path d="M50 23a20 20 0 10 2 17"/><path d="M50 10v13H37"/></svg>`,
+        pierce:`<svg ${common}><circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="11"/><path d="M7 32h50M32 7v50"/></svg>`,
+        crit:`<svg ${common}><path d="M32 6l8 17 19 3-14 13 4 19-17-9-17 9 4-19L5 26l19-3z"/></svg>`,
+        slow:`<svg ${common}><path d="M32 6v52M10 19l44 26M54 19L10 45M21 10l11 10 11-10M21 54l11-10 11 10"/></svg>`,
+        splash:`<svg ${common}><circle cx="32" cy="32" r="7"/><circle cx="32" cy="32" r="18"/><path d="M32 2v8M32 54v8M2 32h8M54 32h8"/></svg>`,
+        shield:`<svg ${common}><path d="M32 5l20 8v16c0 14-8 24-20 30C20 53 12 43 12 29V13z"/><path d="M23 32l6 6 13-15"/></svg>`,
+        heart:`<svg ${common}><path d="M32 56S8 42 8 23C8 11 23 6 32 18c9-12 24-7 24 5 0 19-24 33-24 33z"/></svg>`,
+        multishot:`<svg ${common}><path d="M10 48l18-18M24 50l12-22M39 50l5-25"/><path d="M25 26l4 4-1 6M34 24l3 4-3 5M43 21l3 4-4 4"/></svg>`,
+        drone:`<svg ${common}><rect x="20" y="23" width="24" height="18" rx="7"/><circle cx="32" cy="32" r="4"/><path d="M20 28L9 21M44 28l11-7M14 18h-8M58 18h-8"/></svg>`,
+        chain:`<svg ${common}><path d="M38 5L18 33h15l-7 26 21-31H32z"/><circle cx="11" cy="47" r="5"/><circle cx="53" cy="15" r="5"/></svg>`
+      };
+      return map[id]||map.damage;
+    }
+
+    function bellUpgradeCost(id){
+      const base={damage:9,firerate:10,mag:8,reload:8,pierce:12,crit:12,slow:9,splash:11,shield:7,heart:12,multishot:16,drone:17,chain:18}[id]||10;
+      return base+Math.min(10,Number(bellUpgradeLevels[id]||0)*2);
+    }
+
+    function bellPickUpgradeOptions(count=4){
       const pool=[...bellUpgradeCatalog],out=[];
-      while(pool.length&&out.length<3)out.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+      while(pool.length&&out.length<count)out.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
       return out;
     }
 
-    function bellOpenUpgradePanel(){
-      bellUpgradeOpen=true;bellWaveActive=false;bellFireHeld=false;
-      const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.classList.remove('firing');fireBtn.disabled=true;}
-      const panel=document.getElementById('bellUpgradePanel'),choices=document.getElementById('bellUpgradeChoices');
+    function bellRenderUpgradeShop(){
+      const panel=document.getElementById('bellUpgradePanel'),choices=document.getElementById('bellUpgradeChoices'),wallet=document.getElementById('bellUpgradeCredits'),next=document.getElementById('bellUpgradeContinue');
+      if(wallet)wallet.textContent=Math.floor(bellBattleCredits);
+      if(next)next.textContent=`▶ Хвиля ${Math.min(bellMaxWaves,bellWave+1)}`;
       if(!panel||!choices)return;
-      choices.innerHTML=bellPickUpgradeOptions().map(u=>`<button class="bell-upgrade-card" type="button" onclick="bellChooseUpgrade('${u.id}')"><span class="bell-upgrade-icon">${u.icon}</span><span class="bell-upgrade-name">${u.name}</span><div class="bell-upgrade-desc">${u.desc}</div><div class="bell-upgrade-level">Рівень: ${Number(bellUpgradeLevels[u.id]||0)}</div></button>`).join('');
-      panel.style.display='flex';bellShowBanner('🔔 ПЕРЕРВА!',900);
+      choices.innerHTML=bellUpgradeStock.map(u=>{
+        const lv=Number(bellUpgradeLevels[u.id]||0),cost=bellUpgradeCost(u.id),bought=bellPurchasedThisBreak.has(u.id),locked=!bought&&bellBattleCredits<cost;
+        return `<div class="bell-upgrade-card ${bought?'bought':''} ${locked?'locked':''}"><span class="bell-upgrade-rarity">${u.rarity||'BOOST'}</span><span class="bell-upgrade-svg">${bellUpgradeSvg(u.id)}</span><span class="bell-upgrade-name">${u.name}</span><div class="bell-upgrade-desc">${u.desc}</div><div class="bell-upgrade-level">Рівень ${lv}</div><div class="bell-upgrade-cost">⚡ ${cost}</div><button class="bell-upgrade-buy" type="button" ${bought||locked?'disabled':''} onclick="bellChooseUpgrade('${u.id}')">${bought?'✓ Куплено':locked?'Не вистачає ⚡':'Купити'}</button></div>`;
+      }).join('');
+      updateBellArenaToolbar();
+    }
+
+    function bellOpenUpgradePanel(){
+      bellUpgradeOpen=true;bellWaveActive=false;bellFireHeld=false;dinoLastFrame=performance.now();
+      const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.classList.remove('firing');fireBtn.disabled=true;}
+      bellUpgradeStock=bellPickUpgradeOptions(4);bellPurchasedThisBreak=new Set();
+      const panel=document.getElementById('bellUpgradePanel');if(!panel)return;
+      bellRenderUpgradeShop();panel.style.display='flex';bellShowBanner('🔔 ПЕРЕРВА!',900);
     }
 
     window.bellChooseUpgrade=function(id){
-      if(!bellUpgradeOpen)return;
+      if(!bellUpgradeOpen||bellPurchasedThisBreak.has(id))return;
       const u=bellUpgradeCatalog.find(x=>x.id===id);if(!u)return;
-      bellUpgradeLevels[id]=(Number(bellUpgradeLevels[id])||0)+1;u.apply();
-      bellUpgradeOpen=false;
-      const panel=document.getElementById('bellUpgradePanel');if(panel)panel.style.display='none';
-      updateDinoHUD();updateCombatHUD();
-      bellStartWave(bellWave+1);
+      const cost=bellUpgradeCost(id);if(bellBattleCredits<cost){portalToast('⚡ Не вистачає бойових кредитів.');return;}
+      bellBattleCredits-=cost;bellPurchasedThisBreak.add(id);bellUpgradeLevels[id]=(Number(bellUpgradeLevels[id])||0)+1;u.apply();
+      updateDinoHUD();updateCombatHUD();bellRenderUpgradeShop();
+    };
+
+    window.bellContinueAfterBreak=function(){
+      if(!bellUpgradeOpen)return;
+      bellUpgradeOpen=false;const panel=document.getElementById('bellUpgradePanel');if(panel)panel.style.display='none';
+      dinoLastFrame=performance.now();bellStartWave(Math.min(bellMaxWaves,bellWave+1));
     };
 
     function bellMaybeFinishWave(){
       if(!bellWaveActive||bellUpgradeOpen)return;
       const regularDone=bellWaveSpawned>=bellWaveTarget&&bellWaveKilled>=bellWaveTarget;
       const bossDone=!bellBossRequired||bellBossDefeated;
-      if(regularDone&&bossDone&&!enemies.some(e=>!e.dead)){
+      const miniBossDone=!bellMiniBossRequired||bellMiniBossDefeated;
+      if(regularDone&&bossDone&&miniBossDone&&!enemies.some(e=>!e.dead)&&!enemyProjectiles.some(s=>!s.dead)){
         bellWaveActive=false;
         dinoArtifactsRun+=1+(bellWave>=5?1:0)+(bellWave>=12?1:0);
         dinoScore+=380+bellWave*65;
+        bellBattleCredits+=5+Math.floor(bellWave/2);
+        updateBellArenaToolbar();
         if(bellWave>=bellMaxWaves){
           bellShowBanner('🔔 ФІНАЛЬНИЙ ДЗВІНОК!',1000);
           setTimeout(()=>{if(dinoGameRunning)endDinoGame(true);},650);
@@ -4859,6 +5045,9 @@ body.dino-no-scroll{overflow:hidden!important;}
       const batch=Math.min(bellWaveTarget-bellWaveSpawned,plan.cap-active,1+Math.floor(Math.random()*maxBatch));
       for(let i=0;i<batch;i++){spawnEnemy(bellWave,DINO_W+80+i*54+rand(0,60));bellWaveSpawned++;}
       enemySpawnTimer=plan.interval*rand(.58,.98);
+      if(bellMiniBossRequired&&!bellMiniBossSpawned&&bellWaveSpawned>=Math.ceil(bellWaveTarget*.50)){
+        spawnMiniBoss();
+      }
       if(plan.boss&&!bellBossSpawnedThisWave&&bellWaveSpawned>=Math.ceil(bellWaveTarget*.62)){
         spawnDirectorBoss((bellWave===5||bellWave===15)?'viceprincipal':'director');
       }
@@ -4882,7 +5071,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       bellFirePointerId=null;
     }
 
-    function bellUpdateHeldFire(){if(bellFireHeld&&dinoGameRunning&&!bellUpgradeOpen)fireDinoWeapon(false,getDinoTarget());}
+    function bellUpdateHeldFire(){if(bellFireHeld&&dinoGameRunning&&!bellUpgradeOpen&&!bellShopPause)fireDinoWeapon(false,getDinoTarget());}
 
     function startDinoGame(){
       if(!isGameUnlocked) return;
@@ -4892,7 +5081,8 @@ body.dino-no-scroll{overflow:hidden!important;}
       dinoRunStartedAt=Date.now();
       dinoRunId=`${window.currentUserUid||'guest'}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
       dinoLastFrame=performance.now();
-      const btn=document.getElementById('dinoStartBtn'); if(btn){btn.textContent='⚔️ Бій триває';btn.disabled=true;} const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=false; if(window.innerWidth<700 && !dinoExpanded){toggleDinoExpanded();}
+      enterBellArena();
+      const btn=document.getElementById('dinoStartBtn'); if(btn){btn.textContent='⚔️ Бій триває';btn.disabled=true;} const arenaRestart=document.getElementById('bellArenaRestartBtn');if(arenaRestart)arenaRestart.disabled=true; const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn)fireBtn.disabled=false;
       updateCombatHUD();
       dinoAnimationId=requestAnimationFrame(gameLoop);
     }
@@ -4900,10 +5090,10 @@ body.dino-no-scroll{overflow:hidden!important;}
     function resetDinoRun(){
       dinoScore=0;dinoArtifactsRun=0;dinoElapsed=0;gameSpeed=185;worldOffset=0;
       obstacleTimer=999999;collectibleTimer=999999;powerTimer=999999;themeIndex=0;previousThemeIndex=0;themeTransition=1;lastThemeIndex=-1;screenShake=0;dodgeCount=0;
-      obstacles=[];collectibles=[];powerups=[];particles=[];floatTexts=[];enemies=[];projectiles=[];ultraFx=[];
+      obstacles=[];collectibles=[];powerups=[];particles=[];floatTexts=[];enemies=[];projectiles=[];enemyProjectiles=[];ultraFx=[];
       enemySpawnTimer=120;dinoKills=0;dinoAutoFire=false;bellBossSpawned=false;bellVictory=false;bellCombo=0;bellBestCombo=0;dinoReloadUntil=0;dinoLastShotAt=0;dinoMuzzleFlashUntil=0;dinoLockedTargetId=null;
-      bellWave=1;bellWaveTarget=0;bellWaveSpawned=0;bellWaveKilled=0;bellWaveActive=false;bellUpgradeOpen=false;bellBossRequired=false;bellBossSpawnedThisWave=false;bellBossDefeated=true;bellFireHeld=false;bellFirePointerId=null;
-      bellDamageBonus=0;bellFireRateMult=.92;bellReloadMult=.9;bellMagBonus=2;bellPierceBonus=0;bellSplashBonus=0;bellCritChance=.05;bellSlowChance=0;bellUpgradeLevels={};
+      bellWave=1;bellWaveTarget=0;bellWaveSpawned=0;bellWaveKilled=0;bellWaveActive=false;bellUpgradeOpen=false;bellBossRequired=false;bellBossSpawnedThisWave=false;bellBossDefeated=true;bellMiniBossRequired=false;bellMiniBossSpawned=false;bellMiniBossDefeated=true;bellFireHeld=false;bellFirePointerId=null;
+      bellDamageBonus=0;bellFireRateMult=.92;bellReloadMult=.9;bellMagBonus=2;bellPierceBonus=0;bellSplashBonus=0;bellCritChance=.05;bellSlowChance=0;bellMultishot=0;bellDroneLevel=0;bellDroneNextShot=0;bellChainChance=0;bellUpgradeLevels={};bellBattleCredits=0;bellUpgradeStock=[];bellPurchasedThisBreak=new Set();bellShopPause=false;
       dinoMaxAmmo=(currentWeapon().mag||6)+bellMagBonus;dinoAmmo=dinoMaxAmmo;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
       dinoMaxLives=owned.boost_heart?4:3;
@@ -4920,8 +5110,8 @@ body.dino-no-scroll{overflow:hidden!important;}
       const lives=document.getElementById('dinoLives');if(lives)lives.textContent='❤️'.repeat(player.lives)+'🖤'.repeat(Math.max(0,dinoMaxLives-player.lives));
       const t=dinoThemes[themeIndex],loc=document.getElementById('dinoLocation');if(loc)loc.textContent=`⚠️ Хвиля ${bellWave}/${bellMaxWaves} • ${t.icon} ${t.name}`;
       const now=performance.now(),status=[];if(player.shield)status.push(`🛡 ${player.shield}`);if(player.doubleUntil>now)status.push(`⭐ x2 ${Math.ceil((player.doubleUntil-now)/1000)}с`);if(bellCombo>=5)status.push(`🔥 combo x${bellCombo}`);
-      const p=document.getElementById('dinoPowerStatus');if(p)p.textContent=status.join(' • ')||'Тримайте кнопку «ВОГОНЬ» • шквал атаки активний';
-      updateCombatHUD();
+      const p=document.getElementById('dinoPowerStatus');if(bellDroneLevel>0)status.push(`🛸 дрон ${bellDroneLevel}`);if(bellMultishot>0)status.push(`🔱 x${bellMultishot+1}`);if(p)p.textContent=status.join(' • ')||'Тримайте кнопку «ВОГОНЬ» • відстрілюйте також ворожі снаряди';
+      updateCombatHUD();updateBellArenaToolbar();
     }
 
     function missionValue(){
@@ -4972,29 +5162,24 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     function spawnEnemy(wave=bellWave,startX=DINO_W+90){
-      const plan=bellWavePlan(wave),r=Math.random();
-      let type='teacher';
-      if(wave>=2&&r>.74)type='physed';
-      if(wave>=3&&r>.82)type='math';
-      if(wave>=4&&r>.875)type='chemistry';
-      if(wave>=5&&r>.92)type='librarian';
-      if(wave>=7&&r>.955)type='brute';
+      const plan=bellWavePlan(wave);
+      const weighted=[['teacher',40],['physed',wave>=2?13:0],['math',wave>=3?10:0],['chemistry',wave>=4?8:0],['librarian',wave>=5?6:0],['informatics',wave>=6?7:0],['history',wave>=9?6:0],['geography',wave>=11?6:0],['music',wave>=12?5:0],['art',wave>=14?5:0],['brute',wave>=7?4:0]].filter(x=>x[1]>0);
+      const total=weighted.reduce((s,x)=>s+x[1],0);let pick=Math.random()*total,type='teacher';
+      for(const [name,wgt] of weighted){pick-=wgt;if(pick<=0){type=name;break;}}
       const row=Math.floor(Math.random()*4);
-      let hp=1+plan.hpBonus,speed=106,w=58,h=86;
-      if(type==='physed'){hp=2+plan.hpBonus;speed=176;}
-      if(type==='math'){hp=2+plan.hpBonus;speed=123;}
-      if(type==='chemistry'){hp=3+plan.hpBonus;speed=112;}
-      if(type==='librarian'){hp=4+plan.hpBonus;speed=94;w=62;h=92;}
-      if(type==='brute'){hp=7+plan.hpBonus*2;speed=79;w=70;h=102;}
-      const palette=enemyPalette((themeIndex+row)%5);
-      const laneOffset=row*12;
-      const e={
-        id:++enemySerial,type,theme:themeIndex,row,
-        x:startX+rand(0,44),y:GROUND_Y-h-laneOffset,w,h,
-        hp,maxHp:hp,speed:speed*plan.speedMult+rand(-8,15),
-        dead:false,hitFlash:0,walk:rand(0,Math.PI*2),palette,slowUntil:0,
-        subject:{teacher:'Вчитель',physed:'Фізрук',math:'Математик',chemistry:'Хімік',librarian:'Бібліотекар',brute:'Домашка-бос'}[type]
-      };
+      let hp=1+plan.hpBonus,speed=106,w=58,h=86,ranged=false;
+      if(type==='physed'){hp=2+plan.hpBonus;speed=182;}
+      if(type==='math'){hp=2+plan.hpBonus;speed=126;ranged=true;}
+      if(type==='chemistry'){hp=3+plan.hpBonus;speed=114;ranged=true;}
+      if(type==='librarian'){hp=4+plan.hpBonus;speed=96;w=62;h=92;ranged=true;}
+      if(type==='informatics'){hp=3+plan.hpBonus;speed=121;ranged=true;}
+      if(type==='history'){hp=4+plan.hpBonus;speed=102;ranged=true;}
+      if(type==='geography'){hp=4+plan.hpBonus;speed=108;ranged=true;}
+      if(type==='music'){hp=4+plan.hpBonus;speed=116;ranged=true;}
+      if(type==='art'){hp=5+plan.hpBonus;speed=101;ranged=true;}
+      if(type==='brute'){hp=7+plan.hpBonus*2;speed=82;w=70;h=102;}
+      const palette=enemyPalette((themeIndex+row)%5),laneOffset=row*12;
+      const e={id:++enemySerial,type,theme:themeIndex,row,x:startX+rand(0,44),y:GROUND_Y-h-laneOffset,w,h,hp,maxHp:hp,speed:speed*plan.speedMult+rand(-8,15),dead:false,hitFlash:0,walk:rand(0,Math.PI*2),palette,slowUntil:0,ranged,nextAttackAt:performance.now()+rand(850,2100),attackCycle:0,subject:{teacher:'Вчитель',physed:'Фізрук',math:'Математик',chemistry:'Хімік',librarian:'Бібліотекар',informatics:'Інформатик',history:'Історик',geography:'Географ',music:'Музикант',art:'Художник',brute:'Домашка-бос'}[type]};
       enemies.push(e);return e;
     }
 
@@ -5011,11 +5196,118 @@ body.dino-no-scroll{overflow:hidden!important;}
         x:DINO_W+185,y:GROUND_Y-132,w:isDirector?94:88,h:isDirector?132:126,
         hp,maxHp:hp,speed,dead:false,hitFlash:0,walk:0,slowUntil:0,
         palette:{cloth:isDirector?'#1f2937':'#334155',accent:isDirector?'#7c3aed':'#0369a1',metal:'#fbbf24',skin:'#d2a177'},
-        subject:isDirector?'Директор':'Заступник директора'
+        subject:isDirector?'Директор':'Заступник директора',ranged:true,nextAttackAt:performance.now()+700
       });
       bellBossSpawnedThisWave=true;bellBossDefeated=false;
       bellShowBanner(finalBoss?'👑 ФІНАЛЬНИЙ БОС: ДИРЕКТОР!':(isDirector?'👔 БОС: ДИРЕКТОР!':'📋 БОС: ЗАСТУПНИК!'),1650);
       screenShake=7;
+    }
+
+    function spawnMiniBoss(){
+      if(bellMiniBossSpawned)return;
+      const tier=Math.max(1,Math.ceil(bellWave/5));
+      const hp=18+tier*12;
+      enemies.push({
+        id:++enemySerial,type:'headteacher',theme:themeIndex,row:0,
+        x:DINO_W+150,y:GROUND_Y-118,w:82,h:118,
+        hp,maxHp:hp,speed:78+tier*4,dead:false,hitFlash:0,walk:0,slowUntil:0,
+        ranged:true,nextAttackAt:performance.now()+900,
+        palette:{cloth:'#312e81',accent:'#f59e0b',metal:'#e2e8f0',skin:'#d5a173'},
+        subject:'Класний керівник'
+      });
+      bellMiniBossSpawned=true;bellMiniBossDefeated=false;
+      bellShowBanner('⭐ МІНІБОС: КЛАСНИЙ КЕРІВНИК!',1300);screenShake=4;
+    }
+
+    function enemyShotHitbox(s){return {x:s.x-s.r,y:s.y-s.r,w:s.r*2,h:s.r*2};}
+
+    function spawnEnemyShot(enemy,kind='book',angleOffset=0){
+      if(!dinoGameRunning||bellUpgradeOpen||bellShopPause)return;
+      const sx=enemy.x+8,sy=enemy.y+enemy.h*.45,tx=player.x+36,ty=player.y+42;
+      const dx=tx-sx,dy=ty-sy,a=Math.atan2(dy,dx)+angleOffset;
+      const speed={order:345,flask:375,pixel:445,note:405,paint:355,formula:400,book:390}[kind]||390;
+      const radius={order:10,flask:8,pixel:6,note:7,paint:9,formula:7,book:7}[kind]||7;
+      const color={order:'#8b5cf6',flask:'#22d3ee',pixel:'#38bdf8',note:'#f472b6',paint:'#f59e0b',formula:'#fbbf24',book:'#ef4444'}[kind]||'#ef4444';
+      enemyProjectiles.push({x:sx,y:sy,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,r:radius,kind,color,life:4,dead:false,spin:rand(0,Math.PI*2),damage:1});
+    }
+
+    function updateEnemyAttacks(now){
+      if(bellUpgradeOpen||bellShopPause)return;
+      for(const e of enemies){
+        if(e.dead||!e.ranged||e.x<DINO_W*.28||e.x>DINO_W*.98||now<(e.nextAttackAt||0))continue;
+        e.attackCycle=(e.attackCycle||0)+1;
+        let delay=2200,kind='book',spread=0;
+        if(e.type==='math'){kind='formula';delay=1750;}
+        else if(e.type==='chemistry'){kind='flask';delay=2050;}
+        else if(e.type==='librarian'){kind='book';delay=2200;}
+        else if(e.type==='informatics'){kind='pixel';delay=1450;}
+        else if(e.type==='history'){kind='book';delay=1850;}
+        else if(e.type==='geography'){kind='formula';delay=1700;}
+        else if(e.type==='music'){kind='note';delay=1500;}
+        else if(e.type==='art'){kind='paint';delay=1850;}
+        else if(e.type==='headteacher'){kind='order';delay=1280;spread=.13;}
+        else if(e.type==='viceprincipal'){kind='order';delay=1040;spread=.16;}
+        else if(e.type==='director'){kind='order';delay=760;spread=.18;}
+
+        if(e.type==='music'){
+          spawnEnemyShot(e,kind,-.08);spawnEnemyShot(e,kind,.08);
+        }else if(e.type==='art'){
+          spawnEnemyShot(e,kind,-.05);spawnEnemyShot(e,kind,.05);
+        }else if(e.type==='director'&&e.attackCycle%4===0){
+          [-.34,-.17,0,.17,.34].forEach(a=>spawnEnemyShot(e,'order',a));bellThreatPulse=1;screenShake=Math.max(screenShake,5);bellShowBanner('⚠️ ДИРЕКТОР: МАСОВИЙ НАКАЗ!',650);
+        }else if(e.type==='viceprincipal'&&e.attackCycle%4===0){
+          [-.25,-.08,.08,.25].forEach(a=>spawnEnemyShot(e,'order',a));bellThreatPulse=.8;
+        }else if(e.type==='headteacher'&&e.attackCycle%3===0){
+          [-.20,0,.20].forEach(a=>spawnEnemyShot(e,'order',a));bellThreatPulse=.6;
+        }else if(['headteacher','viceprincipal','director'].includes(e.type)){
+          spawnEnemyShot(e,kind,-spread);spawnEnemyShot(e,kind,0);spawnEnemyShot(e,kind,spread);
+        }else spawnEnemyShot(e,kind,0);
+        e.nextAttackAt=now+delay*rand(.80,1.14)/Math.min(1.9,1+bellWave*.028);
+      }
+    }
+
+    function drawEnemyProjectile(s){
+      ctx.save();ctx.translate(s.x,s.y);ctx.rotate(s.spin||0);
+      ultraGlow(0,0,s.r*2.6,s.color,.18);
+      if(s.kind==='book'){
+        ctx.fillStyle='#7c2d12';roundRectPath(-10,-7,20,14,3);ctx.fill();ctx.strokeStyle='#fde68a';ctx.lineWidth=1.4;ctx.stroke();
+        ctx.fillStyle='#fef3c7';ctx.fillRect(-1,-6,2,12);
+      }else if(s.kind==='flask'){
+        ctx.fillStyle='#e0f2fe';ctx.fillRect(-3,-9,6,6);ctx.fillStyle=s.color;ctx.beginPath();ctx.moveTo(-7,-2);ctx.lineTo(7,-2);ctx.lineTo(9,8);ctx.lineTo(-9,8);ctx.closePath();ctx.fill();
+      }else if(s.kind==='pixel'){
+        ctx.fillStyle=s.color;ctx.fillRect(-7,-7,14,14);ctx.fillStyle='#e0f2fe';ctx.fillRect(-3,-3,6,6);
+      }else if(s.kind==='note'){
+        ctx.fillStyle=s.color;ctx.font='900 20px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('♪',0,0);ultraGlow(0,0,18,'rgba(244,114,182,.85)',.12);
+      }else if(s.kind==='paint'){
+        ctx.fillStyle=s.color;ctx.beginPath();ctx.arc(0,0,8,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fde68a';ctx.beginPath();ctx.arc(-3,-3,3,0,Math.PI*2);ctx.fill();
+      }else if(s.kind==='order'){
+        ctx.fillStyle='#4c1d95';roundRectPath(-11,-8,22,16,3);ctx.fill();ctx.strokeStyle='#fde68a';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#fff';ctx.font='900 7px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('!',0,3);
+      }else{
+        ctx.fillStyle=s.color;ctx.font='900 13px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('π',0,0);
+      }
+      ctx.restore();
+    }
+
+    function drawBellDrone(now){
+      if(bellDroneLevel<=0)return;
+      const x=player.x+42+Math.sin(now/330)*7,y=player.y-34+Math.sin(now/210)*5;
+      ctx.save();
+      ultraGlow(x,y,28,'rgba(34,211,238,.85)',.16);
+      ctx.fillStyle='#0f172a';roundRectPath(x-16,y-8,32,16,8);ctx.fill();
+      ctx.fillStyle='#38bdf8';ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#94a3b8';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-18,y);ctx.lineTo(x-28,y-5);ctx.moveTo(x+18,y);ctx.lineTo(x+28,y-5);ctx.stroke();
+      ctx.fillStyle='#f8fafc';ctx.beginPath();ctx.arc(x-28,y-5,4,0,Math.PI*2);ctx.arc(x+28,y-5,4,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
+
+    function updateBellDrone(now){
+      if(bellDroneLevel<=0||now<bellDroneNextShot||!dinoGameRunning||bellUpgradeOpen)return;
+      const target=getDinoTarget();if(!target)return;
+      const x=player.x+42,y=player.y-34;
+      const tx=target.x+target.w/2,ty=target.y+target.h/2,travel=Math.max(.08,(tx-x)/1050);
+      projectiles.push({x,y,w:14,h:8,vx:1050,vy:clamp((ty-y)/travel,-500,500),damage:.55+.28*bellDroneLevel,type:'drone',color:'#a5f3fc',accent:'#22d3ee',crit:false,rotation:0,life:2,pierce:Math.max(0,bellDroneLevel-2),splash:0,homing:.18,hitIds:[]});
+      emitShotUltraFx(x+8,y,{type:'pistol',accent:'#22d3ee'});
+      bellDroneNextShot=now+Math.max(260,820-bellDroneLevel*120);
     }
 
     function enemyHitbox(e){
@@ -5033,6 +5325,21 @@ body.dino-no-scroll{overflow:hidden!important;}
       burst(projectile.x,projectile.y,projectile.accent||'#fff',projectile.crit?14:8);
       emitImpactUltraFx(projectile.x,projectile.y,projectile.accent||'#fff',projectile.damage>=3?1.35:1);
       floatText(enemy.x+6,enemy.y-5,`${projectile.crit?'⭐ КРИТ ':'-'}${Math.round(projectile.damage*10)/10}`,projectile.crit?'#fbbf24':'#ef4444');
+      if(bellChainChance>0&&Math.random()<bellChainChance){
+        let chained=null,best=175;
+        for(const other of enemies){
+          if(other===enemy||other.dead)continue;
+          const d=Math.hypot((other.x+other.w/2)-(enemy.x+enemy.w/2),(other.y+other.h/2)-(enemy.y+enemy.h/2));
+          if(d<best){best=d;chained=other;}
+        }
+        if(chained){
+          chained.hp-=Math.max(.7,projectile.damage*.55);chained.hitFlash=.12;
+          ultraFx.push({kind:'chain',x:enemy.x+enemy.w/2,y:enemy.y+enemy.h/2,x2:chained.x+chained.w/2,y2:chained.y+chained.h/2,vx:0,vy:0,life:.13,max:.13,size:2,color:'#67e8f9',rot:0,vr:0,alpha:1,power:1});
+          burst(chained.x+chained.w/2,chained.y+chained.h/2,'#67e8f9',8);
+          if(chained.hp<=0)killDinoEnemy(chained);
+        }
+      }
+
       if(projectile.splash>0){
         for(const other of enemies){
           if(other===enemy||other.dead)continue;
@@ -5051,14 +5358,16 @@ body.dino-no-scroll{overflow:hidden!important;}
       if(enemy.dead)return;
       enemy.dead=true;dinoKills++;bellCombo++;bellBestCombo=Math.max(bellBestCombo,bellCombo);
       const boss=['director','viceprincipal'].includes(enemy.type);
-      if(boss)bellBossDefeated=true;else bellWaveKilled++;
+      const miniBoss=enemy.type==='headteacher';
+      if(boss)bellBossDefeated=true;else if(miniBoss)bellMiniBossDefeated=true;else bellWaveKilled++;
       const mult=player.doubleUntil>performance.now()?2:1,comboMult=1+Math.min(1,bellCombo*.03);
-      const baseReward={teacher:60,physed:78,math:88,chemistry:100,librarian:122,brute:160,viceprincipal:620,director:1250}[enemy.type]||65;
+      const baseReward={teacher:60,physed:78,math:88,chemistry:100,librarian:122,informatics:110,history:118,geography:118,music:124,art:130,brute:160,headteacher:380,viceprincipal:620,director:1250}[enemy.type]||65;
       const reward=Math.round(baseReward*comboMult);dinoScore+=reward*mult;
-      burst(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,boss?34:18);
-      emitImpactUltraFx(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,boss?2.2:1.35);
+      bellBattleCredits+=boss?10:miniBoss?6:enemy.type==='brute'?3:enemy.type==='librarian'?2:1;updateBellArenaToolbar();
+      burst(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,(boss||miniBoss)?34:18);
+      emitImpactUltraFx(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,(boss||miniBoss)?2.2:1.35);
       floatText(enemy.x-5,enemy.y-13,`+${reward}${bellCombo>=5?` • COMBO x${bellCombo}`:''}`,'#f59e0b');
-      screenShake=Math.max(screenShake,boss?8:3.5);
+      screenShake=Math.max(screenShake,boss?8:miniBoss?6:3.5);
       const roll=Math.random();
       if(!boss&&roll<.025){player.shield=Math.min(3,(player.shield||0)+1);floatText(enemy.x,enemy.y,'🛡 ЩИТ','#38bdf8');}
       else if(!boss&&roll<.05){dinoAmmo=dinoMaxAmmo;dinoReloadUntil=0;floatText(enemy.x,enemy.y,'🔋 ЗАРЯД','#22c55e');}
@@ -5143,11 +5452,11 @@ body.dino-no-scroll{overflow:hidden!important;}
       const finalScore=Math.max(0,Math.floor(dinoScore));
       if(finalScore>dinoHighScore){dinoHighScore=finalScore;localStorage.setItem('dino_high_score',String(dinoHighScore));}
       dinoArtifactsTotal+=dinoArtifactsRun;localStorage.setItem('dino_artifacts_total',String(dinoArtifactsTotal));
-      updateDinoHighScoreUI();updateDinoHUD();updateMissionUI();
+      updateDinoHighScoreUI();updateDinoHUD();updateMissionUI();updateBellArenaToolbar();
       const duration=Math.max(1,Date.now()-dinoRunStartedAt);
       saveDinoLeaderboard(finalScore,dinoArtifactsRun,duration,dinoRunId);
       drawGameOver(finalScore,victory);
-      const btn=document.getElementById('dinoStartBtn');if(btn){btn.disabled=false;btn.textContent='🔄 Ще раз';} const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.disabled=true;fireBtn.classList.remove('firing');} bellFireHeld=false;
+      const btn=document.getElementById('dinoStartBtn');if(btn){btn.disabled=false;btn.textContent='🔄 Ще раз';} const arenaRestart=document.getElementById('bellArenaRestartBtn');if(arenaRestart)arenaRestart.disabled=false; const fireBtn=document.getElementById('dinoFireBtn');if(fireBtn){fireBtn.disabled=true;fireBtn.classList.remove('firing');} bellFireHeld=false;
     }
 
     function burst(x,y,color,count=8){
@@ -5310,6 +5619,12 @@ body.dino-no-scroll{overflow:hidden!important;}
         const x=ultraParallaxX(i*220,1.3,DINO_W+260);
         ctx.save();ctx.globalAlpha=.06+.05*pulse;ctx.fillStyle=i%2?'#f59e0b':'#38bdf8';ctx.fillRect(x,GROUND_Y+8,108,7);ctx.restore();
       }
+
+      // alarm reflections grow stronger in late waves
+      const danger=clamp((bellWave-1)/(bellMaxWaves-1),0,1);
+      ctx.save();ctx.globalAlpha=.025+danger*.055;
+      ctx.fillStyle=Math.sin(dinoElapsed*.008)>0?'#ef4444':'#3b82f6';ctx.fillRect(0,0,DINO_W,GROUND_Y);
+      ctx.restore();
     }
 
     function emitDinoTrail(dt){
@@ -5746,6 +6061,7 @@ body.dino-no-scroll{overflow:hidden!important;}
         if(f.kind==='smoke'){f.vx*=.985;f.vy-=9*dt;f.size+=10*dt;}
         else if(f.kind==='casing'){f.vy+=430*dt;}
         else if(f.kind==='spark'||f.kind==='ember'){f.vy+=190*dt;}
+        else if(f.kind==='chain'){f.vx=0;f.vy=0;}
       }
       ultraFx=ultraFx.filter(f=>f.life>0);
     }
@@ -5760,6 +6076,8 @@ body.dino-no-scroll{overflow:hidden!important;}
           ctx.fillStyle=f.color;roundRectPath(-f.size/2,-1.5,f.size,3,1);ctx.fill();ctx.fillStyle='#8a651f';ctx.fillRect(f.size/2-1,-1.5,1.5,3);
         }else if(f.kind==='ring'){
           ctx.strokeStyle=f.color;ctx.lineWidth=2.2*t;ctx.beginPath();ctx.arc(0,0,f.size+(1-t)*27*f.power,0,Math.PI*2);ctx.stroke();
+        }else if(f.kind==='chain'){
+          ctx.rotate(-f.rot);ctx.translate(-f.x,-f.y);ctx.strokeStyle=f.color;ctx.lineWidth=2.4*t;ctx.shadowColor=f.color;ctx.shadowBlur=10;ctx.beginPath();ctx.moveTo(f.x,f.y);const mx=(f.x+f.x2)/2+rand(-8,8),my=(f.y+f.y2)/2+rand(-7,7);ctx.lineTo(mx,my);ctx.lineTo(f.x2,f.y2);ctx.stroke();
         }else{
           ctx.shadowColor=f.color;ctx.shadowBlur=6;ctx.fillStyle=f.color;ctx.beginPath();ctx.arc(0,0,f.size*t,0,Math.PI*2);ctx.fill();
         }
@@ -5770,7 +6088,7 @@ body.dino-no-scroll{overflow:hidden!important;}
     function drawEnemy(e){
       if(e.dead)return;
       ctx.save();if(e.hitFlash>0)ctx.globalAlpha=.55;
-      const boss=['director','viceprincipal'].includes(e.type),scale=boss?1.18:e.type==='brute'?1.08:1;
+      const boss=['director','viceprincipal'].includes(e.type),miniBoss=e.type==='headteacher',scale=boss?1.18:miniBoss?1.12:e.type==='brute'?1.08:1;
       ctx.translate(e.x,e.y);ctx.scale(scale,scale);
       const W=e.w/scale,H=e.h/scale,p=e.palette,phase=Math.sin(e.walk)*5;
 
@@ -5802,7 +6120,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       ctx.fillStyle=e.type==='physed'?'#1f2937':'#3f2d24';ctx.beginPath();ctx.arc(W*.50,H*.14,13,Math.PI,Math.PI*2);ctx.fill();
       ctx.fillStyle='#111827';ctx.beginPath();ctx.arc(W*.45,H*.20,1.7,0,Math.PI*2);ctx.arc(W*.56,H*.20,1.7,0,Math.PI*2);ctx.fill();
 
-      if(!['physed','brute'].includes(e.type)&&!boss){
+      if(!['physed','brute'].includes(e.type)&&!boss&&!miniBoss){
         ctx.strokeStyle='#111827';ctx.lineWidth=1.7;ctx.strokeRect(W*.34,H*.17,9,7);ctx.strokeRect(W*.54,H*.17,9,7);ctx.beginPath();ctx.moveTo(W*.43,H*.205);ctx.lineTo(W*.54,H*.205);ctx.stroke();
       }
 
@@ -5812,8 +6130,20 @@ body.dino-no-scroll{overflow:hidden!important;}
         ctx.fillStyle='#fbbf24';roundRectPath(W*.77,H*.39,W*.34,H*.10,2);ctx.fill();
       }else if(e.type==='chemistry'){
         ctx.fillStyle='#67e8f9';ctx.beginPath();ctx.moveTo(W*.82,H*.40);ctx.lineTo(W*.95,H*.40);ctx.lineTo(W*1.02,H*.58);ctx.lineTo(W*.75,H*.58);ctx.closePath();ctx.fill();ultraGlow(W*.89,H*.51,18,'rgba(34,211,238,.8)',.16);
+      }else if(e.type==='informatics'){
+        ctx.fillStyle='#0f172a';roundRectPath(W*.67,H*.40,W*.40,H*.30,4);ctx.fill();ctx.fillStyle='#22d3ee';ctx.font='900 8px monospace';ctx.textAlign='center';ctx.fillText('</>',W*.87,H*.57);ultraGlow(W*.87,H*.54,16,'rgba(34,211,238,.7)',.12);
+      }else if(e.type==='history'){
+        ctx.fillStyle='#8b5e3c';roundRectPath(W*.68,H*.39,W*.38,H*.34,4);ctx.fill();ctx.fillStyle='#fef3c7';ctx.font='900 7px serif';ctx.textAlign='center';ctx.fillText('1240',W*.87,H*.58);
+      }else if(e.type==='geography'){
+        ctx.fillStyle='#0ea5e9';ctx.beginPath();ctx.arc(W*.86,H*.55,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e0f2fe';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(W*.86,H*.55,8,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#22c55e';ctx.beginPath();ctx.ellipse(W*.82,H*.52,5,3,.2,0,Math.PI*2);ctx.fill();
+      }else if(e.type==='music'){
+        ctx.fillStyle='#7c3aed';roundRectPath(W*.72,H*.41,W*.31,H*.28,5);ctx.fill();ctx.fillStyle='#f9a8d4';ctx.font='900 16px serif';ctx.textAlign='center';ctx.fillText('♫',W*.87,H*.59);
+      }else if(e.type==='art'){
+        ctx.fillStyle='#d97706';ctx.beginPath();ctx.ellipse(W*.86,H*.55,14,10,-.3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#22c55e';ctx.beginPath();ctx.arc(W*.81,H*.51,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#3b82f6';ctx.beginPath();ctx.arc(W*.89,H*.55,3,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#92400e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W*.72,H*.67);ctx.lineTo(W*1.02,H*.39);ctx.stroke();
       }else if(e.type==='librarian'){
         ctx.fillStyle='#7c2d12';roundRectPath(W*.66,H*.40,W*.42,H*.42,5);ctx.fill();ctx.fillStyle='#fde68a';ctx.font='900 7px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('ТИША!',W*.87,H*.61);
+      }else if(miniBoss){
+        ctx.fillStyle='#312e81';roundRectPath(W*.61,H*.36,W*.50,H*.50,6);ctx.fill();ctx.strokeStyle='#f59e0b';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#fde68a';ctx.font='900 7px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('ЖУРНАЛ',W*.86,H*.60);
       }else if(e.type==='brute'){
         ctx.fillStyle='#166534';roundRectPath(W*.62,H*.37,W*.48,H*.48,6);ctx.fill();ctx.fillStyle='#fff';ctx.font='900 8px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('Д/З',W*.86,H*.60);
       }else if(boss){
@@ -5825,9 +6155,9 @@ body.dino-no-scroll{overflow:hidden!important;}
       ctx.restore();
 
       if(e.maxHp>1){
-        const bw=boss?82:e.type==='brute'?56:44,bh=boss?7:4,x=e.x+(e.w-bw)/2,y=e.y-11;
+        const bw=boss?82:miniBoss?70:e.type==='brute'?56:44,bh=(boss||miniBoss)?7:4,x=e.x+(e.w-bw)/2,y=e.y-11;
         ctx.fillStyle='rgba(15,23,42,.45)';ctx.fillRect(x,y,bw,bh);ctx.fillStyle=e.hp/e.maxHp>.5?'#22c55e':e.hp/e.maxHp>.25?'#f59e0b':'#ef4444';ctx.fillRect(x,y,bw*clamp(e.hp/e.maxHp,0,1),bh);
-        if(boss){ctx.fillStyle=e.type==='director'?'#7c3aed':'#0369a1';ctx.font='900 9px Inter,sans-serif';ctx.textAlign='center';ctx.fillText(e.type==='director'?'ДИРЕКТОР':'ЗАСТУПНИК',x+bw/2,y-4);}
+        if(boss||miniBoss){ctx.fillStyle=miniBoss?'#f59e0b':e.type==='director'?'#7c3aed':'#0369a1';ctx.font='900 9px Inter,sans-serif';ctx.textAlign='center';ctx.fillText(miniBoss?'КЛАСНИЙ':e.type==='director'?'ДИРЕКТОР':'ЗАСТУПНИК',x+bw/2,y-4);}
       }
     }
 
@@ -5899,7 +6229,7 @@ body.dino-no-scroll{overflow:hidden!important;}
 
 
     function drawDinoTargetLock(now){
-      if(!dinoAutoFire||!dinoLockedTargetId) return;
+      if(!dinoLockedTargetId) return;
       const e=enemies.find(x=>x.id===dinoLockedTargetId&&!x.dead);
       if(!e) return;
       dinoAimPulse+=.08;
@@ -5907,7 +6237,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       const cx=e.x+e.w/2, cy=e.y+e.h/2;
       const r=Math.max(e.w,e.h)*.55+pulse;
       ctx.save();
-      ctx.strokeStyle='rgba(34,197,94,.82)';
+      ctx.strokeStyle=bellFireHeld?'rgba(251,191,36,.92)':'rgba(34,211,238,.78)';
       ctx.lineWidth=2;
       ctx.setLineDash([7,5]);
       ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
@@ -5929,6 +6259,8 @@ body.dino-no-scroll{overflow:hidden!important;}
       enemies.forEach(drawEnemy);
       drawDinoTargetLock(now);
       projectiles.forEach(drawProjectile);
+      enemyProjectiles.forEach(drawEnemyProjectile);
+      drawBellDrone(now);
       drawUltraFx();
       collectibles.forEach(c=>{ctx.save();ctx.translate(c.x+13,c.y+13);ctx.rotate(Math.sin(c.spin)*.15);ctx.fillStyle='rgba(255,255,255,.88)';ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();ctx.font='22px Apple Color Emoji,Segoe UI Emoji,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(c.icon,0,1);ctx.restore();});
       powerups.forEach(p=>{ctx.save();ctx.shadowColor='#fff';ctx.shadowBlur=12;ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.arc(p.x+14,p.y+14,15,0,Math.PI*2);ctx.fill();ctx.font='22px Apple Color Emoji,Segoe UI Emoji,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.icon,p.x+14,p.y+15);ctx.restore();});
@@ -5937,6 +6269,32 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
 
+
+    function drawBattleOverlay(now){
+      if(!dinoGameRunning)return;
+      const plan=bellWavePlan(bellWave),boss=enemies.find(e=>!e.dead&&['director','viceprincipal','headteacher'].includes(e.type));
+      ctx.save();
+      // top HUD glass
+      const g=ctx.createLinearGradient(0,0,0,78);g.addColorStop(0,'rgba(7,15,29,.82)');g.addColorStop(1,'rgba(7,15,29,0)');ctx.fillStyle=g;ctx.fillRect(0,0,DINO_W,82);
+      ctx.textBaseline='middle';
+      ctx.fillStyle='#f8fafc';ctx.font='1000 20px Inter,sans-serif';ctx.textAlign='left';ctx.fillText(`ХВИЛЯ ${bellWave}/${bellMaxWaves}`,24,28);
+      ctx.font='800 13px Inter,sans-serif';ctx.fillStyle='#93c5fd';ctx.fillText(`${Math.max(0,bellWaveTarget-bellWaveKilled)} у хвилі • ${dinoKills} знешкоджено • ⚡ ${Math.floor(bellBattleCredits)}`,24,51);
+      ctx.textAlign='right';ctx.fillStyle='#f8fafc';ctx.font='1000 18px Inter,sans-serif';ctx.fillText(`${dinoAmmo}/${dinoMaxAmmo}`,DINO_W-24,28);
+      ctx.fillStyle=bellCombo>=5?'#fbbf24':'#cbd5e1';ctx.font='900 13px Inter,sans-serif';ctx.fillText(bellCombo>=5?`COMBO x${bellCombo}`:currentWeapon().name,DINO_W-24,51);
+
+      // wave bar
+      const barX=24,barY=66,barW=DINO_W-48,ratio=clamp(bellWaveKilled/Math.max(1,bellWaveTarget),0,1);
+      ctx.fillStyle='rgba(148,163,184,.20)';roundRectPath(barX,barY,barW,5,3);ctx.fill();
+      const bg=ctx.createLinearGradient(barX,0,barX+barW,0);bg.addColorStop(0,'#38bdf8');bg.addColorStop(.55,'#22c55e');bg.addColorStop(1,'#f59e0b');ctx.fillStyle=bg;roundRectPath(barX,barY,barW*ratio,5,3);ctx.fill();
+
+      if(boss){
+        const bx=DINO_W*.22,bw=DINO_W*.56,by=90,ratio=clamp(boss.hp/Math.max(1,boss.maxHp),0,1);
+        ctx.fillStyle='rgba(15,23,42,.78)';roundRectPath(bx,by,bw,26,8);ctx.fill();
+        const hp=ctx.createLinearGradient(bx,0,bx+bw,0);hp.addColorStop(0,'#ef4444');hp.addColorStop(.58,'#f59e0b');hp.addColorStop(1,'#fde68a');ctx.fillStyle=hp;roundRectPath(bx+3,by+3,(bw-6)*ratio,20,6);ctx.fill();
+        ctx.fillStyle='#fff';ctx.font='1000 11px Inter,sans-serif';ctx.textAlign='center';ctx.fillText(`${boss.subject.toUpperCase()} • ${Math.ceil(boss.hp)}/${boss.maxHp}`,DINO_W/2,by+13);
+      }
+      ctx.restore();
+    }
 
     function drawBellHordeDepth(){
       const count=Math.min(86,18+bellWave*5);
@@ -6004,6 +6362,13 @@ body.dino-no-scroll{overflow:hidden!important;}
         ctx.fillStyle=grad;ctx.beginPath();ctx.arc(x,gy,34,0,Math.PI*2);ctx.fill();
       }
 
+      if(bellThreatPulse>0){
+        ctx.save();ctx.globalAlpha=.08+.14*bellThreatPulse;ctx.fillStyle='#ef4444';ctx.fillRect(0,0,DINO_W,DINO_H);ctx.restore();
+      }
+      // danger arrows for incoming off-screen horde
+      const incoming=enemies.filter(e=>!e.dead&&e.x>DINO_W-20).slice(0,5);
+      incoming.forEach((e,i)=>{const y=140+i*34;ctx.save();ctx.globalAlpha=.45;ctx.fillStyle=e.type==='director'?'#fbbf24':'#ef4444';ctx.beginPath();ctx.moveTo(DINO_W-18,y);ctx.lineTo(DINO_W-34,y-9);ctx.lineTo(DINO_W-34,y+9);ctx.closePath();ctx.fill();ctx.restore();});
+
       const vg=ctx.createRadialGradient(DINO_W*.5,DINO_H*.43,DINO_W*.18,DINO_W*.5,DINO_H*.46,DINO_W*.74);
       vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(6,15,28,.24)');ctx.fillStyle=vg;ctx.fillRect(0,0,DINO_W,DINO_H);
       ctx.fillStyle='rgba(15,23,42,.18)';ctx.beginPath();ctx.ellipse(player.x+38,GROUND_Y-2,44,9,0,0,Math.PI*2);ctx.fill();
@@ -6020,19 +6385,24 @@ body.dino-no-scroll{overflow:hidden!important;}
 
     function drawDinoIdleScreen(){
       if(!canvas)return;const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawDinoAtmosphere(performance.now());
-      ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.92)';ctx.font='1000 35px Inter,sans-serif';ctx.fillText('🔔 ВИЖИТИ ДО ДЗВІНКА 2.0',DINO_W/2,94);ctx.font='800 16px Inter,sans-serif';ctx.fillStyle='#334155';ctx.fillText('20 хвиль • швидка стрільба • велика орда • боси кожні 5 хвиль',DINO_W/2,126);ctx.restore();
+      ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.92)';ctx.font='1000 35px Inter,sans-serif';ctx.fillText('🔔 ВИЖИТИ ДО ДЗВІНКА 2.3',DINO_W/2,94);ctx.font='800 16px Inter,sans-serif';ctx.fillStyle='#334155';ctx.fillText('20 хвиль • мінібоси • ворожі атаки • дрон • боси кожні 5 хвиль',DINO_W/2,126);ctx.restore();
     }
 
     function gameLoop(now){
       if(!dinoGameRunning)return;
-      const dt=Math.min(.034,(now-dinoLastFrame)/1000||.016);dinoLastFrame=now;dinoElapsed+=dt*1000;
+      const dt=Math.min(.034,(now-dinoLastFrame)/1000||.016);dinoLastFrame=now;
+      if(bellUpgradeOpen||bellShopPause||!bellWaveActive){
+        updateDinoHUD();bellUpdateWaveUI();updateBellArenaToolbar();
+        dinoAnimationId=requestAnimationFrame(gameLoop);return;
+      }
+      dinoElapsed+=dt*1000;
       const mult=player.doubleUntil>now?2:1;
       gameSpeed=185+bellWave*12;worldOffset+=gameSpeed*dt;dinoScore+=dt*(7+bellWave*.8+Math.min(8,bellCombo*.08))*mult;
 
       player.y=GROUND_Y-92;player.vy=0;player.jumping=false;player.ducking=false;
       if(themeTransition<1)themeTransition=Math.min(1,themeTransition+dt*.95);
 
-      completeDinoReload(now);updateDinoAutoTarget(now);bellUpdateHeldFire();
+      completeDinoReload(now);updateDinoAutoTarget(now);bellUpdateHeldFire();updateBellDrone(now);updateEnemyAttacks(now);
       if(bellWaveActive&&!bellUpgradeOpen){enemySpawnTimer-=dt*1000;if(enemySpawnTimer<=0)bellSpawnWaveBatch();}
 
       const ph=dinoHitbox();
@@ -6044,11 +6414,20 @@ body.dino-no-scroll{overflow:hidden!important;}
         if(e.hitFlash>0)e.hitFlash-=dt;
         if(e.x+e.w>=player.x+8&&e.x<=player.x+player.w+10){
           handleCollision(e,now);e.dead=true;bellCombo=0;
-          if(['director','viceprincipal'].includes(e.type))bellBossDefeated=true;else bellWaveKilled++;
+          if(['director','viceprincipal'].includes(e.type))bellBossDefeated=true;else if(e.type==='headteacher')bellMiniBossDefeated=true;else bellWaveKilled++;
           burst(e.x+e.w/2,e.y+e.h/2,e.palette.accent,10);bellUpdateWaveUI();
         }
       });
       enemies=enemies.filter(e=>!e.dead&&e.x>-110);
+
+      enemyProjectiles.forEach(s=>{
+        if(s.dead)return;
+        s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt;s.spin+=dt*4.5;
+        if(aabb(enemyShotHitbox(s),dinoHitbox())){
+          s.dead=true;handleCollision(s,now);burst(s.x,s.y,s.color,10);screenShake=Math.max(screenShake,4);
+        }
+        if(s.x<-80||s.y<-80||s.y>DINO_H+80||s.life<=0)s.dead=true;
+      });
 
       projectiles.forEach(p=>{
         if(p.homing>0){
@@ -6063,6 +6442,14 @@ body.dino-no-scroll{overflow:hidden!important;}
         }
         p.x+=p.vx*dt;p.y+=(p.vy||0)*dt;p.life-=dt;p.rotation+=(p.type==='axe'||p.type==='disc')?dt*12:0;
         if(p.dead)return;
+        for(const s of enemyProjectiles){
+          if(s.dead)continue;
+          if(aabb(projectileHitbox(p),enemyShotHitbox(s))){
+            s.dead=true;dinoScore+=12;burst(s.x,s.y,'#fde68a',8);emitImpactUltraFx(s.x,s.y,'#fde68a',.9);
+            if(p.pierce>0)p.pierce--;else{p.dead=true;break;}
+          }
+        }
+        if(p.dead)return;
         for(const e of enemies){
           if(e.dead||(p.hitIds||[]).includes(e.id))continue;
           if(aabb(projectileHitbox(p),enemyHitbox(e))){
@@ -6072,15 +6459,17 @@ body.dino-no-scroll{overflow:hidden!important;}
         }
       });
       projectiles=projectiles.filter(p=>!p.dead&&p.life>0&&p.x<DINO_W+100);
+      enemyProjectiles=enemyProjectiles.filter(s=>!s.dead&&s.life>0);
 
+      bellThreatPulse=Math.max(0,bellThreatPulse-dt*1.7);
       particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=320*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
       updateUltraFx(dt);floatTexts.forEach(f=>{f.y-=22*dt;f.life-=dt*.9;});floatTexts=floatTexts.filter(f=>f.life>0);
 
-      bellMaybeFinishWave();updateMissionUI();updateDinoHUD();bellUpdateWaveUI();
+      bellMaybeFinishWave();updateMissionUI();updateDinoHUD();bellUpdateWaveUI();updateBellArenaToolbar();
 
       ctx.save();
       if(screenShake>0){ctx.translate(rand(-screenShake,screenShake),rand(-screenShake,screenShake));screenShake*=.82;if(screenShake<.4)screenShake=0;}
-      ctx.clearRect(-20,-20,DINO_W+40,DINO_H+40);drawBackground(dinoThemes[themeIndex],dt);drawRunner();drawEntities(now);drawDinoAtmosphere(now);ctx.restore();
+      ctx.clearRect(-20,-20,DINO_W+40,DINO_H+40);drawBackground(dinoThemes[themeIndex],dt);drawRunner();drawEntities(now);drawDinoAtmosphere(now);drawBattleOverlay(now);ctx.restore();
       dinoAnimationId=requestAnimationFrame(gameLoop);
     }
 
