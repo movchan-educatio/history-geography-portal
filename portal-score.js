@@ -207,6 +207,15 @@ function ensurePortalEconomy(data = {}) {
 
   data.portal_achievements = data.portal_achievements || {};
   data.portal_weekly_claims = data.portal_weekly_claims || {};
+  data.portal_daily_claims = data.portal_daily_claims || {};
+  data.portal_weapon_levels = data.portal_weapon_levels || {};
+  data.portal_weapon_levels.weapon_school_blaster = Math.max(1, Math.min(3, Number(data.portal_weapon_levels.weapon_school_blaster) || 1));
+  for (const [id,item] of Object.entries(PORTAL_STORE_CATALOG)) {
+    if (item?.type === 'weapon' && data.portal_owned_items[id]) {
+      data.portal_weapon_levels[id] = Math.max(1, Math.min(3, Number(data.portal_weapon_levels[id]) || 1));
+    }
+  }
+  if ((Number(data.portal_economy_version) || 0) < 4) data.portal_economy_version = 4;
   return data;
 }
 
@@ -672,6 +681,10 @@ async function purchasePortalItem(itemId) {
       data.portal_coins -= item.price;
       data.portal_coins_spent = (Number(data.portal_coins_spent)||0) + item.price;
       data.portal_owned_items[id] = true;
+      if (item.type === 'weapon') {
+        data.portal_weapon_levels = data.portal_weapon_levels || {};
+        data.portal_weapon_levels[id] = Math.max(1, Number(data.portal_weapon_levels[id]) || 1);
+      }
       data.portal_last_purchase = { id, label:item.label, price:item.price, at:Date.now() };
       applyPortalProgressRewards(data);
       result = { ok:true, bought:true, balance:data.portal_coins, item };
@@ -712,6 +725,89 @@ async function equipPortalItem(slot, itemId) {
   }
 }
 
+
+function portalLocalDateKey() {
+  const d = new Date();
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function portalWeaponUpgradeCost(item, level) {
+  const base = Math.max(100, Math.round(((Number(item?.price)||0) * .45) / 10) * 10);
+  return level <= 1 ? base : base * 2;
+}
+
+async function upgradePortalWeapon(itemId) {
+  const id = String(itemId || '');
+  const item = PORTAL_STORE_CATALOG[id];
+  if (!item || item.type !== 'weapon') return { ok:false, reason:'invalid_item' };
+  const user = await requireUser();
+  if (!user) return { ok:false, reason:'login' };
+  let result = { ok:false, reason:'unknown' };
+  try {
+    const tx = await runTransaction(ref(database, `users/${user.uid}`), data => {
+      data = data || {};
+      ensurePortalEconomy(data);
+      if (!data.portal_owned_items[id]) { result={ok:false,reason:'not_owned'}; return; }
+      const level = Math.max(1, Math.min(3, Number(data.portal_weapon_levels?.[id]) || 1));
+      if (level >= 3) { result={ok:true,maxed:true,level:3,balance:data.portal_coins}; return data; }
+      const price = portalWeaponUpgradeCost(item, level);
+      if (data.portal_coins < price) { result={ok:false,reason:'not_enough',price,balance:data.portal_coins}; return; }
+      data.portal_coins -= price;
+      data.portal_coins_spent = (Number(data.portal_coins_spent)||0) + price;
+      data.portal_weapon_levels[id] = level + 1;
+      data.portal_last_weapon_upgrade = { id, level:level+1, price, at:Date.now() };
+      result={ok:true,upgraded:true,level:level+1,price,balance:data.portal_coins};
+      return data;
+    });
+    if (!tx.committed && result.reason === 'unknown') return {ok:false,reason:'not_enough'};
+    if (tx.snapshot?.exists()) result.profile = tx.snapshot.val();
+    return result;
+  } catch (error) {
+    console.error('Портал: weapon upgrade', error);
+    return {ok:false,reason:'firebase'};
+  }
+}
+
+const BELL_DAILY_REWARDS = Object.freeze({
+  kills45:25,
+  wave8:25,
+  combo18:20,
+  score5000:30,
+  boss1:30
+});
+
+async function claimBellDailyMission(missionId, dateKey='') {
+  const id=String(missionId||'');
+  const reward=Number(BELL_DAILY_REWARDS[id])||0;
+  if (!reward) return {ok:false,reason:'invalid_mission'};
+  const today=portalLocalDateKey();
+  if (dateKey && String(dateKey)!==today) return {ok:false,reason:'wrong_day'};
+  const user=await requireUser();
+  if(!user)return {ok:false,reason:'login'};
+  let result={ok:false,reason:'unknown'};
+  try{
+    const tx=await runTransaction(ref(database,`users/${user.uid}`),data=>{
+      data=data||{};ensurePortalEconomy(data);
+      data.portal_daily_claims=data.portal_daily_claims||{};
+      if(data.portal_daily_claims[today]){
+        result={ok:true,already:true,reward:Number(data.portal_daily_claims[today].reward)||0,balance:data.portal_coins};
+        return data;
+      }
+      data.portal_daily_claims[today]={id,reward,claimedAt:Date.now()};
+      data.portal_coins += reward;
+      data.portal_coins_earned += reward;
+      result={ok:true,claimed:true,reward,balance:data.portal_coins};
+      return data;
+    });
+    if(tx.snapshot?.exists())result.profile=tx.snapshot.val();
+    return result;
+  }catch(error){
+    console.error('Портал: daily mission reward',error);
+    return {ok:false,reason:'firebase'};
+  }
+}
+
 async function lockTruthOrLie(reason = 'suspicious_activity', until = Date.now() + 3600000) {
   const user = await requireUser();
   if (!user) return false;
@@ -747,6 +843,8 @@ window.portalScore = {
   refreshPortalEconomy: refreshPortalEconomy,
   purchasePortalItem: purchasePortalItem,
   equipPortalItem: equipPortalItem,
+  upgradePortalWeapon: upgradePortalWeapon,
+  claimBellDailyMission: claimBellDailyMission,
   storeCatalog: PORTAL_STORE_CATALOG,
   calculateWeekScore
 };
