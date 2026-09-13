@@ -2886,7 +2886,7 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       <div id="bellClashLobby" class="bell-clash-lobby">
         <div class="bell-clash-shell">
           <div class="bell-clash-head">
-            <div><span class="bell-clash-kicker">ARENA XL • STABLE MP</span><h2>LYCEUM CLASH</h2><p>Короткий матч • 75 секунд</p></div>
+            <div><span class="bell-clash-kicker">ARENA XL • STABLE MP 6.9.2</span><h2>LYCEUM CLASH</h2><p>Короткий матч • 75 секунд</p></div>
             <button type="button" class="bell-clash-close" onclick="bellClashLeaveUI()">×</button>
           </div>
           <div id="bellClashConnect" class="bell-clash-connect">
@@ -5244,11 +5244,12 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       };
     };
 
-    async function bellClashAttachDisconnect(code){
+    function bellClashAttachDisconnect(code){
       try{
         if(!window.currentUserUid)return;
         bellClashDisconnectRef = ref(database, `${bellClashRoot}/${code}/players/${window.currentUserUid}`);
-        await onDisconnect(bellClashDisconnectRef).set(null);
+        // Best-effort only: room/join UI must not wait for server acknowledgement.
+        onDisconnect(bellClashDisconnectRef).set(null).catch(e=>console.warn('Clash onDisconnect:',e));
       }catch(e){console.warn('Clash onDisconnect:',e);}
     }
 
@@ -5270,25 +5271,98 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
     };
 
     window.bellClashJoinRoom = async function(rawCode){
-      if(!window.currentUserUid) throw new Error('LOGIN_REQUIRED');
+      if(!window.currentUserUid)throw new Error('LOGIN_REQUIRED');
+
       const code=bellClashCleanCode(rawCode);
       if(code.length!==5)throw new Error('BAD_CODE');
-      let joined=false, reason='ROOM_NOT_FOUND';
-      const roomRef=ref(database, `${bellClashRoot}/${code}`);
-      const tx=await runTransaction(roomRef, room=>{
-        if(!room){reason='ROOM_NOT_FOUND';return room;}
-        if(room.status!=='lobby'){reason='MATCH_STARTED';return room;}
-        room.players=room.players||{};
-        if(room.players[window.currentUserUid]){joined=true;return room;}
-        const ids=Object.keys(room.players);
-        if(ids.length>=5){reason='ROOM_FULL';return room;}
-        const used=new Set(ids.map(uid=>Number(room.players[uid]?.slot)||0));
-        let slot=1;while(used.has(slot)&&slot<=5)slot++;
-        room.players[window.currentUserUid]=bellClashPlayerPayload(slot);
-        joined=true;return room;
-      });
-      if(!tx.committed || !joined)throw new Error(reason);
-      await bellClashAttachDisconnect(code);
+
+      const roomRef=ref(database,`${bellClashRoot}/${code}`);
+      let snap;
+      try{
+        snap=await get(roomRef);
+      }catch(e){
+        console.error('Clash join read:',e);
+        throw new Error(/permission/i.test(String(e?.code||e?.message||e))?'JOIN_PERMISSION':'JOIN_READ_FAILED');
+      }
+
+      if(!snap.exists())throw new Error('ROOM_NOT_FOUND');
+      const room=snap.val()||{};
+      if(room.status!=='lobby')throw new Error('MATCH_STARTED');
+
+      const players=room.players||{};
+
+      // A second device using the SAME Google account has the same Firebase UID,
+      // so it cannot be a second player. Show a clear message instead of silently
+      // leaving only one hero in the room.
+      if(room.hostUid===window.currentUserUid){
+        throw new Error('SAME_ACCOUNT');
+      }
+
+      // If this account already has a player record, treat it as a reconnect.
+      if(players[window.currentUserUid]){
+        bellClashAttachDisconnect(code);
+        return code;
+      }
+
+      const realEntries=Object.entries(players).filter(([uid,p])=>!String(uid).startsWith('BOT_')&&!p?.isBot);
+      if(realEntries.length>=5)throw new Error('ROOM_FULL');
+
+      const used=new Set(realEntries.map(([,p])=>Number(p?.slot)||0));
+      let slot=1;
+      while(used.has(slot)&&slot<=5)slot++;
+      if(slot>5)throw new Error('ROOM_FULL');
+
+      const playerRef=ref(database,`${bellClashRoot}/${code}/players/${window.currentUserUid}`);
+      const payload=bellClashPlayerPayload(slot);
+
+      try{
+        // Write ONLY this authenticated user's player node.
+        // This is much safer with Firebase rules than a transaction on the whole room.
+        await set(playerRef,payload);
+      }catch(e){
+        console.error('Clash direct join write:',e);
+        throw new Error(/permission/i.test(String(e?.code||e?.message||e))?'JOIN_PERMISSION':'JOIN_WRITE_FAILED');
+      }
+
+      // Verify that the player really exists before opening the lobby.
+      try{
+        const verify=await get(playerRef);
+        if(!verify.exists())throw new Error('JOIN_VERIFY_FAILED');
+      }catch(e){
+        if(String(e?.message||e)==='JOIN_VERIFY_FAILED')throw e;
+        console.warn('Clash join verify:',e);
+      }
+
+      bellClashAttachDisconnect(code);
+
+      // Very small race-repair: if two pupils joined at the exact same moment
+      // and both chose the same slot, only THIS user's node is moved.
+      setTimeout(async()=>{
+        try{
+          const current=await get(roomRef);
+          if(!current.exists())return;
+          const ps=current.val()?.players||{};
+          const mine=ps[window.currentUserUid];
+          if(!mine)return;
+
+          const reals=Object.entries(ps).filter(([uid,p])=>!String(uid).startsWith('BOT_')&&!p?.isBot);
+          const sameSlot=reals.filter(([,p])=>Number(p?.slot)===Number(mine.slot));
+          if(sameSlot.length<=1)return;
+
+          const ordered=sameSlot.map(([uid])=>uid).sort();
+          if(ordered[0]===window.currentUserUid)return;
+
+          const occupied=new Set(
+            reals.filter(([uid])=>uid!==window.currentUserUid).map(([,p])=>Number(p?.slot)||0)
+          );
+          let free=1;while(occupied.has(free)&&free<=5)free++;
+          if(free<=5){
+            const fixed=bellClashPlayerPayload(free);
+            await update(playerRef,{slot:free,x:fixed.x,y:fixed.y,lastSeen:Date.now()});
+          }
+        }catch(e){console.warn('Clash slot repair:',e);}
+      },350);
+
       return code;
     };
 
@@ -5893,11 +5967,28 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
       }catch(e){bellClashHandleError(e);}
     };
     window.bellClashJoinRoomUI=async function(){
-      const input=document.getElementById('bellClashCodeInput');const code=(input?.value||'').trim().toUpperCase();
-      try{await window.bellClashJoinRoom(code);bellClash.roomCode=code;bellClashWatch(code);document.getElementById('bellClashConnect').style.display='none';document.getElementById('bellClashRoom').style.display='block';bellClashCloseSetups();bellClashToast('👥 Ви в кімнаті');}
-      catch(e){bellClashHandleError(e);}
+      const input=document.getElementById('bellClashCodeInput');
+      const code=(input?.value||'').trim().toUpperCase();
+      const btn=document.querySelector('.bell-clash-joinbox button');
+      const oldText=btn?.textContent||'ПРИЄДНАТИСЯ';
+      if(btn?.disabled)return;
+
+      try{
+        if(btn){btn.disabled=true;btn.textContent='ПІДКЛЮЧЕННЯ…';}
+        await window.bellClashJoinRoom(code);
+        bellClash.roomCode=code;
+        bellClashWatch(code);
+        document.getElementById('bellClashConnect').style.display='none';
+        document.getElementById('bellClashRoom').style.display='block';
+        bellClashCloseSetups();
+        bellClashToast('👥 Ви в кімнаті');
+      }catch(e){
+        bellClashHandleError(e);
+      }finally{
+        if(btn){btn.disabled=false;btn.textContent=oldText;}
+      }
     };
-    function bellClashHandleError(e){const m=String(e?.message||e);const map={LOGIN_REQUIRED:'Спочатку увійдіть через Google.',BAD_CODE:'Код має містити 5 символів.',ROOM_NOT_FOUND:'Кімнату не знайдено.',ROOM_FULL:'У кімнаті вже 5 гравців.',MATCH_STARTED:'Матч уже почався.',START_FAILED:'Не вдалося почати матч.'};bellClashToast('⚠️ '+(map[m]||'Помилка кімнати.'));}
+    function bellClashHandleError(e){const m=String(e?.message||e);const map={LOGIN_REQUIRED:'Спочатку увійдіть через Google.',BAD_CODE:'Код має містити 5 символів.',ROOM_NOT_FOUND:'Кімнату не знайдено.',ROOM_FULL:'У кімнаті вже 5 гравців.',MATCH_STARTED:'Матч уже почався.',START_FAILED:'Не вдалося почати матч.',SAME_ACCOUNT:'На другому пристрої потрібно увійти ІНШИМ Google-акаунтом. Один Firebase UID = один гравець.',JOIN_PERMISSION:'Firebase не дозволив цьому учневі записати свій слот у кімнаті.',JOIN_READ_FAILED:'Не вдалося прочитати кімнату з Firebase.',JOIN_WRITE_FAILED:'Не вдалося додати гравця в кімнату.',JOIN_VERIFY_FAILED:'Гравця не знайдено після підключення. Спробуйте ще раз.'};console.error('Clash room:',e);bellClashToast('⚠️ '+(map[m]||`Помилка кімнати: ${m}`));}
 
     function bellClashWatch(code){
       bellClash.unsub=window.bellClashWatchRoom(code,room=>{
