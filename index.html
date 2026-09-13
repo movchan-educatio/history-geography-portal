@@ -947,6 +947,24 @@
   }
 }
 
+
+
+/* ===== V23.6: компактні бали/монети + стабільний чат на мобільному ===== */
+.portal-coin-badge{white-space:nowrap;flex:0 0 auto;font-size:12px;font-weight:800;color:#7c4a03;}
+.chat-input-group button:disabled{opacity:.6;cursor:wait;}
+@media(max-width:700px){
+  #authBox .portal-coin-badge{font-size:9px!important;padding:2px 3px!important;line-height:1.1!important;}
+  #characterStudioCard .character-balance{font-size:9px!important;line-height:1.25!important;padding:6px 5px!important;}
+  #characterStudioCard #characterCoinBalance,#characterStudioCard #characterScoreBalance{font-size:9px!important;font-weight:900!important;}
+  .chat-input-group{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:6px!important;}
+  .chat-input-group input{min-width:0!important;width:100%!important;font-size:12px!important;}
+  .chat-input-group button{padding:8px 10px!important;font-size:12px!important;white-space:nowrap!important;}
+}
+@media(max-width:430px){
+  #authBox .portal-coin-badge{font-size:8px!important;}
+  #characterStudioCard .character-balance,#characterStudioCard #characterCoinBalance,#characterStudioCard #characterScoreBalance{font-size:8px!important;}
+}
+
 </style>
 
 
@@ -1662,7 +1680,7 @@ img, svg, canvas, video, iframe {
               <div class="character-coming-features"><span>🎨 19 образів</span><span>💇 Зачіски й кепки</span><span>👓 Окуляри</span><span>👟 Взуття</span><span>⛓️ Прикраси</span></div>
             </div>
             <div class="character-owner-editor" id="characterOwnerEditor" hidden>
-              <div class="character-editor-layout"><div class="character-preview-column"><div class="character-preview-frame" id="characterPreview"></div><div class="character-balance">⭐ <span id="characterScoreBalance">0</span> балів · 🪙 <span id="characterCoinBalance">0</span> монет</div><div class="character-level"><span id="characterLevelLabel">Рівень 1</span><div class="character-level-bar"><span id="characterLevelProgress" style="width:0%"></span></div></div></div>
+              <div class="character-editor-layout"><div class="character-preview-column"><div class="character-preview-frame" id="characterPreview"></div><div class="character-balance">⭐ <span id="characterScoreBalance">0</span> за тиждень · 🪙 <span id="characterCoinBalance">0</span> монет</div><div class="character-level"><span id="characterLevelLabel">Рівень 1</span><div class="character-level-bar"><span id="characterLevelProgress" style="width:0%"></span></div></div></div>
                 <div><div class="character-category-tabs" id="characterCategoryTabs"></div><div class="character-items" id="characterItems"></div><div class="character-inline-notice" id="characterInlineNotice">Натисни на будь-яку річ, щоб одразу приміряти її.</div><button class="character-buy-btn" id="characterBuyBtn" type="button">Купити</button><button class="character-unequip-btn" id="characterUnequipBtn" type="button" hidden>Зняти вибраний атрибут</button><div class="character-editor-status" id="characterEditorStatus">Покупки й вибраний образ автоматично синхронізуються з профілем.</div></div>
               </div>
             </div>
@@ -2710,7 +2728,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
   <!-- FIREBASE SCRIPTS -->
   <script type="module">
-    import "./portal-score-v23-5.js";
+    import "./portal-score-v23-6.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -2734,6 +2752,15 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     const database = getDatabase(app);
     const provider = new GoogleAuthProvider();
     const PORTAL_OWNER_UID = 'LGw3zPR7w4SdN8zvi4LWExYTfFh2';
+
+    // Безпечне виведення імен/аватарів у рейтингу та профілі.
+    // Ця функція була випадково втрачена у V23.5, через що renderRealtimeLeaderboard()
+    // падав з ReferenceError і таблиця залишалася на "Завантажуємо…".
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+      }[ch]));
+    }
 
     window.currentStudent = null;
     window.currentUserUid = null;
@@ -2791,9 +2818,11 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       if(!announcement||!editor)return;
       announcement.hidden=isOwner;editor.hidden=!isOwner;badge.hidden=isOwner;badge.textContent='Скоро';
       if(!isOwner)return;
-      const score=Number(characterProfile.score)||0,level=Math.floor(score/100)+1,progress=score%100;
-      document.getElementById('characterCoinBalance').textContent=Number(characterProfile.portal_coins)||0;
-      document.getElementById('characterScoreBalance').textContent=score;
+      const totalScore=Number(characterProfile.score)||0;
+      const weekScore=Number(characterProfile.week_score)||0;
+      const level=Math.floor(totalScore/100)+1,progress=totalScore%100;
+      document.getElementById('characterCoinBalance').textContent=Math.max(0,Math.floor(Number(characterProfile.portal_coins)||0));
+      document.getElementById('characterScoreBalance').textContent=weekScore;
       document.getElementById('characterLevelLabel').textContent=`Рівень ${level} · ще ${100-progress} балів до наступного`;
       document.getElementById('characterLevelProgress').style.width=`${progress}%`;
       document.getElementById('characterPreview').innerHTML=characterAvatarMarkup(characterDraft);
@@ -3312,35 +3341,54 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       });
     }
 
+    function attachChatRealtime() {
+      if (!window.currentUserUid || chatRealtimeUnsubscribe) return;
+      chatRealtimeUnsubscribe = onValue(ref(database, 'chat'), snapshot => {
+        const data = snapshot.val() || {};
+        window.chatData = Object.values(data)
+          .filter(msg => msg && typeof msg === 'object')
+          .sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0))
+          .slice(-100);
+        renderChat();
+      }, error => {
+        chatRealtimeUnsubscribe = null;
+        console.warn('Firebase чат:', error);
+        const chatBox = document.getElementById('chatMessages');
+        if (chatBox && !(window.chatData || []).length) {
+          chatBox.innerHTML = '<div class="chat-message-item"><div style="color:#991b1b">⚠️ Не вдалося підключити повідомлення. Повторюємо з’єднання…</div></div>';
+        }
+        setTimeout(() => {
+          if (auth.currentUser && window.currentUserUid && !chatRealtimeUnsubscribe) attachChatRealtime();
+        }, 5000);
+      });
+    }
+
     async function startRealtimeData() {
       if (!window.currentUserUid) return;
       const box = document.getElementById('leaderboardList');
       if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Завантажуємо таблицю активності…</span></div></div>';
 
-      // Якщо браузер уже має останній успішний список, показуємо його одразу,
-      // але паралельно обов'язково оновлюємо дані з Firebase.
+      // Чат підключаємо ПЕРШИМ і незалежно від рейтингу. У V23.5 він чекав
+      // завершення двох спроб читання /users, тому на ПК здавався порожнім.
+      attachChatRealtime();
+
+      // Якщо браузер уже має останній успішний список, показуємо його одразу.
       const cached = readLeaderboardCache();
-      if (Object.keys(cached).length) applyUsersSnapshot(cached, {cache:false, syncCurrent:false});
+      if (Object.keys(cached).length) {
+        try { applyUsersSnapshot(cached, {cache:false, syncCurrent:false}); }
+        catch (error) { console.warn('Кеш рейтингу:', error); }
+      }
 
-      // Realtime запускаємо одразу, а одноразові читання мають тайм-аут.
-      // Жоден завислий транспорт більше не блокує інший.
+      // Realtime рейтингу запускається одразу. Одноразові читання — лише страховка
+      // і більше не затримують чат чи інші елементи сторінки.
       attachUsersRealtime();
-      let loaded = await withTimeout(loadLeaderboardViaSdk(), 3000);
-      if (!loaded) loaded = await withTimeout(loadLeaderboardViaRest(), 6500);
-      if (!loaded && !Object.keys(cached).length && box && /Завантажуємо таблицю активності/.test(box.textContent || '')) {
-        box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося прочитати загальний рейтинг Firebase. Повторюємо підключення…</span></div></div>';
-      }
-
-      if (!chatRealtimeUnsubscribe) {
-        chatRealtimeUnsubscribe = onValue(ref(database, 'chat'), snapshot => {
-          const data = snapshot.val() || {};
-          window.chatData = Object.values(data).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0)).slice(-100);
-          renderChat();
-        }, error => {
-          chatRealtimeUnsubscribe = null;
-          console.warn('Firebase чат:', error);
-        });
-      }
+      void (async () => {
+        let loaded = await withTimeout(loadLeaderboardViaSdk(), 3500);
+        if (!loaded) loaded = await withTimeout(loadLeaderboardViaRest(), 7000);
+        if (!loaded && !Object.keys(cached).length && box && /Завантажуємо таблицю активності/.test(box.textContent || '')) {
+          box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося прочитати рейтинг. Перевіряємо з’єднання з Firebase…</span></div></div>';
+        }
+      })();
     }
 
     // Онлайн-присутність: Firebase Realtime Database + onDisconnect.
@@ -3711,20 +3759,40 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
     window.sendChatMessage = async function() {
       const input = document.getElementById('chatInput');
+      const button = input?.closest('.chat-input-group')?.querySelector('button');
       const text = input ? input.value.trim() : '';
       if (!text) return;
-      if (!window.currentUserUid) {
+      if (!window.currentUserUid || !auth.currentUser) {
         alert('Спочатку увійдіть через Google.');
         return;
       }
-      await push(ref(database, 'chat'), {
-        uid: window.currentUserUid,
-        author: window.currentStudent || 'Учень',
-        text,
-        timestamp: Date.now()
-      });
-      input.value = '';
+      if (button) button.disabled = true;
+      try {
+        await push(ref(database, 'chat'), {
+          uid: window.currentUserUid,
+          author: window.currentStudent || 'Учень',
+          text: text.slice(0,120),
+          timestamp: Date.now()
+        });
+        input.value = '';
+        input.placeholder = 'Повідомлення надіслано ✓';
+        setTimeout(() => { if (input) input.placeholder = 'Напишіть повідомлення чи коментар...'; }, 1600);
+      } catch (error) {
+        console.error('Firebase чат: не вдалося надіслати повідомлення', error);
+        input.placeholder = 'Помилка відправлення — спробуйте ще раз';
+        alert('Не вдалося надіслати повідомлення. Перевірте з’єднання з Firebase і спробуйте ще раз.');
+      } finally {
+        if (button) button.disabled = false;
+        input?.focus();
+      }
     };
+
+    document.getElementById('chatInput')?.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        window.sendChatMessage();
+      }
+    });
   </script>
 
   <script>
@@ -3769,15 +3837,18 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     function renderChat() {
       const chatContainer = document.getElementById('chatMessages');
       if (!chatContainer) return;
-      chatContainer.innerHTML = '';
-      window.chatData.forEach(msg => {
-        chatContainer.innerHTML += `
-          <div class="chat-message-item">
-            <div class="chat-message-author">${msg.author}</div>
-            <div style="color: #334155;">${msg.text}</div>
-          </div>
-        `;
-      });
+      const rows = Array.isArray(window.chatData) ? window.chatData : [];
+      if (!rows.length) {
+        chatContainer.innerHTML = '<div class="chat-message-item"><div style="color:#64748b">Поки що повідомлень немає. Напишіть перше 🙂</div></div>';
+        return;
+      }
+      const safe = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      chatContainer.innerHTML = rows.map(msg => `
+        <div class="chat-message-item">
+          <div class="chat-message-author">${safe(msg.author || 'Учень')}</div>
+          <div style="color:#334155;white-space:pre-wrap;overflow-wrap:anywhere">${safe(msg.text || '')}</div>
+        </div>
+      `).join('');
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
