@@ -3134,6 +3134,11 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     let chatRealtimeUnsubscribe = null;
 
     function stopRealtimeData() {
+      leaderboardLoadSerial++;
+      if (leaderboardFallbackTimer) {
+        clearTimeout(leaderboardFallbackTimer);
+        leaderboardFallbackTimer = null;
+      }
       if (usersRealtimeUnsubscribe) {
         try { usersRealtimeUnsubscribe(); } catch (_) {}
         usersRealtimeUnsubscribe = null;
@@ -3144,30 +3149,80 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       }
     }
 
+    function applyUsersSnapshot(raw) {
+      raw = raw || {};
+      renderSundayWinner(raw);
+      window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
+        .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
+      renderRealtimeLeaderboard();
+
+      const mine = raw[window.currentUserUid] || {};
+      updateCurrentScoreBadge(Number(mine.week_score) || 0);
+      if (window.syncEscapeWeeklyLocks) window.syncEscapeWeeklyLocks(mine);
+      syncCharacterStudio(mine);
+    }
+
+    let leaderboardFallbackTimer = null;
+    let leaderboardLoadSerial = 0;
+
+    async function loadLeaderboardViaRest(serial) {
+      if (!auth.currentUser || !window.currentUserUid || serial !== leaderboardLoadSerial) return false;
+      try {
+        const token = await auth.currentUser.getIdToken(false);
+        if (!token || serial !== leaderboardLoadSerial) return false;
+        const url = `${firebaseConfig.databaseURL}/users.json?auth=${encodeURIComponent(token)}`;
+        const response = await fetch(url, { cache:'no-store', credentials:'omit' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const raw = await response.json();
+        if (serial !== leaderboardLoadSerial || !auth.currentUser) return false;
+        applyUsersSnapshot(raw || {});
+        return true;
+      } catch (error) {
+        console.error('Firebase рейтинг REST fallback:', error);
+        return false;
+      }
+    }
+
     function startRealtimeData() {
-      if (!window.currentUserUid) return;
+      if (!window.currentUserUid || !auth.currentUser) return;
+      const serial = ++leaderboardLoadSerial;
       if (!usersRealtimeUnsubscribe) {
         const box = document.getElementById('leaderboardList');
         if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Завантажуємо таблицю активності…</span></div></div>';
-        usersRealtimeUnsubscribe = onValue(ref(database, 'users'), snapshot => {
-          const raw = snapshot.val() || {};
-          renderSundayWinner(raw);
-          window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
-            .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
-          renderRealtimeLeaderboard();
 
-          const mine = raw[window.currentUserUid] || {};
-          updateCurrentScoreBadge(Number(mine.week_score) || 0);
-          if (window.syncEscapeWeeklyLocks) window.syncEscapeWeeklyLocks(mine);
-          syncCharacterStudio(mine);
-        }, error => {
+        let realtimeDelivered = false;
+        usersRealtimeUnsubscribe = onValue(ref(database, 'users'), snapshot => {
+          realtimeDelivered = true;
+          if (leaderboardFallbackTimer) {
+            clearTimeout(leaderboardFallbackTimer);
+            leaderboardFallbackTimer = null;
+          }
+          applyUsersSnapshot(snapshot.val() || {});
+        }, async error => {
           usersRealtimeUnsubscribe = null;
-          console.error('Firebase рейтинг:', error);
-          if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Повторюємо підключення…</span></div></div>';
+          console.error('Firebase рейтинг realtime:', error);
+          const restored = await loadLeaderboardViaRest(serial);
+          if (!restored && box) {
+            box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Повторюємо підключення…</span></div></div>';
+          }
           if (auth.currentUser && window.currentUserUid) {
-            setTimeout(() => { if (!usersRealtimeUnsubscribe && auth.currentUser) startRealtimeData(); }, 2500);
+            setTimeout(() => { if (!usersRealtimeUnsubscribe && auth.currentUser) startRealtimeData(); }, 3000);
           }
         });
+
+        // Деякі браузери/мережі можуть тримати WebSocket Firebase у стані очікування
+        // без callback і без error. Через 2.5 с підтягуємо ті самі дані через
+        // авторизований REST-запит; realtime-слухач лишається для подальших змін.
+        if (leaderboardFallbackTimer) clearTimeout(leaderboardFallbackTimer);
+        leaderboardFallbackTimer = setTimeout(async () => {
+          leaderboardFallbackTimer = null;
+          if (!realtimeDelivered && auth.currentUser && window.currentUserUid) {
+            const restored = await loadLeaderboardViaRest(serial);
+            if (!restored && box && /Завантажуємо таблицю активності/.test(box.textContent || '')) {
+              box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Рейтинг не відповідає. Перевіряємо підключення…</span></div></div>';
+            }
+          }
+        }, 2500);
       }
 
       if (!chatRealtimeUnsubscribe) {
