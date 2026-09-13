@@ -2849,10 +2849,13 @@ body.bell-arena-body{overflow:hidden!important;overscroll-behavior:none!importan
   position:absolute;inset:0;width:100%;height:100%;border:0;background:#020712;
 }
 #colyseusClashPortalClose{
-  position:fixed;right:10px;top:10px;z-index:2147483646;border:1px solid rgba(148,163,184,.36);
-  border-radius:12px;background:rgba(2,6,23,.74);backdrop-filter:blur(12px);color:#fff;
-  font:900 11px Inter,system-ui,sans-serif;padding:9px 12px;box-shadow:0 8px 26px rgba(0,0,0,.35)
+  position:fixed;left:50%;top:max(7px,env(safe-area-inset-top));transform:translateX(-50%);
+  z-index:2147483646;width:34px;height:34px;padding:0;border:1px solid rgba(148,163,184,.16);
+  border-radius:50%;background:rgba(2,6,23,.46);backdrop-filter:blur(10px);color:rgba(255,255,255,.78);
+  font:900 18px Inter,system-ui,sans-serif;line-height:32px;text-align:center;
+  box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:.68
 }
+#colyseusClashPortalClose:hover{opacity:1;background:rgba(15,23,42,.86)}
 #colyseusClashReward{
   position:fixed;left:50%;top:14px;transform:translate(-50%,-20px);z-index:2147483646;
   opacity:0;pointer-events:none;background:rgba(5,20,35,.92);border:1px solid rgba(74,222,128,.45);
@@ -2889,6 +2892,10 @@ body.colyseus-clash-open{overflow:hidden!important}
 .clash-launch-features b{display:block;color:#fff;font-size:16px}.clash-launch-features span{font-size:6.5px;color:#94a3b8;font-weight:900}
 .clash-launch-v23 .bell-home-stats{margin-top:8px}
 .clash-launch-v23 .bell-home-primary{min-height:54px!important;font-size:13px!important;background:linear-gradient(135deg,#0284c7,#2563eb 55%,#059669)!important}
+.clash-launch-tools{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.clash-launch-tools button{min-height:36px;border-radius:11px;border:1px solid rgba(148,163,184,.12);background:rgba(255,255,255,.035);color:#cbd5e1;font:900 8px Inter,system-ui;letter-spacing:.04em}
+.clash-launch-tools button:hover{border-color:rgba(103,232,249,.35);color:#fff;background:rgba(14,165,233,.08)}
+
 @media(max-width:600px){
   .clash-launch-v23{padding:11px!important}
   .clash-launch-top h2{font-size:23px!important}
@@ -2899,12 +2906,16 @@ body.colyseus-clash-open{overflow:hidden!important}
 }
 </style>
 
+<style id="clash-v26-profile-style">
+.clash-v26-profile{display:grid;grid-template-columns:1.4fr .7fr 1fr;gap:6px;margin-top:7px}.clash-v26-profile>div{padding:7px;border-radius:10px;background:rgba(15,23,42,.72);border:1px solid rgba(148,163,184,.09)}.clash-v26-profile span{display:block;font-size:6px;color:#67e8f9;font-weight:1000}.clash-v26-profile b{display:block;font-size:10px;color:#fff;margin-top:2px}.clash-v26-profile small{font-size:6px;color:#94a3b8}.clash-v26-profile i{display:block;height:5px;border-radius:999px;background:#17263a;overflow:hidden;margin-top:5px}.clash-v26-profile em{display:block;height:100%;width:0;background:linear-gradient(90deg,#22d3ee,#8b5cf6)}
+@media(max-width:600px){.clash-v26-profile{grid-template-columns:1fr 1fr}.clash-v26-profile>div:first-child{grid-column:1/-1}}
+</style>
 </head>
 <body>
 
 <div id="colyseusClashOverlay" aria-hidden="true">
   <iframe id="colyseusClashFrame" title="LYCEUM CLASH multiplayer" allow="autoplay; fullscreen; gamepad"></iframe>
-  <button id="colyseusClashPortalClose" type="button" onclick="closeColyseusClash()">← ПОРТАЛ</button>
+  <button id="colyseusClashPortalClose" type="button" onclick="closeColyseusClash()" title="Повернутися на портал" aria-label="Повернутися на портал">↩</button>
   <div id="colyseusClashReward"></div>
 </div>
 
@@ -2961,8 +2972,17 @@ body.colyseus-clash-open{overflow:hidden!important}
           <div><span>🎮</span><strong id="bellHomeTokens">0</strong><small>матчів</small></div>
           <div><span>🪙</span><strong id="bellHomeCoins">0</strong><small>монет</small></div>
         </div>
+        <div class="clash-v26-profile">
+          <div><span>РІВЕНЬ ГЕРОЯ</span><b id="clashHeroLevel">Lv.1</b><i><em id="clashHeroXpBar"></em></i></div>
+          <div><span>K/D</span><b id="clashKd">0.00</b><small id="clashStreak">серія 0</small></div>
+          <div><span>МІСІЇ</span><b id="clashMissionText">0/3 матчі</b><small>щоденні + тижневі</small></div>
+        </div>
 
         <button id="bellHomePrimary" class="bell-home-primary clash-main-play clash-focus-play" type="button" onclick="bellHomePrimaryAction()">⚔️ У БІЙ</button>
+        <div class="clash-launch-tools">
+          <button type="button" onclick="bellAppNavigate('heroes')">🧑‍🚀 ГЕРОЇ</button>
+          <button type="button" onclick="bellAppNavigate('shop')">🛒 МАГАЗИН</button>
+        </div>
         <div class="clash-focus-hint">Синхронний WebSocket multiplayer • серверні боти • Portal Coins</div>
       </div>
     </div>
@@ -7429,6 +7449,15 @@ body.colyseus-clash-open{overflow:hidden!important}
       {id:'weapon_skin_lava',cat:'Стилі зброї',icon:'🌋',name:'Lava Core',price:540,rarity:'Легендарний',desc:'Чорно-помаранчевий корпус із вогняним glow.',type:'weapon_skin',value:'lava'},
       {id:'weapon_skin_mint',cat:'Стилі зброї',icon:'🟢',name:'Mint Tech',price:390,rarity:'Епічний',desc:'М’ятно-бірюзовий техностиль.',type:'weapon_skin',value:'minttech'},
 
+      {id:'shot_effect_classic',cat:'Ефекти пострілу',icon:'✦',name:'Classic Shot',price:0,rarity:'Стартовий',desc:'Чистий стандартний tracer.',type:'shot_effect',value:'classic'},
+      {id:'shot_effect_spark',cat:'Ефекти пострілу',icon:'✨',name:'Spark Shot',price:220,rarity:'Рідкісний',desc:'Яскраві електричні іскри пострілу.',type:'shot_effect',value:'spark'},
+      {id:'shot_effect_plasma',cat:'Ефекти пострілу',icon:'🟣',name:'Plasma Shot',price:360,rarity:'Епічний',desc:'Фіолетовий плазмовий tracer.',type:'shot_effect',value:'plasma'},
+      {id:'shot_effect_toxic',cat:'Ефекти пострілу',icon:'☣️',name:'Toxic Shot',price:420,rarity:'Епічний',desc:'Кислотно-зелений слід заряду.',type:'shot_effect',value:'toxic'},
+      {id:'shot_effect_pixel',cat:'Ефекти пострілу',icon:'👾',name:'Pixel Shot',price:520,rarity:'Легендарний',desc:'Піксельний бірюзовий tracer.',type:'shot_effect',value:'pixel'},
+      {id:'ko_effect_burst',cat:'KO ефекти',icon:'💥',name:'Classic KO',price:0,rarity:'Стартовий',desc:'Стандартний чистий KO-вибух.',type:'ko_effect',value:'burst'},
+      {id:'ko_effect_stars',cat:'KO ефекти',icon:'🌟',name:'Star KO',price:280,rarity:'Рідкісний',desc:'Зоряний вибух після KO.',type:'ko_effect',value:'stars'},
+      {id:'ko_effect_glitch',cat:'KO ефекти',icon:'🧩',name:'Glitch KO',price:460,rarity:'Епічний',desc:'Цифровий glitch-вибух.',type:'ko_effect',value:'glitch'},
+      {id:'ko_effect_frost',cat:'KO ефекти',icon:'❄️',name:'Frost KO',price:520,rarity:'Легендарний',desc:'Крижаний KO-вибух.',type:'ko_effect',value:'frost'},
       {id:'trail_gold',cat:'Ефекти',icon:'✨',name:'Золотий слід',price:120,rarity:'Звичайний',desc:'Золоті іскри під час бігу.',type:'trail',value:'gold'},
       {id:'trail_fire',cat:'Ефекти',icon:'🔥',name:'Вогняний слід',price:220,rarity:'Рідкісний',desc:'Вогняні частинки за персонажем.',type:'trail',value:'fire'},
       {id:'trail_stars',cat:'Ефекти',icon:'🌟',name:'Зоряний слід',price:300,rarity:'Епічний',desc:'Зоряні частинки під час рейду.',type:'trail',value:'stars'},
@@ -7537,7 +7566,7 @@ body.colyseus-clash-open{overflow:hidden!important}
 
     function portalToast(text){const t=document.getElementById('portalToast');if(!t)return;t.textContent=text;t.classList.add('show');clearTimeout(window.__portalToastTimer);window.__portalToastTimer=setTimeout(()=>t.classList.remove('show'),2200);}
     window.portalToast=portalToast;
-    function portalOwnedCount(p=window.portalEconomyProfile){return Object.entries(p?.portal_owned_items||{}).filter(([id,v])=>v&&!['skin_student','weapon_school_blaster','weapon_skin_default','trail_none','frame_none'].includes(id)).length;}
+    function portalOwnedCount(p=window.portalEconomyProfile){return Object.entries(p?.portal_owned_items||{}).filter(([id,v])=>v&&!['skin_student','weapon_school_blaster','weapon_skin_default','trail_none','frame_none','shot_effect_classic','ko_effect_burst'].includes(id)).length;}
     function portalEquippedItem(item,p=window.portalEconomyProfile){return p?.portal_equipped?.[item.type]===item.value;}
     function applyPortalProfileFrame(value){document.querySelectorAll('#authBox .home-user-avatar').forEach(el=>{el.classList.remove('portal-frame-bronze','portal-frame-silver','portal-frame-gold','portal-frame-historian');if(value&&value!=='none')el.classList.add('portal-frame-'+value);});}
     window.syncPortalEconomy=function(profile){
@@ -7573,7 +7602,7 @@ body.colyseus-clash-open{overflow:hidden!important}
     document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(document.getElementById('portalShopModal')?.style.display==='flex'){e.preventDefault();window.closePortalShop();return;}if(dinoExpanded){e.preventDefault();exitBellArena();}});
     window.setPortalShopTab=function(tab){portalShopCurrentTab=tab;document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));renderPortalShop();};
     window.buyPortalItem=async function(id){const item=portalShopItems.find(x=>x.id===id);if(!item)return;const res=await window.portalScore?.purchasePortalItem?.(id);if(res?.ok){portalToast(`✅ ${item.name} додано до колекції!`);if(item.type==='weapon')updateDinoWeaponOptions?.();if(item.type==='skin')updateDinoSkinOptions?.();renderPortalShop();}else if(res?.reason==='not_enough'){portalToast(`🪙 Потрібно ${item.price} монет.`);}else if(res?.reason==='login'){portalToast('🔐 Увійдіть через Google.');}else portalToast('⚠️ Покупку не виконано.');};
-    window.equipPortalItemUI=async function(id){const item=portalShopItems.find(x=>x.id===id);if(!item||item.type==='boost')return;const res=await window.portalScore?.equipPortalItem?.(item.type,id);if(res?.ok){portalToast(`✅ Активовано: ${item.name}`);if(item.type==='weapon'){currentDinoWeapon=item.value;localStorage.setItem('dino_weapon',currentDinoWeapon);dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;updateDinoWeaponOptions?.();}if(item.type==='skin'){currentDinoSkin=item.value;localStorage.setItem('dino_skin',currentDinoSkin);updateDinoSkinOptions?.();}if(!dinoGameRunning)drawDinoIdleScreen();renderPortalShop();}else portalToast('⚠️ Не вдалося активувати предмет.');};
+    window.equipPortalItemUI=async function(id){const item=portalShopItems.find(x=>x.id===id);if(!item||item.type==='boost')return;const res=await window.portalScore?.equipPortalItem?.(item.type,id);if(res?.ok){portalToast(`✅ Активовано: ${item.name}`);if(res.profile)window.syncPortalEconomy?.(res.profile);if(item.type==='weapon'){currentDinoWeapon=item.value;localStorage.setItem('dino_weapon',currentDinoWeapon);localStorage.setItem('bell_clash_weapon',item.value);dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;updateDinoWeaponOptions?.();}if(item.type==='skin'){currentDinoSkin=item.value;localStorage.setItem('dino_skin',currentDinoSkin);localStorage.setItem('bell_clash_skin',item.value);updateDinoSkinOptions?.();}if(item.type==='weapon_skin')localStorage.setItem('bell_clash_weapon_skin',item.value);if(!dinoGameRunning)drawDinoIdleScreen();renderPortalShop();updateBellGameHome?.();}else portalToast('⚠️ Не вдалося активувати предмет.');};
 
     function portalWeaponLevel(itemId,p=window.portalEconomyProfile){return Math.max(1,Math.min(3,Number(p?.portal_weapon_levels?.[itemId])||1));}
     function portalWeaponUpgradeCost(item,level){const base=Math.max(100,Math.round(((Number(item?.price)||0)*.45)/10)*10);return level<=1?base:base*2;}
@@ -7611,7 +7640,14 @@ body.colyseus-clash-open{overflow:hidden!important}
         }).join('')
       }</div>`).join('');
     }
-    function renderPortalQuests(){const p=window.portalEconomyProfile||{};const week=portalWeekKey();const claims=p.portal_weekly_claims?.[week]||{};const qs=[['score20','🚀 Ривок тижня',Number(p.week_score)||0,20,20,'Наберіть 20 рейтингових балів'],['geo10','🌍 Геодослідник',(Number(p.week_map_activity_points)||0)+(Number(p.week_flags_points)||0),10,15,'10 правильних відповідей: карта + прапори'],['history10','📜 Історик',(Number(p.week_history_activity_points)||0)+(Number(p.week_escape_points)||0),10,15,'10 балів: хронологія + втечі'],['dino600','🔔 До дзвінка',p.dino_week_key===week?(Number(p.dino_week_best)||0):0,600,20,'Наберіть 600 у «Вижити до дзвінка»']];return `<div class="portal-quest-grid">${qs.map(([id,title,val,target,reward,desc])=>{const done=!!claims[id];const pct=Math.min(100,Math.round(val/target*100));return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">${title} ${done?'✅':''}</div><div class="portal-quest-sub">${desc}</div><div class="portal-progress"><span style="width:${done?100:pct}%"></span></div><div class="portal-quest-sub">${Math.min(val,target)}/${target}</div><div class="portal-quest-reward">${done?'Нагороду отримано':`Нагорода: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;}
+    function renderPortalQuests(){
+      const p=window.portalEconomyProfile||{},ms=window.portalScore?.getClashMissionState?.(p)||{},daily=ms.daily||{},weekly=ms.weekly||{};
+      const value=(s,type)=>type==='heroes'?Object.keys(s.heroes||{}).length:type==='modes'?Object.keys(s.modes||{}).length:Number(s[type])||0;
+      const block=(title,defs,state)=>`<div class="portal-store-section-title">${title}</div><div class="portal-quest-grid">${(defs||[]).map(([id,name,type,target,reward])=>{const v=Math.min(target,value(state,type)),done=!!state.claimed?.[id],pct=done?100:Math.min(100,Math.round(v/target*100));return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">⚔️ ${name} ${done?'✅':''}</div><div class="portal-progress"><span style="width:${pct}%"></span></div><div class="portal-quest-sub">${v}/${target}</div><div class="portal-quest-reward">${done?'Нагороду отримано':`Нагорода: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;
+      const week=portalWeekKey(),claims=p.portal_weekly_claims?.[week]||{};const old=[['score20','🚀 Ривок тижня',Number(p.week_score)||0,20,20,'Наберіть 20 рейтингових балів'],['geo10','🌍 Геодослідник',(Number(p.week_map_activity_points)||0)+(Number(p.week_flags_points)||0),10,15,'10 правильних відповідей: карта + прапори'],['history10','📜 Історик',(Number(p.week_history_activity_points)||0)+(Number(p.week_escape_points)||0),10,15,'10 балів: хронологія + втечі']];
+      const oldHtml=`<div class="portal-store-section-title">Квести порталу</div><div class="portal-quest-grid">${old.map(([id,title,val,target,reward,desc])=>{const done=!!claims[id],pct=Math.min(100,Math.round(val/target*100));return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">${title} ${done?'✅':''}</div><div class="portal-quest-sub">${desc}</div><div class="portal-progress"><span style="width:${done?100:pct}%"></span></div><div class="portal-quest-sub">${Math.min(val,target)}/${target}</div><div class="portal-quest-reward">${done?'Нагороду отримано':`Нагорода: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;
+      return block('LYCEUM CLASH • сьогодні',ms.dailyDefs,daily)+block('LYCEUM CLASH • тиждень',ms.weeklyDefs,weekly)+oldHtml;
+    }
     function renderPortalAchievements(){const ach=window.portalEconomyProfile?.portal_achievements||{};return `<div class="portal-ach-grid">${portalAchievements.map(([id,icon,name,reward])=>{const done=!!ach[id];return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">${icon} ${name} ${done?'✅':''}</div><div class="portal-quest-sub">${portalAchievementsDesc(id)}</div><div class="portal-quest-reward">${done?'Виконано':`Бонус: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;}
     function portalAchievementsDesc(id){return ({first_step:'Отримайте перший навчальний бал.',scholar_50:'Наберіть 50 балів на порталі.',prime_100:'Наберіть 100 балів на порталі.',expert_250:'Наберіть 250 балів на порталі.',runner_500:'Поставте рекорд «Вижити до дзвінка»: рекорд 500+.',runner_1500:'Поставте рекорд «Вижити до дзвінка»: рекорд 1500+.',collector_3:'Придбайте 3 предмети в магазині.'})[id]||'';}
     function renderPortalShop(){
@@ -8186,6 +8222,11 @@ body.colyseus-clash-open{overflow:hidden!important}
       const hero=bellClashHero?.(localStorage.getItem('bell_clash_hero')||'blaster');
       const he=document.getElementById('bellHomeHero');if(he)he.textContent=`${hero?.icon||'⚡'} ${hero?.name||'Штурмовик'}`;
       const primary=document.getElementById('bellHomePrimary');if(primary)primary.textContent='⚔️ ГРАТИ';
+      const cp=p.clash_profile||{},heroId=localStorage.getItem('bell_clash_hero')||'blaster',hp=cp.heroes?.[heroId]||{},lvl=Math.max(1,Number(hp.level)||1);
+      const le=document.getElementById('clashHeroLevel');if(le)le.textContent='Lv.'+lvl;
+      const xb=document.getElementById('clashHeroXpBar');if(xb){const prev=lvl<=1?0:Math.round(120*Math.pow(lvl-1,1.35)),next=lvl>=10?prev+1:Math.round(120*Math.pow(lvl,1.35));xb.style.width=(lvl>=10?100:Math.max(0,Math.min(100,((Number(hp.xp)||0)-prev)/Math.max(1,next-prev)*100)))+'%';}
+      const kd=document.getElementById('clashKd');if(kd)kd.textContent=((Number(cp.kills)||0)/Math.max(1,Number(cp.deaths)||0)).toFixed(2);const st=document.getElementById('clashStreak');if(st)st.textContent='серія '+(Number(cp.winStreak)||0)+' • best '+(Number(cp.bestStreak)||0);
+      try{const ms=window.portalScore?.getClashMissionState?.(p),daily=ms?.daily||{},mt=document.getElementById('clashMissionText');if(mt)mt.textContent=Math.min(3,Number(daily.matches)||0)+'/3 матчі';}catch(_){}
       bellDrawCleanHomeHero();
     }
 
@@ -8227,13 +8268,19 @@ body.colyseus-clash-open{overflow:hidden!important}
 
       const qs=new URLSearchParams({
         embed:'1',
-        v:'230',
+        v:'260',
         name:colyseusClashPortalName(),
         hero:colyseusClashPortalHero(),
         skin:localStorage.getItem('bell_clash_skin')||localStorage.getItem('dino_skin')||'student',
         weapon:localStorage.getItem('bell_clash_weapon')||localStorage.getItem('dino_weapon')||'school_blaster',
         weaponSkin:localStorage.getItem('bell_clash_weapon_skin')||'default',
-        perk:localStorage.getItem('bell_clash_perk')||'assault'
+        perk:localStorage.getItem('bell_clash_perk')||'assault',
+        shotEffect:window.portalEconomyProfile?.portal_equipped?.shot_effect||'classic',
+        koEffect:window.portalEconomyProfile?.portal_equipped?.ko_effect||'burst',
+        frame:window.portalEconomyProfile?.portal_equipped?.frame||'none',
+        trail:window.portalEconomyProfile?.portal_equipped?.trail||'none',
+        quality:localStorage.getItem('bell_graphics_mode')||'auto',
+        debug:localStorage.getItem('bell_clash_debug')==='1'?'1':'0'
       });
       frame.src=COLYSEUS_CLASH_ORIGIN+'/game?'+qs.toString();
       overlay.classList.add('active');
@@ -8288,14 +8335,14 @@ body.colyseus-clash-open{overflow:hidden!important}
         }
 
         try{
-          const rewardPlace=Math.min(3,place);
-          const res=await window.portalScore?.awardClashMatchReward?.(key,rewardPlace,score);
+          const res=await window.portalScore?.recordClashProgress?.({matchKey:key,place,score,winner:!!data.winner,hero:data.hero||colyseusClashPortalHero(),mode:data.mode||'clash',kills:data.kills||0,deaths:data.deaths||0,damage:data.damage||0,controlSeconds:data.controlSeconds||0,shots:data.shots||0,hits:data.hits||0});
           if(res?.ok){
-            const reward=Number(res.reward)||0;
-            colyseusClashRewardToast(reward>0?'🪙 +'+reward+' Portal Coins • місце #'+place:'✅ Результат матчу збережено');
-            if(res.profile)window.portalEconomyProfile=res.profile;
-          }
-        }catch(e){console.warn('Colyseus Clash reward:',e);}
+            const reward=Number(res.coins)||0;
+            colyseusClashRewardToast('⚡ +'+(res.xp||0)+' XP • 🪙 +'+reward+(res.missions?.length?' • 🎯 місія!':''));
+            if(res.profile){window.portalEconomyProfile=res.profile;window.syncPortalEconomy?.(res.profile);}
+            try{document.getElementById('colyseusClashFrame')?.contentWindow?.postMessage({source:'LYCEUM_CLASH_PORTAL',type:'PROGRESS_RESULT',ok:true,xp:res.xp||0,heroLevel:res.heroLevel||1,levelProgress:res.levelProgress||0,coins:reward,missions:res.missions||[],streak:res.streak||0},COLYSEUS_CLASH_ORIGIN);}catch(_){}
+          }else{try{document.getElementById('colyseusClashFrame')?.contentWindow?.postMessage({source:'LYCEUM_CLASH_PORTAL',type:'PROGRESS_RESULT',ok:false},COLYSEUS_CLASH_ORIGIN);}catch(_){}}
+        }catch(e){console.warn('Colyseus Clash progress:',e);}
 
         try{bellUpdatePortalClashCard?.();updateBellGameHome?.();}catch(_){}
       }

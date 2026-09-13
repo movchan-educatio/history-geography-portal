@@ -164,6 +164,17 @@ const PORTAL_STORE_CATALOG = Object.freeze({
   weapon_yumi:        { type:'weapon', value:'samurai_yumi',   price:720, label:'Самурайський юмі' },
   weapon_musketeer:   { type:'weapon', value:'musketeer_rifle',price:820, label:'Мушкетерська рушниця' },
 
+  shot_effect_classic:{ type:'shot_effect', value:'classic', price:0, label:'Classic Shot' },
+  shot_effect_spark:  { type:'shot_effect', value:'spark',  price:220, label:'Spark Shot' },
+  shot_effect_plasma: { type:'shot_effect', value:'plasma', price:360, label:'Plasma Shot' },
+  shot_effect_toxic:  { type:'shot_effect', value:'toxic',  price:420, label:'Toxic Shot' },
+  shot_effect_pixel:  { type:'shot_effect', value:'pixel',  price:520, label:'Pixel Shot' },
+
+  ko_effect_burst:  { type:'ko_effect', value:'burst',  price:0, label:'Classic KO' },
+  ko_effect_stars:  { type:'ko_effect', value:'stars',  price:280, label:'Star KO' },
+  ko_effect_glitch: { type:'ko_effect', value:'glitch', price:460, label:'Glitch KO' },
+  ko_effect_frost:  { type:'ko_effect', value:'frost',  price:520, label:'Frost KO' },
+
   trail_gold:       { type:'trail', value:'gold',       price:120, label:'Золотий слід' },
   trail_fire:       { type:'trail', value:'fire',       price:220, label:'Вогняний слід' },
   trail_stars:      { type:'trail', value:'stars',      price:300, label:'Зоряний слід' },
@@ -232,12 +243,20 @@ function ensurePortalEconomy(data = {}) {
   data.portal_owned_items.trail_none = true;
   data.portal_owned_items.frame_none = true;
   data.portal_owned_items.weapon_skin_default = true;
+  data.portal_owned_items.shot_effect_classic = true;
+  data.portal_owned_items.ko_effect_burst = true;
 
   data.portal_equipped.skin = data.portal_equipped.skin || 'student';
   data.portal_equipped.weapon = data.portal_equipped.weapon || 'school_blaster';
   data.portal_equipped.trail = data.portal_equipped.trail || 'none';
   data.portal_equipped.frame = data.portal_equipped.frame || 'none';
   data.portal_equipped.weapon_skin = data.portal_equipped.weapon_skin || 'default';
+  data.portal_equipped.shot_effect = data.portal_equipped.shot_effect || 'classic';
+  data.portal_equipped.ko_effect = data.portal_equipped.ko_effect || 'burst';
+  data.clash_profile = data.clash_profile || {matches:0,wins:0,kills:0,deaths:0,damage:0,controlSeconds:0,bestScore:0,winStreak:0,bestStreak:0,heroes:{},modes:{}};
+  data.clash_progress_records = data.clash_progress_records || {};
+  data.clash_daily = data.clash_daily || {};
+  data.clash_weekly = data.clash_weekly || {};
 
   // Якщо після старої локальної конфігурації стоїть предмет, якого вже немає у власності,
   // повертаємо безпечний стартовий комплект.
@@ -736,6 +755,78 @@ async function awardClashMatchReward(matchKey, place=3, score=0) {
   }
 }
 
+
+function clashLevelFromXp(xp){
+  xp=Math.max(0,Number(xp)||0);let level=1;
+  while(level<10&&xp>=Math.round(120*Math.pow(level,1.35)))level++;
+  return level;
+}
+function clashLevelProgress(xp,level){
+  if(level>=10)return 100;
+  const prev=level<=1?0:Math.round(120*Math.pow(level-1,1.35));
+  const next=Math.round(120*Math.pow(level,1.35));
+  return Math.max(0,Math.min(100,Math.round((xp-prev)/Math.max(1,next-prev)*100)));
+}
+function clashDateKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function clashWeekKey(){const d=new Date(),day=d.getDay()||7;d.setDate(d.getDate()+4-day);const ys=new Date(d.getFullYear(),0,1),w=Math.ceil((((d-ys)/86400000)+1)/7);return `${d.getFullYear()}-W${String(w).padStart(2,'0')}`}
+const CLASH_DAILY_MISSIONS=[
+  ['play3','Зіграно 3 матчі','matches',3,25],['ko5','5 KO','kills',5,30],['heroes2','2 різні герої','heroes',2,30],['control20','20 с контролю','controlSeconds',20,25]
+];
+const CLASH_WEEKLY_MISSIONS=[
+  ['play10','10 матчів','matches',10,60],['wins3','3 перемоги','wins',3,80],['ko25','25 KO','kills',25,90],['modes3','3 режими','modes',3,80]
+];
+function applyClashMissionRewards(data,payload){
+  const day=clashDateKey(),week=clashWeekKey();
+  const daily=data.clash_daily[day]||(data.clash_daily[day]={matches:0,wins:0,kills:0,controlSeconds:0,heroes:{},modes:{},claimed:{}});
+  const weekly=data.clash_weekly[week]||(data.clash_weekly[week]={matches:0,wins:0,kills:0,controlSeconds:0,heroes:{},modes:{},claimed:{}});
+  for(const s of [daily,weekly]){s.matches++;s.wins+=payload.winner?1:0;s.kills+=payload.kills;s.controlSeconds+=payload.controlSeconds;s.heroes[payload.hero]=true;s.modes[payload.mode]=true}
+  let coins=0;const completed=[];
+  const value=(s,type)=>type==='heroes'?Object.keys(s.heroes||{}).length:type==='modes'?Object.keys(s.modes||{}).length:Number(s[type])||0;
+  for(const [id,label,type,target,reward] of CLASH_DAILY_MISSIONS){if(!daily.claimed[id]&&value(daily,type)>=target){daily.claimed[id]=Date.now();coins+=reward;completed.push(label+' +'+reward+'🪙')}}
+  for(const [id,label,type,target,reward] of CLASH_WEEKLY_MISSIONS){if(!weekly.claimed[id]&&value(weekly,type)>=target){weekly.claimed[id]=Date.now();coins+=reward;completed.push(label+' +'+reward+'🪙')}}
+  if(coins){data.portal_coins+=coins;data.portal_coins_earned+=coins}
+  return {coins,completed,daily,weekly};
+}
+async function recordClashProgress(payload={}){
+  const user=await requireUser();if(!user)return {ok:false,reason:'login'};
+  const key=String(payload.matchKey||'').replace(/[^A-Za-z0-9_-]/g,'').slice(0,64);if(!key)return {ok:false,reason:'key'};
+  const safe={
+    hero:String(payload.hero||'blaster').slice(0,24),mode:['clash','control','team2v2','last'].includes(payload.mode)?payload.mode:'clash',
+    place:Math.max(1,Math.min(5,Number(payload.place)||5)),score:Math.max(0,Math.min(999,Math.floor(Number(payload.score)||0))),winner:!!payload.winner,
+    kills:Math.max(0,Math.min(50,Math.floor(Number(payload.kills)||0))),deaths:Math.max(0,Math.min(50,Math.floor(Number(payload.deaths)||0))),
+    damage:Math.max(0,Math.min(20000,Math.floor(Number(payload.damage)||0))),controlSeconds:Math.max(0,Math.min(120,Math.floor(Number(payload.controlSeconds)||0))),
+    shots:Math.max(0,Math.min(2000,Math.floor(Number(payload.shots)||0))),hits:Math.max(0,Math.min(2000,Math.floor(Number(payload.hits)||0)))
+  };
+  let result={ok:false,reason:'unknown'};
+  try{
+    const tx=await runTransaction(ref(database,`users/${user.uid}`),data=>{
+      data=data||{};ensurePortalEconomy(data);
+      if(data.clash_progress_records[key]){result={ok:true,already:true,...data.clash_progress_records[key],profile:data};return data}
+      const cp=data.clash_profile;
+      cp.matches=(Number(cp.matches)||0)+1;cp.wins=(Number(cp.wins)||0)+(safe.winner?1:0);cp.kills=(Number(cp.kills)||0)+safe.kills;cp.deaths=(Number(cp.deaths)||0)+safe.deaths;
+      cp.damage=(Number(cp.damage)||0)+safe.damage;cp.controlSeconds=(Number(cp.controlSeconds)||0)+safe.controlSeconds;cp.bestScore=Math.max(Number(cp.bestScore)||0,safe.score);
+      cp.winStreak=safe.winner?(Number(cp.winStreak)||0)+1:0;cp.bestStreak=Math.max(Number(cp.bestStreak)||0,cp.winStreak);
+      cp.heroUse=cp.heroUse||{};cp.heroUse[safe.hero]=(Number(cp.heroUse[safe.hero])||0)+1;cp.favoriteHero=Object.entries(cp.heroUse).sort((a,b)=>b[1]-a[1])[0]?.[0]||safe.hero;
+      cp.modes=cp.modes||{};cp.modes[safe.mode]=(Number(cp.modes[safe.mode])||0)+1;
+      cp.heroes=cp.heroes||{};const hero=cp.heroes[safe.hero]||(cp.heroes[safe.hero]={xp:0,mastery:0,matches:0,wins:0,kills:0});
+      const xp=40+(safe.winner?40:0)+safe.kills*8+Math.min(35,safe.controlSeconds)+Math.max(0,6-safe.place)*4;
+      const mastery=safe.kills*4+safe.score+(safe.winner?18:0);
+      hero.xp=(Number(hero.xp)||0)+xp;hero.mastery=(Number(hero.mastery)||0)+mastery;hero.matches=(Number(hero.matches)||0)+1;hero.wins=(Number(hero.wins)||0)+(safe.winner?1:0);hero.kills=(Number(hero.kills)||0)+safe.kills;
+      hero.level=clashLevelFromXp(hero.xp);
+      hero.unlocks=hero.unlocks||{};if(hero.level>=2)hero.unlocks.frame=true;if(hero.level>=3)hero.unlocks.agile=true;if(hero.level>=5)hero.unlocks.focus=true;if(hero.level>=7)hero.unlocks.guard=true;if(hero.level>=10)hero.unlocks.master=true;
+      const placeCoins=safe.place===1?15:safe.place===2?10:safe.place===3?7:4;const performanceCoins=Math.min(12,safe.kills*2+Math.floor(safe.controlSeconds/10));
+      const baseCoins=placeCoins+performanceCoins;data.portal_coins+=baseCoins;data.portal_coins_earned+=baseCoins;
+      const missions=applyClashMissionRewards(data,safe);const totalCoins=baseCoins+missions.coins;
+      const saved={xp,mastery,heroLevel:hero.level,levelProgress:clashLevelProgress(hero.xp,hero.level),coins:totalCoins,missionCoins:missions.coins,missions:missions.completed,streak:cp.winStreak,kd:cp.kills/Math.max(1,cp.deaths),favoriteHero:cp.favoriteHero};
+      data.clash_progress_records[key]=saved;result={ok:true,...saved};return data;
+    });
+    if(tx.snapshot?.exists()){result.profile=tx.snapshot.val()}return result;
+  }catch(error){console.error('Портал: clash progression',error);return {ok:false,reason:'firebase'}}
+}
+function getClashMissionState(profile){
+  const p=profile||{},day=clashDateKey(),week=clashWeekKey();return {day,week,daily:p.clash_daily?.[day]||{},weekly:p.clash_weekly?.[week]||{},dailyDefs:CLASH_DAILY_MISSIONS,weeklyDefs:CLASH_WEEKLY_MISSIONS};
+}
+
 async function refreshPortalEconomy() {
   const user = await requireUser();
   if (!user) return { ok:false, reason:'login' };
@@ -795,10 +886,10 @@ async function purchasePortalItem(itemId) {
 }
 
 async function equipPortalItem(slot, itemId) {
-  const safeSlot = ['skin','weapon','weapon_skin','trail','frame'].includes(slot) ? slot : '';
+  const safeSlot = ['skin','weapon','weapon_skin','trail','frame','shot_effect','ko_effect'].includes(slot) ? slot : '';
   const id = String(itemId || '');
   const item = PORTAL_STORE_CATALOG[id];
-  const freeMap = { skin:'skin_student', weapon:'weapon_school_blaster', weapon_skin:'weapon_skin_default', trail:'trail_none', frame:'frame_none' };
+  const freeMap = { skin:'skin_student', weapon:'weapon_school_blaster', weapon_skin:'weapon_skin_default', trail:'trail_none', frame:'frame_none', shot_effect:'shot_effect_classic', ko_effect:'ko_effect_burst' };
   if (!safeSlot) return { ok:false, reason:'invalid_slot' };
   const isFree = id === freeMap[safeSlot];
   if (!isFree && (!item || item.type !== safeSlot)) return { ok:false, reason:'invalid_item' };
@@ -810,11 +901,11 @@ async function equipPortalItem(slot, itemId) {
       data = data || {};
       ensurePortalEconomy(data);
       if (!data.portal_owned_items[id]) return;
-      data.portal_equipped[safeSlot] = isFree ? ({skin:'student',weapon:'school_blaster',weapon_skin:'default',trail:'none',frame:'none'}[safeSlot]) : item.value;
+      data.portal_equipped[safeSlot] = isFree ? ({skin:'student',weapon:'school_blaster',weapon_skin:'default',trail:'none',frame:'none',shot_effect:'classic',ko_effect:'burst'}[safeSlot]) : item.value;
       equipped = true;
       return data;
     });
-    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'student',weapon:'school_blaster',weapon_skin:'default',trail:'none',frame:'none'}[safeSlot]) : item?.value };
+    return { ok:tx.committed && equipped, equipped, slot:safeSlot, value:isFree ? ({skin:'student',weapon:'school_blaster',weapon_skin:'default',trail:'none',frame:'none',shot_effect:'classic',ko_effect:'burst'}[safeSlot]) : item?.value, profile:tx.snapshot?.val?.()||null };
   } catch (error) {
     console.error('Портал: equip item', error);
     return { ok:false, reason:'firebase' };
@@ -942,6 +1033,8 @@ window.portalScore = {
   upgradePortalWeapon: upgradePortalWeapon,
   claimBellDailyMission: claimBellDailyMission,
   awardClashMatchReward: awardClashMatchReward,
+  recordClashProgress: recordClashProgress,
+  getClashMissionState: getClashMissionState,
   storeCatalog: PORTAL_STORE_CATALOG,
   calculateWeekScore
 };
