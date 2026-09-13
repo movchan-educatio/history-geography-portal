@@ -1942,6 +1942,14 @@ body.dino-no-scroll{overflow:hidden!important;}
   .portal-store-item{min-height:184px!important;padding:9px!important;}
 }
 </style>
+
+<style id="survive-bell-game-style">
+.dino2-title:after{content:"NEW GAME"!important;background:linear-gradient(135deg,#0f172a,#2563eb)!important;color:#dbeafe!important;border:1px solid rgba(96,165,250,.55)!important;}
+.dino-game-card{background:radial-gradient(circle at 14% -4%,rgba(59,130,246,.14),transparent 30%),radial-gradient(circle at 92% 6%,rgba(245,158,11,.10),transparent 24%),linear-gradient(180deg,#fff,#f5f9ff)!important;}
+.dino-canvas-wrap{background:#18263a!important;border-color:#60a5fa!important;}
+.dino-jump-btn{background:linear-gradient(135deg,#1d4ed8,#0ea5e9)!important;}
+.dino-duck-btn{background:linear-gradient(135deg,#334155,#475569)!important;}
+</style>
 </head>
 <body>
 
@@ -2005,7 +2013,7 @@ body.dino-no-scroll{overflow:hidden!important;}
           <ul>
             <li>Готуйтеся до НМТ з історії та географії за допомогою інтерактивних тестів.</li>
             <li>Закріплюйте знання у формі гри: відгадуйте факти, змагайтеся в рейтингу та розблоковуйте розваги.</li>
-            <li>Досліджуйте світ через 3D-артефакти та віртуальні аудіотури.</li>
+            <li>Досліджуйте світ через 3D-жетони та віртуальні аудіотури.</li>
           </ul>
         </div>
         <div class="audience-card">
@@ -2121,12 +2129,12 @@ body.dino-no-scroll{overflow:hidden!important;}
           </div>
         </div>
 
-        <!-- Блок 2: Dino Runner 2.9.1 -->
+        <!-- Блок 2: Вижити до дзвінка 1.0 -->
         <div class="dino-game-card">
-          <div class="dino2-top"><div class="dino2-title">🦖 Dino Runner 2.9.1</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
-          <div class="dino2-stats"><div class="dino2-stat">Очки<strong id="dinoScore">0</strong></div><div class="dino2-stat">Рекорд<strong id="dinoHighScore">0</strong></div><div class="dino2-stat">Артефакти<strong id="dinoArtifactsTotal">0</strong></div></div>
-          <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="1200" height="900"></canvas><div id="dinoLockOverlay"><span style="font-size:30px">🔒</span><strong style="font-size:13px;color:#7dd3fc;margin-top:5px">Dino Runner заблоковано</strong><span style="font-size:10px;color:#cbd5e1;margin-top:5px;max-width:310px">Виконайте будь-яке навчальне завдання на порталі — гра відкриється для вашого профілю.</span></div></div>
-          <div class="dino2-hudline"><span id="dinoLives">❤️❤️❤️</span><span id="dinoLocation">🏰 Київська Русь</span><span id="dinoPowerStatus">Бонусів немає</span></div>
+          <div class="dino2-top"><div class="dino2-title">🔔 Вижити до дзвінка</div><div class="dino2-wallet">🪙 <span id="dinoPortalCoins">0</span> монет</div></div>
+          <div class="dino2-stats"><div class="dino2-stat">Очки<strong id="dinoScore">0</strong></div><div class="dino2-stat">Рекорд<strong id="dinoHighScore">0</strong></div><div class="dino2-stat">Жетони<strong id="dinoArtifactsTotal">0</strong></div></div>
+          <div class="dino-canvas-wrap"><canvas id="dinoCanvas" width="1200" height="900"></canvas><div id="dinoLockOverlay"><span style="font-size:30px">🔒</span><strong style="font-size:13px;color:#7dd3fc;margin-top:5px">«Вижити до дзвінка» заблоковано</strong><span style="font-size:10px;color:#cbd5e1;margin-top:5px;max-width:310px">Виконайте будь-яке навчальне завдання на порталі — після цього відкриється шкільний рейд.</span></div></div>
+          <div class="dino2-hudline"><span id="dinoLives">❤️❤️❤️</span><span id="dinoLocation">🔔 До дзвінка: 01:30</span><span id="dinoPowerStatus">Бонусів немає</span></div>
           <div class="dino-combat-hud">
             <div class="dino-combat-chip"><span>Зброя</span><strong id="dinoWeaponName">—</strong></div>
             <div class="dino-combat-chip"><span>Заряд</span><span id="dinoAmmo" class="dino-ammo-dots"></span></div>
@@ -2144,7 +2152,7 @@ body.dino-no-scroll{overflow:hidden!important;}
           </div>
           <div class="dino2-actions"><button id="dinoStartBtn" onclick="startDinoGame()" disabled>▶ Старт</button><button class="dino-shop-btn" type="button" onclick="openPortalShop('skins')">🛍 Магазин</button><button id="dinoExpandBtn" class="dino-expand-btn" type="button" onclick="toggleDinoExpanded()">⛶</button></div>
           <div class="dino-leader-tabs"><button id="dinoTabWeek" class="dino-leader-tab active" onclick="setDinoLeaderboardMode('week')">Цей тиждень</button><button id="dinoTabAll" class="dino-leader-tab" onclick="setDinoLeaderboardMode('all')">Увесь час</button></div>
-          <div class="dino-leaderboard"><div class="dino-leaderboard-title">🏆 Лідери Dino Runner</div><div id="dinoLeaderboardList"></div></div>
+          <div class="dino-leaderboard"><div class="dino-leaderboard-title">🏆 Лідери «Вижити до дзвінка»</div><div id="dinoLeaderboardList"></div></div>
         </div>
 
         <!-- Блок 3: Робота з картою -->
@@ -2312,7 +2320,7 @@ body.dino-no-scroll{overflow:hidden!important;}
 
   </main>
 
-  <div id="portalShopModal" class="portal-shop-modal" role="dialog" aria-modal="true" aria-labelledby="portalShopTitle" onclick="if(event.target===this) closePortalShop()"><div class="portal-shop-card"><div class="portal-shop-head"><div class="portal-shop-headrow"><div><h3 id="portalShopTitle">🛍 Магазин порталу</h3><div style="font-size:10px;color:#64748b;margin-top:3px">Кожен навчальний бал = 1 монета. Покупки не віднімають рейтингові бали.</div></div><button class="portal-shop-close" onclick="closePortalShop()">×</button></div><div class="portal-shop-summary"><span class="portal-shop-pill coins">🪙 <b id="portalShopCoins">0</b> монет</span><span class="portal-shop-pill">🎭 <b id="portalActiveSkin">Dino</b></span><span class="portal-shop-pill">⚔️ <b id="portalActiveWeapon">Вогняний плювок</b></span><span class="portal-shop-pill">🎒 <b id="portalCollectionCount">0</b></span><span class="portal-shop-pill">🏆 <b id="portalAchievementCount">0</b></span></div><div class="portal-shop-tabs"><button class="portal-shop-tab active" data-shop-tab="skins" onclick="setPortalShopTab('skins')">🎭 Скіни</button><button class="portal-shop-tab" data-shop-tab="weapons" onclick="setPortalShopTab('weapons')">⚔️ Зброя</button><button class="portal-shop-tab" data-shop-tab="other" onclick="setPortalShopTab('other')">✨ Інше</button><button class="portal-shop-tab" data-shop-tab="collection" onclick="setPortalShopTab('collection')">🎒 Колекція</button><button class="portal-shop-tab" data-shop-tab="quests" onclick="setPortalShopTab('quests')">🎯 Квести</button><button class="portal-shop-tab" data-shop-tab="achievements" onclick="setPortalShopTab('achievements')">🏆 Досягнення</button></div></div><div id="portalShopBody" class="portal-shop-body"></div></div></div>
+  <div id="portalShopModal" class="portal-shop-modal" role="dialog" aria-modal="true" aria-labelledby="portalShopTitle" onclick="if(event.target===this) closePortalShop()"><div class="portal-shop-card"><div class="portal-shop-head"><div class="portal-shop-headrow"><div><h3 id="portalShopTitle">🛍 Магазин порталу</h3><div style="font-size:10px;color:#64748b;margin-top:3px">Кожен навчальний бал = 1 монета. Покупки не віднімають рейтингові бали.</div></div><button class="portal-shop-close" onclick="closePortalShop()">×</button></div><div class="portal-shop-summary"><span class="portal-shop-pill coins">🪙 <b id="portalShopCoins">0</b> монет</span><span class="portal-shop-pill">🎭 <b id="portalActiveSkin">Учень</b></span><span class="portal-shop-pill">⚔️ <b id="portalActiveWeapon">Імпульсний бластер</b></span><span class="portal-shop-pill">🎒 <b id="portalCollectionCount">0</b></span><span class="portal-shop-pill">🏆 <b id="portalAchievementCount">0</b></span></div><div class="portal-shop-tabs"><button class="portal-shop-tab active" data-shop-tab="skins" onclick="setPortalShopTab('skins')">👕 Одяг</button><button class="portal-shop-tab" data-shop-tab="weapons" onclick="setPortalShopTab('weapons')">⚔️ Зброя</button><button class="portal-shop-tab" data-shop-tab="other" onclick="setPortalShopTab('other')">✨ Інше</button><button class="portal-shop-tab" data-shop-tab="collection" onclick="setPortalShopTab('collection')">🎒 Колекція</button><button class="portal-shop-tab" data-shop-tab="quests" onclick="setPortalShopTab('quests')">🎯 Квести</button><button class="portal-shop-tab" data-shop-tab="achievements" onclick="setPortalShopTab('achievements')">🏆 Досягнення</button></div></div><div id="portalShopBody" class="portal-shop-body"></div></div></div>
   <div id="portalToast" class="portal-toast"></div>
 
 
@@ -3844,7 +3852,7 @@ body.dino-no-scroll{overflow:hidden!important;}
           if (btn) btn.addEventListener('click', () => window.loginWithGoogle());
         }
         if (window.syncEscapeWeeklyLocks) window.syncEscapeWeeklyLocks({});
-        if (window.syncPortalEconomy) window.syncPortalEconomy({portal_coins:0,portal_owned_items:{skin_dino:true,weapon_firebreath:true,trail_none:true,frame_none:true},portal_equipped:{skin:'dino',weapon:'firebreath',trail:'none',frame:'none'}});
+        if (window.syncPortalEconomy) window.syncPortalEconomy({portal_coins:0,portal_owned_items:{skin_student:true,weapon_school_blaster:true,trail_none:true,frame_none:true},portal_equipped:{skin:'student',weapon:'school_blaster',trail:'none',frame:'none'}});
         renderRealtimeLeaderboard();
         return;
       }
@@ -4135,65 +4143,54 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     /* PORTAL ECONOMY — монети, магазин, колекція, квести */
-    window.portalEconomyProfile = window.portalEconomyProfile || {portal_coins:0,portal_owned_items:{skin_dino:true,weapon_firebreath:true,trail_none:true,frame_none:true},portal_equipped:{skin:'dino',weapon:'firebreath',trail:'none',frame:'none'},portal_achievements:{},portal_weekly_claims:{}};
+    window.portalEconomyProfile = window.portalEconomyProfile || {portal_coins:0,portal_owned_items:{skin_student:true,weapon_school_blaster:true,trail_none:true,frame_none:true},portal_equipped:{skin:'student',weapon:'school_blaster',trail:'none',frame:'none'},portal_achievements:{},portal_weekly_claims:{}};
     let portalShopCurrentTab='skins';
     const portalShopItems=[
-      // Скіни
-      {id:'skin_dino',cat:'Скіни Dino',icon:'🦖',name:'Дино',price:0,rarity:'Стартовий',desc:'Початковий персонаж. Доступний кожному гравцеві.',type:'skin',value:'dino'},
-      {id:'skin_teacher',cat:'Скіни Dino',icon:'👨‍🏫',name:'Вчитель',price:240,rarity:'Рідкісний',desc:'Повноцінний векторний скін учителя: окуляри, сорочка, краватка та правильна бойова стійка.',type:'skin',value:'teacher'},
-      {id:'skin_cossack',cat:'Скіни Dino',icon:'⚔️',name:'Козак',price:180,rarity:'Рідкісний',desc:'Оселедець, вуса, шаровари та козацьке спорядження.',type:'skin',value:'cossack'},
-      {id:'skin_knight',cat:'Скіни Dino',icon:'🛡️',name:'Лицар',price:260,rarity:'Рідкісний',desc:'Сталева броня, шолом і щит.',type:'skin',value:'knight'},
-      {id:'skin_pharaoh',cat:'Скіни Dino',icon:'𓂀',name:'Фараон',price:340,rarity:'Епічний',desc:'Золотий немес, єгипетські кольори та прикраси.',type:'skin',value:'pharaoh'},
-      {id:'skin_explorer',cat:'Скіни Dino',icon:'🧭',name:'Мандрівник',price:420,rarity:'Епічний',desc:'Капелюх, рюкзак і спорядження дослідника.',type:'skin',value:'explorer'},
-      {id:'skin_archaeologist',cat:'Скіни Dino',icon:'🏺',name:'Археолог',price:520,rarity:'Епічний',desc:'Польова форма, сумка та інструменти археолога.',type:'skin',value:'archaeologist'},
-      {id:'skin_pirate',cat:'Скіни Dino',icon:'☠️',name:'Пірат',price:540,rarity:'Епічний',desc:'Капітанський плащ, бандана й пояс.',type:'skin',value:'pirate'},
-      {id:'skin_prince',cat:'Скіни Dino',icon:'♛',name:'Князь',price:650,rarity:'Легендарний',desc:'Князівський плащ, корона та синьо-червоне вбрання.',type:'skin',value:'prince'},
-      {id:'skin_legionary',cat:'Скіни Dino',icon:'🏛️',name:'Римський легіонер',price:690,rarity:'Легендарний',desc:'Lorica segmentata, червоний плащ і гребінь шолома.',type:'skin',value:'legionary'},
-      {id:'skin_scythian',cat:'Скіни Dino',icon:'🏹',name:'Скіфський лучник',price:760,rarity:'Легендарний',desc:'Гостроверхий башлик, орнаментований одяг і горит.',type:'skin',value:'scythian'},
-      {id:'skin_viking',cat:'Скіни Dino',icon:'ᚱ',name:'Вікінг',price:780,rarity:'Легендарний',desc:'Круглий щит, кольчуга й скандинавське спорядження.',type:'skin',value:'viking'},
-      {id:'skin_musketeer',cat:'Скіни Dino',icon:'⚜️',name:'Мушкетер',price:840,rarity:'Легендарний',desc:'Синій камзол, перев’язь і капелюх із пером.',type:'skin',value:'musketeer'},
-      {id:'skin_samurai',cat:'Скіни Dino',icon:'⛩️',name:'Самурай',price:950,rarity:'Міфічний',desc:'Кабуто, пластинчаста броня та бойова перев’язь.',type:'skin',value:'samurai'},
+      {id:'skin_student',cat:'Одяг',icon:'🎒',name:'Учень',price:0,rarity:'Стартовий',desc:'Базовий образ: футболка, джинси, кросівки та рюкзак.',type:'skin',value:'student'},
+      {id:'outfit_hoodie',cat:'Одяг',icon:'🧥',name:'Худі',price:120,rarity:'Звичайний',desc:'Темне худі, рюкзак і кросівки.',type:'skin',value:'hoodie'},
+      {id:'outfit_varsity',cat:'Одяг',icon:'🏫',name:'Бомбер ліцею',price:220,rarity:'Рідкісний',desc:'Шкільний бомбер, нашивка ліцею та контрастні рукави.',type:'skin',value:'varsity'},
+      {id:'outfit_uniform',cat:'Одяг',icon:'👔',name:'Парадний образ',price:300,rarity:'Рідкісний',desc:'Сорочка, краватка, темні штани й акуратний стиль.',type:'skin',value:'uniform'},
+      {id:'outfit_history',cat:'Одяг',icon:'📜',name:'Клуб історії',price:360,rarity:'Епічний',desc:'Бордовий жилет, золоті деталі та емблема історичного клубу.',type:'skin',value:'history_club'},
+      {id:'outfit_geo',cat:'Одяг',icon:'🌍',name:'Клуб географії',price:360,rarity:'Епічний',desc:'Синьо-зелена куртка з емблемою глобуса.',type:'skin',value:'geo_club'},
+      {id:'outfit_sport',cat:'Одяг',icon:'🏃',name:'Спортивний комплект',price:430,rarity:'Епічний',desc:'Легкий спортивний костюм і швидкі кросівки.',type:'skin',value:'sport'},
+      {id:'outfit_cyber',cat:'Одяг',icon:'⚡',name:'Cyber Student',price:650,rarity:'Легендарний',desc:'Неонові вставки, технологічний рюкзак і світні елементи.',type:'skin',value:'cyber'},
+      {id:'outfit_honor',cat:'Одяг',icon:'👑',name:'Легенда ліцею',price:850,rarity:'Міфічний',desc:'Преміальний біло-синій комплект із золотими деталями.',type:'skin',value:'honor'},
 
-      // Арсенал
-      {id:'weapon_firebreath',cat:'Арсенал Dino',icon:'🔥',name:'Вогняний плювок',price:0,rarity:'Стартовий',desc:'Природна атака Dino • 6 зарядів • швидкі вогняні кулі.',type:'weapon',value:'firebreath'},
-      {id:'weapon_training',cat:'Арсенал Dino',icon:'🔹',name:'Тренувальний бластер',price:140,rarity:'Звичайний',desc:'6 зарядів • швидка стрільба • 1 шкоди.',type:'weapon',value:'training'},
-      {id:'weapon_bow',cat:'Арсенал Dino',icon:'🏹',name:'Князівський лук',price:180,rarity:'Звичайний',desc:'8 стріл • точний і швидкий.',type:'weapon',value:'prince_bow'},
-      {id:'weapon_crossbow',cat:'Арсенал Dino',icon:'🎯',name:'Лицарський арбалет',price:240,rarity:'Рідкісний',desc:'6 болтів • 2 шкоди • стабільна дальність.',type:'weapon',value:'crossbow'},
-      {id:'weapon_flare',cat:'Арсенал Dino',icon:'🔫',name:'Сигнальний пістолет',price:280,rarity:'Рідкісний',desc:'7 зарядів • швидка реакція.',type:'weapon',value:'flare'},
-      {id:'weapon_musket',cat:'Арсенал Dino',icon:'💥',name:'Козацький мушкет',price:340,rarity:'Рідкісний',desc:'4 заряди • 3 шкоди • сильна віддача.',type:'weapon',value:'cossack_musket'},
-      {id:'weapon_disc',cat:'Арсенал Dino',icon:'🌀',name:'Релікварний диск',price:380,rarity:'Епічний',desc:'5 дисків • самонаведення • пробиває цілі.',type:'weapon',value:'relic_disc'},
-      {id:'weapon_ra_staff',cat:'Арсенал Dino',icon:'☀️',name:'Посох Ра',price:430,rarity:'Епічний',desc:'5 зарядів • сонячний вибух у радіусі.',type:'weapon',value:'ra_staff'},
-      {id:'weapon_viking_axe',cat:'Арсенал Dino',icon:'🪓',name:'Метальна сокира',price:470,rarity:'Епічний',desc:'4 сокири • 3 шкоди • пробиття.',type:'weapon',value:'viking_axe'},
-      {id:'weapon_scythian_bow',cat:'Арсенал Dino',icon:'🏹',name:'Скіфський складний лук',price:520,rarity:'Епічний',desc:'9 стріл • дуже висока швидкострільність.',type:'weapon',value:'scythian_bow'},
-      {id:'weapon_pirate',cat:'Арсенал Dino',icon:'☠️',name:'Піратський пістолет',price:590,rarity:'Легендарний',desc:'5 пострілів • 2 шкоди • сильний імпульс.',type:'weapon',value:'pirate_pistol'},
-      {id:'weapon_pilum',cat:'Арсенал Dino',icon:'🗡️',name:'Римський пілум',price:650,rarity:'Легендарний',desc:'5 списів • 3 шкоди • пробиває дві цілі.',type:'weapon',value:'roman_pilum'},
-      {id:'weapon_yumi',cat:'Арсенал Dino',icon:'🎋',name:'Самурайський юмі',price:720,rarity:'Легендарний',desc:'8 стріл • 2 шкоди • пробивна стріла.',type:'weapon',value:'samurai_yumi'},
-      {id:'weapon_musketeer',cat:'Арсенал Dino',icon:'⚜️',name:'Мушкетерська рушниця',price:820,rarity:'Міфічний',desc:'3 заряди • 4 шкоди • найпотужніший постріл.',type:'weapon',value:'musketeer_rifle'},
+      {id:'skin_dino',cat:'Колекційні костюми',icon:'🦖',name:'Костюм Dino',price:500,rarity:'Епічний',desc:'Маскот старої гри як секретний костюм.',type:'skin',value:'dino'},
+      {id:'skin_cossack',cat:'Колекційні костюми',icon:'⚔️',name:'Козак',price:420,rarity:'Епічний',desc:'Колекційний історичний образ.',type:'skin',value:'cossack'},
+      {id:'skin_knight',cat:'Колекційні костюми',icon:'🛡️',name:'Лицар',price:460,rarity:'Епічний',desc:'Колекційний обладунок лицаря.',type:'skin',value:'knight'},
+      {id:'skin_pharaoh',cat:'Колекційні костюми',icon:'𓂀',name:'Фараон',price:520,rarity:'Легендарний',desc:'Золотий немес і єгипетські прикраси.',type:'skin',value:'pharaoh'},
+      {id:'skin_pirate',cat:'Колекційні костюми',icon:'☠️',name:'Пірат',price:620,rarity:'Легендарний',desc:'Капітанський плащ і бандана.',type:'skin',value:'pirate'},
+      {id:'skin_samurai',cat:'Колекційні костюми',icon:'⛩️',name:'Самурай',price:820,rarity:'Міфічний',desc:'Колекційна пластинчаста броня.',type:'skin',value:'samurai'},
 
-      // Ефекти
-      {id:'trail_gold',cat:'Ефекти сліду',icon:'✨',name:'Золотий слід',price:120,rarity:'Звичайний',desc:'Золоті іскри під час бігу.',type:'trail',value:'gold'},
-      {id:'trail_fire',cat:'Ефекти сліду',icon:'🔥',name:'Вогняний слід',price:220,rarity:'Рідкісний',desc:'Вогняні частинки за персонажем.',type:'trail',value:'fire'},
-      {id:'trail_stars',cat:'Ефекти сліду',icon:'🌟',name:'Зоряний слід',price:300,rarity:'Епічний',desc:'Зоряні частинки під час забігу.',type:'trail',value:'stars'},
-      {id:'trail_lightning',cat:'Ефекти сліду',icon:'⚡',name:'Блискавка',price:380,rarity:'Епічний',desc:'Електричний слід для швидких раннерів.',type:'trail',value:'lightning'},
+      {id:'weapon_school_blaster',cat:'Шкільний арсенал',icon:'🔵',name:'Імпульсний бластер',price:0,rarity:'Стартовий',desc:'Швидкий енергетичний бластер. Добрий баланс для старту.',type:'weapon',value:'school_blaster'},
+      {id:'weapon_marker',cat:'Шкільний арсенал',icon:'🖊️',name:'Маркер-бластер',price:120,rarity:'Звичайний',desc:'Швидкострільний маркерний імпульс.',type:'weapon',value:'marker_blaster'},
+      {id:'weapon_chalk',cat:'Шкільний арсенал',icon:'☁️',name:'Крейдяна гармата',price:200,rarity:'Рідкісний',desc:'Важкі крейдяні заряди з підвищеною шкодою.',type:'weapon',value:'chalk_cannon'},
+      {id:'weapon_bookwave',cat:'Шкільний арсенал',icon:'📘',name:'Дискомет знань',price:280,rarity:'Рідкісний',desc:'Енергетичний диск із легким самонаведенням.',type:'weapon',value:'book_wave'},
+      {id:'weapon_ruler',cat:'Шкільний арсенал',icon:'📏',name:'Лазерна лінійка',price:360,rarity:'Епічний',desc:'Точний пробивний промінь на великій швидкості.',type:'weapon',value:'laser_ruler'},
+      {id:'weapon_science',cat:'Шкільний арсенал',icon:'🧪',name:'Науковий імпульс',price:480,rarity:'Епічний',desc:'Сферичний заряд із невеликою зоною ураження.',type:'weapon',value:'science_pulse'},
+      {id:'weapon_bell',cat:'Шкільний арсенал',icon:'🔔',name:'Дзвінкобій',price:650,rarity:'Легендарний',desc:'Повільніший, але дуже потужний енергетичний постріл.',type:'weapon',value:'bell_breaker'},
+      {id:'weapon_honor',cat:'Шкільний арсенал',icon:'🏆',name:'Бластер відмінника',price:900,rarity:'Міфічний',desc:'Висока шкода, пробиття й сильний FX.',type:'weapon',value:'honor_cannon'},
 
-      // Рамки
-      {id:'frame_bronze',cat:'Рамки профілю',icon:'🥉',name:'Бронзова рамка',price:100,rarity:'Звичайний',desc:'Оформлення аватарки в профілі.',type:'frame',value:'bronze'},
-      {id:'frame_silver',cat:'Рамки профілю',icon:'🥈',name:'Срібна рамка',price:200,rarity:'Рідкісний',desc:'Срібне оформлення аватарки.',type:'frame',value:'silver'},
-      {id:'frame_gold',cat:'Рамки профілю',icon:'🥇',name:'Золота рамка',price:350,rarity:'Епічний',desc:'Золоте оформлення для активних учнів.',type:'frame',value:'gold'},
-      {id:'frame_historian',cat:'Рамки профілю',icon:'🏛️',name:'Рамка «Історик»',price:450,rarity:'Легендарний',desc:'Золото-фіолетова рамка дослідника.',type:'frame',value:'historian'},
-
-      // Постійні бонуси
-      {id:'boost_shield',cat:'Постійні бонуси',icon:'🛡️',name:'Щит на старті',price:180,rarity:'Рідкісний',desc:'Кожен новий забіг починається з одного щита.',type:'boost',value:'shield'},
-      {id:'boost_magnet',cat:'Постійні бонуси',icon:'🧲',name:'Магніт на старті',price:220,rarity:'Рідкісний',desc:'Перші 6 секунд артефакти притягуються до гравця.',type:'boost',value:'magnet'},
-      {id:'boost_heart',cat:'Постійні бонуси',icon:'❤️',name:'+1 життя',price:300,rarity:'Епічний',desc:'Кожен забіг починається з чотирма життями.',type:'boost',value:'heart'}
+      {id:'trail_gold',cat:'Ефекти',icon:'✨',name:'Золотий слід',price:120,rarity:'Звичайний',desc:'Золоті іскри під час бігу.',type:'trail',value:'gold'},
+      {id:'trail_fire',cat:'Ефекти',icon:'🔥',name:'Вогняний слід',price:220,rarity:'Рідкісний',desc:'Вогняні частинки за персонажем.',type:'trail',value:'fire'},
+      {id:'trail_stars',cat:'Ефекти',icon:'🌟',name:'Зоряний слід',price:300,rarity:'Епічний',desc:'Зоряні частинки під час рейду.',type:'trail',value:'stars'},
+      {id:'trail_lightning',cat:'Ефекти',icon:'⚡',name:'Блискавка',price:380,rarity:'Епічний',desc:'Електричний слід.',type:'trail',value:'lightning'},
+      {id:'frame_bronze',cat:'Рамки профілю',icon:'🥉',name:'Бронзова рамка',price:100,rarity:'Звичайний',desc:'Оформлення аватарки.',type:'frame',value:'bronze'},
+      {id:'frame_silver',cat:'Рамки профілю',icon:'🥈',name:'Срібна рамка',price:200,rarity:'Рідкісний',desc:'Срібне оформлення профілю.',type:'frame',value:'silver'},
+      {id:'frame_gold',cat:'Рамки профілю',icon:'🥇',name:'Золота рамка',price:350,rarity:'Епічний',desc:'Золоте оформлення профілю.',type:'frame',value:'gold'},
+      {id:'frame_historian',cat:'Рамки профілю',icon:'🏛️',name:'Рамка «Історик»',price:450,rarity:'Легендарний',desc:'Рамка дослідника.',type:'frame',value:'historian'},
+      {id:'boost_shield',cat:'Постійні бонуси',icon:'🛡️',name:'Щит на старті',price:180,rarity:'Рідкісний',desc:'Кожен рейд починається з одного щита.',type:'boost',value:'shield'},
+      {id:'boost_magnet',cat:'Постійні бонуси',icon:'🧲',name:'Магніт жетонів',price:220,rarity:'Рідкісний',desc:'Перші 6 секунд жетони притягуються.',type:'boost',value:'magnet'},
+      {id:'boost_heart',cat:'Постійні бонуси',icon:'❤️',name:'+1 життя',price:300,rarity:'Епічний',desc:'Рейд починається з чотирма життями.',type:'boost',value:'heart'}
     ];
     const portalAchievements=[
-      ['first_step','🌱 Перший крок','Отримати перший бал на порталі',10],['scholar_50','📚 Знавець','Набрати 50 балів загалом',20],['prime_100','💯 Сотня','Набрати 100 балів загалом',30],['expert_250','🎓 Експерт','Набрати 250 балів загалом',50],['runner_500','🦖 Раннер','Рекорд Dino Runner 500+',20],['runner_1500','⚡ Спринтер','Рекорд Dino Runner 1500+',40],['collector_3','🎒 Колекціонер','Придбати 3 предмети',25]
+      ['first_step','🌱 Перший крок','Отримати перший бал на порталі',10],['scholar_50','📚 Знавець','Набрати 50 балів загалом',20],['prime_100','💯 Сотня','Набрати 100 балів загалом',30],['expert_250','🎓 Експерт','Набрати 250 балів загалом',50],['runner_500','🦖 Раннер','Рекорд «Вижити до дзвінка»: рекорд 500+',20],['runner_1500','⚡ Спринтер','Рекорд «Вижити до дзвінка»: рекорд 1500+',40],['collector_3','🎒 Колекціонер','Придбати 3 предмети',25]
     ];
     function portalWeekKey(){const d=new Date();const day=d.getDay()||7;d.setDate(d.getDate()+4-day);const ys=new Date(d.getFullYear(),0,1);const w=Math.ceil((((d-ys)/86400000)+1)/7);return `${d.getFullYear()}-W${String(w).padStart(2,'0')}`;}
     function portalToast(text){const t=document.getElementById('portalToast');if(!t)return;t.textContent=text;t.classList.add('show');clearTimeout(window.__portalToastTimer);window.__portalToastTimer=setTimeout(()=>t.classList.remove('show'),2200);}
     window.portalToast=portalToast;
-    function portalOwnedCount(p=window.portalEconomyProfile){return Object.entries(p?.portal_owned_items||{}).filter(([id,v])=>v&&!['skin_dino','weapon_firebreath','trail_none','frame_none'].includes(id)).length;}
+    function portalOwnedCount(p=window.portalEconomyProfile){return Object.entries(p?.portal_owned_items||{}).filter(([id,v])=>v&&!['skin_student','weapon_school_blaster','trail_none','frame_none'].includes(id)).length;}
     function portalEquippedItem(item,p=window.portalEconomyProfile){return p?.portal_equipped?.[item.type]===item.value;}
     function applyPortalProfileFrame(value){document.querySelectorAll('#authBox .home-user-avatar').forEach(el=>{el.classList.remove('portal-frame-bronze','portal-frame-silver','portal-frame-gold','portal-frame-historian');if(value&&value!=='none')el.classList.add('portal-frame-'+value);});}
     window.syncPortalEconomy=function(profile){
@@ -4224,13 +4221,13 @@ body.dino-no-scroll{overflow:hidden!important;}
       const cats=[...new Set(items.map(x=>x.cat))];
       return cats.map(cat=>`<div class="portal-store-section-title">${cat}</div><div class="portal-store-grid">${
         items.filter(x=>x.cat===cat).map(item=>{
-          const starter=item.id==='skin_dino'||item.id==='weapon_firebreath';
+          const starter=item.id==='skin_student'||item.id==='weapon_school_blaster';
           const have=starter||!!owned[item.id],eq=have&&portalEquippedItem(item,p);
           let meta='';
-          if(item.type==='skin') meta=eq?'🎭 Зараз використовується':'🎭 Скін персонажа Dino Runner';
+          if(item.type==='skin') meta=eq?'🎭 Зараз використовується':'🎭 Одяг для «Вижити до дзвінка»';
           if(item.type==='weapon'){
             const w=dinoWeapons?.[item.value];
-            meta=w?`⚔️ Шкода: ${w.damage} • Зарядів: ${w.mag} • Перезарядка: ${(Number(w.reload||1000)/1000).toFixed(1)} с`:'⚔️ Зброя Dino Runner';
+            meta=w?`⚔️ Шкода: ${w.damage} • Зарядів: ${w.mag} • Перезарядка: ${(Number(w.reload||1000)/1000).toFixed(1)} с`:'⚔️ Зброя для «Вижити до дзвінка»';
           }
           let action='';
           if(!have) action=`<button class="portal-buy" ${coins<item.price?'disabled':''} onclick="buyPortalItem('${item.id}')">${coins<item.price?'Не вистачає монет':`Купити за 🪙 ${item.price}`}</button>`;
@@ -4241,9 +4238,9 @@ body.dino-no-scroll{overflow:hidden!important;}
         }).join('')
       }</div>`).join('');
     }
-    function renderPortalQuests(){const p=window.portalEconomyProfile||{};const week=portalWeekKey();const claims=p.portal_weekly_claims?.[week]||{};const qs=[['score20','🚀 Ривок тижня',Number(p.week_score)||0,20,20,'Наберіть 20 рейтингових балів'],['geo10','🌍 Геодослідник',(Number(p.week_map_activity_points)||0)+(Number(p.week_flags_points)||0),10,15,'10 правильних відповідей: карта + прапори'],['history10','📜 Історик',(Number(p.week_history_activity_points)||0)+(Number(p.week_escape_points)||0),10,15,'10 балів: хронологія + втечі'],['dino600','🦖 Раннер',p.dino_week_key===week?(Number(p.dino_week_best)||0):0,600,20,'Наберіть 600 у Dino Runner']];return `<div class="portal-quest-grid">${qs.map(([id,title,val,target,reward,desc])=>{const done=!!claims[id];const pct=Math.min(100,Math.round(val/target*100));return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">${title} ${done?'✅':''}</div><div class="portal-quest-sub">${desc}</div><div class="portal-progress"><span style="width:${done?100:pct}%"></span></div><div class="portal-quest-sub">${Math.min(val,target)}/${target}</div><div class="portal-quest-reward">${done?'Нагороду отримано':`Нагорода: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;}
+    function renderPortalQuests(){const p=window.portalEconomyProfile||{};const week=portalWeekKey();const claims=p.portal_weekly_claims?.[week]||{};const qs=[['score20','🚀 Ривок тижня',Number(p.week_score)||0,20,20,'Наберіть 20 рейтингових балів'],['geo10','🌍 Геодослідник',(Number(p.week_map_activity_points)||0)+(Number(p.week_flags_points)||0),10,15,'10 правильних відповідей: карта + прапори'],['history10','📜 Історик',(Number(p.week_history_activity_points)||0)+(Number(p.week_escape_points)||0),10,15,'10 балів: хронологія + втечі'],['dino600','🔔 До дзвінка',p.dino_week_key===week?(Number(p.dino_week_best)||0):0,600,20,'Наберіть 600 у «Вижити до дзвінка»']];return `<div class="portal-quest-grid">${qs.map(([id,title,val,target,reward,desc])=>{const done=!!claims[id];const pct=Math.min(100,Math.round(val/target*100));return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">${title} ${done?'✅':''}</div><div class="portal-quest-sub">${desc}</div><div class="portal-progress"><span style="width:${done?100:pct}%"></span></div><div class="portal-quest-sub">${Math.min(val,target)}/${target}</div><div class="portal-quest-reward">${done?'Нагороду отримано':`Нагорода: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;}
     function renderPortalAchievements(){const ach=window.portalEconomyProfile?.portal_achievements||{};return `<div class="portal-ach-grid">${portalAchievements.map(([id,icon,name,reward])=>{const done=!!ach[id];return `<div class="portal-quest ${done?'done':''}"><div class="portal-quest-title">${icon} ${name} ${done?'✅':''}</div><div class="portal-quest-sub">${portalAchievementsDesc(id)}</div><div class="portal-quest-reward">${done?'Виконано':`Бонус: 🪙 ${reward}`}</div></div>`}).join('')}</div>`;}
-    function portalAchievementsDesc(id){return ({first_step:'Отримайте перший навчальний бал.',scholar_50:'Наберіть 50 балів на порталі.',prime_100:'Наберіть 100 балів на порталі.',expert_250:'Наберіть 250 балів на порталі.',runner_500:'Поставте рекорд Dino Runner 500+.',runner_1500:'Поставте рекорд Dino Runner 1500+.',collector_3:'Придбайте 3 предмети в магазині.'})[id]||'';}
+    function portalAchievementsDesc(id){return ({first_step:'Отримайте перший навчальний бал.',scholar_50:'Наберіть 50 балів на порталі.',prime_100:'Наберіть 100 балів на порталі.',expert_250:'Наберіть 250 балів на порталі.',runner_500:'Поставте рекорд «Вижити до дзвінка»: рекорд 500+.',runner_1500:'Поставте рекорд «Вижити до дзвінка»: рекорд 1500+.',collector_3:'Придбайте 3 предмети в магазині.'})[id]||'';}
     function renderPortalShop(){
       const body=document.getElementById('portalShopBody');if(!body)return;
       const p=window.portalEconomyProfile||{},coins=Number(p.portal_coins)||0;
@@ -4257,7 +4254,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       if(portalShopCurrentTab==='skins'){body.innerHTML=renderPortalStoreItems(portalShopItems.filter(x=>x.type==='skin'));return;}
       if(portalShopCurrentTab==='weapons'){body.innerHTML=renderPortalStoreItems(portalShopItems.filter(x=>x.type==='weapon'));return;}
       if(portalShopCurrentTab==='other'){body.innerHTML=renderPortalStoreItems(portalShopItems.filter(x=>!['skin','weapon'].includes(x.type)));return;}
-      if(portalShopCurrentTab==='collection'){const own=portalShopItems.filter(x=>x.id==='skin_dino'||x.id==='weapon_firebreath'||p.portal_owned_items?.[x.id]);body.innerHTML=own.length?renderPortalStoreItems(own):'<div class="portal-shop-empty">Колекція поки порожня.</div>';return;}
+      if(portalShopCurrentTab==='collection'){const own=portalShopItems.filter(x=>x.id==='skin_student'||x.id==='weapon_school_blaster'||p.portal_owned_items?.[x.id]);body.innerHTML=own.length?renderPortalStoreItems(own):'<div class="portal-shop-empty">Колекція поки порожня.</div>';return;}
       if(portalShopCurrentTab==='quests'){body.innerHTML=renderPortalQuests();return;}
       body.innerHTML=renderPortalAchievements();
     }
@@ -4292,8 +4289,8 @@ body.dino-no-scroll{overflow:hidden!important;}
     let isGameUnlocked = false;
     let dinoLeaderboardMode = 'week';
     let dinoLeaderboardData = [];
-    let currentDinoSkin = localStorage.getItem('dino_skin') || 'dino';
-    let currentDinoWeapon = localStorage.getItem('dino_weapon') || 'firebreath';
+    let currentDinoSkin = localStorage.getItem('dino_skin') || 'student';
+    let currentDinoWeapon = localStorage.getItem('dino_weapon') || 'school_blaster';
     let currentDinoTrail = 'none';
     let dinoMaxLives = 3;
     let dinoTrailTick = 0;
@@ -4317,8 +4314,21 @@ body.dino-no-scroll{overflow:hidden!important;}
     let ultraFx = [];
     let dinoWasAirborne = false;
     let ultraWeatherSeed = Math.random()*9999;
+    const bellRoundDuration=90000;
+    let bellBossSpawned=false;
+    let bellVictory=false;
+    let bellCombo=0;
+    let bellBestCombo=0;
 
     const dinoWeapons = {
+      school_blaster:{name:'Імпульсний бластер',itemId:'weapon_school_blaster',type:'pistol',color:'#dbeafe',accent:'#38bdf8',speed:980,damage:1,cooldown:300,mag:8,reload:850,homing:.06},
+      marker_blaster:{name:'Маркер-бластер',itemId:'weapon_marker',type:'flare',color:'#f8fafc',accent:'#a855f7',speed:1040,damage:1,cooldown:245,mag:10,reload:800},
+      chalk_cannon:{name:'Крейдяна гармата',itemId:'weapon_chalk',type:'bolt',color:'#f8fafc',accent:'#cbd5e1',speed:930,damage:2,cooldown:460,mag:7,reload:950,pierce:1},
+      book_wave:{name:'Дискомет знань',itemId:'weapon_bookwave',type:'disc',color:'#60a5fa',accent:'#fde68a',speed:800,damage:2,cooldown:480,mag:6,reload:980,pierce:1,homing:.16},
+      laser_ruler:{name:'Лазерна лінійка',itemId:'weapon_ruler',type:'arrow',color:'#fef3c7',accent:'#22d3ee',speed:1220,damage:2,cooldown:390,mag:8,reload:900,pierce:2},
+      science_pulse:{name:'Науковий імпульс',itemId:'weapon_science',type:'sun',color:'#67e8f9',accent:'#a7f3d0',speed:850,damage:2,cooldown:520,mag:6,reload:1000,splash:62},
+      bell_breaker:{name:'Дзвінкобій',itemId:'weapon_bell',type:'arquebus',color:'#f8fafc',accent:'#fbbf24',speed:1280,damage:4,cooldown:900,mag:4,reload:1250,pierce:1,recoil:3.5},
+      honor_cannon:{name:'Бластер відмінника',itemId:'weapon_honor',type:'fireball',color:'#fde68a',accent:'#60a5fa',speed:980,damage:4,cooldown:620,mag:6,reload:1100,pierce:1,splash:42},
       training:{name:'Тренувальний бластер',itemId:'weapon_training',type:'chalk',color:'#f8fafc',accent:'#60a5fa',speed:850,damage:1,cooldown:350,mag:6,reload:1000},
       firebreath:{name:'Вогняний плювок',itemId:'weapon_firebreath',type:'fireball',color:'#fb923c',accent:'#fde047',speed:760,damage:1,cooldown:300,mag:6,reload:950},
       prince_bow:{name:'Князівський лук',itemId:'weapon_bow',type:'arrow',color:'#d6b47b',accent:'#e5e7eb',speed:980,damage:2,cooldown:440,mag:8,reload:900},
@@ -4341,28 +4351,37 @@ body.dino-no-scroll{overflow:hidden!important;}
     teacherRunner.onload = () => { teacherRunnerReady = true; };
 
     const dinoThemes = [
-      {name:'Київська Русь', icon:'🏰', sky1:'#8bc5ed', sky2:'#e8f4ff', ground:'#7b6845', accent:'#d5b56c', artifact:['🪙','📜','⛪']},
-      {name:'Козацький степ', icon:'⚔️', sky1:'#f5ae65', sky2:'#fde8ba', ground:'#756335', accent:'#2d70b7', artifact:['🪙','🪶','⚔️']},
-      {name:'Стародавній Єгипет', icon:'𓂀', sky1:'#f7cf79', sky2:'#fff1c9', ground:'#bd8d45', accent:'#d7a728', artifact:['🏺','📜','𓂀']},
-      {name:'Середньовічне місто', icon:'🛡️', sky1:'#8da0ba', sky2:'#d9e2ec', ground:'#626b75', accent:'#7c3f2d', artifact:['🪙','🛡️','📜']},
-      {name:'Доба відкриттів', icon:'⛵', sky1:'#63b7d6', sky2:'#e8fbff', ground:'#28779a', accent:'#f0d491', artifact:['🧭','🗺️','🪙']}
+      {name:'Шкільний коридор',icon:'🏫',accent:'#2563eb',artifact:['🪙','⭐','🔔']},
+      {name:'Бібліотека',icon:'📚',accent:'#b45309',artifact:['🪙','📘','⭐']},
+      {name:'Кабінет історії',icon:'📜',accent:'#7c2d12',artifact:['🪙','📜','⭐']},
+      {name:'Кабінет географії',icon:'🌍',accent:'#0369a1',artifact:['🪙','🧭','⭐']},
+      {name:'Лабораторія',icon:'🧪',accent:'#0f766e',artifact:['🪙','🧪','⭐']}
     ];
 
     const dinoSkins = {
-      teacher:{label:'Вчитель', icon:'👨‍🏫', itemId:'skin_teacher'},
-      dino:{label:'Дино', icon:'🦖', itemId:'skin_dino'},
-      cossack:{label:'Козак', icon:'⚔️', itemId:'skin_cossack'},
-      knight:{label:'Лицар', icon:'🛡️', itemId:'skin_knight'},
-      pharaoh:{label:'Фараон', icon:'𓂀', itemId:'skin_pharaoh'},
-      explorer:{label:'Мандрівник', icon:'🧭', itemId:'skin_explorer'},
-      archaeologist:{label:'Археолог', icon:'🏺', itemId:'skin_archaeologist'},
-      pirate:{label:'Пірат', icon:'☠️', itemId:'skin_pirate'},
-      prince:{label:'Князь', icon:'♛', itemId:'skin_prince'},
-      legionary:{label:'Римський легіонер', icon:'🏛️', itemId:'skin_legionary'},
-      scythian:{label:'Скіфський лучник', icon:'🏹', itemId:'skin_scythian'},
-      viking:{label:'Вікінг', icon:'ᚱ', itemId:'skin_viking'},
-      musketeer:{label:'Мушкетер', icon:'⚜️', itemId:'skin_musketeer'},
-      samurai:{label:'Самурай', icon:'⛩️', itemId:'skin_samurai'}
+      student:{label:'Учень',icon:'🎒',itemId:'skin_student'},
+      hoodie:{label:'Худі',icon:'🧥',itemId:'outfit_hoodie'},
+      varsity:{label:'Бомбер ліцею',icon:'🏫',itemId:'outfit_varsity'},
+      uniform:{label:'Парадний образ',icon:'👔',itemId:'outfit_uniform'},
+      history_club:{label:'Клуб історії',icon:'📜',itemId:'outfit_history'},
+      geo_club:{label:'Клуб географії',icon:'🌍',itemId:'outfit_geo'},
+      sport:{label:'Спортивний комплект',icon:'🏃',itemId:'outfit_sport'},
+      cyber:{label:'Cyber Student',icon:'⚡',itemId:'outfit_cyber'},
+      honor:{label:'Легенда ліцею',icon:'👑',itemId:'outfit_honor'},
+      dino:{label:'Костюм Dino',icon:'🦖',itemId:'skin_dino'},
+      teacher:{label:'Маскування вчителя',icon:'👨‍🏫',itemId:'skin_teacher'},
+      cossack:{label:'Козак',icon:'⚔️',itemId:'skin_cossack'},
+      knight:{label:'Лицар',icon:'🛡️',itemId:'skin_knight'},
+      pharaoh:{label:'Фараон',icon:'𓂀',itemId:'skin_pharaoh'},
+      explorer:{label:'Мандрівник',icon:'🧭',itemId:'skin_explorer'},
+      archaeologist:{label:'Археолог',icon:'🏺',itemId:'skin_archaeologist'},
+      pirate:{label:'Пірат',icon:'☠️',itemId:'skin_pirate'},
+      prince:{label:'Князь',icon:'♛',itemId:'skin_prince'},
+      legionary:{label:'Римський легіонер',icon:'🏛️',itemId:'skin_legionary'},
+      scythian:{label:'Скіфський лучник',icon:'🏹',itemId:'skin_scythian'},
+      viking:{label:'Вікінг',icon:'ᚱ',itemId:'skin_viking'},
+      musketeer:{label:'Мушкетер',icon:'⚜️',itemId:'skin_musketeer'},
+      samurai:{label:'Самурай',icon:'⛩️',itemId:'skin_samurai'}
     };
 
     const player = {x:122,y:GROUND_Y-92,w:64,h:92,vy:0,jumping:false,ducking:false,lives:3,invulnerableUntil:0,shield:0,doubleUntil:0,magnetUntil:0};
@@ -4375,11 +4394,11 @@ body.dino-no-scroll{overflow:hidden!important;}
     let missionComplete = false;
 
     const missionPool = [
-      {type:'score', target:700, text:'Наберіть 700 очок'},
-      {type:'artifacts', target:6, text:'Зберіть 6 артефактів'},
-      {type:'survive', target:45, text:'Протримайтеся 45 секунд'},
-      {type:'dodge', target:16, text:'Подолайте 16 перешкод'},
-      {type:'kills', target:7, text:'Знешкодьте 7 нападників'}
+      {type:'score',target:1500,text:'Наберіть 1500 очок'},
+      {type:'artifacts',target:8,text:'Зберіть 8 жетонів'},
+      {type:'survive',target:60,text:'Протримайтеся 60 секунд'},
+      {type:'dodge',target:15,text:'Подолайте 15 перешкод'},
+      {type:'kills',target:12,text:'Знешкодьте 12 вчителів'}
     ];
 
     function rand(min,max){ return min + Math.random()*(max-min); }
@@ -4397,14 +4416,14 @@ body.dino-no-scroll{overflow:hidden!important;}
       const select=document.getElementById('dinoSkinSelect'); if(!select) return;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
       select.innerHTML=Object.entries(dinoSkins).map(([id,def])=>{
-        const isOwned=id==='dino'||!!owned[def.itemId];
+        const isOwned=id==='student'||!!owned[def.itemId];
         return `<option value="${id}" ${isOwned?'':'disabled'}>${def.icon} ${def.label}${isOwned?'':' 🔒'}</option>`;
       }).join('');
 
       const currentDef=dinoSkins[currentDinoSkin];
-      if(!currentDef || (currentDinoSkin!=='dino' && !owned[currentDef.itemId])){
-        currentDinoSkin='dino';
-        localStorage.setItem('dino_skin','dino');
+      if(!currentDef || (currentDinoSkin!=='student' && !owned[currentDef.itemId])){
+        currentDinoSkin='student';
+        localStorage.setItem('dino_skin','student');
       }
       select.value=currentDinoSkin;
     }
@@ -4412,14 +4431,14 @@ body.dino-no-scroll{overflow:hidden!important;}
     async function setDinoSkin(value){
       const def=dinoSkins[value]; if(!def) return;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
-      if(value!=='dino'&&!owned[def.itemId]){
+      if(value!=='student'&&!owned[def.itemId]){
         portalToast('🔒 Цей скін ще не придбано.');
         updateDinoSkinOptions();
         return;
       }
-      const itemId=value==='dino'?'skin_dino':def.itemId;
+      const itemId=value==='student'?'skin_student':def.itemId;
       const res=await window.portalScore?.equipPortalItem?.('skin',itemId);
-      if(res?.ok||value==='dino'){
+      if(res?.ok||value==='student'){
         currentDinoSkin=value;
         localStorage.setItem('dino_skin',currentDinoSkin);
         updateDinoSkinOptions();
@@ -4433,14 +4452,14 @@ body.dino-no-scroll{overflow:hidden!important;}
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
       const entries=Object.entries(dinoWeapons);
       select.innerHTML=entries.map(([id,def])=>{
-        const isOwned=id==='firebreath'||!!owned[def.itemId];
+        const isOwned=id==='school_blaster'||!!owned[def.itemId];
         const stat=`${def.damage} шк. · ${def.mag} зар.`;
         return `<option value="${id}" ${isOwned?'':'disabled'}>${def.name} — ${stat}${isOwned?'':' 🔒'}</option>`;
       }).join('');
 
-      if(!dinoWeapons[currentDinoWeapon] || (currentDinoWeapon!=='firebreath'&&!owned[dinoWeapons[currentDinoWeapon]?.itemId])){
-        currentDinoWeapon='firebreath';
-        localStorage.setItem('dino_weapon','firebreath');
+      if(!dinoWeapons[currentDinoWeapon] || (currentDinoWeapon!=='school_blaster'&&!owned[dinoWeapons[currentDinoWeapon]?.itemId])){
+        currentDinoWeapon='school_blaster';
+        localStorage.setItem('dino_weapon','school_blaster');
       }
       select.value=currentDinoWeapon;
 
@@ -4454,14 +4473,14 @@ body.dino-no-scroll{overflow:hidden!important;}
     async function setDinoWeapon(value){
       const def=dinoWeapons[value]; if(!def) return;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
-      if(value!=='firebreath'&&!owned[def.itemId]){
+      if(value!=='school_blaster'&&!owned[def.itemId]){
         portalToast('🔒 Цю зброю ще не придбано.');
         updateDinoWeaponOptions();
         return;
       }
-      const itemId=value==='firebreath'?'weapon_firebreath':def.itemId;
+      const itemId=value==='school_blaster'?'weapon_school_blaster':def.itemId;
       const res=await window.portalScore?.equipPortalItem?.('weapon',itemId);
-      if(res?.ok||value==='firebreath'){
+      if(res?.ok||value==='school_blaster'){
         currentDinoWeapon=value;
         localStorage.setItem('dino_weapon',currentDinoWeapon);
         dinoReloadUntil=0;
@@ -4556,7 +4575,7 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     function currentWeapon(){
-      return dinoWeapons[currentDinoWeapon] || dinoWeapons.firebreath;
+      return dinoWeapons[currentDinoWeapon] || dinoWeapons.school_blaster;
     }
 
     function updateCombatHUD(){
@@ -4683,7 +4702,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       dinoScore=0; dinoArtifactsRun=0; dinoElapsed=0; gameSpeed=300; worldOffset=0;
       obstacleTimer=500; collectibleTimer=1200; powerTimer=5000; themeIndex=0; previousThemeIndex=0; themeTransition=1; lastThemeIndex=-1; screenShake=0; dodgeCount=0;
       obstacles=[];collectibles=[];powerups=[];particles=[];floatTexts=[];enemies=[];projectiles=[];ultraFx=[];
-      enemySpawnTimer=1900;dinoKills=0;dinoAutoFire=true;dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;dinoReloadUntil=0;dinoLastShotAt=0;dinoMuzzleFlashUntil=0;dinoLockedTargetId=null;
+      enemySpawnTimer=1500;dinoKills=0;dinoAutoFire=true;bellBossSpawned=false;bellVictory=false;bellCombo=0;bellBestCombo=0;dinoMaxAmmo=currentWeapon().mag||6;dinoAmmo=dinoMaxAmmo;dinoReloadUntil=0;dinoLastShotAt=0;dinoMuzzleFlashUntil=0;dinoLockedTargetId=null;
       const owned=window.portalEconomyProfile?.portal_owned_items||{};
       dinoMaxLives=owned.boost_heart?4:3;
       const now=performance.now();
@@ -4695,7 +4714,11 @@ body.dino-no-scroll{overflow:hidden!important;}
     function updateDinoHUD(){
       const scoreEl=document.getElementById('dinoScore'); if(scoreEl) scoreEl.textContent=Math.floor(dinoScore);
       const lives=document.getElementById('dinoLives'); if(lives) lives.textContent='❤️'.repeat(player.lives)+'🖤'.repeat(Math.max(0,dinoMaxLives-player.lives));
-      const t=dinoThemes[themeIndex]; const loc=document.getElementById('dinoLocation'); if(loc) loc.textContent=`${t.icon} ${t.name}`;
+      const t=dinoThemes[themeIndex];
+      const loc=document.getElementById('dinoLocation');
+      const remain=Math.max(0,Math.ceil((bellRoundDuration-dinoElapsed)/1000));
+      const mm=String(Math.floor(remain/60)).padStart(2,'0'),ss=String(remain%60).padStart(2,'0');
+      if(loc) loc.textContent=`🔔 ${mm}:${ss} • ${t.icon} ${t.name}`;
       const now=performance.now(); const status=[];
       if(player.shield) status.push('🛡 Щит');
       if(player.doubleUntil>now) status.push(`⭐ x2 ${Math.ceil((player.doubleUntil-now)/1000)}с`);
@@ -4726,54 +4749,62 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     function spawnObstacle(){
-      const difficulty=clamp(dinoScore/1800,0,1);
-      const pool=['rock','fire','cart','barrier','bird'];
+      const difficulty=clamp((dinoElapsed/1000)/90,0,1);
+      const pool=['backpack','books','chair','ruler','paperplane'];
       const type=pool[Math.floor(Math.random()*pool.length)];
-      let o={type,x:DINO_W+30,passed:false};
-      if(type==='bird') Object.assign(o,{y:GROUND_Y-68,w:42,h:28,icon:'🐦'});
-      if(type==='rock') Object.assign(o,{y:GROUND_Y-30,w:34,h:30,icon:'🪨'});
-      if(type==='fire') Object.assign(o,{y:GROUND_Y-39,w:32,h:39,icon:'🔥'});
-      if(type==='cart') Object.assign(o,{y:GROUND_Y-39,w:48,h:39,icon:'🛒'});
-      if(type==='barrier') Object.assign(o,{y:GROUND_Y-43,w:42,h:43,icon:'🧱'});
-      o.speedBonus=rand(0,45*difficulty);
+      let o={type,x:DINO_W+35,passed:false};
+      if(type==='paperplane')Object.assign(o,{y:GROUND_Y-rand(105,155),w:46,h:24});
+      if(type==='backpack')Object.assign(o,{y:GROUND_Y-43,w:42,h:43});
+      if(type==='books')Object.assign(o,{y:GROUND_Y-39,w:47,h:39});
+      if(type==='chair')Object.assign(o,{y:GROUND_Y-49,w:51,h:49});
+      if(type==='ruler')Object.assign(o,{y:GROUND_Y-55,w:32,h:55});
+      o.speedBonus=rand(0,55*difficulty);
       obstacles.push(o);
     }
 
 
     function enemyPalette(idx){
       return [
-        {cloth:'#4b5563',accent:'#9a6a3a',metal:'#9ca3af',skin:'#c99068'},
-        {cloth:'#5d4b32',accent:'#c43a31',metal:'#a8afb7',skin:'#c98f64'},
-        {cloth:'#8b6b45',accent:'#1d4f9a',metal:'#d5b45a',skin:'#b9825a'},
-        {cloth:'#374151',accent:'#7f1d1d',metal:'#9ca3af',skin:'#c48a63'},
-        {cloth:'#5d4037',accent:'#1f6c8c',metal:'#c0c7ce',skin:'#be845c'}
-      ][idx] || {cloth:'#4b5563',accent:'#9a6a3a',metal:'#9ca3af',skin:'#c99068'};
+        {cloth:'#334155',accent:'#2563eb',metal:'#94a3b8',skin:'#d5a173'},
+        {cloth:'#6b4f3d',accent:'#b45309',metal:'#a8a29e',skin:'#d1a073'},
+        {cloth:'#5b2b2b',accent:'#991b1b',metal:'#a8a29e',skin:'#ca936a'},
+        {cloth:'#164e63',accent:'#0284c7',metal:'#94a3b8',skin:'#d2a177'},
+        {cloth:'#14532d',accent:'#0f766e',metal:'#cbd5e1',skin:'#cca078'}
+      ][idx]||{cloth:'#334155',accent:'#2563eb',metal:'#94a3b8',skin:'#d5a173'};
     }
 
     function spawnEnemy(){
-      const difficulty=clamp(dinoScore/2200,0,1);
+      const difficulty=clamp((dinoElapsed/1000)/90,0,1);
       const palette=enemyPalette(themeIndex);
       const roll=Math.random();
-      let type='raider';
-      if(roll>.72) type='brute';
-      if(roll>.9) type='flyer';
-
+      let type='teacher';
+      if(roll>.72)type='brute';
+      if(roll>.92)type='flyer';
       const e={
-        id:++enemySerial,
-        type,theme:themeIndex,
-        x:DINO_W+80,
-        y:GROUND_Y-72,
-        w:50,h:72,
-        hp:type==='brute'?3:type==='flyer'?1:2,
-        maxHp:type==='brute'?3:type==='flyer'?1:2,
-        speed:(type==='brute'?72:type==='flyer'?115:92)+difficulty*70+rand(-8,12),
-        dead:false,hitFlash:0,walk:rand(0,Math.PI*2),
-        palette
+        id:++enemySerial,type,theme:themeIndex,
+        x:DINO_W+90,y:GROUND_Y-84,w:58,h:84,
+        hp:type==='brute'?4:type==='flyer'?1:2,
+        maxHp:type==='brute'?4:type==='flyer'?1:2,
+        speed:(type==='brute'?68:type==='flyer'?138:98)+difficulty*84+rand(-8,14),
+        dead:false,hitFlash:0,walk:rand(0,Math.PI*2),palette,
+        subject:['Черговий','Бібліотекар','Історик','Географ','Лаборант'][themeIndex]||'Вчитель'
       };
-      if(type==='flyer'){
-        e.y=GROUND_Y-rand(120,190);e.w=46;e.h=38;
-      }
+      if(type==='flyer'){e.y=GROUND_Y-rand(135,210);e.w=48;e.h=34;e.subject='Летюча контрольна';}
       enemies.push(e);
+    }
+
+    function spawnDirectorBoss(){
+      if(bellBossSpawned)return;
+      bellBossSpawned=true;
+      enemies.push({
+        id:++enemySerial,type:'director',theme:4,
+        x:DINO_W+140,y:GROUND_Y-118,w:82,h:118,
+        hp:12,maxHp:12,speed:64,dead:false,hitFlash:0,walk:0,
+        palette:{cloth:'#1f2937',accent:'#7c3aed',metal:'#fbbf24',skin:'#d2a177'},
+        subject:'Директор'
+      });
+      floatText(DINO_W*.48,90,'👔 БОС: ДИРЕКТОР!','#7c3aed');
+      screenShake=5;
     }
 
     function enemyHitbox(e){
@@ -4810,16 +4841,17 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     function killDinoEnemy(enemy){
-      if(enemy.dead) return;
-      enemy.dead=true;
-      dinoKills++;
+      if(enemy.dead)return;
+      enemy.dead=true;dinoKills++;bellCombo++;bellBestCombo=Math.max(bellBestCombo,bellCombo);
       const mult=player.doubleUntil>performance.now()?2:1;
-      const reward=enemy.type==='brute'?95:enemy.type==='flyer'?55:70;
+      const comboMult=1+Math.min(.75,bellCombo*.025);
+      const baseReward=enemy.type==='director'?420:enemy.type==='brute'?105:enemy.type==='flyer'?55:75;
+      const reward=Math.round(baseReward*comboMult);
       dinoScore+=reward*mult;
-      burst(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,18);
-      emitImpactUltraFx(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,1.45);
-      floatText(enemy.x-5,enemy.y-13,`+${reward}`,'#f59e0b');
-      screenShake=Math.max(screenShake,4);
+      burst(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,enemy.type==='director'?32:18);
+      emitImpactUltraFx(enemy.x+enemy.w/2,enemy.y+enemy.h/2,enemy.palette.accent,enemy.type==='director'?2:1.45);
+      floatText(enemy.x-5,enemy.y-13,`+${reward}${bellCombo>=5?` • COMBO x${bellCombo}`:''}`,'#f59e0b');
+      screenShake=Math.max(screenShake,enemy.type==='director'?8:4);
       updateCombatHUD();
     }
 
@@ -4882,6 +4914,7 @@ body.dino-no-scroll{overflow:hidden!important;}
         return;
       }
 
+      bellCombo=0;
       player.lives--;
       player.invulnerableUntil=now+1400;
       screenShake=7;
@@ -4892,35 +4925,19 @@ body.dino-no-scroll{overflow:hidden!important;}
       if(player.lives<=0) endDinoGame();
     }
 
-    function endDinoGame(){
-      if(!dinoGameRunning) return;
-      dinoGameRunning=false;
-      dinoGameOver=true;
-      dinoLockedTargetId=null;
+    function endDinoGame(victory=false){
+      if(!dinoGameRunning)return;
+      dinoGameRunning=false;dinoGameOver=true;bellVictory=!!victory;dinoLockedTargetId=null;
       cancelAnimationFrame(dinoAnimationId);
-
+      if(victory){dinoScore+=500;dinoArtifactsRun+=3;}
       const finalScore=Math.max(0,Math.floor(dinoScore));
-      if(finalScore>dinoHighScore){
-        dinoHighScore=finalScore;
-        localStorage.setItem('dino_high_score',String(dinoHighScore));
-      }
-
-      dinoArtifactsTotal+=dinoArtifactsRun;
-      localStorage.setItem('dino_artifacts_total',String(dinoArtifactsTotal));
-
-      updateDinoHighScoreUI();
-      updateDinoHUD();
-      updateMissionUI();
-
+      if(finalScore>dinoHighScore){dinoHighScore=finalScore;localStorage.setItem('dino_high_score',String(dinoHighScore));}
+      dinoArtifactsTotal+=dinoArtifactsRun;localStorage.setItem('dino_artifacts_total',String(dinoArtifactsTotal));
+      updateDinoHighScoreUI();updateDinoHUD();updateMissionUI();
       const duration=Math.max(1,Date.now()-dinoRunStartedAt);
       saveDinoLeaderboard(finalScore,dinoArtifactsRun,duration,dinoRunId);
-      drawGameOver(finalScore);
-
-      const btn=document.getElementById('dinoStartBtn');
-      if(btn){
-        btn.disabled=false;
-        btn.textContent='🔄 Ще раз';
-      }
+      drawGameOver(finalScore,victory);
+      const btn=document.getElementById('dinoStartBtn');if(btn){btn.disabled=false;btn.textContent='🔄 Ще раз';}
     }
 
     function burst(x,y,color,count=8){
@@ -4990,187 +5007,78 @@ body.dino-no-scroll{overflow:hidden!important;}
 
     function drawThemeBackdrop(theme,idx,alpha=1){
       ctx.save();ctx.globalAlpha=alpha;
+      const palettes=[
+        ['#dbeafe','#f8fafc'],['#fef3c7','#fff7ed'],['#f5e7d7','#fffaf4'],['#dff6ff','#f8fdff'],['#dff7ef','#f7fffb']
+      ][idx];
+      const wall=ctx.createLinearGradient(0,0,0,GROUND_Y);
+      wall.addColorStop(0,palettes[0]);wall.addColorStop(.22,palettes[1]);wall.addColorStop(1,'#eef2f6');
+      ctx.fillStyle=wall;ctx.fillRect(0,0,DINO_W,GROUND_Y);
 
-      const sky=ctx.createLinearGradient(0,0,0,GROUND_Y);
-      if(idx===0){sky.addColorStop(0,'#70b4e1');sky.addColorStop(.55,'#cfe9f7');sky.addColorStop(1,'#eef7fb');}
-      if(idx===1){sky.addColorStop(0,'#e9884e');sky.addColorStop(.52,'#f7c375');sky.addColorStop(1,'#fdebc0');}
-      if(idx===2){sky.addColorStop(0,'#e5a747');sky.addColorStop(.5,'#f6cf77');sky.addColorStop(1,'#fff0bf');}
-      if(idx===3){sky.addColorStop(0,'#667992');sky.addColorStop(.55,'#aab9ca');sky.addColorStop(1,'#dde7ef');}
-      if(idx===4){sky.addColorStop(0,'#2c94bd');sky.addColorStop(.58,'#92d5e7');sky.addColorStop(1,'#e8fbff');}
-      ctx.fillStyle=sky;ctx.fillRect(0,0,DINO_W,GROUND_Y);
-
-      // sun/moon + glow
-      const sx=DINO_W*.82, sy=62;
-      if(idx===3){
-        ultraGlow(sx,sy,75,'rgba(235,242,250,.8)',.16);
-        ctx.fillStyle='rgba(236,242,248,.78)';ctx.beginPath();ctx.arc(sx,sy,24,0,Math.PI*2);ctx.fill();
-      }else{
-        ultraGlow(sx,sy,100,idx===2?'rgba(255,207,84,.95)':'rgba(255,242,170,.95)',.20);
-        ctx.fillStyle=idx===2?'#ffd060':'#fff0a8';ctx.beginPath();ctx.arc(sx,sy,31,0,Math.PI*2);ctx.fill();
-        // god rays
-        ctx.save();ctx.translate(sx,sy);ctx.rotate(-.28);
-        const ray=ctx.createLinearGradient(0,0,-DINO_W*.62,DINO_H*.62);
-        ray.addColorStop(0,'rgba(255,247,190,.14)');ray.addColorStop(.45,'rgba(255,247,190,.03)');ray.addColorStop(1,'rgba(255,247,190,0)');
-        ctx.fillStyle=ray;ctx.beginPath();ctx.moveTo(-8,12);ctx.lineTo(-DINO_W*.68,DINO_H*.58);ctx.lineTo(-DINO_W*.40,DINO_H*.58);ctx.closePath();ctx.fill();ctx.restore();
+      ctx.fillStyle='rgba(255,255,255,.66)';ctx.fillRect(0,0,DINO_W,72);
+      for(let x=-100;x<DINO_W+160;x+=170){
+        const px=ultraParallaxX(x,.04,DINO_W+300);
+        ctx.strokeStyle='rgba(100,116,139,.12)';ctx.strokeRect(px,15,120,34);
+        ctx.fillStyle='rgba(255,255,235,.58)';ctx.fillRect(px+18,25,84,9);
       }
 
-      // clouds, each on a different parallax layer
-      for(let i=0;i<4;i++){
-        drawSkyCloud(ultraParallaxX(115+i*270,.065,DINO_W+480),50+(i%2)*35,.72+(i%3)*.12,.23+(i%2)*.09);
-      }
-
-      // far horizon
-      ctx.fillStyle=idx===2?'rgba(165,111,47,.20)':idx===1?'rgba(77,107,58,.22)':'rgba(60,82,103,.17)';
-      ctx.beginPath();ctx.moveTo(0,GROUND_Y);
-      for(let x=0;x<=DINO_W;x+=52){
-        let y=GROUND_Y-120+Math.sin((x+worldOffset*.055)/96)*17+Math.sin((x+38)/57)*7;
-        if(idx===2)y=GROUND_Y-92+Math.sin((x+worldOffset*.04)/120)*12;
-        ctx.lineTo(x,y);
-      }
-      ctx.lineTo(DINO_W,GROUND_Y);ctx.closePath();ctx.fill();
-
-      // thematic middle layer
       if(idx===0){
-        // Kyiv Rus: city walls, gate silhouette, domes
-        for(let i=0;i<5;i++){
-          const x=ultraParallaxX(80+i*240,.17,DINO_W+420);
-          ctx.fillStyle='rgba(86,64,45,.32)';
-          ctx.fillRect(x,GROUND_Y-113,126,84);
-          ctx.beginPath();ctx.moveTo(x-5,GROUND_Y-113);ctx.lineTo(x+63,GROUND_Y-153);ctx.lineTo(x+131,GROUND_Y-113);ctx.closePath();ctx.fill();
-          ctx.fillStyle='rgba(209,175,90,.42)';
-          ctx.beginPath();ctx.arc(x+63,GROUND_Y-157,19,Math.PI,0);ctx.fill();
-          ctx.fillRect(x+60,GROUND_Y-184,6,27);
-          ctx.strokeStyle='rgba(70,45,25,.33)';ctx.lineWidth=1;
-          for(let w=0;w<3;w++)ctx.strokeRect(x+17+w*34,GROUND_Y-85,12,22);
+        for(let i=0;i<7;i++){
+          const x=ultraParallaxX(50+i*220,.12,DINO_W+520);
+          ctx.fillStyle=i%2?'#3b82f6':'#2563eb';roundRectPath(x,100,116,210,8);ctx.fill();
+          ctx.strokeStyle='rgba(255,255,255,.30)';
+          for(let r=0;r<3;r++){ctx.strokeRect(x+10,116+r*61,42,50);ctx.strokeRect(x+63,116+r*61,42,50);}
         }
-        const gx=ultraParallaxX(DINO_W*.63,.095,DINO_W+620);
-        ctx.fillStyle='rgba(80,61,43,.25)';ctx.fillRect(gx,GROUND_Y-170,165,142);
-        ctx.clearRect(gx+55,GROUND_Y-98,52,70);
-        ctx.fillStyle='rgba(80,61,43,.25)';ctx.beginPath();ctx.moveTo(gx-8,GROUND_Y-170);ctx.lineTo(gx+82,GROUND_Y-216);ctx.lineTo(gx+173,GROUND_Y-170);ctx.closePath();ctx.fill();
-        for(let i=0;i<5;i++)drawUltraBird(ultraParallaxX(150+i*210,.045,DINO_W+430),45+(i%3)*20,.75,.22);
+        const cx=DINO_W*.52;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(cx,95,34,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='#475569';ctx.lineWidth=4;ctx.stroke();ctx.strokeStyle='#0f172a';ctx.lineWidth=3;
+        ctx.beginPath();ctx.moveTo(cx,95);ctx.lineTo(cx,74);ctx.moveTo(cx,95);ctx.lineTo(cx+16,101);ctx.stroke();
       }else if(idx===1){
-        // Cossack steppe: river, kurins, windmill
-        ctx.fillStyle='rgba(42,118,164,.25)';ctx.fillRect(0,GROUND_Y-72,DINO_W,25);
-        ctx.fillStyle='rgba(255,255,255,.14)';
-        for(let i=0;i<10;i++){let x=ultraParallaxX(i*130,.21,DINO_W+160);ctx.fillRect(x,GROUND_Y-65,46,2);}
         for(let i=0;i<6;i++){
-          const x=ultraParallaxX(35+i*205,.20,DINO_W+330);
-          ctx.fillStyle='rgba(90,62,38,.33)';ctx.fillRect(x,GROUND_Y-90,56,61);
-          ctx.beginPath();ctx.moveTo(x-6,GROUND_Y-90);ctx.lineTo(x+28,GROUND_Y-120);ctx.lineTo(x+62,GROUND_Y-90);ctx.closePath();ctx.fill();
+          const x=ultraParallaxX(30+i*250,.13,DINO_W+500);
+          ctx.fillStyle='#7c4a2b';roundRectPath(x,102,170,214,5);ctx.fill();ctx.fillStyle='#5d351f';
+          for(let s=0;s<4;s++)ctx.fillRect(x+8,143+s*44,154,6);
+          const colors=['#2563eb','#b91c1c','#15803d','#d97706','#7c3aed'];
+          for(let r=0;r<4;r++)for(let b=0;b<8;b++){ctx.fillStyle=colors[(b+r+i)%colors.length];ctx.fillRect(x+14+b*18,116+r*44,12,25+((b+r)%3)*4);}
         }
-        const wx=ultraParallaxX(DINO_W*.70,.115,DINO_W+650);
-        ctx.fillStyle='rgba(75,55,36,.24)';ctx.fillRect(wx,GROUND_Y-116,45,87);
-        ctx.strokeStyle='rgba(75,55,36,.33)';ctx.lineWidth=4;
-        const wa=dinoElapsed*.00045;
-        for(let k=0;k<4;k++){const a=wa+k*Math.PI/2;ctx.beginPath();ctx.moveTo(wx+22,GROUND_Y-153);ctx.lineTo(wx+22+Math.cos(a)*55,GROUND_Y-153+Math.sin(a)*55);ctx.stroke();}
-        ctx.fillStyle='rgba(52,91,40,.30)';
-        for(let i=0;i<22;i++){let x=ultraParallaxX(i*55,.62,DINO_W+100);ctx.fillRect(x,GROUND_Y-39-(i%3)*4,2,14+(i%4)*5);}
       }else if(idx===2){
-        // Egypt: pyramids, temple, obelisk, palm silhouettes
-        const pyr=(x,w,h,a)=>{
-          ctx.fillStyle=`rgba(179,126,57,${a})`;ctx.beginPath();ctx.moveTo(x,GROUND_Y-25);ctx.lineTo(x+w/2,GROUND_Y-h);ctx.lineTo(x+w,GROUND_Y-25);ctx.closePath();ctx.fill();
-          ctx.strokeStyle=`rgba(106,70,28,${a*.52})`;ctx.lineWidth=1.2;ctx.stroke();
-        };
-        pyr(ultraParallaxX(40,.085,DINO_W+720),270,197,.40);
-        pyr(ultraParallaxX(480,.065,DINO_W+800),210,150,.28);
-        const ox=ultraParallaxX(DINO_W*.73,.12,DINO_W+700);
-        ctx.fillStyle='rgba(145,96,39,.30)';ctx.beginPath();ctx.moveTo(ox,GROUND_Y-28);ctx.lineTo(ox+13,GROUND_Y-184);ctx.lineTo(ox+28,GROUND_Y-28);ctx.closePath();ctx.fill();
-        for(let c=0;c<4;c++){ctx.fillStyle='rgba(176,126,63,.22)';ctx.fillRect(ox+62+c*35,GROUND_Y-111,13,83);ctx.fillRect(ox+57+c*35,GROUND_Y-117,23,7);}
-        // palms
-        for(let i=0;i<5;i++){
-          const x=ultraParallaxX(160+i*250,.24,DINO_W+430);
-          ctx.strokeStyle='rgba(81,57,30,.38)';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,GROUND_Y-28);ctx.quadraticCurveTo(x+5,GROUND_Y-74,x+1,GROUND_Y-113);ctx.stroke();
-          ctx.fillStyle='rgba(38,100,57,.30)';
-          for(let a=0;a<6;a++){ctx.save();ctx.translate(x+1,GROUND_Y-113);ctx.rotate(-1.25+a*.5);ctx.beginPath();ctx.ellipse(20,0,23,5,0,0,Math.PI*2);ctx.fill();ctx.restore();}
-        }
-        // heat-haze
-        ctx.strokeStyle='rgba(255,244,194,.13)';ctx.lineWidth=2;
-        for(let j=0;j<3;j++){ctx.beginPath();for(let x=0;x<=DINO_W;x+=22){let y=128+j*28+Math.sin((x+worldOffset*.07+j*30)/48)*3;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
+        ctx.fillStyle='#244234';roundRectPath(170,95,DINO_W-340,205,12);ctx.fill();ctx.strokeStyle='#d6b98c';ctx.lineWidth=8;ctx.stroke();
+        ctx.fillStyle='rgba(255,255,255,.82)';ctx.font='700 23px Inter,sans-serif';ctx.textAlign='center';
+        ctx.fillText('ІСТОРІЯ • ХРОНОЛОГІЯ • ДЖЕРЕЛА',DINO_W/2,140);
+        ctx.strokeStyle='rgba(255,255,255,.45)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(255,205);ctx.lineTo(420,170);ctx.lineTo(580,220);ctx.lineTo(760,165);ctx.lineTo(930,210);ctx.stroke();
       }else if(idx===3){
-        // Medieval city: castle, towers, glowing windows
-        for(let i=0;i<5;i++){
-          const x=ultraParallaxX(60+i*220,.18,DINO_W+400);
-          ctx.fillStyle='rgba(50,61,74,.40)';ctx.fillRect(x,GROUND_Y-130,158,101);
-          ctx.fillRect(x+15,GROUND_Y-174,42,145);ctx.fillRect(x+102,GROUND_Y-184,39,155);
-          ctx.fillStyle='rgba(242,180,70,.30)';
-          for(let wx=0;wx<3;wx++){ctx.fillRect(x+23+wx*38,GROUND_Y-96,11,19);}
-          ctx.fillStyle='rgba(37,44,54,.38)';
-          for(let b=0;b<5;b++)ctx.fillRect(x+b*34,GROUND_Y-143,22,14);
-        }
-        const fx=ultraParallaxX(DINO_W*.67,.10,DINO_W+620);
-        ctx.strokeStyle='rgba(45,51,59,.45)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(fx+140,GROUND_Y-190);ctx.lineTo(fx+140,GROUND_Y-237);ctx.stroke();
-        ctx.fillStyle='rgba(127,29,29,.44)';ctx.beginPath();ctx.moveTo(fx+141,GROUND_Y-236);ctx.lineTo(fx+178,GROUND_Y-226);ctx.lineTo(fx+141,GROUND_Y-216);ctx.closePath();ctx.fill();
-        for(let i=0;i<4;i++)drawUltraBird(ultraParallaxX(180+i*230,.05,DINO_W+420),50+(i%2)*28,.7,.18);
+        ctx.fillStyle='#e0f2fe';roundRectPath(135,88,DINO_W-270,220,12);ctx.fill();ctx.strokeStyle='#60a5fa';ctx.lineWidth=6;ctx.stroke();
+        ctx.fillStyle='rgba(22,163,74,.58)';
+        [[260,175,90,42],[400,150,70,35],[535,195,85,43],[690,150,82,38],[830,190,90,45]].forEach(([x,y,rx,ry])=>{ctx.beginPath();ctx.ellipse(x,y,rx,ry,.15,0,Math.PI*2);ctx.fill();});
       }else{
-        // Age of Discovery: layered sea, ships, lighthouse
-        const sea=ctx.createLinearGradient(0,GROUND_Y-84,0,GROUND_Y);
-        sea.addColorStop(0,'rgba(43,137,174,.20)');sea.addColorStop(1,'rgba(20,102,145,.42)');
-        ctx.fillStyle=sea;ctx.fillRect(0,GROUND_Y-84,DINO_W,84);
-        ctx.strokeStyle='rgba(210,244,255,.25)';ctx.lineWidth=1.5;
-        for(let r=0;r<4;r++){ctx.beginPath();for(let x=0;x<=DINO_W;x+=22){let y=GROUND_Y-67+r*14+Math.sin((x+worldOffset*.33+r*31)/50)*4;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}
-        for(let i=0;i<3;i++){
-          const x=ultraParallaxX(60+i*390,.14,DINO_W+600);
-          ctx.fillStyle='rgba(83,57,36,.53)';ctx.beginPath();ctx.moveTo(x,GROUND_Y-75);ctx.lineTo(x+122,GROUND_Y-75);ctx.lineTo(x+90,GROUND_Y-47);ctx.lineTo(x+26,GROUND_Y-47);ctx.closePath();ctx.fill();
-          ctx.strokeStyle='rgba(70,48,30,.66)';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x+62,GROUND_Y-76);ctx.lineTo(x+62,GROUND_Y-168);ctx.stroke();
-          ctx.fillStyle='rgba(245,235,202,.64)';ctx.beginPath();ctx.moveTo(x+66,GROUND_Y-161);ctx.lineTo(x+66,GROUND_Y-92);ctx.lineTo(x+120,GROUND_Y-112);ctx.closePath();ctx.fill();
-          ctx.fillStyle='rgba(177,45,45,.45)';ctx.fillRect(x+64,GROUND_Y-169,30,8);
+        for(let i=0;i<6;i++){
+          const x=ultraParallaxX(40+i*245,.15,DINO_W+500);
+          ctx.fillStyle='#e2e8f0';roundRectPath(x,102,160,190,8);ctx.fill();ctx.strokeStyle='#94a3b8';ctx.lineWidth=2;ctx.stroke();
+          ctx.fillStyle='#0f766e';for(let r=0;r<3;r++)for(let c=0;c<4;c++){ctx.beginPath();ctx.arc(x+28+c*32,135+r*45,8,0,Math.PI*2);ctx.fill();}
         }
-        const lx=ultraParallaxX(DINO_W*.78,.065,DINO_W+760);
-        ctx.fillStyle='rgba(239,241,236,.28)';ctx.beginPath();ctx.moveTo(lx,GROUND_Y-67);ctx.lineTo(lx+10,GROUND_Y-174);ctx.lineTo(lx+31,GROUND_Y-174);ctx.lineTo(lx+43,GROUND_Y-67);ctx.closePath();ctx.fill();
-        ultraGlow(lx+21,GROUND_Y-184,48,'rgba(255,244,174,.9)',.18);
-        for(let i=0;i<6;i++)drawUltraBird(ultraParallaxX(100+i*185,.085,DINO_W+360),48+(i%3)*17,.8,.25);
+        ctx.fillStyle='#0f172a';roundRectPath(275,95,650,165,12);ctx.fill();ctx.fillStyle='#67e8f9';ctx.font='700 24px monospace';ctx.textAlign='center';
+        ctx.fillText('H₂O  •  CO₂  •  E = mc²  •  ⚗',DINO_W/2,150);ctx.fillStyle='#a7f3d0';ctx.fillText('SCIENCE LAB',DINO_W/2,205);
       }
 
+      for(let i=0;i<8;i++){
+        const x=ultraParallaxX(40+i*190,.72,DINO_W+300);
+        ctx.fillStyle=idx===4?'rgba(71,85,105,.52)':'rgba(120,78,45,.42)';
+        roundRectPath(x,GROUND_Y-70,105,18,5);ctx.fill();ctx.fillRect(x+12,GROUND_Y-52,7,46);ctx.fillRect(x+86,GROUND_Y-52,7,46);
+      }
       ctx.restore();
     }
 
     function drawBackground(theme,dt){
       const blend=clamp(themeTransition,0,1);
-      if(previousThemeIndex!==themeIndex && blend<1){
+      if(previousThemeIndex!==themeIndex&&blend<1){
         drawThemeBackdrop(dinoThemes[previousThemeIndex],previousThemeIndex,1-blend);
         drawThemeBackdrop(theme,themeIndex,blend);
-      }else{
-        drawThemeBackdrop(theme,themeIndex,1);
-      }
+      }else drawThemeBackdrop(theme,themeIndex,1);
 
-      // Ground base
-      const gg=ctx.createLinearGradient(0,GROUND_Y,0,DINO_H);
-      if(themeIndex===0){gg.addColorStop(0,'#7e704f');gg.addColorStop(1,'#4f4835');}
-      if(themeIndex===1){gg.addColorStop(0,'#68743d');gg.addColorStop(1,'#414b2a');}
-      if(themeIndex===2){gg.addColorStop(0,'#c69a56');gg.addColorStop(1,'#8e6133');}
-      if(themeIndex===3){gg.addColorStop(0,'#68717b');gg.addColorStop(1,'#3e4650');}
-      if(themeIndex===4){gg.addColorStop(0,'#5c8297');gg.addColorStop(1,'#344d60');}
-      ctx.fillStyle=gg;ctx.fillRect(0,GROUND_Y,DINO_W,DINO_H-GROUND_Y);
-
-      // contact edge
-      ctx.fillStyle='rgba(255,255,255,.24)';ctx.fillRect(0,GROUND_Y,DINO_W,2);
-
-      // moving texture layer
-      if(themeIndex===0||themeIndex===3){
-        ctx.strokeStyle='rgba(20,25,30,.15)';ctx.lineWidth=1;
-        for(let i=0;i<22;i++){
-          const x=ultraParallaxX(i*58,1.04,DINO_W+90), y=GROUND_Y+18+(i%4)*12;
-          ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+32,y+(i%2?3:-2));ctx.stroke();
-        }
-      }else if(themeIndex===2){
-        ctx.fillStyle='rgba(91,57,26,.16)';
-        for(let i=0;i<24;i++){
-          const x=ultraParallaxX(i*49,.98,DINO_W+80), y=GROUND_Y+18+(i%4)*12;
-          ctx.beginPath();ctx.ellipse(x,y,12+(i%3)*5,2,0,0,Math.PI*2);ctx.fill();
-        }
-      }else if(themeIndex===1){
-        ctx.strokeStyle='rgba(38,63,29,.32)';ctx.lineWidth=2;
-        for(let i=0;i<30;i++){
-          const x=ultraParallaxX(i*36,1.06,DINO_W+65);
-          ctx.beginPath();ctx.moveTo(x,GROUND_Y+3);ctx.lineTo(x+2,GROUND_Y-6-(i%4)*3);ctx.stroke();
-        }
-      }else{
-        ctx.strokeStyle='rgba(213,247,255,.18)';ctx.lineWidth=1.5;
-        for(let i=0;i<17;i++){
-          const x=ultraParallaxX(i*72,1.08,DINO_W+100), y=GROUND_Y+23+(i%3)*10;
-          ctx.beginPath();ctx.arc(x,y,24,Math.PI*1.08,Math.PI*1.92);ctx.stroke();
-        }
-      }
+      const floor=ctx.createLinearGradient(0,GROUND_Y,0,DINO_H);
+      floor.addColorStop(0,themeIndex===1?'#7b5b42':'#6b7280');floor.addColorStop(1,themeIndex===4?'#263a42':'#374151');
+      ctx.fillStyle=floor;ctx.fillRect(0,GROUND_Y,DINO_W,DINO_H-GROUND_Y);
+      ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=2;
+      for(let i=0;i<18;i++){const x=ultraParallaxX(i*95,1.05,DINO_W+140);ctx.beginPath();ctx.moveTo(x,GROUND_Y);ctx.lineTo(x+45,DINO_H);ctx.stroke();}
+      for(let y=GROUND_Y+36;y<DINO_H;y+=54){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(DINO_W,y);ctx.stroke();}
     }
 
     function emitDinoTrail(dt){
@@ -5252,6 +5160,64 @@ body.dino-no-scroll{overflow:hidden!important;}
       if(type==='pilum') return {...base,gripX:60,gripY:41,rearX:48,rearY:44};
       if(type==='disc') return {...base,gripX:57,gripY:43,rearX:48,rearY:48};
       return base;
+    }
+
+
+    function isSchoolOutfitSkin(skin){
+      return ['student','hoodie','varsity','uniform','history_club','geo_club','sport','cyber','honor'].includes(skin);
+    }
+
+    function drawStudentRunner(x,y,h,skin='student'){
+      const s=h/92,phase=skinRunPhase(),weapon=currentWeapon(),pose=getRunnerWeaponPose(weapon.type,phase);
+      const p={
+        student:{top:'#f8fafc',trim:'#2563eb',pants:'#334155',shoe:'#ef4444',bag:'#1d4ed8',hair:'#3f2d24'},
+        hoodie:{top:'#273449',trim:'#64748b',pants:'#111827',shoe:'#f8fafc',bag:'#0f172a',hair:'#3f2d24'},
+        varsity:{top:'#1d4ed8',trim:'#f8fafc',pants:'#1e293b',shoe:'#ef4444',bag:'#0f172a',hair:'#3f2d24'},
+        uniform:{top:'#f8fafc',trim:'#7f1d1d',pants:'#1f2937',shoe:'#111827',bag:'#334155',hair:'#3f2d24'},
+        history_club:{top:'#7f1d1d',trim:'#fbbf24',pants:'#292524',shoe:'#f8fafc',bag:'#451a03',hair:'#3f2d24'},
+        geo_club:{top:'#0369a1',trim:'#22c55e',pants:'#0f172a',shoe:'#f8fafc',bag:'#164e63',hair:'#3f2d24'},
+        sport:{top:'#0f766e',trim:'#f8fafc',pants:'#115e59',shoe:'#facc15',bag:'#134e4a',hair:'#3f2d24'},
+        cyber:{top:'#111827',trim:'#22d3ee',pants:'#020617',shoe:'#a855f7',bag:'#0f172a',hair:'#111827'},
+        honor:{top:'#f8fafc',trim:'#d4af37',pants:'#1e3a8a',shoe:'#fbbf24',bag:'#1e40af',hair:'#3f2d24'}
+      }[skin]||{top:'#f8fafc',trim:'#2563eb',pants:'#334155',shoe:'#ef4444',bag:'#1d4ed8',hair:'#3f2d24'};
+
+      ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+      ctx.fillStyle='rgba(15,23,42,.16)';ctx.beginPath();ctx.ellipse(34,88,32,7,0,0,Math.PI*2);ctx.fill();
+
+      ctx.fillStyle=p.bag;roundRectPath(4,31,18,35,7);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=2;ctx.stroke();
+
+      ctx.strokeStyle=p.pants;ctx.lineWidth=10;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(29,64);ctx.lineTo(24-phase*7,84);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(43,64);ctx.lineTo(49+phase*7,84);ctx.stroke();
+      ctx.strokeStyle=p.shoe;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(17-phase*7,86);ctx.lineTo(30-phase*7,86);ctx.stroke();ctx.beginPath();ctx.moveTo(44+phase*7,86);ctx.lineTo(58+phase*7,86);ctx.stroke();
+
+      const tg=ctx.createLinearGradient(15,25,49,66);tg.addColorStop(0,p.top);tg.addColorStop(.72,p.top);tg.addColorStop(1,'rgba(15,23,42,.25)');
+      ctx.fillStyle=tg;roundRectPath(16,26,34,42,10);ctx.fill();
+
+      ctx.fillStyle=p.trim;
+      if(skin==='hoodie'){ctx.beginPath();ctx.arc(33,28,15,Math.PI,0);ctx.fill();ctx.fillRect(31,37,3,19);}
+      else if(skin==='varsity'){ctx.fillRect(16,34,34,5);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(42,35,5,0,Math.PI*2);ctx.fill();}
+      else if(skin==='uniform'){ctx.beginPath();ctx.moveTo(28,27);ctx.lineTo(36,27);ctx.lineTo(33,42);ctx.closePath();ctx.fill();}
+      else if(skin==='history_club'){ctx.fillRect(16,44,34,4);ctx.fillStyle='#fbbf24';ctx.fillRect(40,31,6,9);}
+      else if(skin==='geo_club'){ctx.beginPath();ctx.arc(42,35,7,0,Math.PI*2);ctx.fill();}
+      else if(skin==='sport'){ctx.fillRect(16,43,34,5);}
+      else if(skin==='cyber'){ultraGlow(31,46,28,'rgba(34,211,238,.75)',.12);ctx.strokeStyle='#22d3ee';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(19,34);ctx.lineTo(46,34);ctx.moveTo(21,55);ctx.lineTo(45,55);ctx.stroke();}
+      else if(skin==='honor'){ctx.fillRect(16,43,34,4);ctx.fillStyle='#d4af37';ctx.beginPath();ctx.moveTo(38,30);ctx.lineTo(42,24);ctx.lineTo(46,30);ctx.closePath();ctx.fill();}
+      else ctx.fillRect(16,43,34,5);
+
+      ctx.strokeStyle=p.top;ctx.lineWidth=8;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(18,34);ctx.lineTo(pose.rearElbowX,pose.rearElbowY);ctx.lineTo(pose.rearX,pose.rearY);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(48,34);ctx.lineTo(pose.frontElbowX,pose.frontElbowY);ctx.lineTo(pose.gripX,pose.gripY);ctx.stroke();
+
+      ctx.fillStyle='#dfaa7c';ctx.beginPath();ctx.arc(pose.rearX,pose.rearY,3.6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(pose.gripX,pose.gripY,3.6,0,Math.PI*2);ctx.fill();
+
+      ctx.fillStyle='#dfaa7c';ctx.fillRect(30,18,8,10);ctx.beginPath();ctx.arc(34,14,13,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=p.hair;ctx.beginPath();ctx.arc(34,9,12,Math.PI,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(23,10);ctx.quadraticCurveTo(30,-1,46,6);ctx.lineTo(45,12);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#111827';ctx.beginPath();ctx.arc(39,14,1.6,0,Math.PI*2);ctx.fill();
+
+      if(skin==='cyber'){ctx.fillStyle='rgba(34,211,238,.45)';roundRectPath(29,10,18,8,4);ctx.fill();ctx.strokeStyle='#67e8f9';ctx.lineWidth=1;ctx.stroke();}
+      if(skin==='honor'){ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.moveTo(22,5);ctx.lineTo(26,-4);ctx.lineTo(31,3);ctx.lineTo(36,-5);ctx.lineTo(43,5);ctx.closePath();ctx.fill();}
+      ctx.restore();
     }
 
     function drawHumanRunner(x,y,h,skin){
@@ -5493,60 +5459,26 @@ body.dino-no-scroll{overflow:hidden!important;}
 
     function drawRunner(){
       const now=performance.now();
-      if(now<player.invulnerableUntil && Math.floor(now/90)%2===0) return;
-
-      const duck=player.ducking&&!player.jumping;
-      const y=duck?GROUND_Y-55:player.y;
-      const h=duck?58:92;
-
-      ctx.save();
-      ultraGlow(player.x+38,y+42,52,'rgba(255,255,255,.75)',.08);
-
-      if(currentDinoSkin==='dino'){
+      if(now<player.invulnerableUntil&&Math.floor(now/90)%2===0)return;
+      const duck=player.ducking&&!player.jumping,y=duck?GROUND_Y-55:player.y,h=duck?58:92;
+      ctx.save();ultraGlow(player.x+38,y+42,52,'rgba(96,165,250,.8)',.08);
+      if(isSchoolOutfitSkin(currentDinoSkin)){
+        drawStudentRunner(player.x-4,y,h,currentDinoSkin);drawPlayerWeapon(player.x-4,y,h,currentDinoSkin);
+      }else if(currentDinoSkin==='dino'){
         drawDinoCharacter(player.x-3,y,h);
-        if(performance.now()<dinoMuzzleFlashUntil){
-          ultraGlow(player.x+80,y+31,30,'rgba(251,146,60,.95)',.3);
-        }
       }else{
-        // Усі людські скіни, включно з Вчителем, малюються одним векторним skeleton.
-        // Це гарантує правильне положення рук і зброї.
-        drawHumanRunner(player.x-4,y,h,currentDinoSkin||'teacher');
-        drawPlayerWeapon(player.x-4,y,h,currentDinoSkin||'teacher');
+        drawHumanRunner(player.x-4,y,h,currentDinoSkin||'student');drawPlayerWeapon(player.x-4,y,h,currentDinoSkin||'student');
       }
       ctx.restore();
     }
 
     function drawObstacle(o){
-      ctx.save();
-      ctx.fillStyle='rgba(15,23,42,.17)';ctx.beginPath();ctx.ellipse(o.x+o.w/2,GROUND_Y-2,Math.max(13,o.w*.55),5,0,0,Math.PI*2);ctx.fill();
-
-      if(o.type==='rock'){
-        const rg=ctx.createLinearGradient(o.x,o.y,o.x+o.w,o.y+o.h);rg.addColorStop(0,'#8a929d');rg.addColorStop(1,'#505965');
-        ctx.fillStyle=rg;ctx.strokeStyle='#424a55';ctx.lineWidth=2;
-        ctx.beginPath();ctx.moveTo(o.x,o.y+o.h);ctx.lineTo(o.x+5,o.y+10);ctx.lineTo(o.x+18,o.y);ctx.lineTo(o.x+o.w,o.y+13);ctx.lineTo(o.x+o.w-3,o.y+o.h);ctx.closePath();ctx.fill();ctx.stroke();
-        ctx.strokeStyle='rgba(255,255,255,.25)';ctx.beginPath();ctx.moveTo(o.x+7,o.y+13);ctx.lineTo(o.x+18,o.y+5);ctx.stroke();
-      }else if(o.type==='fire'){
-        const g=ctx.createRadialGradient(o.x+o.w/2,o.y+o.h*.72,2,o.x+o.w/2,o.y+o.h*.55,o.w*.8);
-        g.addColorStop(0,'#fff5a1');g.addColorStop(.34,'#fbbf24');g.addColorStop(.66,'#f97316');g.addColorStop(1,'rgba(220,38,38,.1)');
-        ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(o.x+o.w*.5,o.y);ctx.quadraticCurveTo(o.x+o.w*.98,o.y+o.h*.46,o.x+o.w*.72,o.y+o.h);ctx.quadraticCurveTo(o.x+o.w*.5,o.y+o.h*.68,o.x+o.w*.3,o.y+o.h);ctx.quadraticCurveTo(o.x+o.w*.02,o.y+o.h*.45,o.x+o.w*.5,o.y);ctx.fill();
-        ultraGlow(o.x+o.w/2,o.y+o.h*.55,35,'rgba(249,115,22,.9)',.18);
-      }else if(o.type==='cart'){
-        const cg=ctx.createLinearGradient(o.x,o.y,o.x,o.y+o.h);cg.addColorStop(0,'#a06a39');cg.addColorStop(1,'#6e4628');
-        ctx.fillStyle=cg;roundRectPath(o.x,o.y+6,o.w,o.h-12,5);ctx.fill();
-        ctx.strokeStyle='#4b2f19';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(o.x+5,o.y+6);ctx.lineTo(o.x+o.w-5,o.y+o.h-6);ctx.stroke();
-        ctx.fillStyle='#303030';ctx.beginPath();ctx.arc(o.x+10,o.y+o.h,8,0,Math.PI*2);ctx.arc(o.x+o.w-10,o.y+o.h,8,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#b8b0a5';ctx.beginPath();ctx.arc(o.x+10,o.y+o.h,3,0,Math.PI*2);ctx.arc(o.x+o.w-10,o.y+o.h,3,0,Math.PI*2);ctx.fill();
-      }else if(o.type==='barrier'){
-        const bg=ctx.createLinearGradient(o.x,o.y,o.x+o.w,o.y);bg.addColorStop(0,'#7b4e2b');bg.addColorStop(.5,'#a87341');bg.addColorStop(1,'#6d4326');
-        ctx.fillStyle=bg;ctx.fillRect(o.x+5,o.y,o.w-10,o.h);
-        ctx.fillStyle='#e4bd76';for(let y=4;y<o.h;y+=10)ctx.fillRect(o.x+5,o.y+y,o.w-10,4);
-      }else if(o.type==='bird'){
-        const flap=Math.sin(dinoElapsed*.018+o.x*.02)*6;
-        ctx.strokeStyle='#364152';ctx.lineWidth=4;ctx.lineCap='round';
-        ctx.beginPath();ctx.moveTo(o.x,o.y+15);ctx.quadraticCurveTo(o.x+10,o.y+flap,o.x+20,o.y+14);ctx.quadraticCurveTo(o.x+30,o.y-flap,o.x+42,o.y+15);ctx.stroke();
-        ctx.fillStyle='#364152';ctx.beginPath();ctx.arc(o.x+22,o.y+15,5,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.moveTo(o.x+27,o.y+15);ctx.lineTo(o.x+34,o.y+18);ctx.lineTo(o.x+27,o.y+19);ctx.closePath();ctx.fill();
-      }
+      ctx.save();ctx.fillStyle='rgba(15,23,42,.17)';ctx.beginPath();ctx.ellipse(o.x+o.w/2,GROUND_Y-2,Math.max(14,o.w*.55),5,0,0,Math.PI*2);ctx.fill();
+      if(o.type==='backpack'){ctx.fillStyle='#1d4ed8';roundRectPath(o.x+3,o.y+5,o.w-6,o.h-5,10);ctx.fill();ctx.fillStyle='#60a5fa';roundRectPath(o.x+8,o.y+22,o.w-16,15,6);ctx.fill();}
+      else if(o.type==='books'){const cs=['#dc2626','#2563eb','#16a34a','#f59e0b'];for(let i=0;i<4;i++){ctx.fillStyle=cs[i];roundRectPath(o.x+(i%2)*3,o.y+o.h-10-(i+1)*8,o.w-(i%2)*5,8,2);ctx.fill();}}
+      else if(o.type==='chair'){ctx.strokeStyle='#475569';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(o.x+9,o.y+5);ctx.lineTo(o.x+9,o.y+35);ctx.lineTo(o.x+38,o.y+35);ctx.stroke();ctx.fillStyle='#64748b';roundRectPath(o.x+5,o.y,o.w-12,14,4);ctx.fill();}
+      else if(o.type==='ruler'){ctx.fillStyle='#fbbf24';roundRectPath(o.x+7,o.y,o.w-14,o.h,5);ctx.fill();ctx.strokeStyle='#92400e';ctx.lineWidth=1;for(let i=7;i<o.h;i+=8){ctx.beginPath();ctx.moveTo(o.x+8,o.y+i);ctx.lineTo(o.x+18,o.y+i);ctx.stroke();}}
+      else if(o.type==='paperplane'){ctx.fillStyle='#f8fafc';ctx.strokeStyle='#94a3b8';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(o.x,o.y+12);ctx.lineTo(o.x+o.w,o.y);ctx.lineTo(o.x+28,o.y+22);ctx.lineTo(o.x+20,o.y+14);ctx.closePath();ctx.fill();ctx.stroke();}
       ctx.restore();
     }
 
@@ -5605,75 +5537,48 @@ body.dino-no-scroll{overflow:hidden!important;}
     }
 
     function drawEnemy(e){
-      if(e.dead) return;
-      const p=e.palette;
-      ctx.save();
-      if(e.hitFlash>0) ctx.globalAlpha=.55;
+      if(e.dead)return;
+      ctx.save();if(e.hitFlash>0)ctx.globalAlpha=.55;
 
       if(e.type==='flyer'){
-        // fantasy winged raider / scarab-like silhouette depending on theme
-        ctx.translate(e.x,e.y);
-        ctx.strokeStyle=p.cloth;ctx.lineWidth=4;ctx.lineCap='round';
-        const flap=Math.sin(e.walk)*10;
-        ctx.beginPath();ctx.moveTo(22,18);ctx.quadraticCurveTo(7,2+flap,0,18);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(24,18);ctx.quadraticCurveTo(39,2-flap,46,18);ctx.stroke();
-        ctx.fillStyle=p.accent;ctx.beginPath();ctx.ellipse(23,20,11,9,0,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#111827';ctx.beginPath();ctx.arc(27,17,2,0,Math.PI*2);ctx.fill();
+        ctx.translate(e.x,e.y);ctx.fillStyle='#f8fafc';ctx.strokeStyle='#94a3b8';ctx.lineWidth=2;
+        for(let i=0;i<3;i++){ctx.save();ctx.translate(i*5,i*2);ctx.rotate(Math.sin(e.walk+i)*.08);roundRectPath(0,0,40,27,4);ctx.fill();ctx.stroke();ctx.strokeStyle='#64748b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(7,8);ctx.lineTo(32,8);ctx.moveTo(7,14);ctx.lineTo(27,14);ctx.stroke();ctx.restore();}
+        ctx.fillStyle='#ef4444';ctx.font='900 13px Inter,sans-serif';ctx.fillText('2',15,22);ctx.restore();return;
+      }
+
+      const isBoss=e.type==='director',brute=e.type==='brute',scale=isBoss?1.25:1;
+      ctx.translate(e.x,e.y);ctx.scale(scale,scale);
+      const W=e.w/scale,H=e.h/scale,p=e.palette,phase=Math.sin(e.walk)*5;
+      ctx.fillStyle='rgba(15,23,42,.18)';ctx.beginPath();ctx.ellipse(W*.5,H-1,W*.45,6,0,0,Math.PI*2);ctx.fill();
+
+      ctx.strokeStyle='#2f3540';ctx.lineWidth=8;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(W*.40,H*.67);ctx.lineTo(W*.32-phase*.22,H*.94);ctx.stroke();ctx.beginPath();ctx.moveTo(W*.60,H*.67);ctx.lineTo(W*.68+phase*.22,H*.94);ctx.stroke();
+
+      const bodyGrad=ctx.createLinearGradient(0,H*.25,W,H*.72);bodyGrad.addColorStop(0,p.cloth);bodyGrad.addColorStop(1,'#1f2937');
+      ctx.fillStyle=bodyGrad;roundRectPath(W*.19,H*.30,W*.62,H*.45,9);ctx.fill();ctx.fillStyle=p.accent;ctx.fillRect(W*.19,H*.57,W*.62,5);
+
+      ctx.strokeStyle=p.cloth;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(W*.23,H*.39);ctx.lineTo(W*.08,H*.58-phase*.18);ctx.stroke();ctx.beginPath();ctx.moveTo(W*.77,H*.39);ctx.lineTo(W*.90,H*.55+phase*.18);ctx.stroke();
+
+      ctx.fillStyle=p.skin;ctx.beginPath();ctx.arc(W*.50,H*.20,12,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#3f2d24';ctx.beginPath();ctx.arc(W*.50,H*.15,12,Math.PI,Math.PI*2);ctx.fill();
+
+      ctx.strokeStyle='#111827';ctx.lineWidth=2;ctx.strokeRect(W*.36,H*.18,8,6);ctx.strokeRect(W*.54,H*.18,8,6);ctx.beginPath();ctx.moveTo(W*.44,H*.21);ctx.lineTo(W*.54,H*.21);ctx.stroke();
+
+      if(brute||isBoss){
+        ctx.fillStyle=isBoss?'#4c1d95':'#166534';roundRectPath(W*.66,H*.42,W*.38,H*.39,5);ctx.fill();
+        ctx.fillStyle='#f8fafc';ctx.font=`900 ${isBoss?9:8}px Inter,sans-serif`;ctx.textAlign='center';ctx.fillText(isBoss?'НАКАЗ':'Д/З',W*.85,H*.58);ctx.strokeStyle='#fde68a';ctx.lineWidth=2;ctx.stroke();
       }else{
-        const phase=Math.sin(e.walk)*5;
-        // shadow
-        ctx.fillStyle='rgba(15,23,42,.18)';ctx.beginPath();ctx.ellipse(e.x+25,GROUND_Y-3,25,6,0,0,Math.PI*2);ctx.fill();
-
-        // legs
-        ctx.strokeStyle='#30343b';ctx.lineWidth=e.type==='brute'?9:7;ctx.lineCap='round';
-        ctx.beginPath();ctx.moveTo(e.x+19,e.y+52);ctx.lineTo(e.x+15-phase,e.y+69);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(e.x+31,e.y+52);ctx.lineTo(e.x+35+phase,e.y+69);ctx.stroke();
-
-        // body + belt
-        ctx.fillStyle=p.cloth;roundRectPath(e.x+10,e.y+24,31,e.type==='brute'?34:30,7);ctx.fill();
-        ctx.fillStyle=p.accent;ctx.fillRect(e.x+10,e.y+43,31,5);
-
-        // arm / weapon
-        ctx.strokeStyle=p.skin;ctx.lineWidth=6;
-        ctx.beginPath();ctx.moveTo(e.x+13,e.y+30);ctx.lineTo(e.x+3,e.y+45-phase*.4);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(e.x+39,e.y+30);ctx.lineTo(e.x+47,e.y+45+phase*.4);ctx.stroke();
-
-        // head
-        ctx.fillStyle=p.skin;ctx.beginPath();ctx.arc(e.x+26,e.y+15,e.type==='brute'?13:11,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle=p.metal;
-        if(e.theme===2){
-          // mummy-style wrappings
-          ctx.strokeStyle='#e8dcc0';ctx.lineWidth=4;
-          for(let yy=e.y+7;yy<e.y+22;yy+=5){ctx.beginPath();ctx.moveTo(e.x+16,yy);ctx.lineTo(e.x+36,yy+1);ctx.stroke();}
-        }else if(e.theme===4){
-          // pirate bandana
-          ctx.fillStyle='#7f1d1d';ctx.fillRect(e.x+15,e.y+6,22,5);
-          ctx.beginPath();ctx.moveTo(e.x+16,e.y+9);ctx.lineTo(e.x+7,e.y+18);ctx.lineTo(e.x+18,e.y+14);ctx.closePath();ctx.fill();
-        }else{
-          // hood/helmet
-          ctx.beginPath();ctx.arc(e.x+26,e.y+13,e.type==='brute'?14:12,Math.PI,Math.PI*2);ctx.fill();
-        }
-
-        // simple themed weapon
-        ctx.strokeStyle='#5b4630';ctx.lineWidth=3;
-        ctx.beginPath();ctx.moveTo(e.x+45,e.y+34);ctx.lineTo(e.x+55,e.y+56);ctx.stroke();
-        ctx.strokeStyle=p.metal;ctx.lineWidth=2;
-        ctx.beginPath();ctx.moveTo(e.x+52,e.y+52);ctx.lineTo(e.x+59,e.y+58);ctx.stroke();
-
-        if(e.type==='brute'){
-          ctx.strokeStyle=p.metal;ctx.lineWidth=3;
-          ctx.strokeRect(e.x+8,e.y+24,35,34);
-        }
+        ctx.fillStyle='#7c2d12';roundRectPath(W*.69,H*.44,W*.29,H*.31,4);ctx.fill();ctx.fillStyle='#fde68a';ctx.font='900 8px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('КНИГА',W*.84,H*.59);
       }
 
-      // HP bar only when damaged / tougher
-      if(e.maxHp>1){
-        const bw=42,bh=4,x=e.x+(e.w-bw)/2,y=e.y-9;
-        ctx.fillStyle='rgba(15,23,42,.35)';ctx.fillRect(x,y,bw,bh);
-        ctx.fillStyle=e.hp/e.maxHp>.5?'#22c55e':e.hp/e.maxHp>.25?'#f59e0b':'#ef4444';
-        ctx.fillRect(x,y,bw*clamp(e.hp/e.maxHp,0,1),bh);
-      }
+      if(isBoss){ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.moveTo(W*.34,H*.08);ctx.lineTo(W*.40,H*.00);ctx.lineTo(W*.49,H*.07);ctx.lineTo(W*.58,H*.00);ctx.lineTo(W*.66,H*.08);ctx.closePath();ctx.fill();}
       ctx.restore();
+
+      if(e.maxHp>1){
+        const bw=isBoss?74:46,bh=isBoss?7:4,x=e.x+(e.w-bw)/2,y=e.y-11;
+        ctx.fillStyle='rgba(15,23,42,.45)';ctx.fillRect(x,y,bw,bh);ctx.fillStyle=e.hp/e.maxHp>.5?'#22c55e':e.hp/e.maxHp>.25?'#f59e0b':'#ef4444';ctx.fillRect(x,y,bw*clamp(e.hp/e.maxHp,0,1),bh);
+        if(isBoss){ctx.fillStyle='#7c3aed';ctx.font='900 9px Inter,sans-serif';ctx.textAlign='center';ctx.fillText('ДИРЕКТОР',x+bw/2,y-4);}
+      }
     }
 
 
@@ -5784,75 +5689,43 @@ body.dino-no-scroll{overflow:hidden!important;}
 
     function drawDinoAtmosphere(now){
       ctx.save();
-
-      // Theme weather / foreground depth
-      if(themeIndex===0){
-        const fog=ctx.createLinearGradient(0,GROUND_Y-100,0,GROUND_Y+10);
-        fog.addColorStop(0,'rgba(230,242,250,0)');fog.addColorStop(1,'rgba(230,242,250,.13)');
-        ctx.fillStyle=fog;ctx.fillRect(0,GROUND_Y-100,DINO_W,110);
-        ctx.strokeStyle='rgba(48,64,41,.23)';ctx.lineWidth=2.5;
-        for(let i=0;i<15;i++){const x=ultraParallaxX(i*85,1.18,DINO_W+120);ctx.beginPath();ctx.moveTo(x,GROUND_Y);ctx.lineTo(x+2,GROUND_Y-21-(i%4)*5);ctx.stroke();}
-      }else if(themeIndex===1){
-        ctx.strokeStyle='rgba(55,84,37,.28)';ctx.lineWidth=2;
-        for(let i=0;i<26;i++){const x=ultraParallaxX(i*48,1.15,DINO_W+80);ctx.beginPath();ctx.moveTo(x,GROUND_Y);ctx.quadraticCurveTo(x+4,GROUND_Y-14,x+2,GROUND_Y-28-(i%4)*4);ctx.stroke();}
-        for(let i=0;i<12;i++){const x=((i*97+worldOffset*.17+ultraWeatherSeed)%(DINO_W+80))-40,y=95+((i*43)%Math.max(70,GROUND_Y-115))+Math.sin(dinoElapsed*.001+i)*9;ctx.globalAlpha=.13;ctx.fillStyle='#f6d68b';ctx.beginPath();ctx.arc(x,y,2+(i%2),0,Math.PI*2);ctx.fill();}
-      }else if(themeIndex===2){
-        ctx.strokeStyle='rgba(238,199,126,.14)';ctx.lineWidth=1.4;
-        for(let i=0;i<13;i++){const x=((i*109-worldOffset*.46+ultraWeatherSeed)%(DINO_W+160)+DINO_W+160)%(DINO_W+160)-80,y=75+(i*31)%Math.max(80,GROUND_Y-90);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-45,y+7);ctx.stroke();}
-      }else if(themeIndex===3){
-        ctx.strokeStyle='rgba(210,228,242,.12)';ctx.lineWidth=1;
-        for(let i=0;i<16;i++){const x=((i*79-worldOffset*.22+ultraWeatherSeed)%(DINO_W+100))-50,y=35+(i*47)%Math.max(90,GROUND_Y-60);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-5,y+16);ctx.stroke();}
-      }else{
-        for(let i=0;i<11;i++){const x=((i*121-worldOffset*.25+ultraWeatherSeed)%(DINO_W+100))-50,y=GROUND_Y-70-(i%3)*16;ctx.globalAlpha=.12;ctx.fillStyle='#dff7ff';ctx.beginPath();ctx.arc(x,y,3+(i%2)*2,0,Math.PI*2);ctx.fill();}
-      }
+      for(let i=0;i<5;i++){const x=100+i*250,g=ctx.createLinearGradient(x,60,x,GROUND_Y);g.addColorStop(0,'rgba(255,255,255,.07)');g.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(x-70,60);ctx.lineTo(x+70,60);ctx.lineTo(x+140,GROUND_Y);ctx.lineTo(x-140,GROUND_Y);ctx.closePath();ctx.fill();}
+      for(let i=0;i<18;i++){const x=((i*89+worldOffset*.12+ultraWeatherSeed)%(DINO_W+100))-50,y=80+((i*53)%Math.max(100,GROUND_Y-120))+Math.sin(dinoElapsed*.001+i)*8;ctx.globalAlpha=.08+(i%3)*.025;ctx.fillStyle=themeIndex===4?'#a7f3d0':'#fff';ctx.beginPath();ctx.arc(x,y,1.5+(i%2),0,Math.PI*2);ctx.fill();}
       ctx.globalAlpha=1;
-
-      // speed lines
-      if(gameSpeed>420){
-        const k=clamp((gameSpeed-420)/190,0,.6);
-        ctx.strokeStyle=`rgba(255,255,255,${.09+k*.18})`;ctx.lineWidth=1.3;
-        for(let i=0;i<14;i++){const y=60+(i*29)%Math.max(80,GROUND_Y-80),x=ultraParallaxX(i*117,1.62,DINO_W+180);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-35-k*52,y);ctx.stroke();}
-      }
-
-      // cinematic color wash
-      const wash=ctx.createLinearGradient(0,0,0,DINO_H);
-      if(themeIndex===2){wash.addColorStop(0,'rgba(255,189,65,.07)');wash.addColorStop(1,'rgba(105,62,18,.05)');}
-      else if(themeIndex===3){wash.addColorStop(0,'rgba(120,150,195,.05)');wash.addColorStop(1,'rgba(20,29,44,.08)');}
-      else if(themeIndex===4){wash.addColorStop(0,'rgba(60,180,220,.05)');wash.addColorStop(1,'rgba(5,55,90,.07)');}
-      else {wash.addColorStop(0,'rgba(255,255,255,.025)');wash.addColorStop(1,'rgba(20,50,70,.045)');}
-      ctx.fillStyle=wash;ctx.fillRect(0,0,DINO_W,DINO_H);
-
-      // vignette
-      const vg=ctx.createRadialGradient(DINO_W*.5,DINO_H*.43,DINO_W*.17,DINO_W*.5,DINO_H*.46,DINO_W*.73);
-      vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(5,15,30,.23)');
-      ctx.fillStyle=vg;ctx.fillRect(0,0,DINO_W,DINO_H);
-
-      // player shadow
-      ctx.fillStyle='rgba(15,23,42,.17)';ctx.beginPath();ctx.ellipse(player.x+33,GROUND_Y-2,39,8,0,0,Math.PI*2);ctx.fill();
-
+      if(gameSpeed>410){const k=clamp((gameSpeed-410)/160,0,.65);ctx.strokeStyle=`rgba(255,255,255,${.08+k*.16})`;ctx.lineWidth=1.3;for(let i=0;i<14;i++){const y=75+(i*37)%Math.max(90,GROUND_Y-90),x=ultraParallaxX(i*117,1.7,DINO_W+180);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-40-k*55,y);ctx.stroke();}}
+      const vg=ctx.createRadialGradient(DINO_W*.5,DINO_H*.43,DINO_W*.18,DINO_W*.5,DINO_H*.46,DINO_W*.74);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(6,15,28,.22)');ctx.fillStyle=vg;ctx.fillRect(0,0,DINO_W,DINO_H);
+      ctx.fillStyle='rgba(15,23,42,.17)';ctx.beginPath();ctx.ellipse(player.x+38,GROUND_Y-2,43,8,0,0,Math.PI*2);ctx.fill();
       ctx.restore();
     }
 
-    function drawGameOver(finalScore){
-      ctx.save();ctx.fillStyle='rgba(15,23,42,.72)';ctx.fillRect(0,0,DINO_W,DINO_H);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='900 27px Inter,sans-serif';ctx.fillText('ЗАБІГ ЗАВЕРШЕНО',DINO_W/2,88);ctx.font='800 17px Inter,sans-serif';ctx.fillStyle='#fde68a';ctx.fillText(`${finalScore} очок • ${dinoArtifactsRun} артефактів`,DINO_W/2,120);ctx.font='12px Inter,sans-serif';ctx.fillStyle='#dbeafe';ctx.fillText('Натисніть «Ще раз» для нового забігу',DINO_W/2,150);ctx.restore();
+    function drawGameOver(finalScore,victory=false){
+      ctx.save();ctx.fillStyle='rgba(15,23,42,.78)';ctx.fillRect(0,0,DINO_W,DINO_H);ctx.textAlign='center';
+      if(victory){ultraGlow(DINO_W/2,DINO_H*.27,180,'rgba(251,191,36,.9)',.18);ctx.fillStyle='#fde68a';ctx.font='1000 44px Inter,sans-serif';ctx.fillText('🔔 ДЗВІНОК!',DINO_W/2,DINO_H*.24);ctx.fillStyle='#fff';ctx.font='900 28px Inter,sans-serif';ctx.fillText('ТИ ВИЖИВ ДО ДЗВІНКА',DINO_W/2,DINO_H*.31);}
+      else{ctx.fillStyle='#fff';ctx.font='900 32px Inter,sans-serif';ctx.fillText('РЕЙД ЗАВЕРШЕНО',DINO_W/2,DINO_H*.26);}
+      ctx.font='800 20px Inter,sans-serif';ctx.fillStyle='#bfdbfe';ctx.fillText(`${finalScore} очок • ${dinoKills} знешкоджено • combo x${bellBestCombo}`,DINO_W/2,DINO_H*.38);
+      ctx.font='15px Inter,sans-serif';ctx.fillStyle='#e2e8f0';ctx.fillText('Натисніть «Ще раз» для нового рейду',DINO_W/2,DINO_H*.44);ctx.restore();
     }
 
     function drawDinoIdleScreen(){
-      if(!canvas) return; const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawDinoAtmosphere(performance.now());ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.8)';ctx.font='900 18px Inter,sans-serif';ctx.fillText('DINO RUNNER 2.9.1',DINO_W/2,70);ctx.font='12px Inter,sans-serif';ctx.fillText('Стрибайте, присідайте та збирайте артефакти',DINO_W/2,92);ctx.restore();
+      if(!canvas)return;const theme=dinoThemes[0];ctx.clearRect(0,0,DINO_W,DINO_H);drawBackground(theme,0);drawRunner();drawDinoAtmosphere(performance.now());
+      ctx.save();ctx.textAlign='center';ctx.fillStyle='rgba(15,23,42,.90)';ctx.font='1000 34px Inter,sans-serif';ctx.fillText('🔔 ВИЖИТИ ДО ДЗВІНКА',DINO_W/2,95);ctx.font='700 16px Inter,sans-serif';ctx.fillStyle='#334155';ctx.fillText('90 секунд • автострільба • вчителі • бос-директор',DINO_W/2,126);ctx.restore();
     }
 
     function gameLoop(now){
       if(!dinoGameRunning) return;
       const dt=Math.min(.034,(now-dinoLastFrame)/1000||.016);dinoLastFrame=now;dinoElapsed+=dt*1000;
-      const mult=player.doubleUntil>now?2:1;dinoScore+=dt*12*mult;gameSpeed=clamp(300+dinoScore*.06,300,590);worldOffset+=gameSpeed*dt;
-      const nextTheme=Math.floor(dinoScore/500)%dinoThemes.length;
+      if(dinoElapsed>=bellRoundDuration){endDinoGame(true);return;}
+      const elapsedSec=dinoElapsed/1000,mult=player.doubleUntil>now?2:1;
+      dinoScore+=dt*(14+Math.min(10,bellCombo*.12))*mult;gameSpeed=clamp(285+elapsedSec*2.8,285,535);worldOffset+=gameSpeed*dt;
+      const nextTheme=Math.min(dinoThemes.length-1,Math.floor(elapsedSec/18));
       if(nextTheme!==themeIndex){
         previousThemeIndex=themeIndex;
         themeIndex=nextTheme;
         themeTransition=0;
         floatText(DINO_W*.42,62,`${dinoThemes[themeIndex].icon} ${dinoThemes[themeIndex].name}`,'#0f172a');
       }
-      if(themeTransition<1) themeTransition=Math.min(1,themeTransition+dt*.75);
+      if(themeTransition<1)themeTransition=Math.min(1,themeTransition+dt*.75);
+      if(elapsedSec>=75&&!bellBossSpawned)spawnDirectorBoss();
 
       player.vy+=1920*dt;player.y+=player.vy*dt;
       if(player.jumping)dinoWasAirborne=true;
@@ -5868,10 +5741,10 @@ body.dino-no-scroll{overflow:hidden!important;}
       obstacleTimer-=dt*1000;collectibleTimer-=dt*1000;powerTimer-=dt*1000;
       enemySpawnTimer-=dt*1000;completeDinoReload(now);
       updateDinoAutoTarget(now);
-      if(obstacleTimer<=0){spawnObstacle();obstacleTimer=rand(900,1500)*clamp(1-dinoScore/6000,.64,1);}
+      if(obstacleTimer<=0){spawnObstacle();obstacleTimer=rand(850,1450)*clamp(1-elapsedSec/160,.65,1);}
       if(collectibleTimer<=0){spawnCollectible();collectibleTimer=rand(1150,2100);}
       if(powerTimer<=0){spawnPowerup();powerTimer=rand(6500,10000);}
-      if(dinoScore>120 && enemySpawnTimer<=0){spawnEnemy();enemySpawnTimer=rand(1750,3100)*clamp(1-dinoScore/8500,.58,1);}
+      if(elapsedSec>2&&enemySpawnTimer<=0){spawnEnemy();enemySpawnTimer=rand(1050,2200)*clamp(1-elapsedSec/155,.58,1);}
 
       const ph=dinoHitbox();
       obstacles.forEach(o=>{o.x-=(gameSpeed+o.speedBonus)*dt;if(!o.passed&&o.x+o.w<player.x){o.passed=true;dodgeCount++;dinoScore+=18*mult;}if(aabb(ph,o))handleCollision(o,now);});
@@ -5879,8 +5752,8 @@ body.dino-no-scroll{overflow:hidden!important;}
 
       enemies.forEach(e=>{
         if(e.dead) return;
-        e.walk+=dt*(e.type==='flyer'?9:7);
-        e.x-=(gameSpeed*.24+e.speed)*dt;
+        e.walk+=dt*(e.type==='flyer'?9:e.type==='director'?4.5:7);
+        e.x-=(gameSpeed*(e.type==='director'?.16:.24)+e.speed)*dt;
         if(e.type==='flyer') e.y+=Math.sin(e.walk*1.4)*18*dt;
         if(e.hitFlash>0) e.hitFlash-=dt;
         if(aabb(ph,enemyHitbox(e))){
@@ -5931,7 +5804,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       });
       projectiles=projectiles.filter(p=>!p.dead&&p.life>0&&p.x<DINO_W+80);
 
-      collectibles.forEach(c=>{c.x-=gameSpeed*dt;c.spin+=dt*6;if(player.magnetUntil>now){const dx=player.x-c.x,dy=player.y-c.y,dist=Math.hypot(dx,dy);if(dist<180){c.x+=dx*dt*4.6;c.y+=dy*dt*4.6;}}if(!c.got&&aabb(ph,c)){c.got=true;dinoArtifactsRun++;dinoScore+=35*mult;burst(c.x,c.y,'#fbbf24',10);floatText(c.x,c.y,'+1 🏺','#b45309');}});collectibles=collectibles.filter(c=>!c.got&&c.x>-45);
+      collectibles.forEach(c=>{c.x-=gameSpeed*dt;c.spin+=dt*6;if(player.magnetUntil>now){const dx=player.x-c.x,dy=player.y-c.y,dist=Math.hypot(dx,dy);if(dist<180){c.x+=dx*dt*4.6;c.y+=dy*dt*4.6;}}if(!c.got&&aabb(ph,c)){c.got=true;dinoArtifactsRun++;dinoScore+=35*mult;burst(c.x,c.y,'#fbbf24',10);floatText(c.x,c.y,'+1 ⭐','#b45309');}});collectibles=collectibles.filter(c=>!c.got&&c.x>-45);
       powerups.forEach(p=>{p.x-=gameSpeed*dt;if(!p.got&&aabb(ph,p)){p.got=true;applyPowerup(p.type);}});powerups=powerups.filter(p=>!p.got&&p.x>-45);
 
       particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=320*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
@@ -6166,7 +6039,7 @@ body.dino-no-scroll{overflow:hidden!important;}
       { title: "🎓 Тренажер НМТ", desc: "Онлайн-тестування та підготовка до НМТ з історії та географії", url: "nmt.html" },
       { title: "📚 Методична скарбничка", desc: "Корисні розробки, методички та інструменти для вчителів", url: "methodology.html" },
       { title: "🎧 AUDIO & 3D Віртуальні Тури", desc: "Аудіоекскурсії та віртуальне занурення у видатні місця", url: "https://izi.travel/uk" },
-      { title: "🏺 3D Артефакти", desc: "Інтерактивні тривимірні моделі історичних артефактів", url: "https://sketchfab.com/tags/history" },
+      { title: "🏺 3D Артефакти", desc: "Інтерактивні тривимірні моделі історичних жетонів", url: "https://sketchfab.com/tags/history" },
       { title: "▶️ YouTube-канал «Реальна історія»", desc: "Відеоматеріали та історичні розслідування на YouTube", url: "https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" },
       { title: "🦖 Клуб дослідників & Динозаврик", desc: "Зона розваг, міні-ігри та студентська стіна коментарів", url: "#kids-club" }
     ];
