@@ -3793,7 +3793,8 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     let jetpackState={running:false,last:0,y:320,vy:0,distance:0,stars:0,spawn:0,obstacles:[],particles:[]};
 
     JETPACK_SKINS.forEach(skin=>{const image=new Image();image.src=skin.asset;image.onload=()=>{jetpackImageCache[skin.id]=image;if(!jetpackState.running)drawJetpackScene()};jetpackImageCache[skin.id]=image});
-    jetpackHeroImage.src=CHARACTER_ASSETS.neutral;
+    /* Окремий польотний спрайт має ремені поверх костюма, тому джетпак виглядає вдягненим, а не приклеєним. */
+    jetpackHeroImage.src='character-assets/mriyk-jetpack-flight.png';
     jetpackHeroImage.onload=()=>{if(!jetpackState.running)drawJetpackScene()};
 
     function jetpackDayKey(){
@@ -3925,11 +3926,11 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     function drawJetpackPlayer(ctx){
       const skin=jetpackSelected(),pack=jetpackImageCache[skin.id],y=jetpackState.y,x=190;
       ctx.save();ctx.translate(x,y);ctx.rotate(Math.max(-.18,Math.min(.22,jetpackState.vy/1200)));
-      if(jetpackInput&&jetpackState.running){const flame=34+Math.random()*24;const fire=ctx.createLinearGradient(-31,35,-86-flame*.2,35);fire.addColorStop(0,'#fff7ae');fire.addColorStop(.38,'#38bdf8');fire.addColorStop(1,'rgba(56,189,248,0)');ctx.fillStyle=fire;ctx.beginPath();ctx.moveTo(-28,20);ctx.lineTo(-70-flame,35);ctx.lineTo(-28,51);ctx.fill()}
-      /* Джетпак малюється позаду героя з великим перекриттям, тому він виглядає вдягненим. */
-      if(pack?.complete)ctx.drawImage(pack,-50,-74,132,148);
-      if(jetpackHeroImage.complete)ctx.drawImage(jetpackHeroImage,-4,-72,98,140);
-      else{ctx.fillStyle='#c084fc';ctx.beginPath();ctx.arc(44,-2,36,0,Math.PI*2);ctx.fill()}
+      if(jetpackInput&&jetpackState.running){const glow=12+Math.random()*10;ctx.save();ctx.globalAlpha=.3;ctx.fillStyle='#7dd3fc';ctx.beginPath();ctx.ellipse(57,65,60+glow,18+glow*.25,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+      /* Ранець лежить за спиною, а ремені вже намальовані на передньому шарі польотного костюма. */
+      if(pack?.complete)ctx.drawImage(pack,-18,-62,150,150);
+      if(jetpackHeroImage.complete)ctx.drawImage(jetpackHeroImage,-30,-105,175,210);
+      else{ctx.fillStyle='#c084fc';ctx.beginPath();ctx.arc(58,-5,38,0,Math.PI*2);ctx.fill()}
       ctx.restore();
     }
     function drawJetpackScene(){
@@ -3943,7 +3944,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       drawJetpackPlayer(ctx);
     }
     function jetpackCollision(obstacle){
-      const px=225,py=jetpackState.y,r=34;
+      const px=238,py=jetpackState.y,r=38;
       if(px+r<obstacle.x||px-r>obstacle.x+obstacle.w)return false;
       const top=obstacle.gapY-obstacle.gap/2,bottom=obstacle.gapY+obstacle.gap/2;
       return py-r<top||py+r>bottom;
