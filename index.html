@@ -10,7 +10,7 @@
   <!-- Підключення іконок -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-  <link rel="stylesheet" href="style.css?v=25">
+  <link rel="stylesheet" href="style.css?v=26">
   
   <style>
     html {
@@ -2406,6 +2406,57 @@ header .traveler-container{display:none!important}
 }
 </style>
 
+<style id="v26-escape-photo-cards-glass">
+/* Фото-картки місій: історичне зображення зверху, читабельна скляна панель знизу. */
+.escape-catalog-wrap{
+  background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(239,248,255,.68) 55%,rgba(255,247,237,.72))!important;
+  -webkit-backdrop-filter:blur(20px) saturate(145%)!important;
+  backdrop-filter:blur(20px) saturate(145%)!important;
+  border-color:rgba(255,255,255,.78)!important;
+}
+.escape-period-block{
+  background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(255,255,255,.65))!important;
+  border-color:rgba(255,255,255,.84)!important;
+  -webkit-backdrop-filter:blur(14px) saturate(135%)!important;
+  backdrop-filter:blur(14px) saturate(135%)!important;
+}
+.escape-chapter{
+  display:grid!important;grid-template-rows:112px minmax(112px,auto)!important;gap:0!important;
+  min-height:224px!important;padding:0!important;border-color:rgba(255,255,255,.88)!important;
+  background:rgba(255,255,255,.76)!important;box-shadow:0 10px 24px rgba(28,49,70,.12),inset 0 1px rgba(255,255,255,.9)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(140%)!important;backdrop-filter:blur(12px) saturate(140%)!important;
+}
+.escape-chapter:before{display:none!important}
+.escape-card-media{position:relative;display:block;width:100%;height:112px;overflow:hidden;background:linear-gradient(135deg,#16344d,#396782);isolation:isolate}
+.escape-card-media:after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(5,15,28,.02),rgba(5,15,28,.08) 48%,rgba(5,15,28,.7));pointer-events:none}
+.escape-card-photo{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transform:scale(1.025);transition:opacity .4s ease,transform .55s ease}
+.escape-card-media.loaded .escape-card-photo{opacity:1;transform:scale(1)}
+.escape-card-media.failed{background:linear-gradient(135deg,#164e63,#2563eb 55%,#7c3aed)}
+.escape-card-skeleton{position:absolute;inset:0;z-index:0;background:linear-gradient(105deg,#d9e8ef 16%,#f5fbff 32%,#d9e8ef 48%);background-size:220% 100%;animation:escapeCardShimmer 1.35s linear infinite}
+.escape-card-media.loaded .escape-card-skeleton,.escape-card-media.failed .escape-card-skeleton{display:none}
+@keyframes escapeCardShimmer{to{background-position-x:-220%}}
+.escape-card-fallback{position:absolute;inset:0;z-index:1;display:none;place-items:center;color:rgba(255,255,255,.92);font-size:30px;font-weight:900}
+.escape-card-media.failed .escape-card-fallback{display:grid}
+.escape-card-media .escape-chapter-status{position:absolute!important;z-index:4!important;right:8px!important;top:8px!important;max-width:calc(100% - 16px)!important;padding:4px 7px!important;border:1px solid rgba(255,255,255,.45)!important;background:rgba(7,25,47,.76)!important;color:#fff!important;box-shadow:0 4px 12px rgba(0,0,0,.18)!important;-webkit-backdrop-filter:blur(7px)!important;backdrop-filter:blur(7px)!important}
+.escape-card-source{position:absolute;z-index:4;left:8px;bottom:6px;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(255,255,255,.9);font-size:7px;font-weight:800;letter-spacing:.02em;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+.escape-card-body{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:10px 11px 12px;text-align:left}
+.escape-card-topline{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:7px}
+.escape-card-number{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;padding:0 7px;border:1px solid #dbeafe;border-radius:999px;background:#eff6ff;color:#25638d;font-size:8px;font-weight:950}
+.escape-card-body .escape-chapter-icon{width:29px!important;height:29px!important;border-radius:9px!important;box-shadow:0 4px 10px rgba(234,88,12,.18)!important}
+.escape-card-body .escape-chapter-icon:before{left:9px!important;top:7px!important;width:10px!important;height:10px!important;border-width:2px!important}
+.escape-card-body .escape-chapter-title{margin:0!important;font-size:12px!important;line-height:1.22!important}
+.escape-card-body .escape-chapter-era{margin-top:auto!important;padding-top:7px!important;font-size:8.5px!important}
+.escape-chapter:hover:not(:disabled) .escape-card-photo{transform:scale(1.06)}
+.escape-chapter.locked .escape-card-media{filter:grayscale(.75)}
+
+@media(max-width:1000px){.escape-period-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:700px){
+  .escape-period-grid .escape-chapter{min-width:190px!important;max-width:190px!important;min-height:228px!important;grid-template-rows:116px minmax(112px,auto)!important}
+  .escape-card-media{height:116px}.escape-card-body .escape-chapter-title{font-size:12.5px!important}
+}
+@media(prefers-reduced-motion:reduce){.escape-card-skeleton{animation:none!important}.escape-card-photo{transition:none!important}}
+</style>
+
 </head>
 <body>
 
@@ -2667,7 +2718,7 @@ header .traveler-container{display:none!important}
           <div class="escape-catalog-head">
             <div>
               <h4>🏃 Втечі з минулого</h4>
-              <p>Кожну втечу можна пройти один раз на тиждень. У кожній темі 20 запитань (80 варіантів відповідей): чотири тижні поспіль питання не повторюються.</p>
+              <p>Кожну втечу можна пройти один раз на тиждень. У кожній темі 20 запитань (80 варіантів відповідей): чотири тижні поспіль питання не повторюються. Кожна місія має власне тематичне зображення з Wikipedia.</p>
             </div>
             <div style="font-size:9px;font-weight:900;color:#8a7465;">60 історичних місій • 20 запитань на тему</div>
           </div>
@@ -3028,13 +3079,13 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
         const missions = escapeScenarios.filter(s=>s.period===period.id);
         return `<section class="escape-period-block" data-period="${period.id}">
           <div class="escape-period-head"><div><span>${period.icon}</span><div><h5>${period.title}</h5><p>${period.description}</p></div></div><b>${missions.length} втеч</b></div>
-          <div class="escape-period-grid">${missions.map(s=>{
+          <div class="escape-period-grid">${missions.map((s,missionIndex)=>{
             const locked = loggedIn && isEscapeCompletedThisWeek(s.id);
             const failed = locked && isEscapeFailedThisWeek(s.id);
             const active = s.id === escapeCurrentScenarioId;
             return `<button type="button" class="escape-chapter ${locked?'locked':''} ${active?'active':''}" data-escape-id="${s.id}" ${locked?'disabled':''}>
-              <div class="escape-chapter-top"><span class="escape-chapter-icon">${s.icon}</span><span class="escape-chapter-status">${locked?(failed?'💔 3 життя втрачено':'✓ до понеділка'):'1× на тиждень'}</span></div>
-              <div><div class="escape-chapter-title">${s.title}</div><div class="escape-chapter-era">${s.era}</div></div>
+              <span class="escape-card-media" data-escape-card-photo="${s.id}"><span class="escape-card-skeleton"></span><span class="escape-card-fallback">${s.icon}</span><span class="escape-chapter-status">${locked?(failed?'💔 3 життя втрачено':'✓ до понеділка'):'1× на тиждень'}</span><span class="escape-card-source">Wikipedia</span></span>
+              <span class="escape-card-body"><span class="escape-card-topline"><span class="escape-chapter-icon">${s.icon}</span><span class="escape-card-number">Місія ${missionIndex+1}</span></span><span class="escape-chapter-title">${s.title}</span><span class="escape-chapter-era">${s.era}</span></span>
             </button>`;
           }).join('')}</div>
         </section>`;
@@ -3049,6 +3100,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           document.getElementById('escapePastGame')?.scrollIntoView({behavior:'smooth',block:'nearest'});
         });
       });
+      hydrateEscapeCatalogPhotos(box);
     }
 
     function applyEscapeLockState() {
@@ -3313,6 +3365,111 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     };
 
     const escapeWikipediaAliases = {"paleolithic":["Палеоліт","Paleolithic"],"fire_mastery":["Використання вогню первісною людиною","Control of fire by early humans"],"neanderthals":["Неандерталець","Neanderthal"],"cro_magnons":["Людина розумна","Homo sapiens"],"cave_art":["Печерний живопис","Cave painting"],"mesolithic":["Мезоліт","Mesolithic"],"neolithic":["Неолітична революція","Neolithic Revolution"],"trypillia":["Трипільська культура","Cucuteni–Trypillia culture"],"bronze_age":["Бронзова доба","Bronze Age"],"iron_scythians":["Скіфи","Scythians"],"egypt":["Стародавній Єгипет","Ancient Egypt"],"mesopotamia":["Месопотамія","Mesopotamia"],"greece_myths":["Стародавня Греція","Ancient Greece"],"athens":["Афінська демократія","Athenian democracy"],"sparta":["Спарта","Sparta"],"persian_wars":["Греко-перські війни","Greco-Persian Wars"],"alexander":["Александр Македонський","Alexander the Great"],"roman_republic":["Римська республіка","Roman Republic"],"roman_empire":["Римська імперія","Roman Empire"],"black_sea_colonies":["Античні міста Північного Причорномор’я","Greek colonies on the Black Sea"],"baptism988":["Хрещення Русі","Christianization of Kievan Rus"],"yaroslav":["Ярослав Мудрий","Yaroslav the Wise"],"kyiv1240":["Облога Києва 1240","Siege of Kyiv 1240"],"galicia_volhynia":["Галицько-Волинське князівство","Kingdom of Galicia–Volhynia"],"byzantium":["Візантійська імперія","Byzantine Empire"],"charlemagne":["Карл Великий","Charlemagne"],"castle":["Середньовічний замок","Castle"],"crusades":["Хрестові походи","Crusades"],"medieval_city":["Середньовічне місто","Medieval town"],"mongol_empire":["Монгольська імперія","Mongol Empire"],"discoveries1492":["Доба великих географічних відкриттів","Age of Discovery"],"renaissance":["Відродження","Renaissance"],"reformation":["Реформація","Reformation"],"sich":["Запорозька Січ","Zaporizhian Sich"],"khmel1648":["Хмельниччина","Khmelnytsky Uprising"],"mazepa":["Іван Мазепа","Ivan Mazepa"],"american_revolution":["Американська революція","American Revolution"],"paris1789":["Французька революція","French Revolution"],"industrial_revolution":["Промислова революція","Industrial Revolution"],"napoleon":["Наполеон Бонапарт","Napoleon"],"ww1":["Перша світова війна","World War I"],"revolution1917":["Українська революція 1917—1921","Ukrainian War of Independence"],"kruty1918":["Бій під Крутами","Battle of Kruty"],"zunr_unity":["Акт Злуки","Unification Act"],"interwar_ukraine":["Україна між світовими війнами","Interwar period"],"holodomor":["Голодомор","Holodomor"],"ww2_ukraine":["Україна в Другій світовій війні","Ukraine in World War II"],"holocaust":["Голокост","The Holocaust"],"cold_war":["Холодна війна","Cold War"],"independence1991":["Акт проголошення незалежності України","Declaration of Independence of Ukraine"],"constitution1996":["Конституція України","Constitution of Ukraine"],"orange_revolution":["Помаранчева революція","Orange Revolution"],"dignity2013":["Революція гідності","Revolution of Dignity"],"war2014":["Російсько-українська війна","Russo-Ukrainian War"],"invasion2022":["Російське вторгнення в Україну (з 2022)","Russian invasion of Ukraine"],"eu_candidate":["Вступ України до Європейського Союзу","Accession of Ukraine to the European Union"],"digital_ukraine":["Дія електронний сервіс","Diia"],"climate_today":["Зміна клімату","Climate change"],"global_world":["Глобалізація","Globalization"],"ukraine_culture_today":["Культура України","Ukrainian culture"]};
+
+    const escapeCatalogScenarioImages = new Map();
+    const escapeCatalogImageJobs = new Map();
+    const escapeCatalogUsedImageUrls = new Set();
+    const escapeCatalogSafeQueries = {
+      holodomor:['Меморіал жертв Голодомору Київ','Holodomor memorial Kyiv'],
+      holocaust:['Меморіал жертв Голокосту Бабин Яр','Babyn Yar menorah memorial'],
+      kruty1918:['Меморіал пам’яті героїв Крут','Kruty memorial Ukraine'],
+      ww2_ukraine:['Національний музей історії України у Другій світовій війні','National Museum of the History of Ukraine in the Second World War'],
+      war2014:['Меморіал захисників України 2014','Memorial defenders of Ukraine'],
+      invasion2022:['Прапор України Київ 2022','Ukrainian flag Kyiv 2022']
+    };
+
+    async function escapeWikipediaUniqueCardImage(query,lang='uk',scenarioId=''){
+      const normalized=String(query||'').trim();
+      if(!normalized)throw new Error('Empty catalog image query');
+      const cacheKey=`escape_card_photo_v26_${scenarioId}_${lang}`;
+      try{
+        const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
+        if(cached?.url&&!escapeCatalogUsedImageUrls.has(cached.url)){
+          escapeCatalogUsedImageUrls.add(cached.url);
+          try{await escapeLoadImage(cached.url,6500);return cached}catch(e){escapeCatalogUsedImageUrls.delete(cached.url)}
+        }
+      }catch(e){}
+
+      const api=`https://${lang}.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(normalized)}&gsrnamespace=0&gsrlimit=8&prop=pageimages|info&piprop=thumbnail|original&pithumbsize=720&inprop=url&format=json&origin=*`;
+      const res=await fetch(api,{headers:{accept:'application/json'}});
+      if(!res.ok)throw new Error('Wikipedia catalog HTTP '+res.status);
+      const data=await res.json();
+      const pages=Object.values(data?.query?.pages||{}).sort((a,b)=>(a.index||999)-(b.index||999));
+      for(const page of pages){
+        const url=page?.thumbnail?.source||page?.original?.source;
+        if(!url||escapeCatalogUsedImageUrls.has(url))continue;
+        escapeCatalogUsedImageUrls.add(url);
+        try{
+          await escapeLoadImage(url,6500);
+          const result={url,page:page.fullurl||`https://${lang}.wikipedia.org/?curid=${page.pageid}`,title:page.title||normalized,lang};
+          try{localStorage.setItem(cacheKey,JSON.stringify(result))}catch(e){}
+          return result;
+        }catch(e){escapeCatalogUsedImageUrls.delete(url)}
+      }
+      throw new Error('No unique Wikipedia image for '+normalized);
+    }
+
+    function escapeCatalogImageForScenario(scenario){
+      if(escapeCatalogScenarioImages.has(scenario.id))return Promise.resolve(escapeCatalogScenarioImages.get(scenario.id));
+      if(escapeCatalogImageJobs.has(scenario.id))return escapeCatalogImageJobs.get(scenario.id);
+      const aliases=escapeWikipediaAliases[scenario.id]||[];
+      const safe=escapeCatalogSafeQueries[scenario.id]||[];
+      const candidates=[
+        {q:safe[0],lang:'uk'},{q:aliases[0],lang:'uk'},
+        {q:`${scenario.title} ${scenario.era}`,lang:'uk'},
+        {q:safe[1],lang:'en'},{q:aliases[1],lang:'en'},
+        {q:`${scenario.title} history`,lang:'en'}
+      ].filter(item=>String(item.q||'').trim());
+      const job=(async()=>{
+        const seen=new Set();
+        for(const candidate of candidates){
+          const key=`${candidate.lang}:${String(candidate.q).toLowerCase()}`;
+          if(seen.has(key))continue;
+          seen.add(key);
+          try{
+            const result=await escapeWikipediaUniqueCardImage(candidate.q,candidate.lang,scenario.id);
+            escapeCatalogScenarioImages.set(scenario.id,result);
+            return result;
+          }catch(e){}
+        }
+        throw new Error('No catalog image for '+scenario.id);
+      })();
+      escapeCatalogImageJobs.set(scenario.id,job);
+      return job;
+    }
+
+    async function hydrateEscapeCatalogPhoto(node){
+      if(!node||node.dataset.photoState)return;
+      const scenario=escapeScenarios.find(item=>item.id===node.dataset.escapeCardPhoto);
+      if(!scenario)return;
+      node.dataset.photoState='loading';
+      try{
+        const image=await escapeCatalogImageForScenario(scenario);
+        if(!node.isConnected)return;
+        const img=document.createElement('img');
+        img.className='escape-card-photo';
+        img.alt=`${scenario.title} — тематичне історичне зображення`;
+        img.loading='lazy';img.decoding='async';img.referrerPolicy='no-referrer';img.src=image.url;
+        node.appendChild(img);
+        const source=node.querySelector('.escape-card-source');
+        if(source){source.textContent=`Wikipedia · ${image.title}`;source.title=`Джерело зображення: ${image.page}`}
+        requestAnimationFrame(()=>node.classList.add('loaded'));
+        node.dataset.photoState='loaded';
+      }catch(error){
+        if(!node.isConnected)return;
+        node.classList.add('failed');node.dataset.photoState='failed';
+        const source=node.querySelector('.escape-card-source');if(source)source.textContent='Тематична заставка';
+      }
+    }
+
+    function hydrateEscapeCatalogPhotos(root){
+      const nodes=[...root.querySelectorAll('[data-escape-card-photo]')];
+      if(!('IntersectionObserver'in window)){nodes.forEach(hydrateEscapeCatalogPhoto);return}
+      const observer=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{if(!entry.isIntersecting)return;observer.unobserve(entry.target);hydrateEscapeCatalogPhoto(entry.target)});
+      },{rootMargin:'220px 160px',threshold:.01});
+      nodes.forEach(node=>observer.observe(node));
+    }
 
     let escapeImageRequestToken = 0;
 
