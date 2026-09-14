@@ -2306,6 +2306,44 @@ img, svg, canvas, video, iframe {
 }
 </style>
 
+<style id="v23-14-premium-wearables">
+/* V23.14 — справжні прозорі 3D-атрибути з анатомічними зонами накладання. */
+.portal-character-avatar{isolation:isolate;--head-x:50%;--head-y:2%;--face-x:55%;--face-y:24%;--hands-x:50%;--hands-y:56%;--feet-x:54%;--feet-y:82%;--neck-x:50%;--neck-y:43%;}
+.portal-character-avatar>.character-aura{z-index:0}
+.portal-character-avatar>img.character-body{position:relative;z-index:2}
+.portal-character-avatar>img.character-wearable{box-sizing:border-box!important;margin:0!important;padding:0!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 2px 3px rgba(15,23,42,.22));}
+.portal-character-avatar>img.character-wearable.backpack{z-index:1;left:var(--back-x,50%);top:var(--back-y,46%);width:var(--back-w,38%);height:var(--back-h,36%);transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.hair{z-index:4;left:var(--head-x);top:var(--head-y);width:var(--hair-w,48%);height:var(--hair-h,25%);transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.glasses{z-index:5;left:var(--face-x);top:var(--face-y);width:var(--glasses-w,42%);height:var(--glasses-h,12%);transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.gloves{z-index:5;left:var(--hands-x);top:var(--hands-y,54%);width:var(--gloves-w,40%);height:var(--gloves-h,17%);transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.boots{z-index:5;left:var(--feet-x);top:var(--feet-y,82%);width:var(--boots-w,52%);height:var(--boots-h,15%);transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.necklace{z-index:5;left:var(--neck-x);top:var(--neck-y,43%);width:var(--necklace-w,25%);height:var(--necklace-h,14%);transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.weapon{z-index:4;right:var(--weapon-r,6%);bottom:var(--weapon-b,8%);width:var(--weapon-w,24%);height:var(--weapon-h,52%)}
+.portal-character-avatar>img.character-wearable.artifact{z-index:4;left:var(--artifact-l,8%);bottom:var(--artifact-b,16%);width:var(--artifact-w,23%);height:var(--artifact-h,28%)}
+.portal-character-avatar>img.character-wearable[data-wearable-item="star"].hair{--hair-w:15%;--hair-h:11%;left:64%;top:5%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="tuft"].hair{--hair-w:25%;--hair-h:18%;left:45%;top:1%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="mohawk"].hair{--hair-w:35%;--hair-h:22%;top:0}
+.portal-character-avatar>img.character-wearable[data-wearable-item="crown"].hair{--hair-w:28%;--hair-h:20%;top:1%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="chain"].necklace{--necklace-w:28%;--necklace-h:12%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="saber"].weapon,.portal-character-avatar>img.character-wearable[data-wearable-item="staff"].weapon,.portal-character-avatar>img.character-wearable[data-wearable-item="quill"].weapon{--weapon-w:24%;--weapon-h:58%;--weapon-r:6%;--weapon-b:8%}
+.portal-character-avatar>img.character-wearable.glasses,.portal-character-avatar>img.character-wearable.gloves,.portal-character-avatar>img.character-wearable.boots{object-fit:fill!important}
+/* Невеликі поправки для різних поз персонажів. */
+.portal-character-avatar[data-character-skin="bluecap"],.portal-character-avatar[data-character-skin="bluecyber"],.portal-character-avatar[data-character-skin="mintcurls"],.portal-character-avatar[data-character-skin="pinkbraids"],.portal-character-avatar[data-character-skin="violetmoon"]{--face-y:25%;--hands-y:48%;--feet-y:79%;--neck-y:40%}
+.portal-character-avatar[data-character-skin="aquabucket"],.portal-character-avatar[data-character-skin="limeexplorer"],.portal-character-avatar[data-character-skin="traveler"],.portal-character-avatar[data-character-skin="yellowskater"]{--face-y:24%;--hands-y:50%;--feet-y:80%;--neck-y:40%}
+.portal-character-avatar[data-character-skin="coralathlete"],.portal-character-avatar[data-character-skin="orangebandana"]{--face-y:24%;--hands-y:49%;--feet-y:79%;--neck-y:39%}
+/* У малому рейтинговому аватарі залишаємо читабельні деталі, без старих emoji-розмірів. */
+#leaderboardList .leaderboard-character-avatar>img.character-wearable{display:block!important;font-size:0!important;letter-spacing:0!important}
+.character-item.incompatible{border-style:dashed!important;background:#f8fafc!important;opacity:.72;cursor:not-allowed!important}
+.character-item.incompatible:hover{transform:none!important;border-color:#cbd5e1!important}
+.character-item.incompatible small{color:#8a4b08!important}
+.character-item{min-height:70px!important}
+.character-item-art{width:56px!important;height:56px!important;flex:0 0 56px!important;padding:4px!important;object-fit:contain!important}
+@media(max-width:620px){
+  #characterStudioCard .character-preview-frame{padding:0!important}
+  #characterStudioCard .character-preview-frame .portal-character-avatar{overflow:visible!important}
+}
+</style>
+
 </head>
 <body>
 
@@ -3621,7 +3659,15 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       weapon:{quill:'character-assets/wearables/weapon-quill.png',saber:'character-assets/wearables/weapon-saber.png',blaster:'character-assets/wearables/weapon-blaster.png',staff:'character-assets/wearables/weapon-staff.png'},
       artifact:{book:'character-assets/wearables/artifact-book.png',compass:'character-assets/wearables/artifact-compass.png',crystal:'character-assets/wearables/artifact-crystal.png',hourglass:'character-assets/wearables/artifact-hourglass.png'}
     };
+    const characterWearableUrl=src=>`${src}?v=2314`;
     const WEARABLE_CATEGORIES=['hair','glasses','gloves','boots','necklace','backpack','weapon','artifact'];
+    const CHARACTER_SKIN_CONFLICTS={
+      hair:new Set(['aquabucket','bluecap','bluecyber','casual','coralathlete','limeexplorer','mintcurls','orangebandana','pinkbraids','science','street','traveler','violetmoon','yellowskater']),
+      glasses:new Set(['aquabucket','bluecyber','mintcurls','pinkbraids','violetmoon','yellowskater']),
+      gloves:new Set(['aquabucket','bluecap','bluecyber','coralathlete','limeexplorer','orangebandana','pinkbraids','violetmoon','yellowskater']),
+      boots:new Set(['aquabucket','bluecap','bluecyber','coralathlete','limeexplorer','mintcurls','orangebandana','pinkbraids','violetmoon','yellowskater']),
+      necklace:new Set(['aquabucket','bluecap','bluecyber','coralathlete','limeexplorer','mintcurls','orangebandana','pinkbraids','violetmoon','yellowskater'])
+    };
     let characterDraft={...CHARACTER_DEFAULT},characterProfile={},characterCategory='skin',characterNotice={type:'',text:'Натисни на будь-яку річ, щоб одразу приміряти її.'},characterBusy=false;
 
     function normalizeCharacter(raw={}){
@@ -3630,23 +3676,35 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       return normalized;
     }
     function characterItem(cat,id){return CHARACTER_CATALOG[cat]?.items.find(x=>x[0]===id)}
+    function characterCompatibility(cat,id,skin){
+      if(!id||id==='none'||cat==='skin'||cat==='aura')return '';
+      if(CHARACTER_SKIN_CONFLICTS[cat]?.has(skin)){
+        if(cat==='hair')return 'Цей образ уже має власну зачіску або головний убір.';
+        if(cat==='glasses')return 'Цей образ уже має окуляри.';
+        if(cat==='gloves')return 'У цьому образі руки заховані або зайняті.';
+        if(cat==='boots')return 'Цей готовий образ уже має власне взуття іншої форми.';
+        if(cat==='necklace')return 'Цей готовий образ уже має власні прикраси або особливий комір.';
+      }
+      return '';
+    }
     function characterForOwnedProfile(raw,profile={},extraOwnedKey=''){
       const wanted=normalizeCharacter(raw),saved=normalizeCharacter(profile.portal_character||CHARACTER_DEFAULT),owned=profile.portal_character_owned||{};
       Object.keys(CHARACTER_CATALOG).forEach(cat=>{const id=wanted[cat],row=characterItem(cat,id),key=`${cat}_${id}`;if(Number(row?.[2])>0&&owned[key]!==true&&key!==extraOwnedKey)wanted[cat]=saved[cat]});
       return wanted;
     }
     function characterAvatarMarkup(raw,mode='profile'){
-      const c=normalizeCharacter(raw),wear=[];
+      const c=normalizeCharacter(raw),wearBack=[],wearFront=[];
       WEARABLE_CATEGORIES.forEach(cat=>{
         const id=c[cat],src=CHARACTER_WEARABLE_ASSETS[cat]?.[id];
-        if(!src)return;
-        wear.push(`<img class="character-wearable ${cat}" src="${src}" alt="" aria-hidden="true" loading="lazy">`);
+        if(!src||characterCompatibility(cat,id,c.skin))return;
+        const layer=`<img class="character-wearable ${cat}" data-wearable-item="${id}" src="${characterWearableUrl(src)}" alt="" aria-hidden="true" loading="lazy">`;
+        (cat==='backpack'?wearBack:wearFront).push(layer);
       });
-      return `<span class="portal-character-avatar ${mode==='leaderboard'?'leaderboard-character-avatar':''}" aria-label="Персональний улюбленець"><span class="character-aura" style="background:${CHARACTER_AURAS[c.aura]}"></span><img class="character-body" src="${CHARACTER_ASSETS[c.skin]}" alt="Персональний улюбленець" loading="lazy">${wear.join('')}</span>`;
+      return `<span class="portal-character-avatar ${mode==='leaderboard'?'leaderboard-character-avatar':''}" data-character-skin="${c.skin}" aria-label="Персональний улюбленець"><span class="character-aura" style="background:${CHARACTER_AURAS[c.aura]}"></span>${wearBack.join('')}<img class="character-body" src="${CHARACTER_ASSETS[c.skin]}" alt="Персональний улюбленець" loading="lazy">${wearFront.join('')}</span>`;
     }
     window.characterAvatarMarkup=characterAvatarMarkup;
     function characterOwned(cat,id){const row=characterItem(cat,id);return !row||Number(row[2])===0||characterProfile.portal_character_owned?.[`${cat}_${id}`]===true}
-    function selectedCharacterPurchase(){const id=characterDraft[characterCategory];return characterOwned(characterCategory,id)?null:characterItem(characterCategory,id)}
+    function selectedCharacterPurchase(){const id=characterDraft[characterCategory];return characterCompatibility(characterCategory,id,characterDraft.skin)||characterOwned(characterCategory,id)?null:characterItem(characterCategory,id)}
     function setCharacterNotice(text,type=''){characterNotice={text,type};const el=document.getElementById('characterInlineNotice');if(el){el.textContent=text;el.className=`character-inline-notice ${type}`.trim()}}
     function renderCharacterStudio(){
       updateCurrentCoinBadge(Number(characterProfile?.portal_coins)||0);
@@ -3665,7 +3723,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       document.getElementById('characterPreview').innerHTML=characterAvatarMarkup(characterDraft);
       document.getElementById('characterCategoryTabs').innerHTML=Object.entries(CHARACTER_CATALOG).map(([key,g])=>`<button type="button" class="character-tab ${key===characterCategory?'active':''}" data-character-category="${key}">${g.label}</button>`).join('');
       const rows=CHARACTER_CATALOG[characterCategory].items;
-      document.getElementById('characterItems').innerHTML=rows.map(x=>{const owned=characterOwned(characterCategory,x[0]),selected=characterDraft[characterCategory]===x[0],preview=characterCategory==='skin'?`<img class="character-item-thumb" src="${CHARACTER_ASSETS[x[0]]}" alt="">`:(CHARACTER_WEARABLE_ASSETS[characterCategory]?.[x[0]]?`<img class="character-item-icon character-item-art" src="${CHARACTER_WEARABLE_ASSETS[characterCategory][x[0]]}" alt="">`:`<span class="character-item-icon">${x[3]||'—'}</span>`),status=!owned?`🔒 ${x[2]} монет · можна приміряти`:selected?(x[0]==='none'?'✓ атрибут знято':'✓ одягнено'):'✓ придбано · натисни, щоб одягнути';return `<button type="button" class="character-item ${selected?'selected':''} ${owned?'':'locked'}" data-character-item="${x[0]}"><span class="character-item-preview">${preview}<span><strong>${x[1]}</strong><small>${status}</small></span></span></button>`}).join('');
+      document.getElementById('characterItems').innerHTML=rows.map(x=>{const owned=characterOwned(characterCategory,x[0]),selected=characterDraft[characterCategory]===x[0],conflict=characterCompatibility(characterCategory,x[0],characterDraft.skin),preview=characterCategory==='skin'?`<img class="character-item-thumb" src="${CHARACTER_ASSETS[x[0]]}" alt="">`:(CHARACTER_WEARABLE_ASSETS[characterCategory]?.[x[0]]?`<img class="character-item-icon character-item-art" src="${characterWearableUrl(CHARACTER_WEARABLE_ASSETS[characterCategory][x[0]])}" alt="">`:`<span class="character-item-icon">${x[3]||'—'}</span>`),status=conflict?`⚠️ ${conflict}`:!owned?`🔒 ${x[2]} монет · можна приміряти`:selected?(x[0]==='none'?'✓ атрибут знято':'✓ одягнено'):'✓ придбано · натисни, щоб одягнути';return `<button type="button" class="character-item ${selected?'selected':''} ${owned?'':'locked'} ${conflict?'incompatible':''}" data-character-item="${x[0]}" ${conflict?'aria-disabled="true"':''}><span class="character-item-preview">${preview}<span><strong>${x[1]}</strong><small>${status}</small></span></span></button>`}).join('');
       setCharacterNotice(characterNotice.text,characterNotice.type);
       const purchase=selectedCharacterPurchase(),button=document.getElementById('characterBuyBtn');
       button.disabled=characterBusy||!purchase;button.classList.toggle('purchase',Boolean(purchase));
@@ -3675,6 +3733,8 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     }
     async function chooseCharacterItem(cat,id){
       if(window.currentUserUid!==PORTAL_OWNER_UID||!characterItem(cat,id))return;
+      const conflict=characterCompatibility(cat,id,characterDraft.skin);
+      if(conflict){setCharacterNotice(conflict+' Оберіть інший образ або зніміть цей атрибут.','warn');renderCharacterStudio();return}
       characterDraft[cat]=id;
       const row=characterItem(cat,id);
       if(!characterOwned(cat,id)){
