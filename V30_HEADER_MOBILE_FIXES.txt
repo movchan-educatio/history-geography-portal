@@ -1,0 +1,26 @@
+V30 — HEADER + MOBILE SCREENSHOT FIXES
+
+1. Header restored to a fixed consistent structure on all 5 pages:
+   - Back button always left.
+   - Logo group centered.
+   - Home button always right.
+   - 4 category buttons in a separate solid row below.
+   - Header/buttons/rail use opaque backgrounds; no glass transparency.
+   - Sticky position and identical geometry across pages.
+
+2. Methodology fixes:
+   - Digital tools title is readable on dark background.
+   - Poetry block is dark again, so white poem text is readable.
+   - Google Drive archive frames are shorter on mobile.
+   - Mobile card/title sizing reduced.
+
+3. NMT guide fixes:
+   - Filters no longer run off the right edge.
+   - Mobile filters become a clean 2-column grid.
+   - Search/tools panel is opaque.
+   - "200 materials" counter is readable on the dark page.
+   - NMT stats are aligned 2x2 on mobile.
+
+4. Global:
+   - Horizontal overflow is blocked.
+   - Navigation cache bumped to v30.
