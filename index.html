@@ -823,7 +823,8 @@
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
   <link rel="stylesheet" href="premium-design.css?v=8">
-  <link rel="stylesheet" href="v27-theme.css?v=27">
+  <link rel="stylesheet" href="v27-theme.css?v=28">
+  <script defer src="navigation-v28.js?v=28"></script>
 
 <style id="online-presence-styles">
 .online-presence-panel{margin:12px 0 16px;padding:12px 16px;border:1px solid #dbe7df;border-radius:14px;background:linear-gradient(135deg,#f7fff9,#eefaf2);box-shadow:0 4px 14px rgba(34,197,94,.06)}
@@ -2319,6 +2320,8 @@ img, svg, canvas, video, iframe {
 #jetpackCanvas{display:block;width:100%;height:auto;aspect-ratio:3/2;background:#0c4a6e;touch-action:none}
 .jetpack-game-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;text-align:center;background:linear-gradient(180deg,rgba(7,42,73,.38),rgba(3,25,47,.88));color:#fff;backdrop-filter:blur(2px)}
 .jetpack-game-overlay[hidden]{display:none!important}.jetpack-game-overlay img{width:82px;height:92px;object-fit:contain;filter:drop-shadow(0 7px 8px rgba(0,0,0,.34))}.jetpack-game-overlay h4{margin:2px 0 4px;color:#fff;font-size:18px;font-weight:950}.jetpack-game-overlay p{max-width:390px;margin:0 0 9px;color:#dff6ff;font-size:10px;line-height:1.35}
+.jetpack-game-overlay.jetpack-overlay-alert h4{animation:jetpackAlertPulse .42s ease both}.jetpack-game-overlay.jetpack-overlay-alert #jetpackStartButton{animation:jetpackAlertShake .34s ease both}
+@keyframes jetpackAlertPulse{50%{color:#fde68a;transform:scale(1.045)}}@keyframes jetpackAlertShake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
 #jetpackStartButton{min-width:190px;border:0;border-radius:15px;padding:13px 18px;background:linear-gradient(135deg,#fde047,#fb923c);color:#4a2604;font-size:13px;font-weight:950;cursor:pointer;box-shadow:0 9px 22px rgba(245,158,11,.34);transition:transform .16s,filter .16s}#jetpackStartButton:hover{filter:brightness(1.04);transform:translateY(-1px)}#jetpackStartButton:active{transform:translateY(1px) scale(.99)}#jetpackStartButton:disabled{opacity:.58;cursor:not-allowed}
 .jetpack-hud{position:absolute;z-index:4;left:8px;right:8px;top:8px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}.jetpack-hud[hidden]{display:none!important}.jetpack-hud span{padding:5px 8px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(3,25,47,.72);color:#fff;font-size:10px;font-weight:900;backdrop-filter:blur(4px)}
 .jetpack-action-bar{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:9px;padding:11px 10px}.jetpack-action-button{min-width:0;min-height:58px;border:0;border-radius:17px;padding:9px 12px;display:flex;align-items:center;justify-content:center;gap:9px;color:#fff;cursor:pointer;text-align:left;box-shadow:0 8px 18px rgba(15,23,42,.18),inset 0 1px rgba(255,255,255,.3);transition:transform .16s,filter .16s,box-shadow .16s;-webkit-tap-highlight-color:transparent}.jetpack-action-button:hover{filter:brightness(1.06);transform:translateY(-2px);box-shadow:0 11px 22px rgba(15,23,42,.22),inset 0 1px rgba(255,255,255,.35)}.jetpack-action-button:active,.jetpack-action-button.is-pressed{transform:translateY(1px) scale(.985);box-shadow:0 4px 10px rgba(15,23,42,.18),inset 0 2px 5px rgba(15,23,42,.18)}.jetpack-action-button .jetpack-action-icon{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:rgba(255,255,255,.2);font-size:20px}.jetpack-action-copy{display:flex;min-width:0;flex-direction:column}.jetpack-action-copy strong{font-size:13px;line-height:1.05;letter-spacing:.03em}.jetpack-action-copy small{margin-top:4px;color:rgba(255,255,255,.84);font-size:8.5px;line-height:1.15;font-weight:750}.jetpack-thrust-button{background:linear-gradient(135deg,#0284c7,#2563eb 58%,#7c3aed)}.jetpack-shop-button{background:linear-gradient(135deg,#f59e0b,#ea580c 58%,#db2777)}
@@ -2455,6 +2458,7 @@ header .traveler-container{display:none!important}
 
 @media(max-width:1000px){.escape-period-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:700px){
+  .escape-period-grid{overflow-anchor:none;overscroll-behavior-inline:contain;touch-action:pan-x pan-y}
   .escape-period-grid .escape-chapter{min-width:190px!important;max-width:190px!important;min-height:228px!important;grid-template-rows:116px minmax(112px,auto)!important}
   .escape-card-media{height:116px}.escape-card-body .escape-chapter-title{font-size:12.5px!important}
 }
@@ -3072,9 +3076,34 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       applyEscapeLockState();
     }
 
+    const escapeCatalogScrollPositions = new Map();
+
+    function rememberEscapeCatalogScroll(box) {
+      box?.querySelectorAll('.escape-period-block[data-period]').forEach(block => {
+        const grid = block.querySelector('.escape-period-grid');
+        if (grid) escapeCatalogScrollPositions.set(block.dataset.period, grid.scrollLeft);
+      });
+    }
+
+    function restoreEscapeCatalogScroll(box) {
+      box?.querySelectorAll('.escape-period-block[data-period]').forEach(block => {
+        const grid = block.querySelector('.escape-period-grid');
+        if (!grid) return;
+        const saved = escapeCatalogScrollPositions.get(block.dataset.period);
+        if (Number.isFinite(saved) && saved > 0) grid.scrollLeft = saved;
+        if (!grid.dataset.scrollMemoryBound) {
+          grid.dataset.scrollMemoryBound = '1';
+          grid.addEventListener('scroll', () => {
+            escapeCatalogScrollPositions.set(block.dataset.period, grid.scrollLeft);
+          }, {passive:true});
+        }
+      });
+    }
+
     function renderEscapeCatalog() {
       const box = document.getElementById('escapeCatalog');
       if (!box) return;
+      rememberEscapeCatalogScroll(box);
       const loggedIn = !!window.currentUserUid;
       const loginNote = document.getElementById('escapeLoginNote');
       if (loginNote) loginNote.style.display = loggedIn ? 'none' : 'block';
@@ -3104,6 +3133,8 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           document.getElementById('escapePastGame')?.scrollIntoView({behavior:'smooth',block:'nearest'});
         });
       });
+      restoreEscapeCatalogScroll(box);
+      requestAnimationFrame(() => restoreEscapeCatalogScroll(box));
       hydrateEscapeCatalogPhotos(box);
     }
 
@@ -4121,8 +4152,17 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       if(!button||jetpackState.running)return;
       if(!window.currentUserUid){button.textContent='Увійти через Google';button.disabled=false;return}
       const free=jetpackFreeRunsLeft();
-      button.textContent=free>0?`Почати безкоштовно · ще ${free}`:`Почати за ${JETPACK_RUN_PRICE} коінів`;
+      const coins=Math.max(0,Math.floor(Number(jetpackProfile.portal_coins)||0));
+      button.textContent=free>0?`Почати безкоштовно · ще ${free}`:coins>=JETPACK_RUN_PRICE?`Почати за ${JETPACK_RUN_PRICE} коінів`:`Потрібно ще ${JETPACK_RUN_PRICE-coins} коінів`;
       button.disabled=jetpackBusy;
+    }
+    function showJetpackStartMessage(title,text){
+      const overlay=document.getElementById('jetpackOverlay'),hud=document.getElementById('jetpackHud');
+      const titleEl=document.getElementById('jetpackOverlayTitle'),textEl=document.getElementById('jetpackOverlayText');
+      if(hud)hud.hidden=true;
+      if(overlay){overlay.hidden=false;overlay.classList.remove('jetpack-overlay-alert');void overlay.offsetWidth;overlay.classList.add('jetpack-overlay-alert')}
+      if(titleEl)titleEl.textContent=title;
+      if(textEl)textEl.textContent=text;
     }
     async function selectJetpackSkin(id){
       const skin=JETPACK_SKINS.find(item=>item.id===id);
@@ -4247,12 +4287,18 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           else{if(coins<JETPACK_RUN_PRICE){reason='coins';return}data.portal_coins=coins-JETPACK_RUN_PRICE;data.portal_coins_spent=(Number(data.portal_coins_spent)||0)+JETPACK_RUN_PRICE}
           data.jetpack_total_runs=(Number(data.jetpack_total_runs)||0)+1;data.portal_jetpack_owned={silver:true,...(data.portal_jetpack_owned||{})};if(!data.portal_jetpack_skin)data.portal_jetpack_skin='silver';started=true;return data;
         });
-        if(!tx.committed||!started){setJetpackNotice(reason==='coins'?`Безкоштовні польоти закінчилися. Для нового потрібно ${JETPACK_RUN_PRICE} коінів.`:'Не вдалося розпочати політ. Спробуй ще раз.','warn');document.getElementById('jetpackGarage')?.setAttribute('open','');return}
+        if(!tx.committed||!started){
+          const coins=Math.max(0,Math.floor(Number(jetpackProfile.portal_coins)||0));
+          const message=reason==='coins'?`Для нового польоту потрібно ${JETPACK_RUN_PRICE} коінів. Зараз у вас ${coins} — бракує ${Math.max(0,JETPACK_RUN_PRICE-coins)}.`:'Не вдалося розпочати політ. Спробуйте ще раз.';
+          setJetpackNotice(message,'warn');
+          showJetpackStartMessage(reason==='coins'?'Недостатньо коінів':'Політ не розпочато',message);
+          return
+        }
         jetpackProfile=tx.snapshot.val()||jetpackProfile;characterProfile=jetpackProfile;updateCurrentCoinBadge(Number(jetpackProfile.portal_coins)||0);renderJetpackProfile();mergeCurrentProfileIntoLeaderboard(jetpackProfile);
         jetpackState={running:true,last:performance.now(),y:jetpackCanvas.height/2,vy:0,distance:0,stars:0,spawn:.75,obstacles:[],particles:[]};
         const overlay=document.getElementById('jetpackOverlay'),hud=document.getElementById('jetpackHud');if(overlay)overlay.hidden=true;if(hud)hud.hidden=false;
         document.getElementById('jetpackGarage')?.removeAttribute('open');jetpackFrame=requestAnimationFrame(jetpackLoop);
-      }catch(error){console.error('Jetpack start:',error);setJetpackNotice('Не вдалося списати коіни або відкрити політ. Перевір з’єднання.','warn')}
+      }catch(error){console.error('Jetpack start:',error);const message='Не вдалося розпочати політ. Перевірте з’єднання з інтернетом.';setJetpackNotice(message,'warn');showJetpackStartMessage('Немає з’єднання',message)}
       finally{jetpackBusy=false;renderJetpackStartState()}
     }
 
@@ -4407,6 +4453,13 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       if (window.studentsData) renderSundayWinner(Object.fromEntries(window.studentsData.map(p => [p.uid, p])));
     }, 30000);
 
+    function googleAccountPhoto(user, profile={}) {
+      const providerPhoto = Array.isArray(user?.providerData)
+        ? user.providerData.find(item => item?.providerId === 'google.com' && item.photoURL)?.photoURL
+        : '';
+      return user?.photoURL || providerPhoto || profile?.googlePhotoURL || profile?.photoURL || profile?.photoUrl || '';
+    }
+
     async function ensureUserProfile(user) {
       if (!user) return;
       const userRef = ref(database, 'users/' + user.uid);
@@ -4416,7 +4469,8 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
         data.email = data.email || user.email || '';
         // Фото профілю беремо безпосередньо з Google-акаунта.
         // Не завантажуємо фотографії на Firebase Storage.
-        if (user.photoURL) { data.photoURL = user.photoURL; data.googlePhotoURL = user.photoURL; }
+        const currentGooglePhoto = googleAccountPhoto(user, data);
+        if (currentGooglePhoto) { data.photoURL = currentGooglePhoto; data.googlePhotoURL = currentGooglePhoto; }
         data.role = user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student';
         if (data.score === undefined) data.score = 0;
         if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
@@ -4976,16 +5030,14 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
 
       if (authBox) {
         const role = window.currentUserRole === 'teacher' ? 'ВЧИТЕЛЬ' : 'УЧЕНЬ';
-        const savedCharacter=characterProfile.portal_character;
-        const homeAvatar = savedCharacter
-          ? characterAvatarMarkup(savedCharacter)
-          : user.photoURL
-          ? `<img class="home-user-avatar" src="${escapeHtml(user.photoURL)}" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">`
+        const googlePhoto = googleAccountPhoto(user, characterProfile);
+        const homeAvatar = googlePhoto
+          ? `<img class="home-user-avatar" src="${escapeHtml(googlePhoto)}" alt="Фото профілю Google" referrerpolicy="no-referrer" decoding="async" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">`
           : '';
-        const homeInitial = `<span class="home-user-avatar" style="width:30px;height:30px;border-radius:50%;display:${savedCharacter||user.photoURL ? 'none' : 'inline-flex'};align-items:center;justify-content:center;background:#8b5e3c;color:#fff;font-weight:800;">${(user.displayName || 'У').charAt(0).toUpperCase()}</span>`;
+        const homeInitial = `<span class="home-user-avatar" style="width:30px;height:30px;border-radius:50%;display:${googlePhoto ? 'none' : 'inline-flex'};align-items:center;justify-content:center;background:#0f749f;color:#fff;font-weight:800;">${escapeHtml((user.displayName || 'У').charAt(0).toUpperCase())}</span>`;
         authBox.innerHTML = `<div class="home-user-chip" style="display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;">
           ${homeAvatar}${homeInitial}
-          <span class="home-user-name" style="font-weight:700;color:#1e293b;">${user.displayName || 'Користувач'}</span>
+          <span class="home-user-name" style="font-weight:700;color:#1e293b;">${escapeHtml(user.displayName || 'Користувач')}</span>
           <span class="home-role-badge" style="padding:4px 8px;border-radius:999px;background:${window.currentUserRole === 'teacher' ? '#5b1f0e' : '#e7ddd5'};color:${window.currentUserRole === 'teacher' ? '#fff' : '#5b1f0e'};font-size:11px;font-weight:800;">${role}</span>
           <span id="currentUserScore" class="home-score-badge">0 балів</span>
           <span id="currentUserCoins" class="portal-coin-badge">🪙 0</span>
