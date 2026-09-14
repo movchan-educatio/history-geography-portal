@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071e30">
   <title>Історія і географія БЕЗ МЕЖ — Освітній Портал Сергія Мовчана</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
   <!-- Підключення іконок -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
-  <link rel="stylesheet" href="style.css?v=26">
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <link rel="preload" as="image" href="hero-banner.webp" fetchpriority="high">
+  <link rel="stylesheet" href="style.css?v=27">
   
   <style>
     html {
@@ -115,7 +118,7 @@
     .mountain-banner {
       position: relative;
       background: linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.65)), 
-                  url('hero-banner.jpeg') center 25% / cover no-repeat;
+                  url('hero-banner.webp') center 25% / cover no-repeat;
       border-radius: 0; 
       margin: 0 auto 20px auto;
       max-width: 100%;
@@ -820,6 +823,7 @@
 <link rel="stylesheet" href="site-modern.css?v=1">
 <link rel="stylesheet" href="redesign.css?v=5">
   <link rel="stylesheet" href="premium-design.css?v=8">
+  <link rel="stylesheet" href="v27-theme.css?v=27">
 
 <style id="online-presence-styles">
 .online-presence-panel{margin:12px 0 16px;padding:12px 16px;border:1px solid #dbe7df;border-radius:14px;background:linear-gradient(135deg,#f7fff9,#eefaf2);box-shadow:0 4px 14px rgba(34,197,94,.06)}
@@ -2469,7 +2473,7 @@ header .traveler-container{display:none!important}
   <!-- Навігаційна шапка -->
   <header>
     <a href="index.html" class="logo-group">
-      <img src="logo.png" alt="Логотип Освітній Портал" class="logo-img">
+      <img src="logo-192.webp" width="44" height="44" decoding="async" fetchpriority="high" alt="Логотип Освітній Портал" class="logo-img">
       <div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
     </a>
     <nav>
@@ -2654,7 +2658,7 @@ header .traveler-container{display:none!important}
           <div class="jetpack-game-shell" id="jetpackGameShell">
             <canvas id="jetpackCanvas" width="960" height="640" aria-label="Гра Jetpack Run"></canvas>
             <div class="jetpack-game-overlay" id="jetpackOverlay">
-              <img id="jetpackOverlaySkin" src="jetpack-assets/jetpack-silver.png" alt="Обраний джетпак">
+              <img id="jetpackOverlaySkin" data-src="jetpack-assets/jetpack-silver.webp" loading="lazy" decoding="async" alt="Обраний джетпак">
               <h4 id="jetpackOverlayTitle">Готовий до польоту?</h4>
               <p id="jetpackOverlayText">Затискай екран, мишу або пробіл, щоб підніматися. Відпусти — герой опуститься.</p>
               <button type="button" id="jetpackStartButton">Почати безкоштовно</button>
@@ -3995,15 +3999,16 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     const JETPACK_RUN_PRICE=10;
     const JETPACK_FREE_RUNS_PER_DAY=3;
     const JETPACK_SKINS=[
-      {id:'silver',name:'Срібний старт',price:0,rarity:'Базовий',color:'#38bdf8',asset:'jetpack-assets/jetpack-silver.png'},
-      {id:'solar',name:'Сонячне золото',price:80,rarity:'Рідкісний',color:'#f59e0b',asset:'jetpack-assets/jetpack-solar.png'},
-      {id:'neon',name:'Неоновий імпульс',price:120,rarity:'Епічний',color:'#a855f7',asset:'jetpack-assets/jetpack-neon.png'},
-      {id:'magma',name:'Магма',price:160,rarity:'Епічний',color:'#ef4444',asset:'jetpack-assets/jetpack-magma.png'},
-      {id:'ukraine',name:'Українське небо',price:200,rarity:'Легендарний',color:'#2563eb',asset:'jetpack-assets/jetpack-ukraine.png'},
-      {id:'chronos',name:'Квантовий Хронос',price:5000,rarity:'Суперпреміум',color:'#14b8a6',asset:'jetpack-assets/jetpack-chronos.png'},
-      {id:'phoenix',name:'Галактичний Фенікс',price:5000,rarity:'Міфічний',color:'#f0abfc',asset:'jetpack-assets/jetpack-phoenix.png'},
-      {id:'diamond',name:'Діамантова Корона',price:5000,rarity:'Абсолютний',color:'#67e8f9',asset:'jetpack-assets/jetpack-diamond.png'}
+      {id:'silver',name:'Срібний старт',price:0,rarity:'Базовий',color:'#38bdf8',asset:'jetpack-assets/jetpack-silver.webp'},
+      {id:'solar',name:'Сонячне золото',price:80,rarity:'Рідкісний',color:'#f59e0b',asset:'jetpack-assets/jetpack-solar.webp'},
+      {id:'neon',name:'Неоновий імпульс',price:120,rarity:'Епічний',color:'#a855f7',asset:'jetpack-assets/jetpack-neon.webp'},
+      {id:'magma',name:'Магма',price:160,rarity:'Епічний',color:'#ef4444',asset:'jetpack-assets/jetpack-magma.webp'},
+      {id:'ukraine',name:'Українське небо',price:200,rarity:'Легендарний',color:'#2563eb',asset:'jetpack-assets/jetpack-ukraine.webp'},
+      {id:'chronos',name:'Квантовий Хронос',price:5000,rarity:'Суперпреміум',color:'#14b8a6',asset:'jetpack-assets/jetpack-chronos.webp'},
+      {id:'phoenix',name:'Галактичний Фенікс',price:5000,rarity:'Міфічний',color:'#f0abfc',asset:'jetpack-assets/jetpack-phoenix.webp'},
+      {id:'diamond',name:'Діамантова Корона',price:5000,rarity:'Абсолютний',color:'#67e8f9',asset:'jetpack-assets/jetpack-diamond.webp'}
     ];
+    const JETPACK_PLAYER_SCALE=.86;
     const jetpackCanvas=document.getElementById('jetpackCanvas');
     const jetpackCtx=jetpackCanvas?.getContext('2d');
     const jetpackImageCache={};
@@ -4012,12 +4017,32 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     let jetpackBusy=false;
     let jetpackInput=false;
     let jetpackFrame=0;
+    let jetpackAssetsRequested=false;
     let jetpackState={running:false,last:0,y:320,vy:0,distance:0,stars:0,spawn:0,obstacles:[],particles:[]};
 
-    JETPACK_SKINS.forEach(skin=>{const image=new Image();image.src=skin.asset;image.onload=()=>{jetpackImageCache[skin.id]=image;if(!jetpackState.running)drawJetpackScene()};jetpackImageCache[skin.id]=image});
-    /* Окремий польотний спрайт має ремені поверх костюма, тому джетпак виглядає вдягненим, а не приклеєним. */
-    jetpackHeroImage.src='character-assets/mriyk-jetpack-flight.png';
-    jetpackHeroImage.onload=()=>{if(!jetpackState.running)drawJetpackScene()};
+    function ensureJetpackSkinImage(skin=jetpackSelected()){
+      if(jetpackImageCache[skin.id])return jetpackImageCache[skin.id];
+      const image=new Image();image.decoding='async';image.src=skin.asset;
+      image.onload=()=>{if(!jetpackState.running)drawJetpackScene()};
+      image.onerror=()=>{delete jetpackImageCache[skin.id]};
+      jetpackImageCache[skin.id]=image;return image;
+    }
+    function loadJetpackGarageImages(){
+      document.querySelectorAll('#jetpackSkinGrid img[data-src]').forEach(image=>{if(!image.src)image.src=image.dataset.src||''});
+    }
+    function ensureJetpackAssets(){
+      jetpackAssetsRequested=true;
+      const selected=jetpackSelected();
+      ensureJetpackSkinImage(selected);
+      if(!jetpackHeroImage.getAttribute('src')){
+        /* Полегшений польотний спрайт завантажується лише біля гри. */
+        jetpackHeroImage.decoding='async';
+        jetpackHeroImage.src='character-assets/mriyk-jetpack-flight.webp';
+        jetpackHeroImage.onload=()=>{if(!jetpackState.running)drawJetpackScene()};
+      }
+      const overlaySkin=document.getElementById('jetpackOverlaySkin');
+      if(overlaySkin&&overlaySkin.src!==new URL(selected.asset,document.baseURI).href)overlaySkin.src=selected.asset;
+    }
 
     function jetpackDayKey(){
       try{return new Date().toLocaleDateString('en-CA',{timeZone:'Europe/Kyiv'})}
@@ -4045,10 +4070,12 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       grid.innerHTML=JETPACK_SKINS.map(skin=>{
         const owned=jetpackOwned(skin.id),active=selected.id===skin.id;
         const status=active?'✓ Обрано':owned?'Одягнути':`🪙 ${skin.price}`;
-        return `<button type="button" class="jetpack-skin-card ${active?'selected':''} ${owned?'':'locked'}" data-jetpack-skin="${skin.id}" aria-label="${escapeHtml(skin.name)} — ${status}"><span class="jetpack-skin-rarity" style="background:${skin.color}"></span><img src="${skin.asset}" alt=""><strong>${escapeHtml(skin.name)}</strong><small>${escapeHtml(skin.rarity)} · ${status}</small></button>`;
+        return `<button type="button" class="jetpack-skin-card ${active?'selected':''} ${owned?'':'locked'}" data-jetpack-skin="${skin.id}" aria-label="${escapeHtml(skin.name)} — ${status}"><span class="jetpack-skin-rarity" style="background:${skin.color}"></span><img data-src="${skin.asset}" loading="lazy" decoding="async" alt=""><strong>${escapeHtml(skin.name)}</strong><small>${escapeHtml(skin.rarity)} · ${status}</small></button>`;
       }).join('');
       const overlaySkin=document.getElementById('jetpackOverlaySkin');
-      if(overlaySkin)overlaySkin.src=selected.asset;
+      if(overlaySkin)overlaySkin.dataset.src=selected.asset;
+      if(jetpackAssetsRequested)ensureJetpackAssets();
+      if(document.getElementById('jetpackGarage')?.open)loadJetpackGarageImages();
     }
     function renderJetpackProfile(){
       const coins=Math.max(0,Math.floor(Number(jetpackProfile.portal_coins)||0));
@@ -4154,11 +4181,11 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     }
     function drawJetpackPlayer(ctx){
       const skin=jetpackSelected(),pack=jetpackImageCache[skin.id],y=jetpackState.y,x=190;
-      ctx.save();ctx.translate(x,y);ctx.rotate(Math.max(-.18,Math.min(.22,jetpackState.vy/1200)));
+      ctx.save();ctx.translate(x,y);ctx.rotate(Math.max(-.18,Math.min(.22,jetpackState.vy/1200)));ctx.scale(JETPACK_PLAYER_SCALE,JETPACK_PLAYER_SCALE);
       if(jetpackInput&&jetpackState.running){const glow=12+Math.random()*10;ctx.save();ctx.globalAlpha=.3;ctx.fillStyle='#7dd3fc';ctx.beginPath();ctx.ellipse(57,65,60+glow,18+glow*.25,0,0,Math.PI*2);ctx.fill();ctx.restore()}
       /* Ранець лежить за спиною, а ремені вже намальовані на передньому шарі польотного костюма. */
-      if(pack?.complete)ctx.drawImage(pack,-18,-62,150,150);
-      if(jetpackHeroImage.complete)ctx.drawImage(jetpackHeroImage,-30,-105,175,210);
+      if(pack?.naturalWidth)ctx.drawImage(pack,-18,-62,150,150);
+      if(jetpackHeroImage.naturalWidth)ctx.drawImage(jetpackHeroImage,-30,-105,175,210);
       else{ctx.fillStyle='#c084fc';ctx.beginPath();ctx.arc(58,-5,38,0,Math.PI*2);ctx.fill()}
       ctx.restore();
     }
@@ -4173,7 +4200,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       drawJetpackPlayer(ctx);
     }
     function jetpackCollision(obstacle){
-      const px=238,py=jetpackState.y,r=38;
+      const px=238,py=jetpackState.y,r=38*JETPACK_PLAYER_SCALE;
       if(px+r<obstacle.x||px-r>obstacle.x+obstacle.w)return false;
       const top=obstacle.gapY-obstacle.gap/2,bottom=obstacle.gapY+obstacle.gap/2;
       return py-r<top||py+r>bottom;
@@ -4201,13 +4228,15 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       jetpackState.obstacles.forEach(o=>{o.x-=speed*dt;if(!o.collected&&o.x<190){o.collected=true;jetpackState.stars++}if(jetpackCollision(o))endJetpackRun()});
       jetpackState.obstacles=jetpackState.obstacles.filter(o=>o.x>-100);
       if(!jetpackState.running)return;
-      if(jetpackState.y<38||jetpackState.y>jetpackCanvas.height-38){endJetpackRun();return}
+      const playerRadius=38*JETPACK_PLAYER_SCALE;
+      if(jetpackState.y<playerRadius||jetpackState.y>jetpackCanvas.height-playerRadius){endJetpackRun();return}
       const distanceEl=document.getElementById('jetpackDistance'),starsEl=document.getElementById('jetpackRunStars');if(distanceEl)distanceEl.textContent=Math.floor(jetpackState.distance);if(starsEl)starsEl.textContent=jetpackState.stars;
       drawJetpackScene();jetpackFrame=requestAnimationFrame(jetpackLoop);
     }
     async function startJetpackRun(){
       if(jetpackBusy||jetpackState.running)return;
       if(!window.currentUserUid){if(window.loginWithGoogle)window.loginWithGoogle();return}
+      ensureJetpackAssets();
       jetpackBusy=true;renderJetpackStartState();
       try{
         let started=false,reason='';
@@ -4235,7 +4264,9 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     jetpackThrustButton?.addEventListener('pointerup',event=>{event.preventDefault();setJetpackThrust(false)});
     jetpackThrustButton?.addEventListener('pointercancel',()=>setJetpackThrust(false));
     jetpackThrustButton?.addEventListener('click',()=>{if(!jetpackState.running)startJetpackRun()});
-    document.getElementById('jetpackShopButton')?.addEventListener('click',()=>{const garage=document.getElementById('jetpackGarage');if(!garage)return;garage.open=!garage.open;if(garage.open)setTimeout(()=>garage.scrollIntoView({behavior:'smooth',block:'nearest'}),80)});
+    const jetpackGarage=document.getElementById('jetpackGarage');
+    document.getElementById('jetpackShopButton')?.addEventListener('click',()=>{if(!jetpackGarage)return;jetpackGarage.open=!jetpackGarage.open;if(jetpackGarage.open){loadJetpackGarageImages();setTimeout(()=>jetpackGarage.scrollIntoView({behavior:'smooth',block:'nearest'}),80)}});
+    jetpackGarage?.addEventListener('toggle',()=>{if(jetpackGarage.open)loadJetpackGarageImages()});
     jetpackCanvas?.addEventListener('pointerdown',event=>{if(jetpackState.running){event.preventDefault();jetpackInput=true;jetpackCanvas.setPointerCapture?.(event.pointerId)}});
     jetpackCanvas?.addEventListener('pointerup',event=>{event.preventDefault();setJetpackThrust(false)});
     jetpackCanvas?.addEventListener('pointercancel',()=>setJetpackThrust(false));
@@ -4243,6 +4274,13 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     window.addEventListener('keyup',event=>{if(event.code==='Space'){event.preventDefault();setJetpackThrust(false)}});
     document.addEventListener('visibilitychange',()=>{if(document.hidden&&jetpackState.running)endJetpackRun()});
     renderJetpackProfile();
+    const jetpackCard=document.getElementById('jetpackRunCard');
+    if(jetpackCard&&'IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){ensureJetpackAssets();observer.disconnect()}},{rootMargin:'520px 0px'});
+      observer.observe(jetpackCard);
+    }else if(jetpackCard){
+      window.setTimeout(ensureJetpackAssets,1200);
+    }
 
     function mergeCurrentProfileIntoLeaderboard(profile={}){
       const uid=window.currentUserUid;
@@ -8202,14 +8240,39 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
   updateNetworkStatus();
 })();
 </script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-      if (typeof window.initMapActivity === 'function') window.initMapActivity();
       if (typeof window.renderHistoryActivityQuestion === 'function') window.renderHistoryActivityQuestion();
       if (typeof window.renderFlagsQuestion === 'function') window.renderFlagsQuestion();
     }, 100);
+
+    const mapNode=document.getElementById('worldMap');
+    if(!mapNode)return;
+    let leafletRequested=false;
+    const loadLeaflet=()=>{
+      if(leafletRequested)return;
+      leafletRequested=true;
+      if(window.L){window.initMapActivity?.();return}
+      const style=document.createElement('link');
+      style.rel='stylesheet';style.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';style.crossOrigin='anonymous';
+      document.head.appendChild(style);
+      const script=document.createElement('script');
+      script.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';script.async=true;script.crossOrigin='anonymous';
+      script.onload=()=>window.initMapActivity?.();
+      script.onerror=()=>{
+        leafletRequested=false;
+        const status=document.getElementById('mapStatus');
+        if(status)status.textContent='Не вдалося завантажити карту. Перевірте інтернет і прокрутіть сторінку ще раз.';
+      };
+      document.body.appendChild(script);
+    };
+    if('IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){loadLeaflet();observer.disconnect()}},{rootMargin:'650px 0px'});
+      observer.observe(mapNode);
+    }else{
+      window.setTimeout(loadLeaflet,1200);
+    }
   });
 </script>
 </body>

@@ -1,0 +1,168 @@
+/* V27 — контрастний темний фон, світлі картки та швидка «північна» шапка. */
+:root{
+  --v27-bg:#111c2c;
+  --v27-bg-deep:#091321;
+  --v27-card:#fffdf9;
+  --v27-card-cool:#f8fbff;
+  --v27-line:rgba(148,163,184,.38);
+  --v27-ink:#172033;
+  --v27-muted:#5f6b7d;
+  --v27-shadow:0 18px 44px rgba(2,8,23,.30),0 2px 8px rgba(2,8,23,.14);
+}
+
+html{
+  background:var(--v27-bg-deep)!important;
+}
+body{
+  min-height:100vh;
+  color:var(--v27-ink)!important;
+  background:
+    radial-gradient(circle at 9% 7%,rgba(14,165,233,.15),transparent 27%),
+    radial-gradient(circle at 92% 28%,rgba(245,158,11,.08),transparent 24%),
+    linear-gradient(155deg,#15243a 0%,#101b2c 48%,#091421 100%)!important;
+  background-attachment:scroll!important;
+}
+body::before{
+  display:block!important;
+  content:""!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  opacity:.34!important;
+  background-image:
+    linear-gradient(rgba(148,163,184,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(148,163,184,.045) 1px,transparent 1px)!important;
+  background-size:38px 38px!important;
+  -webkit-mask-image:linear-gradient(to bottom,#000,transparent 82%)!important;
+  mask-image:linear-gradient(to bottom,#000,transparent 82%)!important;
+}
+
+/* Шапка: темне «авіаційне скло» з легкою сіткою та кольоровою лінією. */
+header{
+  isolation:isolate!important;
+  position:sticky!important;
+  top:0!important;
+  z-index:10000!important;
+  overflow:hidden!important;
+  background:
+    radial-gradient(circle at 18% -45%,rgba(14,165,233,.36),transparent 42%),
+    radial-gradient(circle at 85% 145%,rgba(245,158,11,.18),transparent 38%),
+    linear-gradient(112deg,rgba(5,17,32,.98),rgba(9,38,62,.97) 54%,rgba(7,30,48,.98))!important;
+  border:0!important;
+  box-shadow:0 14px 38px rgba(2,8,23,.38),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(125%)!important;
+  backdrop-filter:blur(10px) saturate(125%)!important;
+}
+header::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:-1!important;
+  pointer-events:none!important;
+  opacity:.36!important;
+  background-image:
+    linear-gradient(120deg,transparent 0 42%,rgba(255,255,255,.06) 42.2% 42.8%,transparent 43% 100%),
+    radial-gradient(circle,rgba(125,211,252,.55) 1px,transparent 1.5px)!important;
+  background-size:auto,28px 28px!important;
+}
+header::after{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  height:3px!important;
+  background:linear-gradient(90deg,#38bdf8 0 38%,#2563eb 58%,#facc15 82%,#fb923c)!important;
+  box-shadow:0 0 18px rgba(56,189,248,.46)!important;
+}
+header>*{position:relative!important;z-index:1!important;}
+header .logo-img{
+  border:1px solid rgba(255,255,255,.7)!important;
+  background:rgba(255,255,255,.94)!important;
+  box-shadow:0 0 0 4px rgba(56,189,248,.12),0 9px 24px rgba(0,0,0,.32)!important;
+}
+header .logo-text{color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.3)!important;}
+header .logo-text span{color:#7dd3fc!important;}
+header nav ul{
+  border:1px solid rgba(148,213,255,.2)!important;
+  background:rgba(5,19,34,.42)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+header nav a{color:#d9e9f7!important;}
+header nav a:hover{color:#fff!important;background:rgba(56,189,248,.13)!important;}
+header nav a.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,#0284c7,#2563eb)!important;
+  box-shadow:0 7px 18px rgba(2,132,199,.34),inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+
+/* Світлі поверхні контрастують із темним полотном та не використовують дорогий blur. */
+body :is(
+  .target-audience-section,.audience-card,.leaderboard-section,.info-card,.virtual-tour-card,
+  .kids-club-section,.chat-box,.jetpack-run-card,.map-activity-card,.history-activity-card,
+  .flags-activity-card,.escape-catalog-wrap,.accordion-card,.quiz-container,.global-test-container,
+  .quiz-card,.nmt200-card,.nmt-library,.nmt-results-widget,.export-container,.section-block,
+  .poetry-card,.page-header,.methodology-card,.section-card,.content-card,.event-card-full
+){
+  background:linear-gradient(150deg,var(--v27-card) 0%,var(--v27-card-cool) 100%)!important;
+  border:1px solid var(--v27-line)!important;
+  box-shadow:var(--v27-shadow)!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+body :is(.target-audience-section,.leaderboard-section,.kids-club-section,.page-header,.section-block,.escape-catalog-wrap){
+  outline:1px solid rgba(255,255,255,.11)!important;
+  outline-offset:4px!important;
+}
+body :is(.info-card,.audience-card,.virtual-tour-card,.accordion-card,.quiz-card,.methodology-card,.section-card,.content-card){
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;
+}
+body :is(.info-card,.audience-card,.virtual-tour-card,.accordion-card,.quiz-card,.methodology-card,.section-card,.content-card):hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(56,189,248,.58)!important;
+  box-shadow:0 22px 52px rgba(2,8,23,.36),0 0 0 1px rgba(56,189,248,.12)!important;
+}
+
+.section-title{
+  color:#f3f7fc!important;
+  text-shadow:0 2px 12px rgba(0,0,0,.34)!important;
+}
+.section-title::after{background:linear-gradient(90deg,#38bdf8,#facc15)!important;}
+main.main-container>h1,main.main-container>h2{color:#f8fafc!important;}
+main.main-container>p{color:#cbd5e1!important;}
+.target-audience-section h3,.kids-club-section h3,.leaderboard-section h3,
+.page-header h1,.page-header h2,.section-block h2,.section-block h3{color:var(--v27-ink)!important;text-shadow:none!important;}
+.page-header p,.section-block>p{color:var(--v27-muted)!important;}
+
+.mountain-banner{
+  position:relative!important;
+  z-index:1!important;
+  border-bottom:1px solid rgba(125,211,252,.36)!important;
+  box-shadow:0 24px 52px rgba(2,8,23,.38),inset 0 -1px 0 rgba(255,255,255,.08)!important;
+}
+footer{position:relative!important;z-index:1!important;box-shadow:0 -18px 42px rgba(2,8,23,.24)!important;}
+
+/* Менше роботи браузера до прокручування великих блоків. */
+@supports(content-visibility:auto){
+  .grid-3-tours,.kids-club-section,footer,
+  body:not(:has(.mountain-banner)) .section-block:nth-of-type(n+3){
+    content-visibility:auto;
+    contain-intrinsic-size:auto 720px;
+  }
+}
+
+@media(max-width:900px){
+  header{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;}
+  header nav ul{background:rgba(3,14,27,.68)!important;}
+  body :is(.target-audience-section,.leaderboard-section,.kids-club-section,.page-header,.section-block,.escape-catalog-wrap){outline-offset:2px!important;}
+}
+@media(max-width:560px){
+  body{background:linear-gradient(160deg,#15243a,#0a1523 72%)!important;}
+  header::before{opacity:.22!important;}
+  header nav a{min-height:40px!important;}
+  body :is(.target-audience-section,.leaderboard-section,.kids-club-section){box-shadow:0 13px 30px rgba(2,8,23,.28)!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  body :is(.info-card,.audience-card,.virtual-tour-card,.accordion-card,.quiz-card,.methodology-card,.section-card,.content-card){transition:none!important;}
+}
