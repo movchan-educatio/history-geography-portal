@@ -2306,33 +2306,65 @@ img, svg, canvas, video, iframe {
 }
 </style>
 
-<style id="v23-14-premium-wearables">
-/* V23.14 — справжні прозорі 3D-атрибути з анатомічними зонами накладання. */
-.portal-character-avatar{isolation:isolate;--head-x:50%;--head-y:2%;--face-x:55%;--face-y:24%;--hands-x:50%;--hands-y:56%;--feet-x:54%;--feet-y:82%;--neck-x:50%;--neck-y:43%;}
+<style id="v23-15-anatomical-wearables">
+/* V23.15 — пропорційні PNG без розтягування та окремі анатомічні кріплення. */
+.portal-character-avatar{isolation:isolate;--head-x:50%;--head-y:2%;--face-x:50%;--face-y:25%;--hands-x:50%;--hands-y:59%;--feet-x:50%;--feet-y:82%;--neck-x:50%;--neck-y:46%;}
 .portal-character-avatar>.character-aura{z-index:0}
 .portal-character-avatar>img.character-body{position:relative;z-index:2}
 .portal-character-avatar>img.character-wearable{box-sizing:border-box!important;margin:0!important;padding:0!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 2px 3px rgba(15,23,42,.22));}
-.portal-character-avatar>img.character-wearable.backpack{z-index:1;left:var(--back-x,50%);top:var(--back-y,46%);width:var(--back-w,38%);height:var(--back-h,36%);transform:translateX(-50%)}
-.portal-character-avatar>img.character-wearable.hair{z-index:4;left:var(--head-x);top:var(--head-y);width:var(--hair-w,48%);height:var(--hair-h,25%);transform:translateX(-50%)}
-.portal-character-avatar>img.character-wearable.glasses{z-index:5;left:var(--face-x);top:var(--face-y);width:var(--glasses-w,42%);height:var(--glasses-h,12%);transform:translateX(-50%)}
-.portal-character-avatar>img.character-wearable.gloves{z-index:5;left:var(--hands-x);top:var(--hands-y,54%);width:var(--gloves-w,40%);height:var(--gloves-h,17%);transform:translateX(-50%)}
-.portal-character-avatar>img.character-wearable.boots{z-index:5;left:var(--feet-x);top:var(--feet-y,82%);width:var(--boots-w,52%);height:var(--boots-h,15%);transform:translateX(-50%)}
-.portal-character-avatar>img.character-wearable.necklace{z-index:5;left:var(--neck-x);top:var(--neck-y,43%);width:var(--necklace-w,25%);height:var(--necklace-h,14%);transform:translateX(-50%)}
-.portal-character-avatar>img.character-wearable.weapon{z-index:4;right:var(--weapon-r,6%);bottom:var(--weapon-b,8%);width:var(--weapon-w,24%);height:var(--weapon-h,52%)}
-.portal-character-avatar>img.character-wearable.artifact{z-index:4;left:var(--artifact-l,8%);bottom:var(--artifact-b,16%);width:var(--artifact-w,23%);height:var(--artifact-h,28%)}
-.portal-character-avatar>img.character-wearable[data-wearable-item="star"].hair{--hair-w:15%;--hair-h:11%;left:64%;top:5%}
-.portal-character-avatar>img.character-wearable[data-wearable-item="tuft"].hair{--hair-w:25%;--hair-h:18%;left:45%;top:1%}
-.portal-character-avatar>img.character-wearable[data-wearable-item="mohawk"].hair{--hair-w:35%;--hair-h:22%;top:0}
-.portal-character-avatar>img.character-wearable[data-wearable-item="crown"].hair{--hair-w:28%;--hair-h:20%;top:1%}
-.portal-character-avatar>img.character-wearable[data-wearable-item="chain"].necklace{--necklace-w:28%;--necklace-h:12%}
-.portal-character-avatar>img.character-wearable[data-wearable-item="saber"].weapon,.portal-character-avatar>img.character-wearable[data-wearable-item="staff"].weapon,.portal-character-avatar>img.character-wearable[data-wearable-item="quill"].weapon{--weapon-w:24%;--weapon-h:58%;--weapon-r:6%;--weapon-b:8%}
-.portal-character-avatar>img.character-wearable.glasses,.portal-character-avatar>img.character-wearable.gloves,.portal-character-avatar>img.character-wearable.boots{object-fit:fill!important}
+.portal-character-avatar>img.character-wearable.backpack{z-index:1;left:var(--back-x,34%);top:var(--back-y,43%);width:var(--back-w,34%);height:auto!important;transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.hair{z-index:4;left:var(--head-x);top:var(--head-y);width:var(--hair-w,42%);height:auto!important;transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.glasses{z-index:5;left:var(--face-x);top:var(--face-y);width:var(--glasses-w,40%);height:auto!important;transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.gloves{z-index:5;left:var(--hands-x);top:var(--hands-y);width:var(--gloves-w,38%);height:auto!important;transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.boots{z-index:5;left:var(--feet-x);top:var(--feet-y);bottom:auto;width:var(--boots-w,42%);height:auto!important;transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.necklace{z-index:5;left:var(--neck-x);top:var(--neck-y);width:var(--necklace-w,21%);height:auto!important;transform:translateX(-50%)}
+.portal-character-avatar>img.character-wearable.weapon{z-index:4;right:var(--weapon-r,7%);bottom:var(--weapon-b,8%);width:auto!important;height:var(--weapon-h,46%)!important}
+.portal-character-avatar>img.character-wearable.artifact{z-index:4;left:var(--artifact-l,6%);bottom:var(--artifact-b,24%);width:auto!important;height:var(--artifact-h,22%)!important}
+/* Предмети мають різну реальну форму — тому кожен отримує власний масштаб. */
+.portal-character-avatar>img.character-wearable[data-wearable-item="star"].hair{--hair-w:9%;--head-x:35%;--head-y:19%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="tuft"].hair{--hair-w:21%;--head-x:44%;--head-y:2%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="mohawk"].hair{--hair-w:31%;--head-y:1%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="cap"].hair{--hair-w:52%;--head-x:48%;--head-y:1%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="bandana"].hair{--hair-w:49%;--head-y:8%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="bucket"].hair{--hair-w:49%;--head-x:48%;--head-y:1%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="crown"].hair{--hair-w:30%;--head-y:1%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="science"].glasses{--glasses-w:42%;--face-y:24%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="future"].glasses{--glasses-w:39%;--face-y:25%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="winter"].gloves{--gloves-w:37%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="sport"].gloves{--gloves-w:39%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="tech"].gloves{--gloves-w:37%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="hike"].boots{--boots-w:36%;--feet-y:78%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="formal"].boots{--boots-w:41%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="skate"].boots{--boots-w:43%;--feet-y:80%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="chain"].necklace{--necklace-w:17%;--neck-y:49%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="compass"].necklace{--necklace-w:16%;--neck-y:47%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="crystal"].necklace{--necklace-w:16%;--neck-y:47%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="star"].necklace{--necklace-w:16%;--neck-y:47%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="school"].backpack{--back-w:32%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="travel"].backpack{--back-w:31%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="rocket"].backpack{--back-w:35%;--back-y:42%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="blaster"].weapon{--weapon-h:29%;--weapon-r:6%;--weapon-b:18%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="quill"].weapon{--weapon-h:45%;--weapon-r:7%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="saber"].weapon{--weapon-h:47%;--weapon-r:8%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="staff"].weapon{--weapon-h:49%;--weapon-r:8%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="book"].artifact{--artifact-h:21%;--artifact-b:25%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="compass"].artifact{--artifact-h:22%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="crystal"].artifact{--artifact-h:23%;--artifact-b:22%}
+.portal-character-avatar>img.character-wearable[data-wearable-item="hourglass"].artifact{--artifact-h:22%}
 /* Невеликі поправки для різних поз персонажів. */
-.portal-character-avatar[data-character-skin="bluecap"],.portal-character-avatar[data-character-skin="bluecyber"],.portal-character-avatar[data-character-skin="mintcurls"],.portal-character-avatar[data-character-skin="pinkbraids"],.portal-character-avatar[data-character-skin="violetmoon"]{--face-y:25%;--hands-y:48%;--feet-y:79%;--neck-y:40%}
-.portal-character-avatar[data-character-skin="aquabucket"],.portal-character-avatar[data-character-skin="limeexplorer"],.portal-character-avatar[data-character-skin="traveler"],.portal-character-avatar[data-character-skin="yellowskater"]{--face-y:24%;--hands-y:50%;--feet-y:80%;--neck-y:40%}
-.portal-character-avatar[data-character-skin="coralathlete"],.portal-character-avatar[data-character-skin="orangebandana"]{--face-y:24%;--hands-y:49%;--feet-y:79%;--neck-y:39%}
+.portal-character-avatar[data-character-skin="bluecap"],.portal-character-avatar[data-character-skin="bluecyber"],.portal-character-avatar[data-character-skin="mintcurls"],.portal-character-avatar[data-character-skin="pinkbraids"],.portal-character-avatar[data-character-skin="violetmoon"]{--face-y:25%;--hands-y:59%;--feet-y:80%;--neck-y:45%;--back-x:32%;--back-y:40%}
+.portal-character-avatar[data-character-skin="aquabucket"],.portal-character-avatar[data-character-skin="limeexplorer"],.portal-character-avatar[data-character-skin="traveler"],.portal-character-avatar[data-character-skin="yellowskater"]{--face-y:24%;--hands-y:59%;--feet-y:81%;--neck-y:45%;--back-x:31%;--back-y:41%}
+.portal-character-avatar[data-character-skin="coralathlete"],.portal-character-avatar[data-character-skin="orangebandana"]{--face-y:24%;--hands-y:59%;--feet-y:80%;--neck-y:44%;--back-x:31%;--back-y:41%}
 /* У малому рейтинговому аватарі залишаємо читабельні деталі, без старих emoji-розмірів. */
 #leaderboardList .leaderboard-character-avatar>img.character-wearable{display:block!important;font-size:0!important;letter-spacing:0!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.hair{left:var(--head-x)!important;top:var(--head-y)!important;right:auto!important;bottom:auto!important;width:var(--hair-w,42%)!important;height:auto!important;transform:translateX(-50%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.glasses{left:var(--face-x)!important;top:var(--face-y)!important;right:auto!important;bottom:auto!important;width:var(--glasses-w,40%)!important;height:auto!important;transform:translateX(-50%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.gloves{left:var(--hands-x)!important;top:var(--hands-y)!important;right:auto!important;bottom:auto!important;width:var(--gloves-w,38%)!important;height:auto!important;transform:translateX(-50%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.boots{left:var(--feet-x)!important;top:var(--feet-y)!important;right:auto!important;bottom:auto!important;width:var(--boots-w,42%)!important;height:auto!important;transform:translateX(-50%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.necklace{left:var(--neck-x)!important;top:var(--neck-y)!important;right:auto!important;bottom:auto!important;width:var(--necklace-w,21%)!important;height:auto!important;transform:translateX(-50%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.backpack{left:var(--back-x,34%)!important;top:var(--back-y,43%)!important;right:auto!important;bottom:auto!important;width:var(--back-w,34%)!important;height:auto!important;transform:translateX(-50%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.weapon{left:auto!important;right:var(--weapon-r,7%)!important;top:auto!important;bottom:var(--weapon-b,8%)!important;width:auto!important;height:var(--weapon-h,46%)!important}
+#leaderboardList .leaderboard-character-avatar>img.character-wearable.artifact{left:var(--artifact-l,6%)!important;right:auto!important;top:auto!important;bottom:var(--artifact-b,24%)!important;width:auto!important;height:var(--artifact-h,22%)!important}
 .character-item.incompatible{border-style:dashed!important;background:#f8fafc!important;opacity:.72;cursor:not-allowed!important}
 .character-item.incompatible:hover{transform:none!important;border-color:#cbd5e1!important}
 .character-item.incompatible small{color:#8a4b08!important}
@@ -3659,7 +3691,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       weapon:{quill:'character-assets/wearables/weapon-quill.png',saber:'character-assets/wearables/weapon-saber.png',blaster:'character-assets/wearables/weapon-blaster.png',staff:'character-assets/wearables/weapon-staff.png'},
       artifact:{book:'character-assets/wearables/artifact-book.png',compass:'character-assets/wearables/artifact-compass.png',crystal:'character-assets/wearables/artifact-crystal.png',hourglass:'character-assets/wearables/artifact-hourglass.png'}
     };
-    const characterWearableUrl=src=>`${src}?v=2314`;
+    const characterWearableUrl=src=>`${src}?v=2315`;
     const WEARABLE_CATEGORIES=['hair','glasses','gloves','boots','necklace','backpack','weapon','artifact'];
     const CHARACTER_SKIN_CONFLICTS={
       hair:new Set(['aquabucket','bluecap','bluecyber','casual','coralathlete','limeexplorer','mintcurls','orangebandana','pinkbraids','science','street','traveler','violetmoon','yellowskater']),
@@ -3668,6 +3700,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
       boots:new Set(['aquabucket','bluecap','bluecyber','coralathlete','limeexplorer','mintcurls','orangebandana','pinkbraids','violetmoon','yellowskater']),
       necklace:new Set(['aquabucket','bluecap','bluecyber','coralathlete','limeexplorer','mintcurls','orangebandana','pinkbraids','violetmoon','yellowskater'])
     };
+    const CHARACTER_BUILTIN_STAR_SKINS=new Set(['neutral','casual','sport','science','space','formal','ukraine']);
     let characterDraft={...CHARACTER_DEFAULT},characterProfile={},characterCategory='skin',characterNotice={type:'',text:'Натисни на будь-яку річ, щоб одразу приміряти її.'},characterBusy=false;
 
     function normalizeCharacter(raw={}){
@@ -3678,6 +3711,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     function characterItem(cat,id){return CHARACTER_CATALOG[cat]?.items.find(x=>x[0]===id)}
     function characterCompatibility(cat,id,skin){
       if(!id||id==='none'||cat==='skin'||cat==='aura')return '';
+      if(cat==='hair'&&id==='star'&&CHARACTER_BUILTIN_STAR_SKINS.has(skin))return 'У цього персонажа золота зірка вже є в базовому образі.';
       if(CHARACTER_SKIN_CONFLICTS[cat]?.has(skin)){
         if(cat==='hair')return 'Цей образ уже має власну зачіску або головний убір.';
         if(cat==='glasses')return 'Цей образ уже має окуляри.';
