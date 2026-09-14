@@ -1,0 +1,331 @@
+
+/* ================================================================
+   PORTAL UI 2026 — unified upper panel + modern button language
+   ================================================================ */
+:root{
+  --pui-bg:#071827;
+  --pui-panel:#0d2236;
+  --pui-panel-2:#102a42;
+  --pui-border:#24465e;
+  --pui-text:#f8fbff;
+  --pui-muted:#9fb5c7;
+  --pui-cyan:#22d3ee;
+  --pui-blue:#2563eb;
+  --pui-blue2:#0e7490;
+  --pui-paper:#ffffff;
+  --pui-ink:#172033;
+}
+
+.portal-unified-header{
+  position:sticky!important;
+  top:0!important;
+  z-index:1900!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:0!important;
+  margin:0!important;
+  display:block!important;
+  background:
+    radial-gradient(circle at 50% -100%,rgba(37,99,235,.24),transparent 60%),
+    linear-gradient(180deg,#0a1d30,#061522)!important;
+  border-bottom:1px solid rgba(96,165,250,.18)!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.18)!important;
+}
+
+.portal-top-row{
+  position:relative;
+  min-height:62px;
+  display:grid;
+  grid-template-columns:50px minmax(0,1fr) 50px;
+  align-items:center;
+  gap:10px;
+  padding:7px 14px 6px;
+  max-width:1240px;
+  margin:0 auto;
+}
+
+.portal-square-btn{
+  width:46px!important;
+  height:46px!important;
+  min-width:46px!important;
+  min-height:46px!important;
+  padding:0!important;
+  margin:0!important;
+  border:1px solid rgba(125,211,252,.20)!important;
+  border-radius:12px!important;
+  background:linear-gradient(145deg,#173553,#0a2137)!important;
+  color:#fff!important;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.08)!important;
+  display:grid!important;
+  place-items:center!important;
+  line-height:1!important;
+  text-decoration:none!important;
+  overflow:hidden!important;
+}
+.portal-square-btn i{
+  display:block!important;
+  width:1em!important;
+  height:1em!important;
+  line-height:1!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:18px!important;
+  transform:none!important;
+}
+.portal-square-btn:active{transform:scale(.97)}
+
+.portal-top-brand{
+  justify-self:center;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:9px!important;
+  min-width:0;
+  color:#fff!important;
+  text-decoration:none!important;
+}
+.portal-top-brand img{
+  width:38px!important;height:38px!important;min-width:38px!important;
+  border-radius:50%!important;
+  object-fit:cover!important;
+  border:1px solid rgba(125,211,252,.25)!important;
+  box-shadow:0 4px 15px rgba(0,0,0,.25)!important;
+}
+.portal-top-brand>span{
+  display:block;
+  font-weight:900;
+  font-size:11px;
+  line-height:1.05;
+  white-space:nowrap;
+}
+.portal-top-brand small{
+  display:block;
+  margin-top:4px;
+  color:#67e8f9;
+  font-size:7px;
+  letter-spacing:.18em;
+  font-weight:900;
+}
+
+.portal-top-tabs{
+  max-width:1240px;
+  margin:0 auto;
+  padding:0 14px 8px;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:7px!important;
+  overflow:visible!important;
+}
+.portal-top-tab{
+  min-height:40px;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 37px;
+  align-items:center;
+  overflow:hidden;
+  border:1px solid rgba(125,211,252,.16)!important;
+  border-radius:10px!important;
+  color:#eaf7ff!important;
+  text-decoration:none!important;
+  background:linear-gradient(135deg,#11314d,#0b4161 58%,#0f5c6d)!important;
+  box-shadow:0 6px 16px rgba(0,0,0,.14),inset 0 1px rgba(255,255,255,.05)!important;
+  font-size:8.5px!important;
+  font-weight:900!important;
+  letter-spacing:.035em;
+  text-align:center;
+}
+.portal-top-tab span{
+  padding:0 8px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.portal-top-tab i{
+  height:100%;
+  min-height:38px;
+  display:grid!important;
+  place-items:center!important;
+  border-left:1px solid rgba(255,255,255,.10);
+  background:rgba(37,99,235,.23);
+  color:#8be9ff;
+  font-size:13px;
+}
+.portal-top-tab:hover,.portal-top-tab.portal-tab-active{
+  background:linear-gradient(135deg,#0e7490,#2563eb)!important;
+  color:#fff!important;
+  border-color:rgba(103,232,249,.38)!important;
+}
+.portal-top-tab.portal-tab-active i{color:#fff;background:rgba(255,255,255,.12)}
+
+#backToTop{
+  display:grid!important;
+  place-items:center!important;
+  line-height:1!important;
+}
+#backToTop::first-line{line-height:1!important}
+
+/* Methodology page — paper-on-blue editorial layout */
+.methodology-page .methodology-resource-canvas{
+  margin:30px 0 42px;
+  padding:24px;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(34,211,238,.14),transparent 35%),
+    linear-gradient(145deg,#0b2b44,#0b3854 56%,#0c4964);
+  border:1px solid rgba(103,232,249,.18);
+  box-shadow:0 18px 45px rgba(0,0,0,.18);
+}
+.methodology-page .methodology-resource-head{
+  margin:0 0 18px!important;
+  padding:18px 20px!important;
+  border-radius:13px!important;
+  background:linear-gradient(135deg,#0a2440,#123f64)!important;
+  border:1px solid rgba(147,197,253,.18)!important;
+}
+.methodology-page .methodology-resource-head h2{
+  color:#fff!important;
+  margin:0!important;
+  line-height:1.1!important;
+}
+.methodology-page .methodology-resource-head p{
+  color:#bcd0e1!important;
+  margin:8px 0 0!important;
+}
+.methodology-page .methodology-resource-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px!important;
+  margin:0!important;
+  align-items:stretch!important;
+}
+.methodology-page .methodology-resource-grid>.info-card{
+  min-width:0!important;
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  padding:22px!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  color:#253044!important;
+  border:1px solid rgba(226,232,240,.95)!important;
+  box-shadow:0 8px 22px rgba(3,16,29,.14)!important;
+}
+.methodology-page .methodology-resource-grid>.info-card h4{
+  margin:0 0 12px!important;
+  color:#271810!important;
+  font-size:18px!important;
+}
+.methodology-page .methodology-resource-grid>.info-card p{
+  color:#5f5a57!important;
+  line-height:1.58!important;
+}
+.methodology-page .methodology-resource-grid>.info-card .card-instruction{
+  flex:1 1 auto!important;
+}
+.methodology-page .methodology-resource-grid>.info-card .btn-link{
+  width:100%!important;
+  min-height:44px!important;
+  margin-top:14px!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 46px!important;
+  align-items:center!important;
+  border-radius:9px!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  text-decoration:none!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  background:linear-gradient(135deg,#0e7490,#2563eb)!important;
+  box-shadow:0 7px 16px rgba(37,99,235,.18)!important;
+}
+.methodology-page .methodology-resource-grid>.info-card .btn-link::before{
+  content:"ВІДКРИТИ";
+  padding-left:14px;
+  text-align:left;
+}
+.methodology-page .methodology-resource-grid>.info-card .btn-link{
+  font-size:0!important;
+}
+.methodology-page .methodology-resource-grid>.info-card .btn-link::after{
+  content:"↗";
+  height:44px;
+  display:grid;
+  place-items:center;
+  font-size:16px;
+  border-left:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.10);
+}
+
+/* Poem becomes a white paper canvas with dark readable text */
+.methodology-page .poetry-section .poetry-card{
+  padding:32px!important;
+  background:#fff!important;
+  color:#172033!important;
+  border:1px solid #dce5ee!important;
+  border-radius:18px!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.14)!important;
+}
+.methodology-page .poetry-section .poetry-card h3{
+  color:#15243a!important;
+  font-size:1.5rem!important;
+}
+.methodology-page .poetry-section .poetry-card>div{
+  color:#252c35!important;
+  font-style:italic!important;
+}
+.methodology-page .poetry-section .poetry-card>p{
+  color:#4b5563!important;
+}
+.methodology-page .poetry-section .poetry-card>p[style*="text-align: right"]{
+  color:#0e7490!important;
+}
+.methodology-page .poetry-section .poetry-card hr{
+  border-top-color:#d8e1e8!important;
+}
+
+/* Keep the resource/poem layout readable and aligned on phone */
+@media(max-width:800px){
+  .portal-top-row{
+    min-height:58px;
+    grid-template-columns:46px minmax(0,1fr) 46px;
+    padding:6px 9px 5px;
+    gap:6px;
+  }
+  .portal-square-btn{
+    width:42px!important;height:42px!important;
+    min-width:42px!important;min-height:42px!important;
+    border-radius:11px!important;
+  }
+  .portal-square-btn i{font-size:17px!important}
+  .portal-top-brand img{width:34px!important;height:34px!important;min-width:34px!important}
+  .portal-top-brand>span{font-size:9px}
+  .portal-top-brand small{font-size:6px}
+  .portal-top-tabs{
+    padding:0 8px 7px;
+    grid-template-columns:repeat(5,110px)!important;
+    gap:6px!important;
+    overflow-x:auto!important;
+    overscroll-behavior-inline:contain;
+    scrollbar-width:none;
+  }
+  .portal-top-tabs::-webkit-scrollbar{display:none}
+  .portal-top-tab{min-height:38px;font-size:7.5px!important}
+  .portal-top-tab i{min-height:36px;font-size:12px}
+  .methodology-page .methodology-resource-canvas{padding:12px;border-radius:14px}
+  .methodology-page .methodology-resource-head{padding:15px!important}
+  .methodology-page .methodology-resource-grid{
+    grid-template-columns:1fr!important;
+    gap:11px!important;
+  }
+  .methodology-page .methodology-resource-grid>.info-card{padding:18px!important}
+  .methodology-page .poetry-section .poetry-card{padding:22px!important}
+}
+
+/* prevent old header definitions from leaking through */
+.portal-unified-header .main-nav,
+.portal-unified-header .header-tools,
+.portal-unified-header .brand,
+.portal-unified-header .traveler-container{display:none!important}

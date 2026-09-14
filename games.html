@@ -1,0 +1,3865 @@
+<!DOCTYPE html>
+<html lang="uk"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Ігри — БЕЗ МЕЖ</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<link href="v3.css?v=3" rel="stylesheet"/><link href="portal-ui-v2026.css?v=20260915" rel="stylesheet"/></head><body>
+<header class="portal-unified-header" data-page="games">
+  <div class="portal-top-row">
+    <button class="portal-square-btn portal-back-btn" type="button"
+      aria-label="Назад" title="Назад"
+      onclick="if(history.length&gt;1){history.back()}else{location.href='index.html'}">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <a class="portal-top-brand" href="index.html" aria-label="На головну">
+      <img src="logo.png" alt="Логотип">
+      <span>Історія і географія<small>БЕЗ МЕЖ</small></span>
+    </a>
+
+    <a class="portal-square-btn portal-home-btn" href="index.html"
+       aria-label="Головна" title="Головна">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </div>
+  <nav class="portal-top-tabs" aria-label="Основна навігація">
+    <a class="portal-top-tab" href="history.html"><span>ІСТОРІЯ</span><i class="fa-solid fa-landmark"></i></a><a class="portal-top-tab" href="geography.html"><span>ГЕОГРАФІЯ</span><i class="fa-solid fa-earth-europe"></i></a><a class="portal-top-tab" href="nmt.html"><span>НМТ</span><i class="fa-solid fa-graduation-cap"></i></a><a class="portal-top-tab portal-tab-active" href="games.html"><span>ІГРИ</span><i class="fa-solid fa-gamepad"></i></a><a class="portal-top-tab" href="methodology.html"><span>МЕТОДИЧНА</span><i class="fa-solid fa-toolbox"></i></a>
+  </nav>
+</header>
+<main class="games-shell" id="site-main"><section class="games-hero"><h1>🎮 Інтерактивні ігри</h1><p>Усі ігрові активності порталу в одному місці. Виконуй завдання, заробляй бали та піднімайся в рейтингу.</p></section><section class="kids-club-section" id="kids-club">
+<div class="kids-club-header">
+<span style="font-size: 30px;">🧭</span>
+<div>
+<h3>Клуб дослідників &amp; Зона розваг</h3>
+<p style="margin: 0; font-size: 13px; color: #0369a1;">Відпочивайте від уроків, грайте та спілкуйтеся з друзями!</p>
+</div>
+</div>
+<div class="kids-club-grid">
+<!-- Блок 1: Інтерактивний чат / Стіна коментарів -->
+<div class="chat-box">
+<div style="font-weight: 800; color: #0369a1; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+<i class="fas fa-comments"></i> Стіна думок та вражень
+          </div>
+<div class="chat-messages" id="chatMessages"></div>
+<div class="chat-input-group">
+<input id="chatInput" maxlength="120" placeholder="Напишіть повідомлення чи коментар..." type="text"/>
+<button onclick="sendChatMessage()">Надіслати</button>
+</div>
+</div>
+<!-- Блок 2: Динозаврик-Ранер -->
+<div class="dino-game-card">
+<div class="dino-controls">
+<span>🦖 Динозаврик-Ранер</span>
+<span>Очки: <strong id="dinoScore">0</strong> | Рекорд: <strong id="dinoHighScore">0</strong></span>
+</div>
+<div style="position: relative; width: 100%;">
+<canvas height="180" id="dinoCanvas" width="320"></canvas>
+<!-- Оверлей блокування гри -->
+<div id="dinoLockOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 180px; background: rgba(15, 23, 42, 0.85); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 15px; box-sizing: border-box; z-index: 10;">
+<span style="font-size: 28px; margin-bottom: 5px;">🔒</span>
+<strong style="font-size: 14px; color: #38bdf8;">Гра заблокована</strong>
+<span style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Виконайте будь-яке навчальне завдання (опрацюйте факт чи пройдіть тест), щоб розблокувати!</span>
+</div>
+</div>
+<button disabled="" id="dinoStartBtn" onclick="startDinoGame()" style="background: #94a3b8; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: not-allowed; font-size: 12px; width: 100%;">Старт / Стрибок (Пробіл або Тап)</button>
+<div class="dino-leaderboard">
+<div class="dino-leaderboard-title">🏆 Лідери Динозаврика-Ранера • усі учні</div>
+<div id="dinoLeaderboardList"></div>
+</div>
+</div>
+<!-- Блок 3: Робота з картою -->
+<div class="map-activity-card">
+<div style="font-weight:900;color:#0369a1;font-size:14px;">🗺️ Географічний детектив</div>
+<div class="map-task" id="mapTask">Завантаження завдання...</div>
+<div id="worldMap"></div>
+<div class="map-status" id="mapStatus">Натисніть на карту там, де розташована потрібна країна.</div>
+</div>
+<!-- Блок 4: Історична хронологія -->
+<div class="history-activity-card">
+<div style="font-weight:900;color:#6b2f1f;font-size:14px;">📜 Історичний хронолог</div>
+<div class="history-task">Оберіть правильний рік історичної події</div>
+<div class="history-question" id="historyActivityQuestion">Завантаження завдання...</div>
+<div class="history-options" id="historyActivityOptions"></div>
+<div class="history-status" id="historyActivityStatus">Оберіть один із варіантів.</div>
+<button class="history-next" disabled="" id="historyActivityNext" type="button">Наступне питання</button>
+<div style="font-size:11px;color:#64748b;text-align:center;">Питання <span id="historyActivityNumber">1</span> із 10</div>
+</div>
+<!-- Блок 5: Прапори світу -->
+<div class="flags-activity-card" id="flagsGame">
+<div style="font-weight:900;color:#7c2d12;font-size:14px;">🚩 Прапори світу</div>
+<div class="flags-task">Якій країні належить цей прапор?</div>
+<div aria-label="Прапор країни" id="flagsDisplay">🌍</div>
+<div class="flags-options" id="flagsOptions"></div>
+<div class="flags-status" id="flagsStatus">Оберіть правильну відповідь.</div>
+</div>
+</div>
+</section></main><div aria-labelledby="studentDetailsTitle" aria-modal="true" class="student-details-modal" id="studentDetailsModal" role="dialog">
+<div class="student-details-card">
+<div class="student-details-head">
+<div>
+<h3 id="studentDetailsTitle" style="margin:0 0 4px;color:#1e293b;">Статистика учня</h3>
+<div id="studentDetailsSubtitle" style="color:#64748b;font-size:13px;"></div>
+</div>
+<button aria-label="Закрити" class="student-details-close" onclick="closeStudentDetails()" type="button">×</button>
+</div>
+<div id="studentDetailsBody"></div>
+</div>
+</div><footer style="background: #1e293b; color: #ffffff; padding: 30px 20px; text-align: center; margin-top: 40px; border-top: 4px solid #2563eb;">
+<h3 style="margin-bottom: 15px; font-size: 18px; font-weight: 700;">Приєднуйтесь до моїх спільнот</h3>
+<div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;">
+<a href="https://www.instagram.com/matilda.poetry?igsh=MXNkeWo5anFmd2k0Nw%3D%3D&amp;utm_source=qr" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #e1306c; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+<a href="https://www.tiktok.com/@matilda.poetry?_r=1&amp;_t=ZS-98cZEDGY3ym" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #000000; border: 1px solid #333333; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+<a href="https://www.facebook.com/share/1ETNyD3yDX/?mibextid=wwXIfr" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: #1877f2; border-radius: 50%; color: #ffffff; text-decoration: none; font-size: 22px;" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+</div>
+<p style="font-size: 13px; color: #94a3b8; margin: 0;">© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
+<p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
+</footer><nav class="mobile-nav">
+<a href="index.html"><i class="fa-solid fa-house"></i><span>Головна</span></a>
+<a class="active" href="games.html"><i class="fa-solid fa-gamepad"></i><span>Ігри</span></a>
+<a href="index.html#leaderboardHost"><i class="fa-solid fa-trophy"></i><span>Рейтинг</span></a>
+<a href="#site-main"><i class="fa-solid fa-bars"></i><span>Меню</span></a>
+</nav><script type="module">
+    import "./portal-score.js";
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF2acxaXKOH4e4RoAUQcqMgX4s65xttSw",
+      authDomain: "movchan-portal.firebaseapp.com",
+      databaseURL: "https://movchan-portal-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "movchan-portal",
+      storageBucket: "movchan-portal.firebasestorage.app",
+      messagingSenderId: "535915495927",
+      appId: "1:535915495927:web:71f899ea2876ee129c2ef2",
+      measurementId: "G-8XBVKRZRS1"
+    };
+
+    // portal-score.js може ініціалізувати Firebase раніше за цей модуль.
+    // Використовуємо вже існуючий DEFAULT app, щоб не отримати
+    // "Firebase App named '[DEFAULT]' already exists".
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+    const PORTAL_OWNER_UID = 'LGw3zPR7w4SdN8zvi4LWExYTfFh2';
+
+    window.currentStudent = null;
+    window.currentUserUid = null;
+    window.currentUserRole = null;
+    window.studentsData = [];
+    window.chatData = [];
+
+    window.loginWithGoogle = async function () {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error('Google Auth:', error);
+        // На iPhone/Safari popup інколи блокується. У такому випадку
+        // переходимо на redirect-вхід, щоб кнопка все одно працювала.
+        if (error && error.code === 'auth/popup-blocked') {
+          const { signInWithRedirect } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+          await signInWithRedirect(auth, provider);
+          return;
+        }
+        alert('Помилка входу через Google: ' + (error?.message || error));
+      }
+    };
+
+    const googleLoginBtn = document.getElementById('googleLoginBtn');
+    if (googleLoginBtn) googleLoginBtn.addEventListener('click', () => window.loginWithGoogle());
+
+    window.logoutGoogle = function () {
+      signOut(auth);
+    };
+
+    function getWeekKey(date = new Date()) {
+      const d = new Date(date);
+      const day = d.getDay() || 7;
+      d.setDate(d.getDate() + 4 - day);
+      const yearStart = new Date(d.getFullYear(), 0, 1);
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      return `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+    }
+
+    function updateWeekTimer() {
+      const now = new Date();
+      const day = now.getDay() || 7;
+      const next = new Date(now);
+      const daysToNextMonday = 8 - day;
+      next.setDate(now.getDate() + (daysToNextMonday > 7 ? 0 : daysToNextMonday));
+      if (day === 7) next.setDate(now.getDate() + 1);
+      next.setHours(0, 0, 0, 0);
+      const diff = Math.max(0, next - now);
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff / 3600000) % 24);
+      const m = Math.floor((diff / 60000) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      const badge = document.getElementById('weekResetTimer');
+      if (badge) badge.innerHTML = `<i class="fa-regular fa-clock"></i> До завершення тижня: ${d}д ${h}г ${m}хв ${s}с`;
+    }
+    updateWeekTimer();
+    setInterval(updateWeekTimer, 1000);
+    setInterval(() => {
+      if (window.studentsData) renderSundayWinner(Object.fromEntries(window.studentsData.map(p => [p.uid, p])));
+    }, 30000);
+
+    async function ensureUserProfile(user) {
+      if (!user) return;
+      const userRef = ref(database, 'users/' + user.uid);
+      await runTransaction(userRef, data => {
+        data = data || {};
+        data.name = data.name || user.displayName || 'Учень';
+        data.email = data.email || user.email || '';
+        // Фото профілю беремо безпосередньо з Google-акаунта.
+        // Не завантажуємо фотографії на Firebase Storage.
+        if (user.photoURL) { data.photoURL = user.photoURL; data.googlePhotoURL = user.photoURL; }
+        data.role = user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student';
+        if (data.score === undefined) data.score = 0;
+        if (data.week_score === undefined) data.week_score = Number(data.score) || 0;
+        if (data.total_history_points === undefined) data.total_history_points = 0;
+        if (data.total_geography_points === undefined) data.total_geography_points = 0;
+        if (data.nmt_history_score === undefined) data.nmt_history_score = 0;
+        if (data.nmt_geography_score === undefined) data.nmt_geography_score = 0;
+        if (data.truth_or_lie_points === undefined) data.truth_or_lie_points = 0;
+        if (data.map_activity_points === undefined) data.map_activity_points = 0;
+        if (data.history_activity_points === undefined) data.history_activity_points = 0;
+        if (data.flags_points === undefined) data.flags_points = 0;
+        if (data.truth_or_lie_locked_until === undefined) data.truth_or_lie_locked_until = 0;
+        if (data.truth_or_lie_lock_reason === undefined) data.truth_or_lie_lock_reason = '';
+
+        // Поточний тиждень. Перший запуск старих профілів зберігає вже нараховані тижневі поля.
+        // Нові профілі стартують з нуля. Надалі week_key захищає від перенесення старих балів у новий тиждень.
+        const currentWeek = getWeekKey();
+        if (data.week_key === undefined) {
+          if (data.week_history_points === undefined) data.week_history_points = 0;
+          if (data.week_geography_points === undefined) data.week_geography_points = 0;
+          if (data.week_nmt_history_score === undefined) data.week_nmt_history_score = 0;
+          if (data.week_nmt_geography_score === undefined) data.week_nmt_geography_score = 0;
+          if (data.week_truth_or_lie_points === undefined) data.week_truth_or_lie_points = 0;
+          if (data.week_map_activity_points === undefined) data.week_map_activity_points = 0;
+          if (data.week_history_activity_points === undefined) data.week_history_activity_points = 0;
+          if (data.week_flags_points === undefined) data.week_flags_points = 0;
+          data.week_key = currentWeek;
+        } else if (data.week_key !== currentWeek) {
+          data.week_history_points = 0;
+          data.week_geography_points = 0;
+          data.week_nmt_history_score = 0;
+          data.week_nmt_geography_score = 0;
+          data.week_truth_or_lie_points = 0;
+          data.week_map_activity_points = 0;
+          data.week_history_activity_points = 0;
+          data.week_flags_points = 0;
+          data.week_score = 0;
+          data.week_key = currentWeek;
+        }
+        data.week_score =
+          (Number(data.week_history_points) || 0) +
+          (Number(data.week_geography_points) || 0) +
+          (Number(data.week_nmt_history_score) || 0) +
+          (Number(data.week_nmt_geography_score) || 0) +
+          (Number(data.week_truth_or_lie_points) || 0) +
+           (Number(data.week_map_activity_points) || 0) +
+           (Number(data.week_history_activity_points) || 0) +
+           (Number(data.week_flags_points) || 0);
+        return data;
+      });
+    }
+
+    window.closeStudentDetails = function() {
+      const modal = document.getElementById('studentDetailsModal');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.showStudentDetails = function(uid) {
+      const student = (window.studentsData || []).find(p => p.uid === uid);
+      if (!student) return;
+      const modal = document.getElementById('studentDetailsModal');
+      const title = document.getElementById('studentDetailsTitle');
+      const subtitle = document.getElementById('studentDetailsSubtitle');
+      const body = document.getElementById('studentDetailsBody');
+      if (!modal || !title || !body) return;
+      const nmtH = Number(student.nmt_history_score)||0, nmtG = Number(student.nmt_geography_score)||0;
+      const dino = (window.dinoLeaderboardData || []).find(p => p.uid === uid);
+      title.textContent = `📊 ${student.name || student.displayName || student.email || 'Учень'}`;
+      subtitle.textContent = `Загальні результати та результат поточного тижня`;
+      const cards = [
+        ['🏆 Загальні бали', Number(student.score)||0],
+        ['📅 За цей тиждень', Number(student.week_score)||0],
+        ['🏛️ Історія', Number(student.total_history_points)||0],
+        ['🌍 Географія', Number(student.total_geography_points)||0],
+        ['📝 НМТ — історія', nmtH],
+        ['📝 НМТ — географія', nmtG],
+        ['🎯 Правда чи Брехня', Number(student.truth_or_lie_points)||0],
+        ['🗺️ Географічна карта', Number(student.map_activity_points)||0],
+        ['⏳ Історичний хронолог', Number(student.history_activity_points)||0],
+        ['🚩 Прапори', Number(student.flags_points)||0],
+        ['🦖 Динорейсер — рекорд', dino ? Number(dino.score)||0 : '—']
+      ];
+      const weekly = [
+        ['Історія', Number(student.week_history_points)||0],
+        ['Географія', Number(student.week_geography_points)||0],
+        ['НМТ', nmtH + nmtG],
+        ['Правда чи Брехня', Number(student.week_truth_or_lie_points)||0],
+        ['Карта', Number(student.week_map_activity_points)||0],
+        ['Хронолог', Number(student.week_history_activity_points)||0],
+        ['Прапори', Number(student.week_flags_points)||0]
+      ];
+      body.innerHTML = `<h4 style="margin:0 0 10px;color:#475569;">Усього</h4><div class="stats-grid">${cards.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]}${typeof c[1]==='number'?' балів':''}</strong></div>`).join('')}</div><h4 style="margin:20px 0 10px;color:#475569;">Розшифровка за поточний тиждень</h4><div class="stats-grid">${weekly.map(c=>`<div class="stats-card"><small>${c[0]}</small><strong>${c[1]} балів</strong></div>`).join('')}</div>${student.truth_or_lie_locked_until && Number(student.truth_or_lie_locked_until)>Date.now()?`<div class="anti-cheat-badge">🔒 «Правда чи Брехня» заблоковано до ${new Date(Number(student.truth_or_lie_locked_until)).toLocaleString('uk-UA')}</div>`:''}`;
+      modal.style.display = 'flex';
+    };
+
+    function renderRealtimeLeaderboard() {
+      const box = document.getElementById('leaderboardList');
+      if (!box) return;
+      const students = (window.studentsData || [])
+        .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher')
+        .filter(p => p.name || p.displayName || p.email)
+        .sort((a, b) => (Number(b.week_score) || 0) - (Number(a.week_score) || 0));
+
+      if (!students.length) {
+        box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>Поки що немає результатів учнів.</span></div></div>';
+        return;
+      }
+
+      box.innerHTML = students.map((student, index) => {
+        const score = Number(student.week_score) || 0;
+        const hist = Number(student.week_history_points) || 0;
+        const geo = Number(student.week_geography_points) || 0;
+        const nmt = (Number(student.week_nmt_history_score) || 0) + (Number(student.week_nmt_geography_score) || 0);
+        const truth = Number(student.week_truth_or_lie_points) || 0;
+        const map = Number(student.week_map_activity_points) || 0;
+        const chronology = Number(student.week_history_activity_points) || 0;
+        const flags = Number(student.week_flags_points) || 0;
+        const isMe = student.uid === window.currentUserUid;
+        const rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
+        const name = student.name || student.displayName || student.email || 'Учень';
+        const avatarUrl = student.photoURL || student.googlePhotoURL || '';
+        // Якщо фото ще не записане у Firebase, воно з'явиться після наступного входу учня через Google.
+        const initials = String(name).trim().charAt(0).toUpperCase() || 'У';
+        const avatarHtml = avatarUrl
+          ? `<img class="leaderboard-avatar" src="${escapeHtml(avatarUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="leaderboard-avatar-fallback" style="display:none">${escapeHtml(initials)}</span>`
+          : `<span class="leaderboard-avatar-fallback">${escapeHtml(initials)}</span>`;
+        return `<div class="leaderboard-item clickable-student ${isMe ? 'current-user' : ''}" onclick="showStudentDetails('${student.uid}')" title="Відкрити детальну статистику">
+          <div class="student-info">
+            <span class="student-rank ${rankClass}">#${index + 1}</span>
+            <span class="leaderboard-avatar-wrap">${avatarHtml}</span>
+            <div>
+              <span>${escapeHtml(name)}${isMe ? ' (Ви)' : ''}</span>
+              <div style="font-size:11px;color:#64748b;margin-top:3px;line-height:1.55;">Іст. ${hist} • Геогр. ${geo} • НМТ ${nmt} • Гра ${truth} • Карта ${map} • Хронолог ${chronology}</div>
+            </div>
+          </div>
+          <span class="student-score">${score} балів</span>
+        </div>`;
+      }).join('');
+    }
+
+    function updateCurrentScoreBadge(score) {
+      const badge = document.getElementById('currentUserScore');
+      if (badge) badge.textContent = `${Number(score) || 0} балів`;
+    }
+
+    function renderSundayWinner(rawUsers) {
+      const panel = document.getElementById('weeklyWinnerPanel');
+      const nameEl = document.getElementById('weeklyWinnerName');
+      const pointsEl = document.getElementById('weeklyWinnerPoints');
+      if (!panel || !nameEl || !pointsEl) return;
+
+      const now = new Date();
+      const isSundayFinalWindow = now.getDay() === 0 && now.getHours() >= 12 && now.getHours() < 24;
+      if (!isSundayFinalWindow) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      const students = Object.entries(rawUsers || {})
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher' && (p.name || p.displayName || p.email))
+        .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
+        .sort((a,b) => b.week_score - a.week_score);
+      const winner = students[0];
+      if (!winner || winner.week_score <= 0) {
+        panel.style.display = 'none';
+        return;
+      }
+      nameEl.textContent = `🥇 ${winner.name || winner.displayName || winner.email || 'Учень'}`;
+      pointsEl.textContent = `${winner.week_score} балів за цей тиждень`;
+      panel.style.display = 'block';
+    }
+
+    // ЄДИНИЙ realtime-слухач. Firebase сам надсилає зміни без перезавантаження.
+    onValue(ref(database, 'users'), snapshot => {
+      const raw = snapshot.val() || {};
+      renderSundayWinner(raw);
+      window.studentsData = Object.entries(raw).map(([uid, p]) => ({ ...p, uid }))
+        .filter(p => p && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher' && (p.name || p.displayName || p.email));
+      renderRealtimeLeaderboard();
+
+      if (window.currentUserUid) {
+        const mine = raw[window.currentUserUid] || {};
+        updateCurrentScoreBadge(Number(mine.week_score) || 0);
+        // Розблокування може надійти з будь-якої навчальної сторінки через Firebase.
+        if (mine.dino_unlocked === true) unlockDinoGame();
+      }
+    }, error => {
+      console.error('Firebase рейтинг:', error);
+      const box = document.getElementById('leaderboardList');
+      if (box) box.innerHTML = '<div class="leaderboard-item"><div class="student-info"><span>⚠️ Не вдалося завантажити рейтинг. Перевірте Database Rules.</span></div></div>';
+    });
+
+    // Чат теж realtime.
+    onValue(ref(database, 'chat'), snapshot => {
+      const data = snapshot.val() || {};
+      window.chatData = Object.values(data).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0)).slice(-100);
+      renderChat();
+    }, error => console.error('Firebase чат:', error));
+
+    // Онлайн-присутність: Firebase Realtime Database + onDisconnect.
+    // Кожен авторизований користувач публікує лише власний статус.
+    let presenceStartedUid = null;
+    let presenceUnsubscribe = null;
+
+    function escapePresenceName(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[ch]));
+    }
+
+    function renderOnlinePresence(raw) {
+      const text = document.getElementById('onlinePresenceText');
+      const names = document.getElementById('onlinePresenceNames');
+      if (!text || !names) return;
+
+      const users = Object.entries(raw || {})
+        .filter(([uid, p]) => p && p.online === true)
+        .map(([uid, p]) => ({ uid, ...p }))
+        .filter(p => p.uid !== window.currentUserUid && p.uid !== PORTAL_OWNER_UID && p.role !== 'teacher')
+        .sort((a,b) => String(a.name || '').localeCompare(String(b.name || ''), 'uk'));
+
+      const teacherOnline = !!(raw && raw[PORTAL_OWNER_UID] && raw[PORTAL_OWNER_UID].online === true);
+      const isTeacher = window.currentUserRole === 'teacher';
+
+      const panel = document.getElementById('onlinePresencePanel');
+      const title = document.getElementById('onlinePresenceTitle');
+
+      if (panel) panel.classList.toggle('boss-online', isTeacher || teacherOnline);
+      if (title) {
+        title.textContent = (isTeacher || teacherOnline)
+          ? '👑 БОС НА САЙТІ'
+          : '🟢 Зараз на сайті';
+      }
+
+      if (isTeacher) {
+        text.textContent = `👑 БОС НА САЙТІ 😎 • Учнів онлайн: ${users.length}`;
+      } else if (teacherOnline) {
+        text.textContent = `👑 БОС ЗАРАЗ НА САЙТІ! 😎 • Учнів онлайн: ${users.length}`;
+      } else {
+        text.textContent = users.length
+          ? `Учнів онлайн: ${users.length}`
+          : 'Поки що інших учнів онлайн немає.';
+      }
+
+      if (!users.length) {
+        names.innerHTML = teacherOnline && !isTeacher
+          ? '<span class="online-presence-empty">Ви зараз одні з учителем на сайті 🙂</span>'
+          : '<span class="online-presence-empty">Зайдіть у гру — хтось обов’язково приєднається! 🚀</span>';
+        return;
+      }
+
+      names.innerHTML = users.map(p =>
+        `<span class="online-person"><span class="online-dot"></span>${escapePresenceName(p.name || 'Учень')}</span>`
+      ).join('');
+    }
+
+    function stopPresence() {
+      if (presenceUnsubscribe) {
+        try { presenceUnsubscribe(); } catch (_) {}
+        presenceUnsubscribe = null;
+      }
+      presenceStartedUid = null;
+    }
+
+    async function startPresence(user) {
+      if (!user) return;
+      if (presenceStartedUid === user.uid) return;
+      presenceStartedUid = user.uid;
+
+      const myPresenceRef = ref(database, 'presence/' + user.uid);
+      try {
+        await onDisconnect(myPresenceRef).set({
+          online: false,
+          name: user.displayName || 'Учень',
+          role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student',
+          lastSeen: serverTimestamp()
+        });
+        await set(myPresenceRef, {
+          online: true,
+          name: user.displayName || 'Учень',
+          role: user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student',
+          lastSeen: serverTimestamp()
+        });
+      } catch (e) {
+        console.error('Онлайн-присутність:', e);
+      }
+
+      if (presenceUnsubscribe) {
+        try { presenceUnsubscribe(); } catch (_) {}
+      }
+      presenceUnsubscribe = onValue(ref(database, 'presence'), snapshot => {
+        renderOnlinePresence(snapshot.val() || {});
+      }, error => {
+        console.error('Онлайн-присутність Firebase:', error);
+        const text = document.getElementById('onlinePresenceText');
+        if (text) text.textContent = 'Не вдалося отримати список онлайн.';
+      });
+    }
+
+    // Якщо вкладку закрили/перезавантажили, onDisconnect Firebase автоматично
+    // позначить користувача офлайн. Для звичайного виходу також прибираємо статус.
+    window.addEventListener('beforeunload', () => {
+      if (window.currentUserUid) {
+        try {
+          set(ref(database, 'presence/' + window.currentUserUid + '/online'), false);
+        } catch (_) {}
+      }
+    });
+
+
+    onAuthStateChanged(auth, async user => {
+      window.currentStudent = user ? (user.displayName || 'Учень') : null;
+      window.currentUserUid = user ? user.uid : null;
+      window.currentUserRole = user ? (user.uid === PORTAL_OWNER_UID ? 'teacher' : 'student') : null;
+      if (!user) {
+        stopPresence();
+        const text = document.getElementById('onlinePresenceText');
+        const names = document.getElementById('onlinePresenceNames');
+        if (text) text.textContent = 'Увійдіть через Google, щоб бачити, хто зараз онлайн.';
+        if (names) names.innerHTML = '';
+      }
+      if (user) {
+        startPresence(user);
+        loadDinoLeaderboard();
+      } else {
+        dinoLeaderboardData = [];
+        renderDinoLeaderboard([]);
+      }
+
+      const authBox = document.getElementById('authBox');
+      if (!user) {
+        countryGameLockedUntil = 0;
+        countryGameLockLoaded = true;
+        if (authBox) {
+          authBox.innerHTML = '<button id="googleLoginBtn" type="button" class="user-login-btn" style="display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:46px;visibility:visible!important;opacity:1!important;"><i class="fa-brands fa-google"></i> Увійти через Google</button>';
+          const btn = document.getElementById('googleLoginBtn');
+          if (btn) btn.addEventListener('click', () => window.loginWithGoogle());
+        }
+        renderRealtimeLeaderboard();
+        return;
+      }
+
+      try {
+        await ensureUserProfile(user);
+        const profileSnap = await get(ref(database, 'users/' + user.uid));
+        const profileData = profileSnap.val() || {};
+        try {
+          await update(ref(database, 'presence/' + user.uid), {
+            online: true,
+            name: profileData.name || user.displayName || 'Учень',
+            role: window.currentUserRole,
+            lastSeen: serverTimestamp()
+          });
+        } catch (presenceErr) {
+          console.warn('Оновлення імені в online-присутності:', presenceErr);
+        }
+        restoreTruthOrLieLock(profileData.truth_or_lie_locked_until ? { until: profileData.truth_or_lie_locked_until } : null);
+        if (profileData.dino_unlocked === true) unlockDinoGame();
+      } catch (e) {
+        console.error('Профіль Firebase:', e);
+      }
+
+      if (authBox) {
+        const role = window.currentUserRole === 'teacher' ? 'ВЧИТЕЛЬ' : 'УЧЕНЬ';
+        const homeAvatar = user.photoURL
+          ? `<img class="home-user-avatar" src="${escapeHtml(user.photoURL)}" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">`
+          : '';
+        const homeInitial = `<span class="home-user-avatar" style="width:30px;height:30px;border-radius:50%;display:${user.photoURL ? 'none' : 'inline-flex'};align-items:center;justify-content:center;background:#8b5e3c;color:#fff;font-weight:800;">${(user.displayName || 'У').charAt(0).toUpperCase()}</span>`;
+        authBox.innerHTML = `<div class="home-user-chip" style="display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;">
+          ${homeAvatar}${homeInitial}
+          <span style="font-weight:700;color:#1e293b;">${user.displayName || 'Користувач'}</span>
+          <span class="home-role-badge" style="padding:4px 8px;border-radius:999px;background:${window.currentUserRole === 'teacher' ? '#5b1f0e' : '#e7ddd5'};color:${window.currentUserRole === 'teacher' ? '#fff' : '#5b1f0e'};font-size:11px;font-weight:800;">${role}</span>
+          <span id="currentUserScore" class="home-score-badge">0 балів</span>
+        </div><button class="user-login-btn" onclick="logoutGoogle()">Вийти</button>`;
+      }
+
+      const snap = await get(ref(database, 'users/' + user.uid));
+      updateCurrentScoreBadge(Number(snap.val()?.week_score) || 0);
+      renderRealtimeLeaderboard();
+    });
+
+    // Тижневий цикл: у неділю 12:00 фіксуємо переможця і одноразово видаємо +2
+    // до бонусних балів для журналу. У понеділок 00:00 відкривається новий тиждень.
+    async function finalizeSundayWinner() {
+      const now = new Date();
+      if (now.getDay() !== 0 || now.getHours() < 12) return;
+
+      const currentWeek = getWeekKey(now);
+      const winnerRef = ref(database, `weeklyWinners/${currentWeek}`);
+      const existingWinner = await get(winnerRef);
+      if (existingWinner.exists() && existingWinner.val()?.bonusAwarded) return;
+
+      const usersSnap = await get(ref(database, 'users'));
+      const users = usersSnap.val() || {};
+      const students = Object.entries(users)
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher')
+        .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
+        .filter(p => p.name || p.displayName || p.email)
+        .sort((a, b) => b.week_score - a.week_score);
+      const winner = students[0];
+      if (!winner || winner.week_score <= 0) return;
+
+      let claimed = false;
+      const tx = await runTransaction(winnerRef, old => {
+        if (old && old.bonusAwarded) {
+          claimed = false;
+          return old;
+        }
+        claimed = true;
+        return {
+          uid: winner.uid,
+          name: winner.name || winner.displayName || winner.email || 'Учень',
+          points: winner.week_score,
+          bonus: 2,
+          bonusAwarded: true,
+          savedAt: Date.now()
+        };
+      });
+
+      if (tx.committed && claimed) {
+        // +2 — реальний бонус до оцінки в журналі. Він видається лише один раз
+        // за конкретний тиждень; повторне відкриття сайту його не дублює.
+        const updates = {};
+        updates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
+        updates[`users/${winner.uid}/journal_bonus_points`] = (Number(winner.journal_bonus_points) || 0) + 2;
+        updates[`users/${winner.uid}/weekly_bonus_history/${currentWeek}`] = {
+          points: 2,
+          reason: 'Переможець тижневого рейтингу',
+          week: currentWeek,
+          awardedAt: Date.now()
+        };
+        await update(ref(database), updates);
+      }
+    }
+
+    function updateSundayWinnerPanelFromSaved() {
+      const panel = document.getElementById('weeklyWinnerPanel');
+      const nameEl = document.getElementById('weeklyWinnerName');
+      const pointsEl = document.getElementById('weeklyWinnerPoints');
+      if (!panel || !nameEl || !pointsEl) return;
+      const now = new Date();
+      if (now.getDay() !== 0 || now.getHours() < 12) {
+        panel.style.display = 'none';
+        return;
+      }
+      get(ref(database, `weeklyWinners/${getWeekKey(now)}`)).then(snap => {
+        const winner = snap.val();
+        if (!winner || !winner.uid) {
+          panel.style.display = 'none';
+          return;
+        }
+        nameEl.textContent = `🥇 ${winner.name || 'Учень'}`;
+        pointsEl.textContent = `${Number(winner.points) || 0} балів за цей тиждень • ⭐ +2 до оцінки в журналі`;
+        panel.style.display = 'block';
+      }).catch(() => {});
+    }
+
+    // Виконуємо фіксацію переможця при відкритті та регулярно перевіряємо недільне вікно.
+    finalizeSundayWinner().then(updateSundayWinnerPanelFromSaved).catch(error => console.error('Переможець тижня:', error));
+    setInterval(() => {
+      finalizeSundayWinner().then(updateSundayWinnerPanelFromSaved).catch(error => console.error('Переможець тижня:', error));
+    }, 60000);
+
+    // Після завершення неділі починається новий тиждень. Переможець попереднього
+    // тижня вже зафіксований у weeklyWinners і повторно бонус не отримує.
+    async function ensureCurrentWeek() {
+      const now = new Date();
+      const currentWeek = getWeekKey(now);
+      const systemRef = ref(database, 'system/currentWeek');
+      const snap = await get(systemRef);
+      const stored = snap.exists() ? snap.val() : null;
+      if (!stored) {
+        await set(systemRef, currentWeek);
+        return;
+      }
+      if (stored === currentWeek) return;
+
+      // Якщо сайт відкрили вже в новому тижні, спочатку гарантуємо фіксацію
+      // переможця попереднього тижня, а потім обнуляємо тільки тижневі поля.
+      const usersSnap = await get(ref(database, 'users'));
+      const users = usersSnap.val() || {};
+      const previousWeek = stored;
+      const students = Object.entries(users)
+        .filter(([uid, p]) => uid !== PORTAL_OWNER_UID && p && p.role !== 'teacher')
+        .map(([uid, p]) => ({ uid, ...p, week_score: Number(p.week_score) || 0 }))
+        .sort((a, b) => b.week_score - a.week_score);
+      const winner = students[0];
+
+      if (winner && winner.week_score > 0) {
+        const winnerRef = ref(database, `weeklyWinners/${previousWeek}`);
+        let claimed = false;
+        const tx = await runTransaction(winnerRef, old => {
+          if (old && old.bonusAwarded) {
+            claimed = false;
+            return old;
+          }
+          claimed = true;
+          return {
+            uid: winner.uid,
+            name: winner.name || winner.displayName || winner.email || 'Учень',
+            points: winner.week_score,
+            bonus: 2,
+            bonusAwarded: true,
+            savedAt: Date.now()
+          };
+        });
+        if (tx.committed && claimed) {
+          const bonusUpdates = {};
+          bonusUpdates[`users/${winner.uid}/weekly_bonus`] = (Number(winner.weekly_bonus) || 0) + 2;
+          bonusUpdates[`users/${winner.uid}/journal_bonus_points`] = (Number(winner.journal_bonus_points) || 0) + 2;
+          bonusUpdates[`users/${winner.uid}/weekly_bonus_history/${previousWeek}`] = {
+            points: 2,
+            reason: 'Переможець тижневого рейтингу',
+            week: previousWeek,
+            awardedAt: Date.now()
+          };
+          await update(ref(database), bonusUpdates);
+        }
+      }
+
+      const claim = await runTransaction(systemRef, old => old === stored ? currentWeek : old);
+      if (!claim.committed || claim.snapshot.val() !== currentWeek) return;
+
+      const updates = {};
+      Object.keys(users).forEach(uid => {
+        if (uid !== PORTAL_OWNER_UID && users[uid]) {
+          updates[`users/${uid}/week_score`] = 0;
+          updates[`users/${uid}/week_history_points`] = 0;
+          updates[`users/${uid}/week_geography_points`] = 0;
+          updates[`users/${uid}/week_nmt_history_score`] = 0;
+          updates[`users/${uid}/week_nmt_geography_score`] = 0;
+          updates[`users/${uid}/week_truth_or_lie_points`] = 0;
+          updates[`users/${uid}/week_map_activity_points`] = 0;
+          updates[`users/${uid}/week_history_activity_points`] = 0;
+          updates[`users/${uid}/week_key`] = currentWeek;
+        }
+      });
+      if (Object.keys(updates).length) await update(ref(database), updates);
+    }
+
+    ensureCurrentWeek().catch(error => console.error('Тижневий рейтинг:', error));
+
+    // ЄДИНА точка нарахування балів для гри «Правда чи Брехня».
+    window.addPointsToFirebase = function(points) {
+      if (window.portalScore?.awardTruthOrLiePoint) {
+        return window.portalScore.awardTruthOrLiePoint(points);
+      }
+      console.error('Центральний модуль балів ще не завантажився.');
+      return Promise.resolve(false);
+    };
+
+    window.sendChatMessage = async function() {
+      const input = document.getElementById('chatInput');
+      const text = input ? input.value.trim() : '';
+      if (!text) return;
+      if (!window.currentUserUid) {
+        alert('Спочатку увійдіть через Google.');
+        return;
+      }
+      await push(ref(database, 'chat'), {
+        uid: window.currentUserUid,
+        author: window.currentStudent || 'Учень',
+        text,
+        timestamp: Date.now()
+      });
+      input.value = '';
+    };
+  </script><script>
+    function setupTravelerAnimation() {
+      const traveler = document.getElementById('traveler');
+      const totalAnimationTime = 25000;
+      const pauseTimes = [0.25, 0.50, 0.90];
+      const pauseDurationPercent = 0.05;
+
+      function checkPause() {
+        const elapsedTime = (new Date() - startTime) % totalAnimationTime;
+        const progress = elapsedTime / totalAnimationTime;
+
+        let shouldPause = false;
+        pauseTimes.forEach(startPercent => {
+          if (progress >= startPercent && progress < (startPercent + pauseDurationPercent)) {
+            shouldPause = true;
+          }
+        });
+
+        if (shouldPause) {
+          traveler.classList.add('paused');
+        } else {
+          traveler.classList.remove('paused');
+        }
+
+        requestAnimationFrame(checkPause);
+      }
+
+      const startTime = new Date();
+      requestAnimationFrame(checkPause);
+    }
+
+    const defaultChatMessages = [
+      { author: "Софія (🦉)", text: "Привіт усім! Хто скільки очок набрав у грі з динозавриком?" },
+      { author: "Олександр (🚀)", text: "Я пройшов тестування й отримав 10 балів!" }
+    ];
+
+    window.chatData = window.chatData || defaultChatMessages;
+
+    function renderChat() {
+      const chatContainer = document.getElementById('chatMessages');
+      if (!chatContainer) return;
+      chatContainer.innerHTML = '';
+      window.chatData.forEach(msg => {
+        chatContainer.innerHTML += `
+          <div class="chat-message-item">
+            <div class="chat-message-author">${msg.author}</div>
+            <div style="color: #334155;">${msg.text}</div>
+          </div>
+        `;
+      });
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    /* ДИНОЗАВРИК-РАНЕР */
+    let canvas = document.getElementById('dinoCanvas');
+    let ctx = canvas.getContext('2d');
+    let dinoGameRunning = false;
+    let dinoScore = 0;
+    let dinoY = 130;
+    let dinoDY = 0;
+    let isJumping = false;
+    let obstacleX = 320;
+    let obstacleType = 'cactus'; 
+    let obstacleY = 143;
+    let gameSpeed = 4;
+    let dinoAnimationId;
+    let speedInterval = null;
+
+    // Персонаж гри: Сергій Мовчан замість динозаврика
+    const teacherRunner = new Image();
+    teacherRunner.src = 'teacher-runner.png';
+    let teacherRunnerReady = false;
+    teacherRunner.onload = () => { teacherRunnerReady = true; };
+
+    function drawDino(x, y) {
+      if (!teacherRunnerReady) {
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x + 8, y + 10, 18, 20);
+        ctx.fillRect(x + 22, y + 2, 12, 12);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(x + 29, y + 5, 2, 2);
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x, y + 14, 10, 6);
+        ctx.fillRect(x + 10, y + 30, 4, 6);
+        ctx.fillRect(x + 20, y + 30, 4, 6);
+        return;
+      }
+
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      // Фото-персонаж масштабується під висоту гри та стоїть на тій самій лінії,
+      // де раніше знаходився динозаврик.
+      ctx.drawImage(teacherRunner, x - 5, y - 48, 46, 51);
+      ctx.restore();
+    }
+
+    // Загальна таблиця лідерів Динозаврика з Firebase.
+    // Для кожного учня зберігаємо лише найкращий результат.
+    let dinoLeaderboardData = [];
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[ch]));
+    }
+
+    function renderDinoLeaderboard(board = dinoLeaderboardData) {
+      const box = document.getElementById('dinoLeaderboardList');
+      if (!box) return;
+      const cleanBoard = (Array.isArray(board) ? board : [])
+        .filter(p => p && p.name && Number.isFinite(Number(p.score)))
+        .sort((a,b) => Number(b.score) - Number(a.score))
+        .slice(0, 10);
+      if (!cleanBoard.length) {
+        box.innerHTML = '<div class="dino-leader-row"><span>Поки що немає результатів</span><span>—</span></div>';
+        return;
+      }
+      box.innerHTML = cleanBoard.map((p,i) => {
+        const me = p.uid === window.currentUserUid ? ' (Ви)' : '';
+        return `<div class="dino-leader-row"><span>${i+1}. ${escapeHtml(p.name)}${me}</span><strong>${Math.floor(Number(p.score))}</strong></div>`;
+      }).join('');
+    }
+
+    function loadDinoLeaderboard() {
+      if (typeof database === 'undefined' || !window.currentUserUid) return;
+      onValue(ref(database, 'dinoLeaderboard'), snapshot => {
+        const raw = snapshot.val() || {};
+        dinoLeaderboardData = Object.entries(raw).map(([uid, value]) => ({
+          uid,
+          name: value && value.name ? value.name : 'Гравець',
+          score: Number(value && value.score) || 0
+        }));
+        renderDinoLeaderboard();
+      }, error => {
+        console.error('Таблиця Динозаврика:', error);
+        renderDinoLeaderboard([]);
+      });
+    }
+
+    async function saveDinoLeaderboard(score) {
+      if (!Number.isFinite(score) || score <= 0 || !window.currentUserUid) return;
+      const uid = window.currentUserUid;
+      const name = (window.currentStudent || 'Гравець').trim().slice(0, 30) || 'Гравець';
+      const playerRef = ref(database, 'dinoLeaderboard/' + uid);
+      try {
+        await runTransaction(playerRef, current => {
+          current = current || {};
+          const oldScore = Number(current.score) || 0;
+          const newScore = Math.floor(score);
+          if (newScore <= oldScore) return current;
+          return { name, score: newScore, updatedAt: Date.now() };
+        });
+      } catch (e) {
+        console.error('Збереження рекорду Динозаврика:', e);
+      }
+    }
+
+    let dinoHighScore = parseInt(localStorage.getItem('dino_high_score')) || 0;
+    let isGameUnlocked = false;
+
+    function unlockDinoGame() {
+      if (isGameUnlocked) return;
+      isGameUnlocked = true;
+      
+      const overlay = document.getElementById('dinoLockOverlay');
+      const btn = document.getElementById('dinoStartBtn');
+      
+      if (overlay) overlay.style.display = 'none';
+      if (btn) {
+        btn.disabled = false;
+        btn.style.background = '#0284c7';
+        btn.style.cursor = 'pointer';
+      }
+    }
+
+    function updateDinoHighScoreUI() {
+      const hsElement = document.getElementById('dinoHighScore');
+      if (hsElement) hsElement.textContent = dinoHighScore;
+    }
+
+    function startDinoGame() {
+      if (!isGameUnlocked) return;
+
+      if (dinoGameRunning) {
+        if (!isJumping) {
+          dinoDY = -10;
+          isJumping = true;
+        }
+        return;
+      }
+      dinoGameRunning = true;
+      dinoScore = 0;
+      dinoY = 130;
+      dinoDY = 0;
+      obstacleX = 320;
+      gameSpeed = 4;
+      document.getElementById('dinoScore').textContent = '0';
+
+      if (speedInterval) clearInterval(speedInterval);
+      speedInterval = setInterval(() => {
+        if (dinoGameRunning) {
+          gameSpeed = Math.floor(Math.random() * 5) + 3;
+        }
+      }, 10000);
+
+      gameLoop();
+    }
+
+    function gameLoop() {
+      if (!dinoGameRunning) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#64748b';
+      ctx.fillRect(0, 160, canvas.width, 2);
+
+      dinoY += dinoDY;
+      if (dinoY < 130) {
+        dinoDY += 0.6;
+      } else {
+        dinoY = 130;
+        dinoDY = 0;
+        isJumping = false;
+      }
+
+      drawDino(30, dinoY - 5);
+
+      obstacleX -= gameSpeed;
+      if (obstacleX < -30) {
+        obstacleX = 320 + Math.random() * 60;
+        dinoScore += 10;
+        document.getElementById('dinoScore').textContent = dinoScore;
+        
+        if (Math.random() > 0.5) {
+          obstacleType = 'cactus';
+          obstacleY = 143;
+        } else {
+          obstacleType = 'bird';
+          obstacleY = 120;
+        }
+      }
+
+      ctx.font = '26px Inter';
+      if (obstacleType === 'cactus') {
+        ctx.fillText('🌵', obstacleX, obstacleY + 15);
+      } else {
+        ctx.fillText('🐦', obstacleX, obstacleY + 15);
+      }
+
+      if (obstacleX > 20 && obstacleX < 55 && dinoY > (obstacleY - 25)) {
+        dinoGameRunning = false;
+        if (speedInterval) clearInterval(speedInterval);
+
+        saveDinoLeaderboard(dinoScore);
+        if (dinoScore > dinoHighScore) {
+          dinoHighScore = dinoScore;
+          localStorage.setItem('dino_high_score', dinoHighScore);
+          updateDinoHighScoreUI();
+        }
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 16px Inter';
+        ctx.fillText('ГРУ ЗАКІНЧЕНО!', 90, 75);
+        ctx.font = '12px Inter';
+        ctx.fillStyle = '#334155';
+        ctx.fillText(`Ваш результат: ${dinoScore} очок`, 95, 95);
+        ctx.fillText('Тисни кнопку щоб спробувати знову', 50, 115);
+
+        return;
+      }
+
+      dinoAnimationId = requestAnimationFrame(gameLoop);
+    }
+
+    // Перевірка, щоб пробіл блокувався лише поза полями введення
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (activeTag === 'input' || activeTag === 'textarea') {
+          return;
+        }
+
+        const kidsSection = document.getElementById('kids-club');
+        if (kidsSection) {
+          const rect = kidsSection.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            e.preventDefault();
+            startDinoGame();
+          }
+        }
+      }
+    });
+
+    canvas.addEventListener('click', () => {
+      startDinoGame();
+    });
+
+    window.studentsData = window.studentsData || [];
+
+    function renderLeaderboard() {
+      window.studentsData.sort((a, b) => b.score - a.score);
+      const listContainer = document.getElementById('leaderboardList');
+      if (!listContainer) return;
+      listContainer.innerHTML = '';
+      window.studentsData.forEach((student, index) => {
+        let rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
+        const isMe = student.name === window.currentStudent ? 'current-user' : '';
+        listContainer.innerHTML += `
+          <div class="leaderboard-item ${isMe}">
+            <div class="student-info">
+              <span class="student-rank ${rankClass}">#${index + 1}</span>
+              <span>${student.name} ${isMe ? '(Ви)' : ''}</span>
+            </div>
+            <span class="student-score">${student.score} балів</span>
+          </div>
+        `;
+      });
+    }
+
+    function addPoints(points) {
+      if (typeof window.addPointsToFirebase === 'function') {
+        window.addPointsToFirebase(points);
+      }
+    }
+
+    // Динорейсер відкривається після будь-якого позитивного навчального результату
+    // і зберігає цей стан у Firebase.
+    async function unlockDinoAfterActivity() {
+      unlockDinoGame();
+      try {
+        if (window.portalScore?.unlockDinoForUser) {
+          await window.portalScore.unlockDinoForUser();
+        }
+      } catch (e) {
+        console.error('Не вдалося зберегти розблокування Динорейсера:', e);
+      }
+    }
+
+    const keyEvents = [
+      { title: "Бій під Крутами (1918)", short: "Студенти стримали наступ більшовицьких військ на Київ.", full: "29 січня 1918 року біля залізничної станції Крути близько 500 українських студентів і курсантів прийняли нерівний бій з багатотисячною армією." },
+      { title: "Проголошення Незалежності (1991)", short: "Верховна Рада ухвалила Акт проголошення незалежності України.", full: "24 серпня 1991 року позачергова сесія Верховної Ради УРСР урочисто ухвалила історичний документ — Акт проголошення незалежності України." },
+      { title: "Конотопська битва (1659)", short: "Блискуча перемога козацького війська гетьмана Івана Виговського.", full: "У липні 1659 року українське козацтво спільно з кримськими татарами завдало нищівної поразки московському війську під Конотопом." },
+      { title: "Хрещення Київської Русі (988)", short: "Князь Володимир Великий запровадив християнство як державну релігію.", full: "У 988 році київський князь Володимир здійснив масштабну реформу, охрестивши Русь, що зміцнило міжнародні зв'язки держави." },
+      { title: "Перша Конституція Пилипа Орлика (1710)", short: "Одна з перших конституцій у Європі.", full: "5 квітня 1710 року в Бендерах було ухвалено договір і постанови прав і вольностей Війська Запорозького, написані Пилипом Орликом." },
+      { title: "Народження українського козацтва (XV-XVI ст.)", short: "Виникнення козацької вольниці на Дикому Полі.", full: "Запорозька Січ стала форпостом захисту українських земель від нападів татар та турків, створивши унікальну військову демократію." },
+      { title: "Битва під Жовтими Водами (1648)", short: "Перша велика перемога Хмельницького у Визвольній війні.", full: "У травні 1648 року козацько-селянське військо під проводом Богдана Хмельницького розгромило авангард польської армії." },
+      { title: "Зборівський договір (1649)", short: "Укладення угоди після успішної облоги Збаража.", full: "Договір зафіксував автономію козацької України — Гетьманщини в межах трьох воєводств." },
+      { title: "Переяславська рада (1654)", short: "Військова рада та присяга на вірність московському царю.", full: "Подія, що мала складні історичні наслідки для подальшого входження українських земель до складу Московського царства." },
+      { title: "Полтавська битва (1709)", short: "Зіткнення у Північній війні за участю Мазепи.", full: "Поразка гетьмана Івана Мазепи та шведського короля Карла XII від військ Петра I призвела до втрати автономії Гетьманщини." },
+      { title: "Ліквідація Запорозької Січі (1775)", short: "Остаточне знищення російськими військами останньої Січі.", full: "За наказом імператриці Катерини II російські війська зруйнували Нову Січ, остаточно ліквідувавши козацьке самоврядування." },
+      { title: "Відкриття Львівського університету (1661)", short: "Найстаріший вищий навчальний заклад в Україні.", full: "Король Польщі Ян II Казимир надав єзуїтській колегії у Львові статус академії з правом присвоєння вчених ступенів." },
+      { title: "Створення Кирило-Мефодіївського братства (1845)", short: "Таємна политична організація в Києві.", full: "До товариства входили Тарас Шевченко, Микола Костомаров, Пантелеймон Куліш, які пропагували ідеї слов'янської федерації." },
+      { title: "Видання «Кобзаря» Тараса Шевченка (1840)", short: "Початок нової української літератури.", full: "У Санкт-Петербурзі вийшла друком перша збірка віршів Тараса Шевченка, яка назавжди змінила українську національну свідомість." },
+      { title: "Скасування кріпацтва в Російській імперії (1861)", short: "Маніфест Олександра II про звільнення селян.", full: "Селяни отримали особисту свободу, проте реформа вимагала тривалого викупу земельних наділів." },
+      { title: "Валуєвський циркуляр (1863)", short: "Таємне розпорядження про обмеження української мови.", full: "Міністр внутрішніх справ Петро Валуєв заборонив друк літератури українською мовою, стверджуючи, що її «не було, немає і бути не може»." },
+      { title: "Емський указ (1876)", short: "Повна заборона на ввезення та друк українських книг.", full: "Підписаний імператором Олександром II у Німеччині, цей указ забороняв будь-які українські видання та театральні вистави." },
+      { title: "Утворення Української Центральної Ради (1917)", short: "Головний представницький орган у період революції.", full: "Очолювана Михайлом Грушевським, Центральна Рада пройшла шлях від автономії до проголошення незалежності УНР." },
+      { title: "IV Універсал Центральної Ради (1918)", short: "Проголошення повної незалежності УНР.", full: "22 січня 1918 року УНР проголосила себе суверенною та незалежною державою." },
+      { title: "Акт Злуки УНР і ЗУНР (1919)", short: "Об'єднання українських земель у єдину соборну державу.", full: "22 січня 1919 року на Софійській площі в Києві урочисто проголошено об'єднання Української Народної Республіки та Західноукраїнської Народної Республіки." },
+      { title: "Початок Першої світової війни (1914)", short: "Українські землі розділені між двома імперіями.", full: "Галичина опинилась у складі Австро-Угорщини, а Наддніпрянщина — у складі Росії, що призвело до братовбивчого протистояння." },
+      { title: "Голодомор в Україні (1932–1933)", short: "Штучний масовий голод, влаштований радянським тоталітарним режимом.", full: "Геноцид українського народу, що забрав життя мільйонів невинних селян та назавжди змінив демографічну карту країни." },
+      { title: "Друга світова війна на українських землях (1939–1945)", short: "Масштабні бойові дії та руйнування.", full: "Україна стала ареною найзапекліших боїв між арміями гітлерівської Німеччини та сталінського СРСР." },
+      { title: "Проголошення Карпатської України (1939)", short: "Спроба створення незалежної держави в Закарпатті.", full: "15 березня 1939 року собор у Хусті проголосив незалежність Карпатської України, яка героично чинила опір угорській окупації." },
+      { title: "Депортація кримських татар (1944)", short: "Насильницьке виселення корінного народу Криму.", full: "Сталінський режим депортував увесь кримськотатарський народ до Середньої Азії та Уралу." },
+      { title: "Входження Криму до складу УРСР (1954)", short: "Передача Кримської області.", full: "У лютому 1954 року Президія Верховної Ради СРСР передала Кримську область до складу Української РСР через економічні та господарські зв'язки." },
+      { title: "Чорнобильська катастрофа (1986)", short: "Найбільша техногенна аварія в історії атомної енергетики.", full: "26 квітня 1986 року стався вибух на 4-му енергоблоці ЧАЕС, наслідки якого відчули мільйони людей у всьому світі." },
+      { title: "Помаранчева революція (2004)", short: "Масові протести проти фальсифікації виборів.", full: "Громадянське суспільство в Україні виступило на захист своїх демократичних прав та свобод." },
+      { title: "Революція Гідності (2013–2014)", short: "Боротьба за європейський вибір та демократію.", full: "Доленосні події зими 2014 року, які коштували життя Героїв Небесної Сотні, що відстояли суверенітет України." },
+      { title: "Повномасштабна оборона України (з 2022)", short: "Героїчний опір агресії та захист незалежності.", full: "Український народ продемонстрував небувалу єдність, хоробрість та стійкість у боротьбі за свою свободу." },
+      { title: "Київська Русь і християнство", short: "Після хрещення Русі 988 року активніше розвивалися книжність, освіта та культурні зв'язки з християнським світом.", full: "Прийняття християнства сприяло поширенню писемності, храмового будівництва, літописання та дипломатичних контактів." },      { title: "Софія Київська", short: "Собор Святої Софії став одним із найвідоміших символів середньовічного Києва.", full: "Храм споруджували в XI столітті за князювання Ярослава Мудрого; його мозаїки та фрески зберегли важливі пам'ятки давньоруського мистецтва." },      { title: "Ярослав Мудрий", short: "За князювання Ярослава Київ став важливим політичним і культурним центром Східної Європи.", full: "Ярослав підтримував книжність, будівництво храмів і династичні шлюби з європейськими правлячими родинами." },      { title: "Руська правда", short: "«Руська правда» — збірка норм права Київської Русі.", full: "Її найдавніші частини пов'язують із князем Ярославом Мудрим та його наступниками; документ регулював майнові й кримінальні відносини." },      { title: "Галицько-Волинське князівство", short: "Після занепаду Києва Галицько-Волинська держава стала одним із головних центрів руської державності.", full: "Князь Данило Романович зміцнював державу та підтримував зв'язки з європейськими країнами." },      { title: "Коронація Данила Романовича", short: "У 1253 році Данило Романович був коронований папським легатом у Дорогочині.", full: "Коронація стала важливою подією його дипломатичної політики та засвідчила міжнародне визнання правителя." },      { title: "Люблінська унія", short: "У 1569 році Польське королівство та Велике князівство Литовське утворили Річ Посполиту.", full: "Після унії значна частина українських земель опинилася під владою польської корони." },      { title: "Берестейська унія", short: "У 1596 році частина православних єпископів Київської митрополії визнала церковну єдність із Римом.", full: "Так виникла греко-католицька церковна традиція, яка відіграла значну роль в історії західноукраїнських земель." },      { title: "Запорозька Січ", short: "Запорозька Січ була осередком козацького військового та суспільного життя.", full: "Козацьке самоврядування поєднувало військову організацію, виборність старшини та традиції ради." },      { title: "Богдан Хмельницький", short: "Повстання 1648 року під проводом Богдана Хмельницького започаткувало масштабну війну проти Речі Посполитої.", full: "У ході війни сформувалася Гетьманщина як козацька держава." },      { title: "Берестецька битва", short: "У 1651 році відбулася одна з найбільших битв Національно-визвольної війни середини XVII століття.", full: "Битва завершилася поразкою козацько-татарського війська та вплинула на подальший перебіг війни." },      { title: "Гадяцький договір", short: "У 1658 році гетьман Іван Виговський уклав Гадяцький договір із Річчю Посполитою.", full: "Проєкт передбачав створення Великого князівства Руського як третьої складової федерації." },      { title: "Конституція Пилипа Орлика", short: "Документ 1710 року визначав права Війська Запорозького та принципи організації влади.", full: "У ньому передбачалося обмеження влади гетьмана та важлива роль Генеральної ради." },      { title: "Кирило-Мефодіївське братство", short: "У Києві в 1840-х роках діяло Кирило-Мефодіївське братство.", full: "Його учасники обговорювали національне відродження, скасування кріпацтва та ідею федерації слов'янських народів." },      { title: "Іван Франко", short: "Іван Франко був письменником, ученим, перекладачем і громадським діячем.", full: "Він працював у різних жанрах літератури та зробив значний внесок у розвиток української культури." },      { title: "Леся Українка", short: "Леся Українка створила поетичні, драматичні та прозові твори, що стали класикою української літератури.", full: "Її творчість поєднувала теми свободи, гідності, сили особистості та національної культури." },      { title: "Українська революція 1917–1921 років", short: "У 1917–1921 роках українці створили низку державних утворень і боролися за незалежність.", full: "Цей період став одним із ключових етапів формування модерної української політичної нації." },      { title: "Універсали Центральної Ради", short: "Центральна Рада ухвалила чотири Універсали, поступово переходячи від автономістських вимог до проголошення незалежності.", full: "IV Універсал 22 січня 1918 року проголосив Українську Народну Республіку незалежною." },      { title: "Західноукраїнська Народна Республіка", short: "У листопаді 1918 року у Львові було проголошено Західноукраїнську Народну Республіку.", full: "Її керівництво організувало державні установи та Українську Галицьку армію." },      { title: "Українська держава 1918 року", short: "29 квітня 1918 року Павло Скоропадський став гетьманом Української Держави.", full: "За його правління було створено Українську академію наук, засновано державні культурні установи та розбудовувалися дипломатичні зв'язки." },      { title: "Карпатська Україна", short: "У березні 1939 року Сойм Карпатської України проголосив незалежність.", full: "Нова держава зазнала військової агресії та невдовзі була окупована угорськими військами." },      { title: "Українське шістдесятництво", short: "У 1960-х роках в Україні сформувалося покоління митців і громадських діячів, відоме як шістдесятники.", full: "Вони відстоювали розвиток української культури, свободу творчості та людську гідність." },      { title: "Акт проголошення незалежності України", short: "24 серпня 1991 року Верховна Рада ухвалила Акт проголошення незалежності України.", full: "1 грудня 1991 року на всеукраїнському референдумі громадяни підтвердили незалежність." },      { title: "Конституція України", short: "28 червня 1996 року Верховна Рада ухвалила Конституцію України.", full: "Основний Закон визначив засади державного устрою, права людини та систему органів влади." },      { title: "Помаранчева революція", short: "У 2004 році масові мирні протести стали реакцією на фальсифікації президентських виборів.", full: "Події призвели до повторного голосування другого туру виборів." },      { title: "Революція Гідності", short: "У 2013–2014 роках мільйони українців вийшли на Євромайдан на захист європейського курсу та демократичних свобод.", full: "Протести стали одним із визначальних суспільно-політичних переломів новітньої історії України." },      { title: "Острів Хортиця", short: "Хортиця на Дніпрі є одним із найвідоміших символів українського козацтва.", full: "Острів пов'язаний з історією Запорозької Січі та має статус національного заповідника." },      { title: "Києво-Могилянська академія", short: "Києво-Могилянська академія стала одним із найважливіших освітніх осередків ранньомодерної України.", full: "Її традиції пов'язані з розвитком філософії, богослов'я, мов і природничих знань." },      { title: "Перша українська газета", short: "У 1906 році в Києві почала виходити щоденна українськомовна газета «Рада».", full: "Вона стала важливим майданчиком українського громадського та культурного життя початку XX століття." },      { title: "Українські дисиденти", short: "У другій половині XX століття українські дисиденти виступали проти політичних репресій та обмеження прав людини.", full: "Серед відомих діячів були В'ячеслав Чорновіл, Іван Дзюба, Василь Стус та інші." },
+    ];
+
+    const geoFacts = [
+      { title: "Амазонка — річка без мостів", short: "Найповноводніша річка планети не має жодного мосту.", full: "Головна причина відсутності мостів — м'які береги, сезонні розливи на кілометри та відсутність великих доріг у джунглях." },
+      { title: "Найглибше озеро — Байкал", short: "Містить близько 20% світових запасів прісної води.", full: "Байкал — найдавніше, найчистіше та найглибше озеро планети, розташоване у Східному Сибіру." },
+      { title: "Пустеля Сахара колись була зеленою", short: "Тисячоліття тому тут шуміли савани та річки.", full: "Завдяки змінам клімату та нахилу земної осі Сахара циклічно зеленіє кожні кілька тисяч років." },
+      { title: "Найвища вершина світу — Еверест", short: "Йому немає рівних за висотою над рівнем моря.", full: "Гора Джомолунгма підіймається на 8848 метрів у Гімалаях і продовжує повільно рости щороку." },
+      { title: "Найсухіше місце — пустеля Атакама", short: "Деякі метеостанції там ніколи не фіксували дощу.", full: "Розташована в Чилі, Атакама є найсухішою пустелею через холодну течію та високі гори." },
+      { title: "Найбільший океан — Тихий", short: "Він більший за всі материки разом узяті.", full: "Тихий океан займає третину поверхні Землі та містить найглибшу точку — Маріанську западину." },
+      { title: "Найменший океан — Північний Льодовитий", short: "Він переважно вкритий крижаним панциром.", full: "Цей океан має найменшу глибину та унікальну арктичну екосистему." },
+      { title: "Найнижча точка суходолу — Мертве море", short: "Розташоване на 430 метрів нижче рівня моря.", full: "Через неймовірну солоність вода в Мертвому морі настільки щільна, що людина може вільно лежати на поверхні." },
+      { title: "Найвища точка України — Говерла", short: "Її висота становить 2061 метр.", full: "Говерла розташована в масиві Чорногора в Карпатах і є найпопулярнішою вершиною для туристів." },
+      { title: "Найдовша гірська система — Анди", short: "Простягнулися уздовж усього західного узбережжя Південної Америки.", full: "Довжина Анд перевищує 7000 кілометрів, охоплюючи кілька кліматичних зон." },
+      { title: "Найбільший острів світу — Гренландія", short: "Більша частина острова вкрита потужним льодовиком.", full: "Попри назву 'зелена земля', Гренландія переважно біла через крижаний щит." },
+      { title: "Найжаркіше місце на Землі — Долина Смерті", short: "Зафіксовано температурний рекорд понад +56°C.", full: "Пустеля в Каліфорнії (США) має унікальну форму котловану, що затримує спеку." },
+      { title: "Найхолодніше місце — Антарктида", short: "Зафіксовано рекорд температури -89.2°C.", full: "Антарктида — найвіддаленіший, найсухіший і найвітряніший материк планети." },
+      { title: "Найдовша річка — Ніл (або Амазонка)", short: "Суперечки вчених тривають десятиліттями.", full: "Залежно від методу вимірювання витоку першість ділять Ніл у Африці та Амазонка в Південній Америці." },
+      { title: "Найбільше озеро-море — Каспійське", short: "Це найбільша внутрішня водойма на Землі.", full: "Каспій має солонувату воду і площу, що перевищує багато європейських країн." },
+      { title: "Найбільший півострів — Аравійський", short: "Центральна частина зайнята безплідними пустелями.", full: "Півострів славиться родовищами нафти та екстремально спекотним кліматом." },
+      { title: "Найбільший архіпелаг — Малайський", short: "Складається з понад 25 000 островів.", full: "Розташований між Азією та Австралією, включає Індонезію та Філіппіни." },
+      { title: "Найвищий водоспад — Анхель", short: "Вода падає з висоти майже 979 метрів.", full: "Розташований у тропічних лісах Венесуели, водоспад настільки високий, що вода розпилюється в туман." },
+      { title: "Тихоокеанське вогняне кільце", short: "Зона концентрації більшості вулканів і землетрусів.", full: "Опаясує весь Тихий океан, будучи тектонічно найактивнішим регіоном планети." },
+      { title: "Острів Мадагаскар", short: "Батьківщина унікальних ендеміків, зокрема лемурів.", full: "Ізольованість острова дозволила розвинутися унікальній флорі та фауні, що не зустрічаються більше ніде." },
+      
+      { title: "Найменша країна — Ватикан", short: "Місто-держава всередині Рима.", full: "Його площа становить лише близько 44 гектарів." },
+      { title: "Найбільша кількість населення — Індія та Китай", short: "Дві найбільші країни за чисельністю.", full: "Кожна з них налічує понад 1,4 мільярда мешканців." },
+      { title: "Найбільший масив тропічних лісів — Амазонія", short: "Легендарні легеневі тканини планети.", full: "Виробляють величезну кількість кисню та приховують незвідані види рослин і тварин." },
+      { title: "Найдвіжніший материк — Антарктида", short: "Дрейфує завдяки тектоніці плит.", full: "Весь материк повільно зміщується на південь." },
+      { title: "Найдовший державний кордон — США та Канада", short: "Протяжність становить майже 9 000 кілометрів.", full: "Це найдовший у світі демілітаризований кордон між двома країнами." },
+      { title: "Найбільший півострів Європи — Скандинавський", short: "Має мальовничі фіорди та гори.", full: "Омивається кількома морями Атлантичного океану." },
+      { title: "Найглибша точка океану — Безодня Челленджера", short: "Глибина Маріанської западини сягає майже 11 км.", full: "Тиск там настільки колосальний, що дорівнює вазі десятків слонів на квадратний сантиметр." },
+      { title: "Найбільше озеро України — Ялпуг", short: "Прісноводне лиманне озеро на півдні Одещини.", full: "Відіграє величезну екологічну та господарську роль регіону." },
+      { title: "Найсолоніше озеро України — Сиваш", short: "Мілководна система затоки Азовського моря.", full: "Має величезні поклади лікувальних грязей та солей." },
+      { title: "Україна — найбільша держава Європи", short: "Україна є найбільшою державою, територія якої повністю лежить у Європі.", full: "Площа України становить близько 603,5 тис. км²." },      { title: "Дніпро", short: "Дніпро — одна з найбільших річок Європи та одна з головних річок України.", full: "Річка бере початок на Валдайській височині та впадає в Чорне море." },      { title: "Дунай в Україні", short: "Дунай є однією з найважливіших міжнародних річок Європи.", full: "На крайньому південному заході України річка формує частину державного кордону, а її дельта має велике природоохоронне значення." },      { title: "Дельта Дунаю", short: "Дельта Дунаю — одна з найбільших водно-болотних систем Європи.", full: "Вона є місцем проживання сотень видів птахів і важливою екосистемою Чорноморського регіону." },      { title: "Карпати", short: "Українські Карпати є частиною великої Карпатської гірської системи.", full: "Саме тут розташована Говерла — найвища вершина України." },      { title: "Чорне море", short: "Чорне море сполучене із Середземним морем через протоки Босфор і Дарданелли та Мармурове море.", full: "Його глибоководні шари мають дуже низький вміст кисню." },      { title: "Азовське море", short: "Азовське море є одним із наймілкіших морів світу.", full: "Його максимальна глибина становить приблизно 14 метрів." },      { title: "Босфор", short: "Босфор — протока, яка з'єднує Чорне море з Мармуровим морем.", full: "Вона проходить через Стамбул і розділяє європейську та азійську частини Туреччини." },      { title: "Гібралтарська протока", short: "Гібралтарська протока з'єднує Атлантичний океан із Середземним морем.", full: "У найвужчому місці її ширина становить близько 14 км." },      { title: "Суецький канал", short: "Суецький канал з'єднує Середземне та Червоне моря.", full: "Він значно скорочує морський шлях між Європою та Азією." },      { title: "Панамський канал", short: "Панамський канал з'єднує Атлантичний і Тихий океани.", full: "Завдяки йому суднам не потрібно огинати Південну Америку." },      { title: "Гімалаї", short: "Гімалаї — найвища гірська система Землі.", full: "Саме тут розташована Джомолунгма, відома як Еверест." },      { title: "Тибетське нагір'я", short: "Тибетське нагір'я часто називають «дахом світу».", full: "Воно має величезний вплив на клімат Азії та живить витоки багатьох великих річок." },      { title: "Анди та вулкани", short: "Анди містять значну кількість вулканів.", full: "Гірська система сформувалася переважно внаслідок взаємодії літосферних плит." },      { title: "Амазонський ліс", short: "Амазонські тропічні ліси займають величезну площу Південної Америки.", full: "Басейн Амазонки має виняткове значення для біорізноманіття та глобального кругообігу вологи." },      { title: "Сахель", short: "Сахель — перехідна природна зона між Сахарою та саванами Африки.", full: "Регіон простягається через кілька країн і дуже залежить від сезонних опадів." },      { title: "Наміб", short: "Пустеля Наміб лежить уздовж атлантичного узбережжя південно-західної Африки.", full: "Холодна Бенгельська течія сприяє формуванню туманів над пустелею." },      { title: "Гобі", short: "Пустеля Гобі розташована переважно на території Монголії та Китаю.", full: "Це холодна пустеля з великими добовими й сезонними коливаннями температури." },      { title: "Аравійська пустеля", short: "Аравійська пустеля є однією з найбільших пустель світу.", full: "Вона охоплює значну частину Аравійського півострова." },      { title: "Великий Бар'єрний риф", short: "Великий Бар'єрний риф простягається вздовж північно-східного узбережжя Австралії.", full: "Це найбільша у світі система коралових рифів." },      { title: "Мертве море", short: "Мертве море фактично є безстічним солоним озером.", full: "Через високу мінералізацію його вода значно щільніша за прісну воду." },      { title: "Водоспад Вікторія", short: "Водоспад Вікторія розташований на річці Замбезі на кордоні Замбії та Зімбабве.", full: "Місцевою мовою його називають Мосі-оа-Тунья — «дим, що гримить»." },      { title: "Озеро Танганьїка", short: "Танганьїка — одне з найглибших озер світу.", full: "Воно лежить у Східноафриканській рифтовій системі." },      { title: "Озеро Тітікака", short: "Тітікака лежить високо в Андах на кордоні Перу та Болівії.", full: "Його часто називають найвисокогірнішим судноплавним озером світу." },      { title: "Магелланова протока", short: "Магелланова протока відділяє материкову Південну Америку від Вогняної Землі.", full: "Вона була важливим морським шляхом до будівництва Панамського каналу." },      { title: "Північний полюс", short: "Північний полюс розташований у Північному Льодовитому океані, а не на материку.", full: "У районі полюса поверхня вкрита морською кригою, яка дрейфує." },      { title: "Південний полюс", short: "Південний полюс розташований на материку Антарктида.", full: "На відміну від Північного полюса, він лежить на суходолі, вкритому товстим льодовиковим щитом." },      { title: "Озоновий шар", short: "Найбільша концентрація озону в атмосфері міститься у стратосфері.", full: "Озоновий шар поглинає значну частину небезпечного ультрафіолетового випромінювання Сонця." },      { title: "Мусони", short: "Мусони — сезонні вітри, напрям яких змінюється протягом року.", full: "Вони особливо важливі для клімату Південної та Південно-Східної Азії." },      { title: "Ель-Ніньйо", short: "Ель-Ніньйо — періодичне потепління поверхневих вод центральної та східної частин тропічного Тихого океану.", full: "Це явище може впливати на опади, посухи та температуру в різних частинах світу." },
+    ];
+
+    const countriesGameData = [
+      { country: "Франція", text: "Ейфелева вежа влітку стає вищою приблизно на 15 см через теплове розширення.", isTrue: true },
+      { country: "Австралія", text: "У цій країні офіційно заборонено тримати вдома ведмедів коал.", isTrue: true },
+      { country: "Японія", text: "На території Японії розташовано рівно 10 діючих вулканів і жодного сплячого.", isTrue: false },
+      { country: "Італія", text: "У місті Венеція немає автомобільних доріг, весь транспорт пересувається по каналах.", isTrue: true },
+      { country: "Канада", text: "У Канаді більше озер, ніж у всіх інших країнах світу разом узятих.", isTrue: true },
+      { country: "Бразилія", text: "Офіційною мовою Бразилії є іспанська.", isTrue: false },
+      { country: "Ісландія", text: "В Ісландії практично немає комаров через специфічний клімат.", isTrue: true },
+      { country: "Єгипет", text: "Більшу частину території країни займає пустеля Сахара.", isTrue: true },
+      { country: "Велика Британія", text: "У Лондоні заборонено вмирати в будівлі парламенту за законами давнини.", isTrue: true },
+      { country: "США", text: "У штаті Аляска сонце може не заходити протягом кількох тижнів влітку.", isTrue: true },
+      { country: "Німеччина", text: "Берлін за кількістю мостів перевершує навіть Венецію.", isTrue: true },
+      { country: "Мексика", text: "Столиця Мексики місто Мехіко побудоване на дні висохлого озера.", isTrue: true },
+      { country: "Китай", text: "Велика Китайська стіна повністю видима з космосу неозброєним оком.", isTrue: false },
+      { country: "Норвегія", text: "У деяких містах Норвегії сонце не з'являється з-за горизонту місяцями взимку.", isTrue: true },
+      { country: "Швейцарія", text: "У Швейцарії заборонено змивати унітаз у квартирах після 22:00 за законом про шум.", isTrue: false },
+      { country: "Індія", text: "В Індії є єдиний у світі плавучий поштовий відділення на озері Дал.", isTrue: true },
+      { country: "ПАР", text: "Південно-Африканська Республіка має одразу три столиці.", isTrue: true },
+      { country: "Аргентина", text: "Назва країни походить від латинського слова 'срібло'.", isTrue: true },
+      { country: "Фінляндія", text: "Фінляндія офіційно визнана країною з найщасливішим населенням.", isTrue: true },
+      { country: "Греція", text: "Понад 80% території Греції займають рівнини та поля.", isTrue: false },
+      { country: "Швеція", text: "У Швеції розташований відомий крижаний готель, який щороку будують заново.", isTrue: true },
+      { country: "Монголія", text: "Монголія має найменшу щільність населення серед незалежних держав світу.", isTrue: true },
+      { country: "Таїланд", text: "Таїланд офіційно ніколи не був колонією жодної європейської держави.", isTrue: true },
+      { country: "Кенія", text: "Через територію Кенії проходить лінія екватора.", isTrue: true },
+      { country: "Нова Зеландія", text: "У Новій Зеландії мешкає більше людей, ніж овець.", isTrue: false },
+      { country: "Португалія", text: "Лісабон є однією з найдавніших столиць Західної Європи.", isTrue: true },
+      { country: "Чилі", text: "Чилі є однією з найвужчих і найдовших країн світу у формі смуги.", isTrue: true },
+      { country: "В'єтнам", text: "В'єтнам є найбільшим експортером кави арабіка у світі.", isTrue: false },
+      { country: "Перу", text: "Стародавнє місто інків Мачу-Пікчу розташоване високо в Андах.", isTrue: true },
+      { country: "Туреччина", text: "Стамбул — єдине у світі місто, розташоване одразу на двох континентах.", isTrue: true },
+      { country: "Мадагаскар", text: "Понад 90% дикої природи цього острова не зустрічається більше ніде на Землі.", isTrue: true },
+      { country: "Південна Корея", text: "Сеул є одним із найтехнологічніших мегаполісів світу з найшвидшим інтернетом.", isTrue: true },
+      { country: "Нідерланди", text: "Більша частина території Нідерландів лежить нижче рівня моря.", isTrue: true },
+      { country: "Ірландія", text: "В Ірландії повністю відсутні змії через географічну ізоляцію.", isTrue: true },
+      { country: "Ватикан", text: "Ватикан має власну залізницю довжиною лише кілька сотень метрів.", isTrue: true },
+      { country: "Монако", text: "Князівство Монако є найбільшою країною за площею в Європі.", isTrue: false },
+      { country: "Куба", text: "На Кубі досі масово їздять старовинні американські автомобілі середини XX століття.", isTrue: true },
+      { country: "Марокко", text: "У Марокко розташована одна з найспекотніших пустель світу — Сахара.", isTrue: true },
+      { country: "Україна", text: "Географічний центр Європи офіційно розташований на Закарпатті біля Ділового.", isTrue: true },
+      { country: "Австрія", text: "Відень неодноразово очолював рейтинги найкращих для життя міст планети.", isTrue: true },
+      { country: "Бельгія", text: "Бельгія є світовою столицею шоколаду та має тисячі сортів пива.", isTrue: true },
+      { country: "Україна", text: "Україна має вихід до Чорного та Азовського морів.", isTrue: true },      { country: "Україна", text: "Карпати займають частину заходу України.", isTrue: false },      { country: "Франція", text: "Столиця Франції — Париж.", isTrue: true },      { country: "Франція", text: "Лувр розташований у Парижі.", isTrue: false },      { country: "Німеччина", text: "Столиця Німеччини — Берлін.", isTrue: true },      { country: "Німеччина", text: "Німеччина є федеративною державою.", isTrue: false },      { country: "Італія", text: "Столиця Італії — Рим.", isTrue: true },      { country: "Італія", text: "Венеція побудована на островах у лагуні.", isTrue: false },      { country: "Іспанія", text: "Столиця Іспанії — Мадрид.", isTrue: true },      { country: "Іспанія", text: "Іспанія має вихід до Атлантичного океану та Середземного моря.", isTrue: false },      { country: "Португалія", text: "Столиця Португалії — Лісабон.", isTrue: true },      { country: "Португалія", text: "Азори та Мадейра належать Португалії.", isTrue: false },      { country: "Норвегія", text: "Столиця Норвегії — Осло.", isTrue: true },      { country: "Норвегія", text: "Норвегія має вихід до Північного Льодовитого океану.", isTrue: false },      { country: "Швеція", text: "Столиця Швеції — Стокгольм.", isTrue: true },      { country: "Швеція", text: "Швеція має тисячі озер.", isTrue: false },      { country: "Фінляндія", text: "Столиця Фінляндії — Гельсінкі.", isTrue: true },      { country: "Фінляндія", text: "Фінляндія має сухопутний кордон із Норвегією та Швецією.", isTrue: false },      { country: "Данія", text: "Столиця Данії — Копенгаген.", isTrue: true },      { country: "Данія", text: "Данія розташована на півночі Європи.", isTrue: false },      { country: "Ісландія", text: "Столиця Ісландії — Рейк'явік.", isTrue: true },      { country: "Ісландія", text: "В Ісландії багато вулканів і геотермальних джерел.", isTrue: false },      { country: "Велика Британія", text: "Столиця Великої Британії — Лондон.", isTrue: true },      { country: "Велика Британія", text: "Лондон розташований на річці Темзі.", isTrue: false },      { country: "Ірландія", text: "Столиця Ірландії — Дублін.", isTrue: true },      { country: "Ірландія", text: "Національним символом Ірландії є трилисник.", isTrue: false },      { country: "Нідерланди", text: "Столиця Нідерландів — Амстердам.", isTrue: true },      { country: "Нідерланди", text: "Нідерланди відомі системою дамб і польдерів.", isTrue: false },      { country: "Бельгія", text: "Столиця Бельгії — Брюссель.", isTrue: true },      { country: "Бельгія", text: "Бельгія має три офіційні державні мови.", isTrue: false },      { country: "Швейцарія", text: "Столиця Швейцарії — Берн.", isTrue: true },      { country: "Швейцарія", text: "Швейцарські Альпи займають значну частину території країни.", isTrue: false },      { country: "Австрія", text: "Столиця Австрії — Відень.", isTrue: true },      { country: "Австрія", text: "Через Австрію протікає Дунай.", isTrue: false },      { country: "Греція", text: "Столиця Греції — Афіни.", isTrue: true },      { country: "Греція", text: "Греція розташована на півдні Балканського півострова.", isTrue: false },      { country: "Польща", text: "Столиця Польщі — Варшава.", isTrue: true },      { country: "Польща", text: "На півдні Польщі розташовані Карпати та Судети.", isTrue: false },      { country: "Чехія", text: "Столиця Чехії — Прага.", isTrue: true },      { country: "Чехія", text: "Річка Влтава протікає через Прагу.", isTrue: false },      { country: "Угорщина", text: "Столиця Угорщини — Будапешт.", isTrue: true },      { country: "Угорщина", text: "Через Будапешт протікає Дунай.", isTrue: false },      { country: "Румунія", text: "Столиця Румунії — Бухарест.", isTrue: true },      { country: "Румунія", text: "Карпати займають значну частину території Румунії.", isTrue: false },      { country: "Болгарія", text: "Столиця Болгарії — Софія.", isTrue: true },      { country: "Болгарія", text: "Через територію Болгарії проходять Балканські гори.", isTrue: false },      { country: "Хорватія", text: "Столиця Хорватії — Загреб.", isTrue: true },      { country: "Хорватія", text: "Хорватії належать численні острови Адріатичного моря.", isTrue: false },      { country: "Словенія", text: "Столиця Словенії — Любляна.", isTrue: true },      { country: "Словенія", text: "На території Словенії розташовані Альпи.", isTrue: false },      { country: "Словаччина", text: "Столиця Словаччини — Братислава.", isTrue: true },      { country: "Словаччина", text: "Через Братиславу протікає Дунай.", isTrue: false },      { country: "Сербія", text: "Столиця Сербії — Белград.", isTrue: true },      { country: "Сербія", text: "Белград розташований біля місця впадіння Сави в Дунай.", isTrue: false },      { country: "Боснія і Герцеговина", text: "Столиця Боснії і Герцеговини — Сараєво.", isTrue: true },      { country: "Боснія і Герцеговина", text: "Динарські Альпи проходять територією країни.", isTrue: false },      { country: "Чорногорія", text: "Столиця Чорногорії — Подгориця.", isTrue: true },      { country: "Чорногорія", text: "Назва країни пов'язана з горами, вкритими темними лісами.", isTrue: false },      { country: "Албанія", text: "Столиця Албанії — Тирана.", isTrue: true },      { country: "Албанія", text: "Албанські Альпи розташовані на півночі країни.", isTrue: false },      { country: "Північна Македонія", text: "Столиця Північної Македонії — Скоп'є.", isTrue: true },      { country: "Північна Македонія", text: "Озеро Охрид розташоване на кордоні Північної Македонії та Албанії.", isTrue: false },      { country: "США", text: "Столиця США — Вашингтон.", isTrue: true },      { country: "США", text: "Аляска є найбільшим за площею штатом США.", isTrue: false },      { country: "Канада", text: "Столиця Канади — Оттава.", isTrue: true },      { country: "Канада", text: "Канада займає значну частину північної частини Північної Америки.", isTrue: false },      { country: "Мексика", text: "Столиця Мексики — Мехіко.", isTrue: true },      { country: "Мексика", text: "Мексика розташована в Північній Америці.", isTrue: false },      { country: "Бразилія", text: "Столиця Бразилії — Бразиліа.", isTrue: true },      { country: "Бразилія", text: "Амазонка протікає територією Бразилії.", isTrue: false },      { country: "Аргентина", text: "Столиця Аргентини — Буенос-Айрес.", isTrue: true },      { country: "Аргентина", text: "Уздовж західного кордону Аргентини простягаються Анди.", isTrue: false },      { country: "Чилі", text: "Столиця Чилі — Сантьяго.", isTrue: true },      { country: "Чилі", text: "Пустеля Атакама розташована на півночі Чилі.", isTrue: false },      { country: "Перу", text: "Столиця Перу — Ліма.", isTrue: true },      { country: "Перу", text: "Анди проходять через територію Перу.", isTrue: false },      { country: "Колумбія", text: "Столиця Колумбії — Богота.", isTrue: true },      { country: "Колумбія", text: "Колумбія розташована на північному заході Південної Америки.", isTrue: false },      { country: "Еквадор", text: "Столиця Еквадору — Кіто.", isTrue: true },      { country: "Еквадор", text: "Галапагоські острови належать Еквадору.", isTrue: false },      { country: "Болівія", text: "Столиця Болівії за конституцією — Сукре.", isTrue: true },      { country: "Болівія", text: "Ла-Пас є адміністративною столицею Болівії.", isTrue: false },      { country: "Парагвай", text: "Столиця Парагваю — Асунсьйон.", isTrue: true },      { country: "Парагвай", text: "Через Парагвай протікає річка Парагвай.", isTrue: false },      { country: "Уругвай", text: "Столиця Уругваю — Монтевідео.", isTrue: true },      { country: "Уругвай", text: "Уругвай розташований між Аргентиною та Бразилією.", isTrue: false },      { country: "Китай", text: "Столиця Китаю — Пекін.", isTrue: true },      { country: "Китай", text: "Велика Китайська стіна складається з численних ділянок і споруд.", isTrue: false },      { country: "Японія", text: "Столиця Японії — Токіо.", isTrue: true },      { country: "Японія", text: "Японський архіпелаг складається з тисяч островів.", isTrue: false },      { country: "Південна Корея", text: "Столиця Південної Кореї — Сеул.", isTrue: true },      { country: "Південна Корея", text: "Країна має вихід до Жовтого та Японського морів.", isTrue: false },      { country: "Індія", text: "Столиця Індії — Нью-Делі.", isTrue: true },      { country: "Індія", text: "Гімалаї простягаються вздовж північної частини Індії.", isTrue: false },      { country: "Непал", text: "Столиця Непалу — Катманду.", isTrue: true },      { country: "Непал", text: "Еверест розташований на кордоні Непалу та Китаю.", isTrue: false },      { country: "Бутан", text: "Столиця Бутану — Тхімпху.", isTrue: true },      { country: "Бутан", text: "Бутан не має виходу до моря.", isTrue: false },      { country: "Пакистан", text: "Столиця Пакистану — Ісламабад.", isTrue: true },      { country: "Пакистан", text: "Річка Інд є однією з головних річок Пакистану.", isTrue: false },      { country: "Бангладеш", text: "Столиця Бангладешу — Дакка.", isTrue: true },      { country: "Бангладеш", text: "Країна має вихід до Бенгальської затоки.", isTrue: false },      { country: "Шрі-Ланка", text: "Столиця Шрі-Ланки — Шрі-Джаяварденепура-Котте.", isTrue: true },      { country: "Шрі-Ланка", text: "Коломбо є найбільшим містом країни.", isTrue: false },      { country: "Індонезія", text: "Столиця Індонезії — Джакарта.", isTrue: true },      { country: "Індонезія", text: "Індонезія лежить у зоні Тихоокеанського вогняного кільця.", isTrue: false },      { country: "Філіппіни", text: "Столиця Філіппін — Маніла.", isTrue: true },      { country: "Філіппіни", text: "Філіппіни розташовані в західній частині Тихого океану.", isTrue: false },      { country: "В'єтнам", text: "Столиця В'єтнаму — Ханой.", isTrue: true },      { country: "В'єтнам", text: "В'єтнам розташований у Південно-Східній Азії.", isTrue: false },      { country: "Таїланд", text: "Столиця Таїланду — Бангкок.", isTrue: true },      { country: "Таїланд", text: "Таїланд розташований у Південно-Східній Азії.", isTrue: false },      { country: "Малайзія", text: "Столиця Малайзії — Куала-Лумпур.", isTrue: true },      { country: "Малайзія", text: "Малайзія має вихід до Південно-Китайського моря.", isTrue: false },      { country: "Сінгапур", text: "Столиця Сінгапуру — Сінгапур.", isTrue: true },      { country: "Сінгапур", text: "Сінгапур розташований біля південного краю Малаккського півострова.", isTrue: false },      { country: "Монголія", text: "Столиця Монголії — Улан-Батор.", isTrue: true },      { country: "Монголія", text: "Пустеля Гобі розташована на території Монголії та Китаю.", isTrue: false },      { country: "Єгипет", text: "Столиця Єгипту — Каїр.", isTrue: true },      { country: "Єгипет", text: "Синайський півострів географічно належить до Азії.", isTrue: false },      { country: "Кенія", text: "Столиця Кенії — Найробі.", isTrue: true },      { country: "Кенія", text: "Кенія має вихід до Індійського океану.", isTrue: false },      { country: "Танзанія", text: "Столиця Танзанії — Додома.", isTrue: true },      { country: "Танзанія", text: "Танзанія має вихід до Індійського океану.", isTrue: false },      { country: "ПАР", text: "Адміністративна столиця ПАР — Преторія.", isTrue: true },      { country: "ПАР", text: "У ПАР є три столиці з різними функціями влади.", isTrue: false },      { country: "Марокко", text: "Столиця Марокко — Рабат.", isTrue: true },      { country: "Марокко", text: "Атлаські гори проходять територією Марокко.", isTrue: false },      { country: "Австралія", text: "Столиця Австралії — Канберра.", isTrue: true },      { country: "Австралія", text: "Великий Бар'єрний риф лежить біля північно-східного узбережжя Австралії.", isTrue: false },      { country: "Нова Зеландія", text: "Столиця Нової Зеландії — Веллінгтон.", isTrue: true },      { country: "Нова Зеландія", text: "Нова Зеландія розташована в південно-західній частині Тихого океану.", isTrue: false },      { country: "Папуа-Нова Гвінея", text: "Столиця Папуа-Нової Гвінеї — Порт-Морсбі.", isTrue: true },      { country: "Папуа-Нова Гвінея", text: "Папуа-Нова Гвінея лежить на північ від Австралії.", isTrue: false },
+    ];
+
+    let currentCountryGameIndex = 0;
+
+    /* --- ЛОГІКА ГЛОБАЛЬНОГО ПОШУКУ ПО САЙТУ --- */
+    const siteSearchIndex = [
+      { title: "📜 Розділ: Історія", desc: "Уроки, історичні матеріали та інтерактивні тести з історії", url: "history.html" },
+      { title: "🌍 Розділ: Географія", desc: "Географічні карти, конспекти та практичні завдання", url: "geography.html" },
+      { title: "🎓 Тренажер НМТ", desc: "Онлайн-тестування та підготовка до НМТ з історії та географії", url: "nmt.html" },
+      { title: "📚 Методична скарбничка", desc: "Корисні розробки, методички та інструменти для вчителів", url: "methodology.html" },
+      { title: "🎧 AUDIO & 3D Віртуальні Тури", desc: "Аудіоекскурсії та віртуальне занурення у видатні місця", url: "https://izi.travel/uk" },
+      { title: "🏺 3D Артефакти", desc: "Інтерактивні тривимірні моделі історичних артефактів", url: "https://sketchfab.com/tags/history" },
+      { title: "▶️ YouTube-канал «Реальна історія»", desc: "Відеоматеріали та історичні розслідування на YouTube", url: "https://youtube.com/@realnaistoriia?si=BKC5gf1P0DXU0ChB" },
+      { title: "🦖 Клуб дослідників & Динозаврик", desc: "Зона розваг, міні-ігри та студентська стіна коментарів", url: "#kids-club" }
+    ];
+
+    // Додаємо факти до пошукового індексу
+    keyEvents.forEach(evt => {
+      siteSearchIndex.push({
+        title: `📜 Історія: ${evt.title}`,
+        desc: evt.short,
+        url: "history.html"
+      });
+    });
+
+    geoFacts.forEach(fact => {
+      siteSearchIndex.push({
+        title: `🌍 Географія: ${fact.title}`,
+        desc: fact.short,
+        url: "geography.html"
+      });
+    });
+
+    function setupSiteSearch() {
+      const searchInput = document.getElementById('siteSearchInput');
+      const searchResults = document.getElementById('searchResults');
+      if (!searchInput || !searchResults) return;
+
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+          searchResults.style.display = 'none';
+          searchResults.innerHTML = '';
+          return;
+        }
+
+        const filtered = siteSearchIndex.filter(item => 
+          item.title.toLowerCase().includes(query) || 
+          item.desc.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+          searchResults.innerHTML = `<div class="search-result-item" style="color: #64748b; font-size: 13px;">Нічого не знайдено за запитом "${e.target.value}"</div>`;
+        } else {
+          searchResults.innerHTML = filtered.slice(0, 8).map(item => `
+            <a href="${item.url}" class="search-result-item">
+              <div class="search-result-title">${item.title}</div>
+              <div class="search-result-desc">${item.desc}</div>
+            </a>
+          `).join('');
+        }
+        searchResults.style.display = 'block';
+      });
+
+      // Перехід за натисканням Enter
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const firstLink = searchResults.querySelector('a');
+          if (firstLink) {
+            window.location.href = firstLink.getAttribute('href');
+          }
+        }
+      });
+
+      // Закриття результатів при кліку поза полем пошуку
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+          searchResults.style.display = 'none';
+        }
+      });
+    }
+
+    function chooseFromShuffledBag(length, storageKey, currentIndex = -1) {
+      if (!length) return 0;
+      let bag = [];
+      try {
+        bag = JSON.parse(sessionStorage.getItem(storageKey + '_bag') || '[]');
+      } catch (e) {
+        bag = [];
+      }
+      bag = Array.isArray(bag) ? bag.filter(i => Number.isInteger(i) && i >= 0 && i < length) : [];
+      if (!bag.length) {
+        bag = Array.from({length}, (_, i) => i);
+        for (let i = bag.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [bag[i], bag[j]] = [bag[j], bag[i]];
+        }
+        // Не показуємо те саме питання одразу після попереднього.
+        if (length > 1 && bag[0] === currentIndex) [bag[0], bag[1]] = [bag[1], bag[0]];
+      }
+      let next = bag.shift();
+      // Додатковий захист: наступне питання не може бути тим самим.
+      if (length > 1 && next === currentIndex) {
+        const alternate = bag.findIndex(i => i !== currentIndex);
+        if (alternate >= 0) {
+          next = bag.splice(alternate, 1)[0];
+        } else {
+          next = (currentIndex + 1) % length;
+        }
+      }
+      // sessionStorage не повинен ламати гру, навіть якщо браузер його блокує.
+      try {
+        sessionStorage.setItem(storageKey + '_bag', JSON.stringify(bag));
+        sessionStorage.setItem(storageKey, String(next));
+      } catch (e) {
+        console.warn('Не вдалося зберегти стан питання в sessionStorage:', e);
+      }
+      return next;
+    }
+
+    function chooseDifferentRandomIndex(length, storageKey, currentIndex = -1) {
+      if (!length) return 0;
+      const saved = Number(sessionStorage.getItem(storageKey));
+      let previous = Number.isInteger(saved) ? saved : currentIndex;
+      let next = Math.floor(Math.random() * length);
+      if (length > 1) {
+        while (next === previous) next = Math.floor(Math.random() * length);
+      }
+      sessionStorage.setItem(storageKey, String(next));
+      return next;
+    }
+
+    function initPageData() {
+      setupTravelerAnimation();
+      updateDinoHighScoreUI();
+      renderDinoLeaderboard();
+      setupSiteSearch();
+
+      // Кожне завантаження сторінки починає активності з іншого випадкового завдання.
+      mapQuestionIndex = chooseFromShuffledBag(mapQuestions.length, 'portal_last_map_question');
+      historyActivityIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question');
+      mapQuestionNumber = 1;
+      historyActivityNumber = 1;
+
+      // Завантаження випадкового факту історії
+      const randomHist = keyEvents[Math.floor(Math.random() * keyEvents.length)];
+      const histElement = document.getElementById('event-content');
+      if (histElement) {
+        histElement.innerHTML = `<strong>${randomHist.title}</strong><br>${randomHist.short}`;
+        window.currentHistFact = randomHist;
+      }
+
+      // Завантаження випадкового факту географії
+      const randomGeo = geoFacts[Math.floor(Math.random() * geoFacts.length)];
+      const geoElement = document.getElementById('geo-content');
+      if (geoElement) {
+        geoElement.innerHTML = `<strong>${randomGeo.title}</strong><br>${randomGeo.short}`;
+        window.currentGeoFact = randomGeo;
+      }
+
+      // Завантаження гри "Правда чи Брехня"
+      currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
+      const gameItem = countriesGameData[currentCountryGameIndex];
+      const gameTextElem = document.getElementById('country-game-text');
+      if (gameTextElem) {
+        gameTextElem.innerHTML = `🏳️ <strong>${gameItem.country}:</strong> ${gameItem.text}`;
+      }
+      prepareCountryGameQuestion();
+    }
+
+    // Захист «Правда чи Брехня» від автоклікера.
+    // Основні ознаки: надто швидка відповідь, регулярні інтервали, надмірна
+    // кількість відповідей за короткий час. Блокування зберігається у Firebase.
+    let countryGameAnswered = false;
+    let countryGameNextTimer = null;
+    let countryGameQuestionToken = 0;
+    let countryGameRenderedAt = 0;
+    let countryGameMinDelay = 900;
+    let countryGameSuspicious = 0;
+    let countryGameLockedUntil = 0;
+    let countryGameAnswerTimes = [];
+    let countryGameLastAnswerAt = 0;
+    let countryGameLockLoaded = false;
+
+    function prepareCountryGameQuestion() {
+      countryGameQuestionToken++;
+      countryGameAnswered = false;
+      countryGameRenderedAt = performance.now();
+      countryGameMinDelay = 900 + Math.floor(Math.random() * 1100);
+      setCountryGameButtonsDisabled(false);
+      if (Date.now() < countryGameLockedUntil) setCountryGameButtonsDisabled(true);
+    }
+
+    function setCountryGameButtonsDisabled(disabled) {
+      const buttons = document.querySelectorAll('[data-country-game-answer]');
+      buttons.forEach(button => {
+        button.disabled = disabled;
+        button.style.opacity = disabled ? '0.55' : '1';
+        button.style.cursor = disabled ? 'not-allowed' : 'pointer';
+      });
+    }
+
+    function showCountryGameNotice(text, kind='warning') {
+      const resultElem = document.getElementById('country-game-result');
+      if (!resultElem) return;
+      resultElem.style.display = 'block';
+      resultElem.style.background = kind === 'error' ? '#fee2e2' : '#fef3c7';
+      resultElem.style.color = kind === 'error' ? '#991b1b' : '#92400e';
+      resultElem.innerHTML = text;
+    }
+
+    async function lockTruthOrLieForUser(reason) {
+      const uid = window.currentUserUid;
+      if (!uid || !window.portalScore?.lockTruthOrLie) return;
+      const until = Date.now() + 60 * 60 * 1000;
+      countryGameLockedUntil = until;
+      setCountryGameButtonsDisabled(true);
+      showCountryGameNotice('🔒 Гру «Правда чи Брехня» заблоковано на 1 годину через підозрілу автоматизовану активність. Результати підозрілих натискань не зараховуються.', 'error');
+      try { await window.portalScore.lockTruthOrLie(reason, until); } catch(e) { console.error('Anti-cheat lock:', e); }
+    }
+
+    function restoreTruthOrLieLock(lock) {
+      countryGameLockLoaded = true;
+      const until = Number(lock?.until) || 0;
+      countryGameLockedUntil = until;
+      if (until > Date.now()) {
+        setCountryGameButtonsDisabled(true);
+        showCountryGameNotice(`🔒 Гра заблокована до ${new Date(until).toLocaleString('uk-UA')}. Причина: підозріла автоматизована активність.`, 'error');
+      } else if (lock?.until) {
+        countryGameLockedUntil = 0;
+      }
+    }
+
+    async function checkCountryGame(userAnswer) {
+      const now = performance.now();
+      const nowWall = Date.now();
+      if (countryGameAnswered || nowWall < countryGameLockedUntil) return;
+      if (!window.currentUserUid) {
+        showCountryGameNotice('🔐 Щоб грати та отримувати бали, спочатку увійдіть через Google.');
+        return;
+      }
+
+      const elapsed = now - countryGameRenderedAt;
+      const recent = countryGameAnswerTimes.filter(t => nowWall - t < 60000);
+      const interval = countryGameLastAnswerAt ? nowWall - countryGameLastAnswerAt : 0;
+      const tooFast = elapsed < countryGameMinDelay;
+      const tooMany = recent.length >= 9;
+      const regular = interval > 0 && countryGameAnswerTimes.length >= 4 &&
+        countryGameAnswerTimes.slice(-4).every(t => Math.abs((t - countryGameAnswerTimes[countryGameAnswerTimes.length-2]) - (countryGameAnswerTimes[countryGameAnswerTimes.length-2] - countryGameAnswerTimes[countryGameAnswerTimes.length-3])) < 120);
+
+      if (tooFast || tooMany || regular) {
+        countryGameSuspicious++;
+        showCountryGameNotice(`⚠️ Підозріла відповідь не зарахована (${countryGameSuspicious}/3). Не натискайте автоматично — відповідайте самостійно.`, 'warning');
+        if (countryGameSuspicious >= 3) {
+          countryGameSuspicious = 0;
+          await lockTruthOrLieForUser(tooFast ? 'too_fast' : tooMany ? 'too_many_answers' : 'regular_intervals');
+        }
+        return;
+      }
+
+      countryGameAnswered = true;
+      countryGameAnswerTimes.push(nowWall);
+      if (countryGameAnswerTimes.length > 20) countryGameAnswerTimes.shift();
+      countryGameLastAnswerAt = nowWall;
+      setCountryGameButtonsDisabled(true);
+
+      const gameItem = countriesGameData[currentCountryGameIndex];
+      const resultElem = document.getElementById('country-game-result');
+      if (!resultElem || !gameItem) return;
+
+      resultElem.style.display = 'block';
+      if (userAnswer === gameItem.isTrue) {
+        resultElem.style.background = '#dcfce7';
+        resultElem.style.color = '#15803d';
+        resultElem.innerHTML = '🎉 Правильно! Ви отримуєте +1 бал!';
+        await addPoints(1);
+        await unlockDinoAfterActivity();
+      } else {
+        resultElem.style.background = '#fee2e2';
+        resultElem.style.color = '#b91c1c';
+        resultElem.innerHTML = '❌ Неправильно! Спробуйте наступне питання.';
+      }
+
+      if (countryGameNextTimer) clearTimeout(countryGameNextTimer);
+      const answeredToken = countryGameQuestionToken;
+      countryGameNextTimer = setTimeout(() => {
+        if (answeredToken !== countryGameQuestionToken || Date.now() < countryGameLockedUntil) return;
+        currentCountryGameIndex = Math.floor(Math.random() * countriesGameData.length);
+        const nextItem = countriesGameData[currentCountryGameIndex];
+        const gameTextElem = document.getElementById('country-game-text');
+        if (gameTextElem) gameTextElem.innerHTML = `🏳️ <strong>${nextItem.country}:</strong> ${nextItem.text}`;
+        resultElem.style.display = 'none';
+        prepareCountryGameQuestion();
+      }, 2200);
+    }
+
+    /* --- ГЕОГРАФІЧНИЙ ДЕТЕКТИВ: робота з картою --- */
+    const mapQuestions = [
+  {
+    "country": "Афганістан",
+    "lat": 33.0,
+    "lng": 65.0
+  },
+  {
+    "country": "Албанія",
+    "lat": 41.0,
+    "lng": 20.0
+  },
+  {
+    "country": "Алжир",
+    "lat": 28.0,
+    "lng": 3.0
+  },
+  {
+    "country": "Андорра",
+    "lat": 42.5,
+    "lng": 1.6
+  },
+  {
+    "country": "Ангола",
+    "lat": -12.5,
+    "lng": 18.5
+  },
+  {
+    "country": "Антигуа і Барбуда",
+    "lat": 17.05,
+    "lng": -61.8
+  },
+  {
+    "country": "Аргентина",
+    "lat": -34.0,
+    "lng": -64.0
+  },
+  {
+    "country": "Вірменія",
+    "lat": 40.0,
+    "lng": 45.0
+  },
+  {
+    "country": "Австралія",
+    "lat": -27.0,
+    "lng": 133.0
+  },
+  {
+    "country": "Австрія",
+    "lat": 47.3333,
+    "lng": 13.3333
+  },
+  {
+    "country": "Азербайджан",
+    "lat": 40.5,
+    "lng": 47.5
+  },
+  {
+    "country": "Багамські Острови",
+    "lat": 24.25,
+    "lng": -76.0
+  },
+  {
+    "country": "Бахрейн",
+    "lat": 26.0,
+    "lng": 50.55
+  },
+  {
+    "country": "Бангладеш",
+    "lat": 24.0,
+    "lng": 90.0
+  },
+  {
+    "country": "Барбадос",
+    "lat": 13.1667,
+    "lng": -59.5333
+  },
+  {
+    "country": "Бельгія",
+    "lat": 50.8333,
+    "lng": 4.0
+  },
+  {
+    "country": "Беліз",
+    "lat": 17.25,
+    "lng": -88.75
+  },
+  {
+    "country": "Бенін",
+    "lat": 9.5,
+    "lng": 2.25
+  },
+  {
+    "country": "Бутан",
+    "lat": 27.5,
+    "lng": 90.5
+  },
+  {
+    "country": "Болівія",
+    "lat": -17.0,
+    "lng": -65.0
+  },
+  {
+    "country": "Боснія і Герцеговина",
+    "lat": 44.0,
+    "lng": 18.0
+  },
+  {
+    "country": "Ботсвана",
+    "lat": -22.0,
+    "lng": 24.0
+  },
+  {
+    "country": "Бразилія",
+    "lat": -10.0,
+    "lng": -55.0
+  },
+  {
+    "country": "Бруней",
+    "lat": 4.5,
+    "lng": 114.6667
+  },
+  {
+    "country": "Болгарія",
+    "lat": 43.0,
+    "lng": 25.0
+  },
+  {
+    "country": "Буркіна-Фасо",
+    "lat": 13.0,
+    "lng": -2.0
+  },
+  {
+    "country": "Бурунді",
+    "lat": -3.5,
+    "lng": 30.0
+  },
+  {
+    "country": "Кабо-Верде",
+    "lat": 15.1,
+    "lng": -23.6
+  },
+  {
+    "country": "Камбоджа",
+    "lat": 13.0,
+    "lng": 105.0
+  },
+  {
+    "country": "Камерун",
+    "lat": 6.0,
+    "lng": 12.0
+  },
+  {
+    "country": "Канада",
+    "lat": 60.0,
+    "lng": -95.0
+  },
+  {
+    "country": "Центральноафриканська Республіка",
+    "lat": 7.0,
+    "lng": 21.0
+  },
+  {
+    "country": "Чад",
+    "lat": 15.0,
+    "lng": 19.0
+  },
+  {
+    "country": "Чилі",
+    "lat": -30.0,
+    "lng": -71.0
+  },
+  {
+    "country": "Китай",
+    "lat": 35.0,
+    "lng": 105.0
+  },
+  {
+    "country": "Колумбія",
+    "lat": 4.0,
+    "lng": -72.0
+  },
+  {
+    "country": "Комори",
+    "lat": -12.1667,
+    "lng": 44.25
+  },
+  {
+    "country": "Республіка Конго",
+    "lat": -0.7,
+    "lng": 15.6
+  },
+  {
+    "country": "Коста-Рика",
+    "lat": 10.0,
+    "lng": -84.0
+  },
+  {
+    "country": "Кот-д’Івуар",
+    "lat": 7.5,
+    "lng": -5.5
+  },
+  {
+    "country": "Хорватія",
+    "lat": 45.1667,
+    "lng": 15.5
+  },
+  {
+    "country": "Куба",
+    "lat": 21.5,
+    "lng": -80.0
+  },
+  {
+    "country": "Кіпр",
+    "lat": 35.0,
+    "lng": 33.0
+  },
+  {
+    "country": "Чехія",
+    "lat": 49.75,
+    "lng": 15.5
+  },
+  {
+    "country": "Демократична Республіка Конго",
+    "lat": 0.0,
+    "lng": 25.0
+  },
+  {
+    "country": "Данія",
+    "lat": 56.0,
+    "lng": 10.0
+  },
+  {
+    "country": "Джибуті",
+    "lat": 11.5,
+    "lng": 43.0
+  },
+  {
+    "country": "Домініка",
+    "lat": 15.4167,
+    "lng": -61.3333
+  },
+  {
+    "country": "Домініканська Республіка",
+    "lat": 19.0,
+    "lng": -70.6667
+  },
+  {
+    "country": "Еквадор",
+    "lat": -2.0,
+    "lng": -77.5
+  },
+  {
+    "country": "Єгипет",
+    "lat": 27.0,
+    "lng": 30.0
+  },
+  {
+    "country": "Сальвадор",
+    "lat": 13.8333,
+    "lng": -88.9167
+  },
+  {
+    "country": "Екваторіальна Гвінея",
+    "lat": 2.0,
+    "lng": 10.0
+  },
+  {
+    "country": "Еритрея",
+    "lat": 15.0,
+    "lng": 39.0
+  },
+  {
+    "country": "Естонія",
+    "lat": 59.0,
+    "lng": 26.0
+  },
+  {
+    "country": "Есватіні",
+    "lat": -26.5,
+    "lng": 31.5
+  },
+  {
+    "country": "Ефіопія",
+    "lat": 8.0,
+    "lng": 38.0
+  },
+  {
+    "country": "Фіджі",
+    "lat": -18.0,
+    "lng": 175.0
+  },
+  {
+    "country": "Фінляндія",
+    "lat": 64.0,
+    "lng": 26.0
+  },
+  {
+    "country": "Франція",
+    "lat": 46.0,
+    "lng": 2.0
+  },
+  {
+    "country": "Габон",
+    "lat": -1.0,
+    "lng": 11.75
+  },
+  {
+    "country": "Гамбія",
+    "lat": 13.45,
+    "lng": -15.5
+  },
+  {
+    "country": "Грузія",
+    "lat": 42.0,
+    "lng": 43.5
+  },
+  {
+    "country": "Німеччина",
+    "lat": 51.0,
+    "lng": 9.0
+  },
+  {
+    "country": "Гана",
+    "lat": 8.0,
+    "lng": -2.0
+  },
+  {
+    "country": "Греція",
+    "lat": 39.0,
+    "lng": 22.0
+  },
+  {
+    "country": "Гренада",
+    "lat": 12.1167,
+    "lng": -61.6667
+  },
+  {
+    "country": "Гватемала",
+    "lat": 15.5,
+    "lng": -90.25
+  },
+  {
+    "country": "Гвінея",
+    "lat": 11.0,
+    "lng": -10.0
+  },
+  {
+    "country": "Гвінея-Бісау",
+    "lat": 12.0,
+    "lng": -15.0
+  },
+  {
+    "country": "Гаяна",
+    "lat": 5.0,
+    "lng": -59.0
+  },
+  {
+    "country": "Гаїті",
+    "lat": 19.0,
+    "lng": -72.4167
+  },
+  {
+    "country": "Гондурас",
+    "lat": 15.0,
+    "lng": -86.5
+  },
+  {
+    "country": "Угорщина",
+    "lat": 47.0,
+    "lng": 20.0
+  },
+  {
+    "country": "Ісландія",
+    "lat": 65.0,
+    "lng": -18.0
+  },
+  {
+    "country": "Індія",
+    "lat": 20.0,
+    "lng": 77.0
+  },
+  {
+    "country": "Індонезія",
+    "lat": -5.0,
+    "lng": 120.0
+  },
+  {
+    "country": "Іран",
+    "lat": 32.0,
+    "lng": 53.0
+  },
+  {
+    "country": "Ірак",
+    "lat": 33.0,
+    "lng": 44.0
+  },
+  {
+    "country": "Ірландія",
+    "lat": 53.0,
+    "lng": -8.0
+  },
+  {
+    "country": "Ізраїль",
+    "lat": 31.5,
+    "lng": 34.75
+  },
+  {
+    "country": "Італія",
+    "lat": 42.8333,
+    "lng": 12.8333
+  },
+  {
+    "country": "Ямайка",
+    "lat": 18.25,
+    "lng": -77.5
+  },
+  {
+    "country": "Японія",
+    "lat": 36.0,
+    "lng": 138.0
+  },
+  {
+    "country": "Йорданія",
+    "lat": 31.0,
+    "lng": 36.0
+  },
+  {
+    "country": "Казахстан",
+    "lat": 48.0,
+    "lng": 68.0
+  },
+  {
+    "country": "Кенія",
+    "lat": 1.0,
+    "lng": 38.0
+  },
+  {
+    "country": "Кірибаті",
+    "lat": 1.4167,
+    "lng": 173.0
+  },
+  {
+    "country": "Кувейт",
+    "lat": 29.5,
+    "lng": 45.75
+  },
+  {
+    "country": "Киргизстан",
+    "lat": 41.0,
+    "lng": 75.0
+  },
+  {
+    "country": "Лаос",
+    "lat": 18.0,
+    "lng": 105.0
+  },
+  {
+    "country": "Латвія",
+    "lat": 57.0,
+    "lng": 25.0
+  },
+  {
+    "country": "Ліван",
+    "lat": 33.8333,
+    "lng": 35.8333
+  },
+  {
+    "country": "Лесото",
+    "lat": -29.5,
+    "lng": 28.5
+  },
+  {
+    "country": "Ліберія",
+    "lat": 6.5,
+    "lng": -9.5
+  },
+  {
+    "country": "Лівія",
+    "lat": 25.0,
+    "lng": 17.0
+  },
+  {
+    "country": "Ліхтенштейн",
+    "lat": 47.2667,
+    "lng": 9.5333
+  },
+  {
+    "country": "Литва",
+    "lat": 56.0,
+    "lng": 24.0
+  },
+  {
+    "country": "Люксембург",
+    "lat": 49.75,
+    "lng": 6.1667
+  },
+  {
+    "country": "Мадагаскар",
+    "lat": -20.0,
+    "lng": 47.0
+  },
+  {
+    "country": "Малаві",
+    "lat": -13.5,
+    "lng": 34.0
+  },
+  {
+    "country": "Малайзія",
+    "lat": 2.5,
+    "lng": 112.5
+  },
+  {
+    "country": "Мальдіви",
+    "lat": 3.25,
+    "lng": 73.0
+  },
+  {
+    "country": "Малі",
+    "lat": 17.0,
+    "lng": -4.0
+  },
+  {
+    "country": "Мальта",
+    "lat": 35.8333,
+    "lng": 14.5833
+  },
+  {
+    "country": "Маршаллові Острови",
+    "lat": 9.0,
+    "lng": 168.0
+  },
+  {
+    "country": "Мавританія",
+    "lat": 20.0,
+    "lng": -12.0
+  },
+  {
+    "country": "Маврикій",
+    "lat": -20.2833,
+    "lng": 57.55
+  },
+  {
+    "country": "Мексика",
+    "lat": 23.0,
+    "lng": -102.0
+  },
+  {
+    "country": "Мікронезія",
+    "lat": 6.9,
+    "lng": 158.2
+  },
+  {
+    "country": "Молдова",
+    "lat": 47.0,
+    "lng": 29.0
+  },
+  {
+    "country": "Монако",
+    "lat": 43.7333,
+    "lng": 7.4
+  },
+  {
+    "country": "Монголія",
+    "lat": 46.0,
+    "lng": 105.0
+  },
+  {
+    "country": "Чорногорія",
+    "lat": 42.7,
+    "lng": 19.3
+  },
+  {
+    "country": "Марокко",
+    "lat": 32.0,
+    "lng": -5.0
+  },
+  {
+    "country": "Мозамбік",
+    "lat": -18.25,
+    "lng": 35.0
+  },
+  {
+    "country": "Мʼянма (Бірма)",
+    "lat": 19.2,
+    "lng": 96.5
+  },
+  {
+    "country": "Намібія",
+    "lat": -22.0,
+    "lng": 17.0
+  },
+  {
+    "country": "Науру",
+    "lat": -0.5333,
+    "lng": 166.9167
+  },
+  {
+    "country": "Непал",
+    "lat": 28.0,
+    "lng": 84.0
+  },
+  {
+    "country": "Нідерланди",
+    "lat": 52.5,
+    "lng": 5.75
+  },
+  {
+    "country": "Нова Зеландія",
+    "lat": -41.0,
+    "lng": 174.0
+  },
+  {
+    "country": "Нікарагуа",
+    "lat": 13.0,
+    "lng": -85.0
+  },
+  {
+    "country": "Нігер",
+    "lat": 16.0,
+    "lng": 8.0
+  },
+  {
+    "country": "Нігерія",
+    "lat": 10.0,
+    "lng": 8.0
+  },
+  {
+    "country": "Північна Корея",
+    "lat": 40.0,
+    "lng": 127.0
+  },
+  {
+    "country": "Північна Македонія",
+    "lat": 41.6,
+    "lng": 21.7
+  },
+  {
+    "country": "Норвегія",
+    "lat": 62.0,
+    "lng": 10.0
+  },
+  {
+    "country": "Оман",
+    "lat": 21.0,
+    "lng": 57.0
+  },
+  {
+    "country": "Пакистан",
+    "lat": 30.0,
+    "lng": 70.0
+  },
+  {
+    "country": "Палау",
+    "lat": 7.5,
+    "lng": 134.5
+  },
+  {
+    "country": "Палестина",
+    "lat": 32.0,
+    "lng": 35.2
+  },
+  {
+    "country": "Панама",
+    "lat": 9.0,
+    "lng": -80.0
+  },
+  {
+    "country": "Папуа-Нова Гвінея",
+    "lat": -6.0,
+    "lng": 147.0
+  },
+  {
+    "country": "Парагвай",
+    "lat": -23.0,
+    "lng": -58.0
+  },
+  {
+    "country": "Перу",
+    "lat": -10.0,
+    "lng": -76.0
+  },
+  {
+    "country": "Філіппіни",
+    "lat": 13.0,
+    "lng": 122.0
+  },
+  {
+    "country": "Польща",
+    "lat": 52.0,
+    "lng": 20.0
+  },
+  {
+    "country": "Португалія",
+    "lat": 39.5,
+    "lng": -8.0
+  },
+  {
+    "country": "Катар",
+    "lat": 25.5,
+    "lng": 51.25
+  },
+  {
+    "country": "Румунія",
+    "lat": 46.0,
+    "lng": 25.0
+  },
+  {
+    "country": "Руанда",
+    "lat": -2.0,
+    "lng": 30.0
+  },
+  {
+    "country": "Сент-Кітс і Невіс",
+    "lat": 17.3333,
+    "lng": -62.75
+  },
+  {
+    "country": "Сент-Люсія",
+    "lat": 13.8833,
+    "lng": -60.9667
+  },
+  {
+    "country": "Сент-Вінсент і Гренадіни",
+    "lat": 13.25,
+    "lng": -61.2
+  },
+  {
+    "country": "Самоа",
+    "lat": -13.5833,
+    "lng": -172.3333
+  },
+  {
+    "country": "Сан-Марино",
+    "lat": 43.7667,
+    "lng": 12.4167
+  },
+  {
+    "country": "Сан-Томе і Принсіпі",
+    "lat": 0.2,
+    "lng": 6.6
+  },
+  {
+    "country": "Саудівська Аравія",
+    "lat": 25.0,
+    "lng": 45.0
+  },
+  {
+    "country": "Сенегал",
+    "lat": 14.0,
+    "lng": -14.0
+  },
+  {
+    "country": "Сербія",
+    "lat": 44.1305,
+    "lng": 16.4284
+  },
+  {
+    "country": "Сейшельські Острови",
+    "lat": -4.5833,
+    "lng": 55.6667
+  },
+  {
+    "country": "Сьєрра-Леоне",
+    "lat": 8.5,
+    "lng": -11.5
+  },
+  {
+    "country": "Сінгапур",
+    "lat": 1.3667,
+    "lng": 103.8
+  },
+  {
+    "country": "Словаччина",
+    "lat": 48.6667,
+    "lng": 19.5
+  },
+  {
+    "country": "Словенія",
+    "lat": 46.1167,
+    "lng": 14.8167
+  },
+  {
+    "country": "Соломонові Острови",
+    "lat": -8.0,
+    "lng": 159.0
+  },
+  {
+    "country": "Сомалі",
+    "lat": 10.0,
+    "lng": 49.0
+  },
+  {
+    "country": "Південно-Африканська Республіка",
+    "lat": -29.0,
+    "lng": 24.0
+  },
+  {
+    "country": "Південна Корея",
+    "lat": 37.0,
+    "lng": 127.5
+  },
+  {
+    "country": "Південний Судан",
+    "lat": 7.0,
+    "lng": 30.0
+  },
+  {
+    "country": "Іспанія",
+    "lat": 40.0,
+    "lng": -4.0
+  },
+  {
+    "country": "Шрі-Ланка",
+    "lat": 7.0,
+    "lng": 81.0
+  },
+  {
+    "country": "Судан",
+    "lat": 15.0,
+    "lng": 30.0
+  },
+  {
+    "country": "Суринам",
+    "lat": 4.0,
+    "lng": -56.0
+  },
+  {
+    "country": "Швеція",
+    "lat": 62.0,
+    "lng": 15.0
+  },
+  {
+    "country": "Швейцарія",
+    "lat": 47.0,
+    "lng": 8.0
+  },
+  {
+    "country": "Сирія",
+    "lat": 35.0,
+    "lng": 38.0
+  },
+  {
+    "country": "Таджикистан",
+    "lat": 39.0,
+    "lng": 71.0
+  },
+  {
+    "country": "Танзанія",
+    "lat": -6.0,
+    "lng": 35.0
+  },
+  {
+    "country": "Таїланд",
+    "lat": 15.0,
+    "lng": 100.0
+  },
+  {
+    "country": "Тимор-Лешті",
+    "lat": -8.8,
+    "lng": 125.9
+  },
+  {
+    "country": "Того",
+    "lat": 8.0,
+    "lng": 1.1667
+  },
+  {
+    "country": "Тонга",
+    "lat": -20.0,
+    "lng": -175.0
+  },
+  {
+    "country": "Тринідад і Тобаго",
+    "lat": 11.0,
+    "lng": -61.0
+  },
+  {
+    "country": "Туніс",
+    "lat": 34.0,
+    "lng": 9.0
+  },
+  {
+    "country": "Туреччина",
+    "lat": 39.0,
+    "lng": 35.0
+  },
+  {
+    "country": "Туркменістан",
+    "lat": 40.0,
+    "lng": 60.0
+  },
+  {
+    "country": "Тувалу",
+    "lat": -8.0,
+    "lng": 178.0
+  },
+  {
+    "country": "Уганда",
+    "lat": 1.0,
+    "lng": 32.0
+  },
+  {
+    "country": "Україна",
+    "lat": 49.0,
+    "lng": 32.0
+  },
+  {
+    "country": "Обʼєднані Арабські Емірати",
+    "lat": 24.0,
+    "lng": 54.0
+  },
+  {
+    "country": "Велика Британія",
+    "lat": 54.0,
+    "lng": -2.0
+  },
+  {
+    "country": "Сполучені Штати Америки",
+    "lat": 38.0,
+    "lng": -97.0
+  },
+  {
+    "country": "Уругвай",
+    "lat": -33.0,
+    "lng": -56.0
+  },
+  {
+    "country": "Узбекистан",
+    "lat": 41.0,
+    "lng": 64.0
+  },
+  {
+    "country": "Вануату",
+    "lat": -16.0,
+    "lng": 167.0
+  },
+  {
+    "country": "Ватикан",
+    "lat": 41.9,
+    "lng": 12.45
+  },
+  {
+    "country": "Венесуела",
+    "lat": 8.0,
+    "lng": -66.0
+  },
+  {
+    "country": "В’єтнам",
+    "lat": 16.1667,
+    "lng": 107.8333
+  },
+  {
+    "country": "Ємен",
+    "lat": 15.0,
+    "lng": 48.0
+  },
+  {
+    "country": "Замбія",
+    "lat": -15.0,
+    "lng": 30.0
+  },
+  {
+    "country": "Зімбабве",
+    "lat": -20.0,
+    "lng": 30.0
+  }
+];
+    let worldMap = null, mapMarker = null, mapQuestionIndex = 0, mapAnswered = false, mapScore = 0, mapPreviousIndex = -1, mapQuestionNumber = 1;
+
+    function initMapActivity() {
+      if (!window.L || !document.getElementById('worldMap')) return;
+      // Не створюємо карту повторно: подвійна ініціалізація Leaflet могла
+      // залишати старий обробник click і ламати перехід після кількох питань.
+      if (worldMap) {
+        setTimeout(() => worldMap.invalidateSize(), 50);
+        return;
+      }
+      worldMap = L.map('worldMap', { minZoom:1, maxZoom:6, worldCopyJump:true }).setView([25, 10], 1.7);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap contributors' }).addTo(worldMap);
+      worldMap.on('click', handleMapClick);
+      renderMapQuestion();
+    }
+
+    function renderMapQuestion() {
+      const q = mapQuestions[mapQuestionIndex];
+      mapAnswered = false;
+      document.getElementById('mapTask').textContent = `Знайдіть на карті країну: ${q.country}`;
+      document.getElementById('mapStatus').textContent = 'Натисніть на карту там, де розташована потрібна країна.';
+      document.getElementById('mapStatus').style.background = '#f8fafc';
+      document.getElementById('mapStatus').style.color = '#475569';
+      if (mapMarker) { mapMarker.remove(); mapMarker = null; }
+    }
+
+    function handleMapClick(e) {
+      if (mapAnswered) return;
+
+      const q = mapQuestions[mapQuestionIndex];
+      if (!q || !worldMap) return;
+
+      const dLat = e.latlng.lat - q.lat;
+      const dLng = (e.latlng.lng - q.lng) * Math.cos(q.lat * Math.PI / 180);
+      const distance = Math.sqrt(dLat*dLat + dLng*dLng);
+      const isCorrect = distance <= 6.5;
+      const answeredIndex = mapQuestionIndex;
+
+      mapAnswered = true;
+      mapMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(worldMap);
+      const status = document.getElementById('mapStatus');
+
+      if (isCorrect) {
+        mapScore++;
+        if (status) {
+          status.textContent = '🎉 Правильно! +1 бал. Наступна країна завантажується…';
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
+        }
+
+        // Firebase працює у фоні: він не може зупинити перехід до наступної країни.
+        Promise.resolve(saveMapPointToFirebase()).then(saved => {
+          if (saved && window.currentUserUid && typeof get === 'function') {
+            return get(ref(database, 'users/' + window.currentUserUid)).then(mine => {
+              if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
+            });
+          }
+        }).catch(err => console.warn('Карта: фонова синхронізація:', err));
+
+        if (typeof unlockDinoAfterActivity === 'function') {
+          Promise.resolve(unlockDinoAfterActivity()).catch(() => {});
+        }
+      } else {
+        if (status) {
+          status.textContent = '❌ Не влучили. Наступна країна завантажується…';
+          status.style.background = '#fee2e2';
+          status.style.color = '#b91c1c';
+        }
+        L.marker([q.lat, q.lng]).addTo(worldMap)
+          .bindPopup(`📍 Правильне розташування: ${q.country}`)
+          .openPopup();
+      }
+
+      // Один таймер для обох випадків. Не залежить від Firebase.
+      setTimeout(() => {
+        if (mapQuestionIndex === answeredIndex && mapAnswered) {
+          nextMapQuestion();
+        }
+      }, 900);
+    }
+
+    async function saveMapPointToFirebase() {
+      if (window.portalScore?.awardMapPoint) {
+        return window.portalScore.awardMapPoint(1);
+      }
+      console.error('Центральний модуль балів ще не завантажився.');
+      return false;
+    }
+
+    function nextMapQuestion() {
+      if (!mapAnswered) return false;
+      mapAnswered = false;
+
+      const previousIndex = mapQuestionIndex;
+      let nextIndex;
+      try {
+        nextIndex = chooseFromShuffledBag(mapQuestions.length, 'portal_last_map_question', previousIndex);
+      } catch (e) {
+        nextIndex = Math.floor(Math.random() * mapQuestions.length);
+        if (mapQuestions.length > 1 && nextIndex === previousIndex) {
+          nextIndex = (previousIndex + 1) % mapQuestions.length;
+        }
+      }
+      if (mapQuestions.length > 1 && nextIndex === previousIndex) {
+        nextIndex = (previousIndex + 1) % mapQuestions.length;
+      }
+      mapPreviousIndex = previousIndex;
+      mapQuestionIndex = nextIndex;
+      renderMapQuestion();
+      if (worldMap) setTimeout(() => worldMap.invalidateSize(), 50);
+      return true;
+    }
+    window.nextMapQuestion = nextMapQuestion;
+
+    /* --- ІСТОРИЧНИЙ ХРОНОЛОГ --- */
+    const historyActivityQuestions = [
+  {
+    "subject": "Україна",
+    "event": "Олег захопив Київ і об’єднав північні та південні землі Русі",
+    "correct": "882"
+  },
+  {
+    "subject": "Україна",
+    "event": "Похід Олега на Константинополь",
+    "correct": "907"
+  },
+  {
+    "subject": "Україна",
+    "event": "Договір Русі з Візантією",
+    "correct": "911"
+  },
+  {
+    "subject": "Україна",
+    "event": "Загибель князя Ігоря",
+    "correct": "945"
+  },
+  {
+    "subject": "Україна",
+    "event": "Посольство княгині Ольги до Константинополя",
+    "correct": "957"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок самостійного князювання Святослава",
+    "correct": "964"
+  },
+  {
+    "subject": "Україна",
+    "event": "Розгром Хозарського каганату Святославом",
+    "correct": "965"
+  },
+  {
+    "subject": "Україна",
+    "event": "Загибель князя Святослава",
+    "correct": "972"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок князювання Володимира Великого",
+    "correct": "980"
+  },
+  {
+    "subject": "Україна",
+    "event": "Хрещення Русі",
+    "correct": "988"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок князювання Ярослава Мудрого",
+    "correct": "1019"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перемога Ярослава Мудрого над печенігами",
+    "correct": "1036"
+  },
+  {
+    "subject": "Україна",
+    "event": "Смерть Ярослава Мудрого",
+    "correct": "1054"
+  },
+  {
+    "subject": "Україна",
+    "event": "«Правда Ярославичів»",
+    "correct": "1072"
+  },
+  {
+    "subject": "Україна",
+    "event": "Любецький з’їзд князів",
+    "correct": "1097"
+  },
+  {
+    "subject": "Україна",
+    "event": "Повстання в Києві та початок князювання Володимира Мономаха",
+    "correct": "1113"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перша відома літописна згадка назви «Україна»",
+    "correct": "1187"
+  },
+  {
+    "subject": "Україна",
+    "event": "Об’єднання Галицького і Волинського князівств",
+    "correct": "1199"
+  },
+  {
+    "subject": "Україна",
+    "event": "Загибель Романа Мстиславича",
+    "correct": "1205"
+  },
+  {
+    "subject": "Україна",
+    "event": "Битва на Калці",
+    "correct": "1223"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок князювання Данила Романовича в Галичі",
+    "correct": "1238"
+  },
+  {
+    "subject": "Україна",
+    "event": "Захоплення Києва монголами",
+    "correct": "1240"
+  },
+  {
+    "subject": "Україна",
+    "event": "Коронація Данила Романовича",
+    "correct": "1253"
+  },
+  {
+    "subject": "Україна",
+    "event": "Заснування Львова",
+    "correct": "1256"
+  },
+  {
+    "subject": "Україна",
+    "event": "Створення Галицької митрополії",
+    "correct": "1303"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок боротьби за спадщину Галицько-Волинської держави",
+    "correct": "1340"
+  },
+  {
+    "subject": "Україна",
+    "event": "Битва на Синіх Водах",
+    "correct": "1362"
+  },
+  {
+    "subject": "Україна",
+    "event": "Кревська унія",
+    "correct": "1385"
+  },
+  {
+    "subject": "Україна",
+    "event": "Грюнвальдська битва за участю руських хоругв",
+    "correct": "1410"
+  },
+  {
+    "subject": "Україна",
+    "event": "Битва під Вількомиром",
+    "correct": "1435"
+  },
+  {
+    "subject": "Україна",
+    "event": "Ліквідація Київського князівства як удільного",
+    "correct": "1471"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перша згадка про козаків у писемному джерелі",
+    "correct": "1489"
+  },
+  {
+    "subject": "Україна",
+    "event": "Укріплення Дмитра Вишневецького на Малій Хортиці",
+    "correct": "1556"
+  },
+  {
+    "subject": "Україна",
+    "event": "Люблінська унія",
+    "correct": "1569"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перший козацький реєстр",
+    "correct": "1572"
+  },
+  {
+    "subject": "Україна",
+    "event": "Острозька академія",
+    "correct": "1576"
+  },
+  {
+    "subject": "Україна",
+    "event": "Ординація Війська Запорозького реєстрового",
+    "correct": "1578"
+  },
+  {
+    "subject": "Україна",
+    "event": "Острозька Біблія",
+    "correct": "1581"
+  },
+  {
+    "subject": "Україна",
+    "event": "Берестейська церковна унія",
+    "correct": "1596"
+  },
+  {
+    "subject": "Україна",
+    "event": "Похід Сагайдачного на Москву",
+    "correct": "1618"
+  },
+  {
+    "subject": "Україна",
+    "event": "Відновлення православної ієрархії в Києві",
+    "correct": "1620"
+  },
+  {
+    "subject": "Україна",
+    "event": "Хотинська битва",
+    "correct": "1621"
+  },
+  {
+    "subject": "Україна",
+    "event": "Куруківська угода",
+    "correct": "1625"
+  },
+  {
+    "subject": "Україна",
+    "event": "Києво-Могилянська колегія",
+    "correct": "1632"
+  },
+  {
+    "subject": "Україна",
+    "event": "Повстання Павла Бута",
+    "correct": "1637"
+  },
+  {
+    "subject": "Україна",
+    "event": "«Ординація Війська Запорозького реєстрового»",
+    "correct": "1638"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок Національно-визвольної війни Богдана Хмельницького",
+    "correct": "1648"
+  },
+  {
+    "subject": "Україна",
+    "event": "Зборівський договір",
+    "correct": "1649"
+  },
+  {
+    "subject": "Україна",
+    "event": "Берестецька битва",
+    "correct": "1651"
+  },
+  {
+    "subject": "Україна",
+    "event": "Переяславська рада",
+    "correct": "1654"
+  },
+  {
+    "subject": "Україна",
+    "event": "Гадяцький договір",
+    "correct": "1658"
+  },
+  {
+    "subject": "Україна",
+    "event": "Конотопська битва",
+    "correct": "1659"
+  },
+  {
+    "subject": "Україна",
+    "event": "Андрусівське перемир’я",
+    "correct": "1667"
+  },
+  {
+    "subject": "Україна",
+    "event": "Бучацький мир",
+    "correct": "1672"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перший Чигиринський похід",
+    "correct": "1677"
+  },
+  {
+    "subject": "Україна",
+    "event": "Бахчисарайський мир",
+    "correct": "1681"
+  },
+  {
+    "subject": "Україна",
+    "event": "«Вічний мир»",
+    "correct": "1686"
+  },
+  {
+    "subject": "Україна",
+    "event": "Знищення Батурина",
+    "correct": "1708"
+  },
+  {
+    "subject": "Україна",
+    "event": "Полтавська битва",
+    "correct": "1709"
+  },
+  {
+    "subject": "Україна",
+    "event": "Конституція Пилипа Орлика",
+    "correct": "1710"
+  },
+  {
+    "subject": "Україна",
+    "event": "Створення Малоросійської колегії",
+    "correct": "1722"
+  },
+  {
+    "subject": "Україна",
+    "event": "Заснування Нової Січі",
+    "correct": "1734"
+  },
+  {
+    "subject": "Україна",
+    "event": "Ліквідація гетьманства",
+    "correct": "1764"
+  },
+  {
+    "subject": "Україна",
+    "event": "Зруйнування Запорозької Січі",
+    "correct": "1775"
+  },
+  {
+    "subject": "Україна",
+    "event": "Ліквідація полково-сотенного устрою",
+    "correct": "1781"
+  },
+  {
+    "subject": "Україна",
+    "event": "Анексія Криму Російською імперією",
+    "correct": "1783"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перше видання «Енеїди»",
+    "correct": "1798"
+  },
+  {
+    "subject": "Україна",
+    "event": "Відкриття Харківського університету",
+    "correct": "1805"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок діяльності «Будителів» Закарпаття",
+    "correct": "1816"
+  },
+  {
+    "subject": "Україна",
+    "event": "Відкриття Київського університету",
+    "correct": "1834"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перше видання «Кобзаря»",
+    "correct": "1840"
+  },
+  {
+    "subject": "Україна",
+    "event": "Кирило-Мефодіївське братство",
+    "correct": "1846"
+  },
+  {
+    "subject": "Україна",
+    "event": "Скасування панщини в Галичині",
+    "correct": "1848"
+  },
+  {
+    "subject": "Україна",
+    "event": "Скасування кріпацтва в Російській імперії",
+    "correct": "1861"
+  },
+  {
+    "subject": "Україна",
+    "event": "Валуєвський циркуляр",
+    "correct": "1863"
+  },
+  {
+    "subject": "Україна",
+    "event": "Заснування «Просвіти»",
+    "correct": "1868"
+  },
+  {
+    "subject": "Україна",
+    "event": "Літературне товариство імені Шевченка",
+    "correct": "1873"
+  },
+  {
+    "subject": "Україна",
+    "event": "Емський указ",
+    "correct": "1876"
+  },
+  {
+    "subject": "Україна",
+    "event": "Русько-українська радикальна партія",
+    "correct": "1890"
+  },
+  {
+    "subject": "Україна",
+    "event": "Братство тарасівців",
+    "correct": "1891"
+  },
+  {
+    "subject": "Україна",
+    "event": "Михайло Грушевський очолив кафедру історії України у Львові",
+    "correct": "1894"
+  },
+  {
+    "subject": "Україна",
+    "event": "Революційна українська партія",
+    "correct": "1900"
+  },
+  {
+    "subject": "Україна",
+    "event": "Революційні події в Україні",
+    "correct": "1905"
+  },
+  {
+    "subject": "Україна",
+    "event": "Товариство українських поступовців",
+    "correct": "1908"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок Першої світової війни",
+    "correct": "1914"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок Української революції та Центральна Рада",
+    "correct": "1917"
+  },
+  {
+    "subject": "Україна",
+    "event": "IV Універсал і проголошення незалежності УНР",
+    "correct": "1918"
+  },
+  {
+    "subject": "Україна",
+    "event": "Акт Злуки УНР і ЗУНР",
+    "correct": "1919"
+  },
+  {
+    "subject": "Україна",
+    "event": "Ризький мир; завершення основного етапу Української революції",
+    "correct": "1921"
+  },
+  {
+    "subject": "Україна",
+    "event": "Утворення СРСР",
+    "correct": "1922"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок діяльності ОУН",
+    "correct": "1929"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок Голодомору",
+    "correct": "1932"
+  },
+  {
+    "subject": "Україна",
+    "event": "Завершення наймасовішої фази Голодомору",
+    "correct": "1933"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок Другої світової війни та вступ СРСР у Західну Україну",
+    "correct": "1939"
+  },
+  {
+    "subject": "Україна",
+    "event": "Початок німецько-радянської війни та Акт відновлення Української Держави",
+    "correct": "1941"
+  },
+  {
+    "subject": "Україна",
+    "event": "Формування УПА",
+    "correct": "1942"
+  },
+  {
+    "subject": "Україна",
+    "event": "Вигнання нацистських військ з України",
+    "correct": "1944"
+  },
+  {
+    "subject": "Україна",
+    "event": "УРСР серед засновників ООН",
+    "correct": "1945"
+  },
+  {
+    "subject": "Україна",
+    "event": "Передача Кримської області до складу УРСР",
+    "correct": "1954"
+  },
+  {
+    "subject": "Україна",
+    "event": "Перша хвиля арештів українських дисидентів",
+    "correct": "1965"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Традиційна дата заснування Рима",
+    "correct": "753 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Реформи Клісфена в Афінах",
+    "correct": "508 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Марафонська битва",
+    "correct": "490 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Битва при Фермопілах",
+    "correct": "480 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Битва при Платеях",
+    "correct": "479 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Пелопоннеської війни",
+    "correct": "431 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Битва при Херонеї",
+    "correct": "338 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок правління Александра Македонського",
+    "correct": "336 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Смерть Александра Македонського",
+    "correct": "323 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Убивство Юлія Цезаря",
+    "correct": "44 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок принципату Октавіана Августа",
+    "correct": "27 до н.е."
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Виверження Везувію та загибель Помпеїв",
+    "correct": "79"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Міланський едикт",
+    "correct": "313"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Поділ Римської імперії",
+    "correct": "395"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Падіння Західної Римської імперії",
+    "correct": "476"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок правління Юстиніана I",
+    "correct": "527"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Хіджра",
+    "correct": "622"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Битва при Пуатьє",
+    "correct": "732"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Коронація Карла Великого",
+    "correct": "800"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Верденський договір",
+    "correct": "843"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Нормандське завоювання Англії",
+    "correct": "1066"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Першого хрестового походу",
+    "correct": "1096"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Захоплення Єрусалима хрестоносцями",
+    "correct": "1099"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Захоплення Константинополя хрестоносцями",
+    "correct": "1204"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Велика хартія вольностей",
+    "correct": "1215"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок подорожі Марко Поло до Азії",
+    "correct": "1271"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок пандемії чуми в Європі",
+    "correct": "1347"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Падіння Константинополя",
+    "correct": "1453"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Подорож Колумба до Америки",
+    "correct": "1492"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Досягнення Індії Васко да Гамою",
+    "correct": "1498"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Реформації",
+    "correct": "1517"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Вормський рейхстаг",
+    "correct": "1521"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перша облога Відня Османами",
+    "correct": "1529"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Поразка Іспанської Армади",
+    "correct": "1588"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Заснування Британської Ост-Індської компанії",
+    "correct": "1600"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Тридцятилітньої війни",
+    "correct": "1618"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Вестфальський мир",
+    "correct": "1648"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Праця Ньютона «Математичні начала натуральної філософії»",
+    "correct": "1687"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Славна революція в Англії",
+    "correct": "1688"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Війни за незалежність США",
+    "correct": "1775"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Декларація незалежності США",
+    "correct": "1776"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Французької революції",
+    "correct": "1789"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перша конституція Франції",
+    "correct": "1791"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Переворот 18 брюмера",
+    "correct": "1799"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Наполеон проголошений імператором",
+    "correct": "1804"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Битва при Ватерлоо",
+    "correct": "1815"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Повстання декабристів",
+    "correct": "1825"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Липнева революція у Франції",
+    "correct": "1830"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "«Весна народів»",
+    "correct": "1848"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Кримської війни",
+    "correct": "1853"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Публікація «Походження видів»",
+    "correct": "1859"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Громадянської війни в США",
+    "correct": "1861"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Заснування Червоного Хреста",
+    "correct": "1863"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Відкриття Суецького каналу",
+    "correct": "1869"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Проголошення Німецької імперії",
+    "correct": "1871"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Патент на телефон Белла",
+    "correct": "1876"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Берлінська конференція",
+    "correct": "1884"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Відкриття Ейфелевої вежі",
+    "correct": "1889"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перша публічна демонстрація кінематографа",
+    "correct": "1895"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перші сучасні Олімпійські ігри",
+    "correct": "1896"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перший керований політ братів Райт",
+    "correct": "1903"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Революція в Російській імперії",
+    "correct": "1905"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Загибель «Титаніка»",
+    "correct": "1912"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Першої світової війни",
+    "correct": "1914"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Жовтнева революція в Росії",
+    "correct": "1917"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Завершення Першої світової війни",
+    "correct": "1918"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Версальський договір",
+    "correct": "1919"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Створення Ліги Націй",
+    "correct": "1920"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Відкриття гробниці Тутанхамона",
+    "correct": "1922"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Великої депресії",
+    "correct": "1929"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Прихід Гітлера до влади",
+    "correct": "1933"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок громадянської війни в Іспанії",
+    "correct": "1936"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Другої світової війни",
+    "correct": "1939"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Напад Німеччини на СРСР і Японії на Перл-Гарбор",
+    "correct": "1941"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Висадка союзників у Нормандії",
+    "correct": "1944"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Завершення Другої світової війни та створення ООН",
+    "correct": "1945"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Незалежність Індії",
+    "correct": "1947"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Загальна декларація прав людини",
+    "correct": "1948"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Створення НАТО",
+    "correct": "1949"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Відкриття структури ДНК",
+    "correct": "1953"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перший штучний супутник Землі",
+    "correct": "1957"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перший політ людини в космос",
+    "correct": "1961"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Промова «I Have a Dream»",
+    "correct": "1963"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Висадка людини на Місяць",
+    "correct": "1969"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перший мікропроцесор Intel 4004",
+    "correct": "1971"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Світова нафтова криза",
+    "correct": "1973"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Іранська революція",
+    "correct": "1979"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Перший політ космічного шатла",
+    "correct": "1981"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Падіння Берлінського муру",
+    "correct": "1989"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Возз’єднання Німеччини",
+    "correct": "1990"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Розпад СРСР",
+    "correct": "1991"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Маастрихтський договір",
+    "correct": "1992"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Демократичні вибори в ПАР",
+    "correct": "1994"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Передача Гонконгу Китаю",
+    "correct": "1997"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Теракти 11 вересня",
+    "correct": "2001"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Введення готівкового євро",
+    "correct": "2002"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Розширення ЄС на десять держав",
+    "correct": "2004"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Світова фінансова криза",
+    "correct": "2008"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Початок Арабської весни",
+    "correct": "2011"
+  },
+  {
+    "subject": "Всесвітня історія",
+    "event": "Паризька кліматична угода",
+    "correct": "2015"
+  }
+];
+    const historyYearPool = historyActivityQuestions.map(q => q.correct);
+    let historyActivityIndex = 0;
+    let historyActivityAnswered = false;
+    let historyActivityPreviousIndex = -1;
+    let historyActivityNumber = 1;
+
+    function renderHistoryActivityQuestion() {
+      const q = historyActivityQuestions[historyActivityIndex];
+      historyActivityAnswered = false;
+      const question = document.getElementById('historyActivityQuestion');
+      const options = document.getElementById('historyActivityOptions');
+      const status = document.getElementById('historyActivityStatus');
+      const next = document.getElementById('historyActivityNext');
+      const number = document.getElementById('historyActivityNumber');
+      if (!question || !options || !status || !next || !number) return;
+      question.textContent = q.event;
+      number.textContent = historyActivityNumber;
+      status.textContent = 'Оберіть один із варіантів.';
+      status.style.background = '#f8fafc';
+      status.style.color = '#475569';
+      next.disabled = true;
+      const distractors = [...new Set(historyYearPool.filter(y => y !== q.correct))].sort(() => Math.random() - 0.5).slice(0, 3);
+      const optionYears = [q.correct, ...distractors].sort(() => Math.random() - 0.5);
+      options.innerHTML = optionYears.map(year => `<button class="history-option" type="button" onclick="answerHistoryActivity('${String(year).replace(/'/g, "\\'")}')">${year}</button>`).join('');
+    }
+
+    async function saveHistoryActivityPoint() {
+      if (window.portalScore?.awardHistoryActivityPoint) {
+        return window.portalScore.awardHistoryActivityPoint(1);
+      }
+      console.error('Центральний модуль балів ще не завантажився.');
+      return false;
+    }
+
+    async function answerHistoryActivity(year) {
+      if (historyActivityAnswered) return;
+      const q = historyActivityQuestions[historyActivityIndex];
+      if (!q) return;
+      historyActivityAnswered = true;
+      document.querySelectorAll('#historyActivityOptions .history-option').forEach(btn => btn.disabled = true);
+      const status = document.getElementById('historyActivityStatus');
+      const next = document.getElementById('historyActivityNext');
+      if (String(year) === q.correct) {
+        // Кнопку переходу вмикаємо одразу. Збереження в Firebase не повинно
+        // блокувати перехід до наступного питання.
+        if (next) next.disabled = false;
+        if (status) {
+          status.textContent = '🎉 Правильно! +1 бал. Натисніть «Наступне питання».';
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
+        }
+        // Правильний хронолог розблоковує Динорейсер.
+        unlockDinoAfterActivity();
+        saveHistoryActivityPoint().then(async saved => {
+          if (saved && window.currentUserUid) {
+            try {
+              const mine = await get(ref(database, 'users/' + window.currentUserUid));
+              if (mine.exists()) updateCurrentScoreBadge(Number(mine.val()?.week_score) || 0);
+            } catch (e) {
+              console.warn('Не вдалося оновити індикатор балів:', e);
+            }
+          }
+        }).catch(error => console.error('Помилка збереження бала хронолога:', error));
+      } else {
+        if (status) {
+          status.textContent = `❌ Неправильно. Правильна відповідь: ${q.correct} рік.`;
+          status.style.background = '#fee2e2';
+          status.style.color = '#b91c1c';
+        }
+        if (next) next.disabled = false;
+      }
+    }
+
+    function nextHistoryActivityQuestion() {
+      if (!historyActivityAnswered) return false;
+      const previousIndex = historyActivityIndex;
+      try {
+        let nextIndex = chooseFromShuffledBag(historyActivityQuestions.length, 'portal_last_history_activity_question', previousIndex);
+        if (historyActivityQuestions.length > 1 && nextIndex === previousIndex) {
+          nextIndex = (previousIndex + 1) % historyActivityQuestions.length;
+        }
+        historyActivityIndex = nextIndex;
+      } catch (error) {
+        console.warn('Сховище стану хронолога недоступне, використовуємо випадковий перехід:', error);
+        if (historyActivityQuestions.length > 1) {
+          let nextIndex = Math.floor(Math.random() * historyActivityQuestions.length);
+          while (nextIndex === previousIndex) nextIndex = Math.floor(Math.random() * historyActivityQuestions.length);
+          historyActivityIndex = nextIndex;
+        }
+      }
+      historyActivityPreviousIndex = previousIndex;
+      historyActivityNumber = historyActivityNumber >= 10 ? 1 : historyActivityNumber + 1;
+      renderHistoryActivityQuestion();
+      return true;
+    }
+    window.answerHistoryActivity = answerHistoryActivity;
+    window.nextHistoryActivityQuestion = nextHistoryActivityQuestion;
+
+    // Єдиний обробник кнопок переходу. Inline onclick навмисно не використовуємо,
+    // щоб одна відповідь не викликала перехід двічі.
+    function bindActivityNextButtons() {
+      const historyNextButton = document.getElementById('historyActivityNext');
+      if (historyNextButton && !historyNextButton.dataset.bound) {
+        historyNextButton.dataset.bound = '1';
+        historyNextButton.type = 'button';
+        historyNextButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (!historyNextButton.disabled) nextHistoryActivityQuestion();
+        });
+      }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindActivityNextButtons, {once:true});
+    else bindActivityNextButtons();
+    // Ці функції викликаються нижче після завантаження Leaflet.
+    // Оскільки основний код працює в type=module, робимо їх доступними глобально.
+    window.initMapActivity = initMapActivity;
+    window.renderHistoryActivityQuestion = renderHistoryActivityQuestion;
+
+
+    // --- ГРА «ПРАПОРИ СВІТУ» ---
+    const flagsCountries = [["🇺🇦", "Україна"], ["🇵🇱", "Польща"], ["🇩🇪", "Німеччина"], ["🇫🇷", "Франція"], ["🇮🇹", "Італія"], ["🇪🇸", "Іспанія"], ["🇵🇹", "Португалія"], ["🇬🇧", "Велика Британія"], ["🇺🇸", "США"], ["🇨🇦", "Канада"], ["🇧🇷", "Бразилія"], ["🇦🇷", "Аргентина"], ["🇲🇽", "Мексика"], ["🇨🇱", "Чилі"], ["🇵🇪", "Перу"], ["🇨🇴", "Колумбія"], ["🇯🇵", "Японія"], ["🇨🇳", "Китай"], ["🇮🇳", "Індія"], ["🇰🇷", "Південна Корея"], ["🇹🇷", "Туреччина"], ["🇬🇷", "Греція"], ["🇳🇱", "Нідерланди"], ["🇧🇪", "Бельгія"], ["🇨🇭", "Швейцарія"], ["🇦🇹", "Австрія"], ["🇨🇿", "Чехія"], ["🇸🇰", "Словаччина"], ["🇭🇺", "Угорщина"], ["🇷🇴", "Румунія"], ["🇧🇬", "Болгарія"], ["🇷🇸", "Сербія"], ["🇭🇷", "Хорватія"], ["🇸🇮", "Словенія"], ["🇳🇴", "Норвегія"], ["🇸🇪", "Швеція"], ["🇫🇮", "Фінляндія"], ["🇩🇰", "Данія"], ["🇮🇸", "Ісландія"], ["🇮🇪", "Ірландія"], ["🇪🇪", "Естонія"], ["🇱🇻", "Латвія"], ["🇱🇹", "Литва"], ["🇲🇩", "Молдова"], ["🇬🇪", "Грузія"], ["🇦🇲", "Вірменія"], ["🇦🇿", "Азербайджан"], ["🇰🇿", "Казахстан"], ["🇺🇿", "Узбекистан"], ["🇮🇱", "Ізраїль"], ["🇪🇬", "Єгипет"], ["🇲🇦", "Марокко"], ["🇿🇦", "Південна Африка"], ["🇳🇬", "Нігерія"], ["🇰🇪", "Кенія"], ["🇦🇺", "Австралія"], ["🇳🇿", "Нова Зеландія"], ["🇹🇭", "Таїланд"], ["🇻🇳", "В'єтнам"], ["🇮🇩", "Індонезія"], ["🇵🇭", "Філіппіни"], ["🇸🇬", "Сінгапур"], ["🇲🇾", "Малайзія"], ["🇵🇰", "Пакистан"], ["🇸🇦", "Саудівська Аравія"], ["🇦🇪", "ОАЕ"], ["🇮🇷", "Іран"], ["🇮🇶", "Ірак"], ["🇯🇴", "Йорданія"], ["🇨🇺", "Куба"], ["🇯🇲", "Ямайка"], ["🇨🇷", "Коста-Рика"], ["🇵🇦", "Панама"], ["🇺🇾", "Уругвай"], ["🇵🇾", "Парагвай"], ["🇧🇴", "Болівія"], ["🇪🇨", "Еквадор"], ["🇻🇪", "Венесуела"], ["🇬🇹", "Гватемала"], ["🇩🇴", "Домініканська Республіка"], ["🇭🇳", "Гондурас"], ["🇳🇮", "Нікарагуа"], ["🇸🇻", "Сальвадор"], ["🇬🇭", "Гана"], ["🇸🇳", "Сенегал"], ["🇪🇹", "Ефіопія"], ["🇹🇿", "Танзанія"], ["🇺🇬", "Уганда"], ["🇿🇲", "Замбія"], ["🇿🇼", "Зімбабве"], ["🇲🇬", "Мадагаскар"], ["🇫🇯", "Фіджі"], ["🇵🇬", "Папуа-Нова Гвінея"], ["🇳🇵", "Непал"], ["🇲🇳", "Монголія"], ["🇻🇦", "Ватикан"], ["🇱🇺", "Люксембург"], ["🇲🇹", "Мальта"], ["🇨🇾", "Кіпр"], ["🇦🇱", "Албанія"], ["🇧🇦", "Боснія і Герцеговина"], ["🇲🇪", "Чорногорія"], ["🇲🇰", "Північна Македонія"], ["🇽🇰", "Косово"]];
+    let flagsCurrent = null;
+    let flagsAnswered = false;
+    let flagsPreviousIndex = -1;
+
+    function flagsShuffle(arr) {
+      return arr.slice().sort(() => Math.random() - 0.5);
+    }
+
+    function renderFlagsQuestion() {
+      const display = document.getElementById('flagsDisplay');
+      const options = document.getElementById('flagsOptions');
+      const status = document.getElementById('flagsStatus');
+      if (!display || !options || !status) return;
+
+      let idx;
+      do { idx = Math.floor(Math.random() * flagsCountries.length); }
+      while (flagsCountries.length > 1 && idx === flagsPreviousIndex);
+
+      flagsPreviousIndex = idx;
+      flagsCurrent = flagsCountries[idx];
+      flagsAnswered = false;
+
+      // На Windows/старих версіях Chrome прапори-emoji можуть відображатися
+      // як дві літери (наприклад, "SA"). Тому показуємо справжній кольоровий
+      // прапор через Twemoji SVG, а emoji залишаємо як fallback.
+      const flagEmoji = flagsCurrent[0];
+      const codepoints = Array.from(flagEmoji)
+        .map(ch => ch.codePointAt(0).toString(16))
+        .join('-');
+      display.innerHTML = '';
+      const flagImg = document.createElement('img');
+      flagImg.className = 'flag-image';
+      flagImg.alt = `Прапор ${flagsCurrent[1]}`;
+      flagImg.src = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${codepoints}.svg`;
+      flagImg.onerror = () => {
+        display.textContent = flagEmoji;
+      };
+      display.appendChild(flagImg);
+      display.setAttribute('aria-label', `Прапор ${flagsCurrent[1]}`);
+      options.innerHTML = '';
+
+      const wrong = flagsShuffle(flagsCountries.filter((_, i) => i !== idx)).slice(0, 3);
+      flagsShuffle([flagsCurrent, ...wrong]).forEach(([emoji, country]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'flags-option';
+        btn.textContent = country;
+        btn.addEventListener('click', () => answerFlags(country, btn));
+        options.appendChild(btn);
+      });
+      status.textContent = 'Оберіть правильну відповідь.';
+      status.style.background = '#f8fafc';
+      status.style.color = '#475569';
+    }
+
+    function answerFlags(country, clickedButton) {
+      if (flagsAnswered || !flagsCurrent) return;
+      flagsAnswered = true;
+      const answered = flagsCurrent;
+      const correct = country === flagsCurrent[1];
+
+      document.querySelectorAll('#flagsOptions .flags-option').forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === flagsCurrent[1]) {
+          btn.style.background = '#dcfce7';
+          btn.style.borderColor = '#86efac';
+        }
+      });
+
+      const status = document.getElementById('flagsStatus');
+      if (correct) {
+        if (status) {
+          status.textContent = '🎉 Правильно! +1 бал. Наступний прапор…';
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
+        }
+        if (window.portalScore?.awardFlagsPoint) {
+          Promise.resolve(window.portalScore.awardFlagsPoint(1)).catch(err =>
+            console.warn('Прапори: помилка синхронізації:', err)
+          );
+        }
+      } else {
+        if (clickedButton) {
+          clickedButton.style.background = '#fee2e2';
+          clickedButton.style.borderColor = '#fca5a5';
+        }
+        if (status) {
+          status.textContent = `❌ Неправильно. Правильна відповідь: ${flagsCurrent[1]}. Наступний прапор…`;
+          status.style.background = '#fee2e2';
+          status.style.color = '#b91c1c';
+        }
+      }
+
+      setTimeout(() => {
+        if (flagsCurrent === answered && flagsAnswered) renderFlagsQuestion();
+      }, 900);
+    }
+
+    window.renderFlagsQuestion = renderFlagsQuestion;
+
+    function openModal(type) {
+      const modal = document.getElementById('info-modal');
+      const titleElem = document.getElementById('modal-title');
+      const textElem = document.getElementById('modal-text');
+
+      if (type === 'event' && window.currentHistFact) {
+        titleElem.textContent = window.currentHistFact.title;
+        textElem.textContent = window.currentHistFact.full;
+      } else if (type === 'geo' && window.currentGeoFact) {
+        titleElem.textContent = window.currentGeoFact.title;
+        textElem.textContent = window.currentGeoFact.full;
+      }
+
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('info-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', initPageData);
+  </script><script>
+(() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
+</script><script crossorigin="" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      if (typeof window.initMapActivity === 'function') window.initMapActivity();
+      if (typeof window.renderHistoryActivityQuestion === 'function') window.renderHistoryActivityQuestion();
+      if (typeof window.renderFlagsQuestion === 'function') window.renderFlagsQuestion();
+    }, 100);
+  });
+</script></body></html>

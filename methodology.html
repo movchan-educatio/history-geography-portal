@@ -1,237 +1,211 @@
 <!DOCTYPE html>
+
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#071e30">
-  <title>Методична скарбничка — Освітній Портал Сергія Мовчана</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-  <link rel="stylesheet" href="style.css?v=27">
-  <link rel="stylesheet" href="modern-theme.css?v=300">
-<link rel="stylesheet" href="site-modern.css?v=1">
-<link rel="stylesheet" href="redesign.css?v=5">
-  <link rel="stylesheet" href="premium-design.css?v=8">
-  <link rel="stylesheet" href="v27-theme.css?v=28">
-<script defer src="navigation-v28.js?v=30"></script>
-  <link rel="stylesheet" href="v30-stability.css?v=30">
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Методична скарбничка — Освітній Портал Сергія Мовчана</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="app.css?v=1" rel="stylesheet"/>
+<link href="v3.css?v=3" rel="stylesheet"/><link href="portal-ui-v2026.css?v=20260915" rel="stylesheet"/></head>
 <body class="methodology-page">
+<!-- Навігаційна шапка -->
 
-  <!-- Навігаційна шапка -->
-  <header>
-    <a href="index.html" class="logo-group">
-      <img src="logo-192.webp" width="44" height="44" decoding="async" fetchpriority="high" alt="Логотип Освітній Портал" class="logo-img">
-      <div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
+<header class="portal-unified-header" data-page="methodology">
+  <div class="portal-top-row">
+    <button class="portal-square-btn portal-back-btn" type="button"
+      aria-label="Назад" title="Назад"
+      onclick="if(history.length&gt;1){history.back()}else{location.href='index.html'}">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <a class="portal-top-brand" href="index.html" aria-label="На головну">
+      <img src="logo.png" alt="Логотип">
+      <span>Історія і географія<small>БЕЗ МЕЖ</small></span>
     </a>
-    <nav>
-      <ul>
-        <li><a href="index.html">Головна</a></li>
-        <li><a href="history.html">Історія</a></li>
-        <li><a href="geography.html">Географія</a></li>
-        <li><a href="nmt.html">НМТ</a></li>
-        <li><a href="methodology.html" class="active">Методична скарбничка</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <!-- Основний контент -->
-  <main class="main-container">
-    
-    <!-- Заголовок сторінки -->
-    <div class="page-header">
-      <h1>💼 Методична скарбничка</h1>
-      <p style="margin-bottom: 32px; line-height: 1.6;">Педагогічний досвід, цифрові інструменти, інтерактивні ресурси та творчі здобутки вчителя.</p>
-    </div>
+    <a class="portal-square-btn portal-home-btn" href="index.html"
+       aria-label="Головна" title="Головна">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </div>
+  <nav class="portal-top-tabs" aria-label="Основна навігація">
+    <a class="portal-top-tab" href="history.html"><span>ІСТОРІЯ</span><i class="fa-solid fa-landmark"></i></a><a class="portal-top-tab" href="geography.html"><span>ГЕОГРАФІЯ</span><i class="fa-solid fa-earth-europe"></i></a><a class="portal-top-tab" href="nmt.html"><span>НМТ</span><i class="fa-solid fa-graduation-cap"></i></a><a class="portal-top-tab" href="games.html"><span>ІГРИ</span><i class="fa-solid fa-gamepad"></i></a><a class="portal-top-tab portal-tab-active" href="methodology.html"><span>МЕТОДИЧНА</span><i class="fa-solid fa-toolbox"></i></a>
+  </nav>
+</header>
 
-    <!-- Візитна картка вчителя -->
-    <section class="section-block" style="margin-bottom: 40px;">
-      <div class="info-card" style="padding: 28px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <h2 style="margin-top: 0; color: #1e293b; font-size: 1.8rem; display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-id-card" style="color: #2563eb;"></i> Візитна картка
+<!-- Основний контент -->
+<main class="main-container inner-shell" id="site-main">
+<!-- Заголовок сторінки -->
+<div class="page-header">
+<h1>💼 Методична скарбничка</h1>
+<p style="margin-bottom: 32px; line-height: 1.6;">Педагогічний досвід, цифрові інструменти, інтерактивні ресурси та творчі здобутки вчителя.</p>
+</div>
+<!-- Візитна картка вчителя -->
+<section class="section-block" style="margin-bottom: 40px;">
+<div class="info-card" style="padding: 28px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+<h2 style="margin-top: 0; color: #1e293b; font-size: 1.8rem; display: flex; align-items: center; gap: 10px;">
+<i class="fa-solid fa-id-card" style="color: #2563eb;"></i> Візитна картка
         </h2>
-        <p style="font-size: 1.05rem; line-height: 1.7; color: #334155;">
-          <strong>ПІБ:</strong> Мовчан Сергій Олександрович<br>
-          <strong>Посада:</strong> Вчитель історії, географії, природознавства, правознавства та Навчаємося разом Дмитрушківського ліцею Уманського району Черкаської області.<br>
-          <strong>Педагогічний стаж у ліцеї:</strong> з 2019 року.
+<p style="font-size: 1.05rem; line-height: 1.7; color: #334155;">
+<strong>ПІБ:</strong> Мовчан Сергій Олександрович<br/>
+<strong>Посада:</strong> Вчитель історії, географії, природознавства, правознавства та Навчаємося разом Дмитрушківського ліцею Уманського району Черкаської області.<br/>
+<strong>Педагогічний стаж у ліцеї:</strong> з 2019 року.
         </p>
-        <blockquote style="margin: 20px 0; padding: 16px 20px; background: #f1f5f9; border-left: 4px solid #2563eb; font-style: italic; color: #1e293b; font-size: 1.05rem; border-radius: 0 8px 8px 0;">
+<blockquote style="margin: 20px 0; padding: 16px 20px; background: #f1f5f9; border-left: 4px solid #2563eb; font-style: italic; color: #1e293b; font-size: 1.05rem; border-radius: 0 8px 8px 0;">
           «Навчати — означає не просто передавати знання, а запалювати в дитячих серцях вогник допитливості, критичного мислення та любові до рідного краю.»
         </blockquote>
-        <p style="line-height: 1.7; color: #475569;">
+<p style="line-height: 1.7; color: #475569;">
           З 2019 року я маю честь бути частиною дружнього колективу Дмитрушківського ліцею. Моє педагогічне кредо — постійний розвиток, підтримка дитячої ініціативності та створення безпечного, сучасного й захопливого освітнього середовища. Я завжди поруч із дітьми: на уроках, у позакласній діяльності, у реалізації їхніх найсміливіших ідей та проєктів.
         </p>
-      </div>
-    </section>
-
-    <!-- Фотоархів та Сертифікати (Інтерактивні папки Google Диску) -->
-    <section class="section-block" style="margin-bottom: 40px;">
-      <h2 style="margin-bottom: 20px; color: #1e293b; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;">
-        <i class="fa-solid fa-folder-open" style="color: #2563eb;"></i> Фотоархів та документи
+</div>
+</section>
+<!-- Фотоархів та Сертифікати (Інтерактивні папки Google Диску) -->
+<section class="section-block" style="margin-bottom: 40px;">
+<h2 style="margin-bottom: 20px; color: #1e293b; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;">
+<i class="fa-solid fa-folder-open" style="color: #2563eb;"></i> Фотоархів та документи
       </h2>
-      
-      <div style="display: flex; flex-direction: column; gap: 30px;">
-        
-        <!-- Галерея шкільного життя -->
-        <div class="info-card" style="padding: 24px; text-align: center;">
-          <h3 style="margin-top:0; color: #1e293b; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
-            <i class="fa-solid fa-images" style="color: #e11d48;"></i> 📸 Галерея шкільного життя та заходів
+<div style="display: flex; flex-direction: column; gap: 30px;">
+<!-- Галерея шкільного життя -->
+<div class="info-card" style="padding: 24px; text-align: center;">
+<h3 style="margin-top:0; color: #1e293b; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
+<i class="fa-solid fa-images" style="color: #e11d48;"></i> 📸 Галерея шкільного життя та заходів
           </h3>
-          <p style="line-height: 1.6; color: #475569; margin-bottom: 16px;">
+<p style="line-height: 1.6; color: #475569; margin-bottom: 16px;">
             Світлини з відкритих заходів, навчальних проєктів, інтерактивних уроків та позакласного життя ліцеїстів.
           </p>
-          <!-- Центрований контейнер для фрейму -->
-          <div style="display: flex; justify-content: center; width: 100%;">
-            <iframe src="https://drive.google.com/embeddedfolderview?id=1aTURrg63rzsYPy2qrb2Ty6EWvelADnBd#grid" 
-                    style="width: 100%; max-width: 800px; height: 480px; border: 1px solid #cbd5e1; border-radius: 8px; margin: 0 auto;" 
-                    frameborder="0">
-            </iframe>
-          </div>
-          <div style="margin-top: 12px; text-align: center;">
-            <a href="https://drive.google.com/drive/folders/1aTURrg63rzsYPy2qrb2Ty6EWvelADnBd" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.95rem;">
-              <i class="fa-brands fa-google-drive"></i> Відкрити папку на Google Диску ↗
+<!-- Центрований контейнер для фрейму -->
+<div style="display: flex; justify-content: center; width: 100%;">
+<iframe frameborder="0" src="https://drive.google.com/embeddedfolderview?id=1aTURrg63rzsYPy2qrb2Ty6EWvelADnBd#grid" style="width: 100%; max-width: 800px; height: 480px; border: 1px solid #cbd5e1; border-radius: 8px; margin: 0 auto;">
+</iframe>
+</div>
+<div style="margin-top: 12px; text-align: center;">
+<a href="https://drive.google.com/drive/folders/1aTURrg63rzsYPy2qrb2Ty6EWvelADnBd" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.95rem;" target="_blank">
+<i class="fa-brands fa-google-drive"></i> Відкрити папку на Google Диску ↗
             </a>
-          </div>
-        </div>
-
-        <!-- Сертифікати підвищення кваліфікації -->
-        <div class="info-card" style="padding: 24px; text-align: center;">
-          <h3 style="margin-top:0; color: #1e293b; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
-            <i class="fa-solid fa-certificate" style="color: #d97706;"></i> 📜 Підвищення кваліфікації та сертифікати
+</div>
+</div>
+<!-- Сертифікати підвищення кваліфікації -->
+<div class="info-card" style="padding: 24px; text-align: center;">
+<h3 style="margin-top:0; color: #1e293b; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
+<i class="fa-solid fa-certificate" style="color: #d97706;"></i> 📜 Підвищення кваліфікації та сертифікати
           </h3>
-          <p style="line-height: 1.6; color: #475569; margin-bottom: 16px;">
+<p style="line-height: 1.6; color: #475569; margin-bottom: 16px;">
             Сертифікати, дипломи, грамоти та свідоцтва, що підтверджують постійне професійне зростання.
           </p>
-          <!-- Центрований контейнер для фрейму -->
-          <div style="display: flex; justify-content: center; width: 100%;">
-            <iframe src="https://drive.google.com/embeddedfolderview?id=11XW2aYD9razkgysY_4g3c2c2Qa_V9hMJ#grid" 
-                    style="width: 100%; max-width: 800px; height: 480px; border: 1px solid #cbd5e1; border-radius: 8px; margin: 0 auto;" 
-                    frameborder="0">
-            </iframe>
-          </div>
-          <div style="margin-top: 12px; text-align: center;">
-            <a href="https://drive.google.com/drive/folders/11XW2aYD9razkgysY_4g3c2c2Qa_V9hMJ" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.95rem;">
-              <i class="fa-brands fa-google-drive"></i> Відкрити папку на Google Диску ↗
+<!-- Центрований контейнер для фрейму -->
+<div style="display: flex; justify-content: center; width: 100%;">
+<iframe frameborder="0" src="https://drive.google.com/embeddedfolderview?id=11XW2aYD9razkgysY_4g3c2c2Qa_V9hMJ#grid" style="width: 100%; max-width: 800px; height: 480px; border: 1px solid #cbd5e1; border-radius: 8px; margin: 0 auto;">
+</iframe>
+</div>
+<div style="margin-top: 12px; text-align: center;">
+<a href="https://drive.google.com/drive/folders/11XW2aYD9razkgysY_4g3c2c2Qa_V9hMJ" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.95rem;" target="_blank">
+<i class="fa-brands fa-google-drive"></i> Відкрити папку на Google Диску ↗
             </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Методична робота -->
-    <section class="section-block" style="margin-bottom: 40px;">
-      <div class="info-card" style="padding: 28px;">
-        <h2 style="margin-top:0; color: #1e293b; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;">
+</div>
+</div>
+</div>
+</section>
+<!-- Методична робота -->
+<section class="section-block" style="margin-bottom: 40px;">
+<div class="info-card" style="padding: 28px;">
+<h2 style="margin-top:0; color: #1e293b; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;">
           💡 Методична робота: методики та підходи
         </h2>
-        <p style="line-height: 1.6; color: #475569;">У своїй педагогічній практиці я поєдную класичні принципи дидактики із сучасними інноваційними підходами до навчання:</p>
-        
-        <ul style="line-height: 1.8; color: #334155; padding-left: 20px; margin-top: 15px;">
-          <li style="margin-bottom: 8px;"><strong>Інтерактивне та проєктне навчання:</strong> залучення учнів до дослідницьких проєктів, історичних реконструкцій та географічних спостережень.</li>
-          <li style="margin-bottom: 8px;"><strong>Гейміфікація та ігрові технології:</strong> використання освітніх квестів, інтелектуальних вікторин, симуляційних ігор для кращого засвоєння матеріалу.</li>
-          <li style="margin-bottom: 8px;"><strong>Критичне мислення та візуалізація:</strong> робота з першоджерелами, аналіз історичних та правових ситуацій, створення інфографіки, ментальних карт (Mind Maps) та стрічок часу.</li>
-          <li style="margin-bottom: 8px;"><strong>Діяльнісний та особистісно орієнтований підхід (НУШ):</strong> створення умов для самовираження та розвитку потенціалу кожного учня.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Заголовок для цифрових інструментів -->
-    <div class="methodology-tools-heading">
-      <h2>
-        <i class="fa-solid fa-laptop-code" style="color: #67d8ff;"></i> 🛠️ Освітні ресурси та цифрові інструменти
+<p style="line-height: 1.6; color: #475569;">У своїй педагогічній практиці я поєдную класичні принципи дидактики із сучасними інноваційними підходами до навчання:</p>
+<ul style="line-height: 1.8; color: #334155; padding-left: 20px; margin-top: 15px;">
+<li style="margin-bottom: 8px;"><strong>Інтерактивне та проєктне навчання:</strong> залучення учнів до дослідницьких проєктів, історичних реконструкцій та географічних спостережень.</li>
+<li style="margin-bottom: 8px;"><strong>Гейміфікація та ігрові технології:</strong> використання освітніх квестів, інтелектуальних вікторин, симуляційних ігор для кращого засвоєння матеріалу.</li>
+<li style="margin-bottom: 8px;"><strong>Критичне мислення та візуалізація:</strong> робота з першоджерелами, аналіз історичних та правових ситуацій, створення інфографіки, ментальних карт (Mind Maps) та стрічок часу.</li>
+<li style="margin-bottom: 8px;"><strong>Діяльнісний та особистісно орієнтований підхід (НУШ):</strong> створення умов для самовираження та розвитку потенціалу кожного учня.</li>
+</ul>
+</div>
+</section>
+<!-- Заголовок для цифрових інструментів -->
+<section class="methodology-resource-canvas">
+<div class="methodology-resource-head">
+<h2 style="color: #1e293b; font-size: 1.6rem; display: flex; align-items: center; gap: 10px;">
+<i class="fa-solid fa-laptop-code" style="color: #67e8f9;"></i> 🛠️ Освітні ресурси та цифрові інструменти
       </h2>
-      <p style="color: #64748b; margin-top: 8px;">Онлайн-платформи та сервіси для організації сучасних уроків історії, географії та правознавства.</p>
-    </div>
-
-    <!-- Сітка з цифровими ресурсами -->
-    <div class="grid-3" style="margin-bottom: 40px;">
-      
-      <!-- Kahoot -->
-      <div class="info-card">
-        <h4>🎮 Kahoot!</h4>
-        <p>Платформа для створення ігрових вікторин, тестування та інтерактивних опитувань у реальному часі.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Створіть власну гру за темою уроку або скористайтеся готовими шаблонами. Учні приєднуються зі смартфона за пін-кодом.</p>
-        <a href="https://kahoot.com" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Wordwall -->
-      <div class="info-card">
-        <h4>🧩 Wordwall</h4>
-        <p>Універсальний сервіс для створення інтерактивних та друкованих ігор (кросворди, «знайди пару», класифікація).</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Оберіть шаблон, введіть терміни, дати чи географічні об'єкти. Надішліть посилання учням для виконання.</p>
-        <a href="https://wordwall.net/uk" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- LearningApps -->
-      <div class="info-card">
-        <h4>🧠 LearningApps</h4>
-        <p>Конструктор мультимедійних вправ для перевірки знань, роботи з контурними картами, хронологією тощо.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Оберіть тип вправи, заповніть завдання своїм матеріалом та збережіть. Зручно для закріплення теми.</p>
-        <a href="https://learningapps.org" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Google Forms -->
-      <div class="info-card">
-        <h4>📋 Google Форми</h4>
-        <p>Інструмент для організації тестування, опитувань, контрольних робіт та збору зворотного зв'язку.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Створіть тест на Google Диску, налаштуйте бали за правильні відповіді та автоматичне оцінювання.</p>
-        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Padlet -->
-      <div class="info-card">
-        <h4>📌 Padlet</h4>
-        <p>Віртуальна дошка для спільної проєктної діяльності, обговорення історичних подій чи збору ідей.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Створіть дошку (стіну або стрічку часу), надайте доступ учням для додавання дописів, фото та посилань.</p>
-        <a href="https://padlet.com" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Canva -->
-      <div class="info-card">
-        <h4>🎨 Canva</h4>
-        <p>Дизайн-платформа для створення яскравих презентацій, плакатів, інфографіки та дидактичних матеріалів.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Оберіть освітній шаблон, адаптуйте текст і графіку під свій урок історії чи географії.</p>
-        <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Quizizz -->
-      <div class="info-card">
-        <h4>⚡ Quizizz</h4>
-        <p>Платформа для гейміфікованих тестів та домашніх завдань у режимі реального часу.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Створіть власні тести або скористайтеся мільйонами готових матеріалів від колег-педагогів.</p>
-        <a href="https://quizizz.com" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Google Earth -->
-      <div class="info-card">
-        <h4>🌍 Google Earth</h4>
-        <p>Інструмент для віртуальних подорожей, вивчення рельєфу, історичних місць та географічних об'єктів у 3D.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Демонструйте на уроці географії унікальні локації планети або створюйте власні освітні проєкти-подорожі.</p>
-        <a href="https://earth.google.com" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-      <!-- Genially -->
-      <div class="info-card">
-        <h4>✨ Genially</h4>
-        <p>Сервіс для створення інтерактивних плакатів, гейміфікованих презентацій та віртуальних квестів.</p>
-        <p class="card-instruction"><strong>Як користуватися:</strong> Додайте інтерактивні мітки з історичними фактами, фото чи відео на карти та зображення.</p>
-        <a href="https://genial.ly" target="_blank" rel="noopener noreferrer" class="btn-link">Перейти на сайт →</a>
-      </div>
-
-    </div>
-
-    <!-- Поетичний блок -->
-    <section class="section-block poetry-section" style="margin-bottom: 40px;">
-      <div class="info-card poetry-card" style="padding: 32px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; border-radius: 12px; border: 1px solid #334155;">
-        <h3 style="margin-top:0; color: #ffffff !important; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-pen-nib"></i> ✍️ Поетичне слово про рідний ліцей
+<p style="color: #64748b; margin-top: 8px;">Онлайн-платформи та сервіси для організації сучасних уроків історії, географії та правознавства.</p>
+</div>
+<!-- Сітка з цифровими ресурсами -->
+<div class="grid-3 methodology-resource-grid">
+<!-- Kahoot -->
+<div class="info-card">
+<h4>🎮 Kahoot!</h4>
+<p>Платформа для створення ігрових вікторин, тестування та інтерактивних опитувань у реальному часі.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Створіть власну гру за темою уроку або скористайтеся готовими шаблонами. Учні приєднуються зі смартфона за пін-кодом.</p>
+<a class="btn-link" href="https://kahoot.com" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Wordwall -->
+<div class="info-card">
+<h4>🧩 Wordwall</h4>
+<p>Універсальний сервіс для створення інтерактивних та друкованих ігор (кросворди, «знайди пару», класифікація).</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Оберіть шаблон, введіть терміни, дати чи географічні об'єкти. Надішліть посилання учням для виконання.</p>
+<a class="btn-link" href="https://wordwall.net/uk" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- LearningApps -->
+<div class="info-card">
+<h4>🧠 LearningApps</h4>
+<p>Конструктор мультимедійних вправ для перевірки знань, роботи з контурними картами, хронологією тощо.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Оберіть тип вправи, заповніть завдання своїм матеріалом та збережіть. Зручно для закріплення теми.</p>
+<a class="btn-link" href="https://learningapps.org" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Google Forms -->
+<div class="info-card">
+<h4>📋 Google Форми</h4>
+<p>Інструмент для організації тестування, опитувань, контрольних робіт та збору зворотного зв'язку.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Створіть тест на Google Диску, налаштуйте бали за правильні відповіді та автоматичне оцінювання.</p>
+<a class="btn-link" href="https://forms.google.com" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Padlet -->
+<div class="info-card">
+<h4>📌 Padlet</h4>
+<p>Віртуальна дошка для спільної проєктної діяльності, обговорення історичних подій чи збору ідей.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Створіть дошку (стіну або стрічку часу), надайте доступ учням для додавання дописів, фото та посилань.</p>
+<a class="btn-link" href="https://padlet.com" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Canva -->
+<div class="info-card">
+<h4>🎨 Canva</h4>
+<p>Дизайн-платформа для створення яскравих презентацій, плакатів, інфографіки та дидактичних матеріалів.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Оберіть освітній шаблон, адаптуйте текст і графіку під свій урок історії чи географії.</p>
+<a class="btn-link" href="https://www.canva.com" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Quizizz -->
+<div class="info-card">
+<h4>⚡ Quizizz</h4>
+<p>Платформа для гейміфікованих тестів та домашніх завдань у режимі реального часу.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Створіть власні тести або скористайтеся мільйонами готових матеріалів від колег-педагогів.</p>
+<a class="btn-link" href="https://quizizz.com" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Google Earth -->
+<div class="info-card">
+<h4>🌍 Google Earth</h4>
+<p>Інструмент для віртуальних подорожей, вивчення рельєфу, історичних місць та географічних об'єктів у 3D.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Демонструйте на уроці географії унікальні локації планети або створюйте власні освітні проєкти-подорожі.</p>
+<a class="btn-link" href="https://earth.google.com" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+<!-- Genially -->
+<div class="info-card">
+<h4>✨ Genially</h4>
+<p>Сервіс для створення інтерактивних плакатів, гейміфікованих презентацій та віртуальних квестів.</p>
+<p class="card-instruction"><strong>Як користуватися:</strong> Додайте інтерактивні мітки з історичними фактами, фото чи відео на карти та зображення.</p>
+<a class="btn-link" href="https://genial.ly" rel="noopener noreferrer" target="_blank">Перейти на сайт →</a>
+</div>
+</div>
+</section>
+<!-- Поетичний блок -->
+<section class="section-block poetry-section" style="margin-bottom: 40px;">
+<div class="info-card poetry-card" style="padding: 32px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; border-radius: 12px; border: 1px solid #334155;">
+<h3 style="margin-top:0; color: #ffffff !important; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
+<i class="fa-solid fa-pen-nib"></i> ✍️ Поетичне слово про рідний ліцей
         </h3>
-        <div style="font-size: 1.05rem; line-height: 1.8; margin-top: 20px; font-style: italic; white-space: pre-line; color: #f1f5f9;">
+<div style="font-size: 1.05rem; line-height: 1.8; margin-top: 20px; font-style: italic; white-space: pre-line; color: #f1f5f9;">
 Дмитрушківський ліцей —
 це другий дім для дітей,
 майстерня розвитку й знань,
@@ -258,25 +232,27 @@
 а Дмитрушківський ліцей —
 це другий дім для дітей!
         </div>
-        <p style="margin-top: 15px; text-align: right; font-weight: bold; color: #38bdf8; font-size: 1.1rem;">— Сергій Мовчан</p>
-        <hr style="border: 0; border-top: 1px solid #334155; margin: 24px 0;">
-        <p style="font-size: 1.1rem; line-height: 1.6; color: #cbd5e1; text-align: center; margin-bottom: 0;">
+<p style="margin-top: 15px; text-align: right; font-weight: bold; color: #38bdf8; font-size: 1.1rem;">— Сергій Мовчан</p>
+<hr style="border: 0; border-top: 1px solid #334155; margin: 24px 0;"/>
+<p style="font-size: 1.1rem; line-height: 1.6; color: #cbd5e1; text-align: center; margin-bottom: 0;">
           🌟 <strong>Наш ліцей — це більше ніж просто школа.</strong> Це простір, де гартується свідома українська молодь, де кожен день — це новий крок до перемог, відкриттів та великих мрій. Запрошуємо до нашої шкільної родини!
         </p>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Футер -->
-  <footer>
-    <p>© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
-  <p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
-  </footer>
-
-<button id="backToTop" type="button" aria-label="Повернутися вгору" title="Вгору">↑</button>
+</div>
+</section>
+</main>
+<!-- Футер -->
+<footer>
+<p>© Сергій Мовчан • Освітній Портал «Історія і географія БЕЗ МЕЖ»</p>
+<p class="footer-teacher-line">Вчитель Дмитрушківського ліцею</p>
+</footer>
+<button aria-label="Повернутися вгору" id="backToTop" title="Вгору" type="button">↑</button>
 <script>
 (() => { const b=document.getElementById("backToTop"); if(!b)return; const toggle=()=>b.classList.toggle("visible",window.scrollY>500); window.addEventListener("scroll",toggle,{passive:true}); b.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"})); toggle(); })();
 </script>
-</body>
+<nav class="mobile-nav">
+<a class="" href="index.html"><i class="fa-solid fa-house"></i><span>Головна</span></a>
+<a class="" href="games.html"><i class="fa-solid fa-gamepad"></i><span>Ігри</span></a>
+<a href="index.html#leaderboardList"><i class="fa-solid fa-trophy"></i><span>Рейтинг</span></a>
+<a href="#site-main"><i class="fa-solid fa-bars"></i><span>Меню</span></a>
+</nav></body>
 </html>
