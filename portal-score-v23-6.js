@@ -102,7 +102,8 @@ function calculateWeekScore(data = {}) {
     (Number(data.week_map_activity_points) || 0) +
     (Number(data.week_history_activity_points) || 0) +
     (Number(data.week_flags_points) || 0) +
-    (Number(data.week_escape_points) || 0);
+    (Number(data.week_escape_points) || 0) +
+    (Number(data.week_duel_points) || 0);
 }
 
 
