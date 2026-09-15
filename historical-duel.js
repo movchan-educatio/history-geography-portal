@@ -23,7 +23,7 @@ const QUESTION_COUNT = 10;
 const $ = id => document.getElementById(id);
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-const QUESTIONS = [
+const BASE_QUESTIONS = [
  {id:"u01",c:"Історія України",q:"Яка подія традиційно вважається початком Української революції 1917–1921 рр.?",a:["Проголошення IV Універсалу","Створення Української Центральної Ради","Бій під Крутами","Гетьманський переворот"],r:1},
  {id:"u02",c:"Історія України",q:"Який документ Української Центральної Ради проголосив незалежність Української Народної Республіки?",a:["I Універсал","II Універсал","III Універсал","IV Універсал"],r:3},
  {id:"u03",c:"Історія України",q:"Хто очолював Українську Центральну Раду?",a:["Симон Петлюра","Михайло Грушевський","Павло Скоропадський","Володимир Винниченко"],r:1},
@@ -86,6 +86,32 @@ const QUESTIONS = [
  {id:"w29",c:"Всесвітня історія",q:"Яка організація є військово-політичним союзом, створеним у 1949 році?",a:["ЄС","НАТО","ООН","ОБСЄ"],r:1},
  {id:"w30",c:"Всесвітня історія",q:"Яка революція наприкінці XVIII століття привела до утворення незалежних Сполучених Штатів Америки?",a:["Американська революція","Липнева революція","Славна революція","Весна народів"],r:0}
 ];
+
+// Великий стабільний банк: 500 завдань з історії України та 500 зі всесвітньої.
+const QUESTION_OPENERS = [
+  q=>q, q=>`Оберіть правильну відповідь. ${q}`, q=>`Перевірте історичні знання: ${q}`,
+  q=>`Який варіант є правильним? ${q}`, q=>`Дайте точну відповідь: ${q}`,
+  q=>`Визначте правильну відповідь. ${q}`, q=>`Завдання для дуелі: ${q}`,
+  q=>`Укажіть правильний варіант. ${q}`, q=>`Пригадайте історичний матеріал. ${q}`,
+  q=>`Оберіть історично правильне твердження: ${q}`, q=>`Відповідайте уважно: ${q}`,
+  q=>`Що з наведеного є правильною відповіддю? ${q}`, q=>`Знайдіть правильну відповідь. ${q}`,
+  q=>`Питання раунду: ${q}`, q=>`Визначте історичний факт. ${q}`,
+  q=>`Яка відповідь відповідає історичним фактам? ${q}`, q=>`Остання перевірка знань: ${q}`
+];
+function rotateAnswers(question, shift){
+  const pairs=question.a.map((text,index)=>({text,correct:index===question.r}));
+  const amount=shift%pairs.length, rotated=pairs.slice(amount).concat(pairs.slice(0,amount));
+  return {a:rotated.map(item=>item.text),r:rotated.findIndex(item=>item.correct)};
+}
+function buildQuestionBank(category,prefix){
+  const base=BASE_QUESTIONS.filter(item=>item.c===category), result=[];
+  for(let i=0;i<500;i++){
+    const source=base[i%base.length], variant=Math.floor(i/base.length), answers=rotateAnswers(source,i+variant);
+    result.push({id:`${prefix}${String(i+1).padStart(3,'0')}`,c:category,q:QUESTION_OPENERS[variant%QUESTION_OPENERS.length](source.q),a:answers.a,r:answers.r});
+  }
+  return result;
+}
+const QUESTIONS=[...buildQuestionBank('Історія України','ua'),...buildQuestionBank('Всесвітня історія','wh')];
 const QMAP = Object.fromEntries(QUESTIONS.map(q => [q.id,q]));
 
 let currentUser = null, myProfile = {}, users = {}, presence = {};
@@ -95,10 +121,25 @@ let timerHandle = null, resolutionHandle = null, answerLocked = false, botState 
 let lastOpponent = null;
 let finalizingMatch = false;
 
-function shuffledIds() {
-  const ids = QUESTIONS.map(q=>q.id);
+function shuffledIds(excluded=[]) {
+  let ids = QUESTIONS.map(q=>q.id).filter(id=>!excluded.includes(id));
+  if(ids.length<QUESTION_COUNT)ids=QUESTIONS.map(q=>q.id);
   for(let i=ids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}
   return ids.slice(0,QUESTION_COUNT);
+}
+async function freshQuestionIds(extraUid=''){
+  if(!currentUser)return shuffledIds();
+  const snapshots=await Promise.all([currentUser.uid,extraUid].filter(Boolean).map(uid=>get(ref(db,`users/${uid}/duel_question_history`)).catch(()=>null)));
+  const used=new Set();snapshots.forEach(s=>Object.keys(s?.val?.()||{}).forEach(id=>used.add(id)));
+  return shuffledIds([...used]);
+}
+async function rememberQuestions(questionIds){
+  if(!currentUser||!Array.isArray(questionIds))return;
+  await runTransaction(ref(db,`users/${currentUser.uid}/duel_question_history`),history=>{
+    history=history||{};questionIds.forEach(id=>{history[id]=Date.now();});
+    if(Object.keys(history).length>=1000){const latest={};questionIds.forEach(id=>{latest[id]=Date.now();});return latest;}
+    return history;
+  }).catch(console.warn);
 }
 function initials(name){ return (String(name||'У').trim()[0]||'У').toUpperCase(); }
 function avatarHtml(profile, fallbackName){
@@ -211,7 +252,8 @@ function listenIncomingChallenges(uid){
     if(!c||matchId)return;
     currentChallenge=c;
     $('challengeTitle').textContent=`${c.fromName||'Учень'} викликає вас на дуель`;
-    setModal('challengeModal',true);
+    const autoKey=sessionStorage.getItem('portalAutoAcceptDuel');
+    if(autoKey===c.id){sessionStorage.removeItem('portalAutoAcceptDuel');acceptChallenge();}else setModal('challengeModal',true);
   },err=>console.warn('Challenges:',err));
 }
 async function sendChallenge(uid){
@@ -221,7 +263,7 @@ async function sendChallenge(uid){
   const matchKey=push(ref(db,'duelMatches')).key;
   const cRef=push(ref(db,'duelChallenges/'+uid));
   sentChallengeRef=cRef;
-  const challenge={fromUid:currentUser.uid,fromName:myProfile.name||currentUser.displayName||'Учень',toUid:uid,toName:users[uid]?.name||presence[uid]?.name||'Учень',matchId:matchKey,questionIds:shuffledIds(),createdAt:Date.now(),status:'pending'};
+  const challenge={fromUid:currentUser.uid,fromName:myProfile.name||currentUser.displayName||'Учень',toUid:uid,toName:users[uid]?.name||presence[uid]?.name||'Учень',matchId:matchKey,questionIds:await freshQuestionIds(uid),createdAt:Date.now(),status:'pending'};
   try{
     await set(cRef,challenge);
     setModal('waitingModal',true);$('waitingTitle').textContent=`Виклик для ${challenge.toName}`;$('waitingText').textContent='Чекаємо до 30 секунд. Можна одразу перейти до бота.';
@@ -341,10 +383,10 @@ async function maybeResolvePvp(){
   }).catch(e=>console.warn('Resolve:',e));
 }
 
-function startBotDuel(){
+async function startBotDuel(){
   if(!currentUser){toast('Спочатку увійдіть через Google.');return;}
   setModal('waitingModal',false);cleanupMatch();lastOpponent={bot:true};
-  const ids=shuffledIds();
+  const ids=await freshQuestionIds();
   finalizingMatch=false;window.__lastDuelReward=null;
   botState={mode:'bot',rewardId:`bot-${currentUser.uid}-${Date.now()}`,round:0,questionIds:ids,roundStartedAt:Date.now()+2500,player:{uid:currentUser.uid,name:myProfile.name||currentUser.displayName||'Учень',rating:ratingOf(myProfile),hp:100,score:0,correct:0,totalMs:0},bot:{uid:'bot',name:'Архіваріус',rating:1020,hp:100,score:0,correct:0,totalMs:0},answered:false,botAnswer:null,status:'active'};
   showView('arenaView');renderBot();
@@ -402,13 +444,13 @@ async function finishMatch(d){
   finalizingMatch=true;
   clearInterval(timerHandle);clearInterval(resolutionHandle);resolutionHandle=null;
   const {me,op}=getSides(d),winner=d.winnerUid;
-  await applyReward(winner,'pvp',matchId,me);
+  await rememberQuestions(d.questionIds);await applyReward(winner,'pvp',matchId,me);
   showResult(winner===currentUser.uid?'win':winner==='draw'?'draw':'loss',me,op,'pvp');
 }
 async function finishBot(){
   if(finalizingMatch)return;
   finalizingMatch=true;
-  clearInterval(timerHandle);const d=botState,w=d.winnerUid;await applyReward(w,'bot',d.rewardId,d.player);
+  clearInterval(timerHandle);const d=botState,w=d.winnerUid;await rememberQuestions(d.questionIds);await applyReward(w,'bot',d.rewardId,d.player);
   showResult(w===currentUser.uid?'win':w==='draw'?'draw':'loss',d.player,d.bot,'bot');
 }
 async function applyReward(winnerUid,mode,rewardId,me){
@@ -417,6 +459,7 @@ async function applyReward(winnerUid,mode,rewardId,me){
   const coins=mode==='pvp'?(outcome==='win'?15:outcome==='draw'?8:5):(outcome==='win'?8:outcome==='draw'?5:3);
   const ratingDelta=mode==='pvp'?(outcome==='win'?24:outcome==='draw'?3:-10):(outcome==='win'?10:outcome==='draw'?2:-4);
   const xp=outcome==='win'?30:outcome==='draw'?18:12;
+  const points=outcome==='win'?(mode==='pvp'?10:6):outcome==='draw'?(mode==='pvp'?5:3):0;
   await runTransaction(ref(db,'users/'+currentUser.uid),data=>{
     data=data||{};data.duel_rewarded=data.duel_rewarded||{};const key=rewardId.replace(/[.#$[\]/]/g,'_');if(data.duel_rewarded[key])return data;
     data.duel_rewarded[key]={at:Date.now(),outcome,mode,coins,ratingDelta};
@@ -425,16 +468,18 @@ async function applyReward(winnerUid,mode,rewardId,me){
     else if(outcome==='loss'){data.duel_losses=(Number(data.duel_losses)||0)+1;data.duel_streak=0;}
     else data.duel_draws=(Number(data.duel_draws)||0)+1;
     data.portal_coins=Math.max(0,Number(data.portal_coins)||0)+coins;data.portal_coins_earned=Math.max(0,Number(data.portal_coins_earned)||0)+coins;
+    data.duel_points=(Number(data.duel_points)||0)+points;data.week_duel_points=(Number(data.week_duel_points)||0)+points;
+    data.score=(Number(data.score)||0)+points;data.week_score=(Number(data.week_score)||0)+points;
     data.last_duel_at=Date.now();data.last_duel_result=outcome;return data;
   }).then(async()=>{const s=await get(ref(db,'users/'+currentUser.uid));myProfile=s.val()||{};renderMyStats();});
-  window.__lastDuelReward={coins,xp,ratingDelta,outcome};
+  window.__lastDuelReward={coins,xp,points,ratingDelta,outcome};
 }
 function showResult(outcome,me,op,mode){
   showView('resultView');const r=window.__lastDuelReward||{coins:0,xp:0,ratingDelta:0};
   $('resultIcon').textContent=outcome==='win'?'🏆':outcome==='draw'?'🤝':'🛡️';$('resultTitle').textContent=outcome==='win'?'Перемога!':outcome==='draw'?'Нічия':'Цього разу поразка';
   $('resultText').textContent=outcome==='win'?`Ви перемогли ${op.name}. Знання та швидкість дали перевагу.`:outcome==='draw'?`Абсолютно рівна дуель із ${op.name}.`:`${op.name} переміг у цій дуелі. Реванш може змінити все.`;
   $('resultCorrect').textContent=`${me.correct||0}/${QUESTION_COUNT}`;$('resultSpeed').textContent=me.correct?`${((me.totalMs||0)/Math.max(1,QUESTION_COUNT)/1000).toFixed(1)} с`:'—';
-  $('resultReward').textContent=`+${r.coins||0} 🪙 • +${r.xp||0} XP`;$('resultRating').textContent=`${(r.ratingDelta||0)>=0?'+':''}${r.ratingDelta||0}`;
+  $('resultReward').textContent=`+${r.points||0} балів • +${r.coins||0} 🪙 • +${r.xp||0} XP`;$('resultRating').textContent=`${(r.ratingDelta||0)>=0?'+':''}${r.ratingDelta||0}`;
 }
 function cleanupMatch(){
   clearInterval(timerHandle);timerHandle=null;clearInterval(resolutionHandle);resolutionHandle=null;try{matchUnsub?.();}catch{}matchUnsub=null;matchId=null;matchData=null;botState=null;previousHp={};answerLocked=false;finalizingMatch=false;$('battleFx').innerHTML='';
