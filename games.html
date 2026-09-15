@@ -1,36 +1,46 @@
 <!DOCTYPE html>
 <html lang="uk"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Ігри — БЕЗ МЕЖ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
-<link href="portal-ui-v2026.css?v=20260915" rel="stylesheet"/>
+<link href="style.css?v=27" rel="stylesheet"/>
+<link href="modern-theme.css?v=300" rel="stylesheet"/>
+<link href="site-modern.css?v=1" rel="stylesheet"/>
+<link href="redesign.css?v=5" rel="stylesheet"/>
+<link href="premium-design.css?v=8" rel="stylesheet"/>
+<link href="v27-theme.css?v=28" rel="stylesheet"/>
+<link href="v30-stability.css?v=31" rel="stylesheet"/>
 <style id="historical-duel-launch-style">
+.games-page{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.games-shell{position:relative;z-index:1;width:min(1180px,calc(100% - 28px));margin:0 auto;padding:30px 0 60px}
+.games-hero{margin-bottom:22px;padding:28px 30px;border:1px solid rgba(125,211,252,.22);border-radius:22px;background:linear-gradient(135deg,#0a2943,#103c5b);box-shadow:0 18px 42px rgba(2,8,23,.28);color:#fff}
+.games-hero h1{margin:0 0 8px;color:#fff;font-size:clamp(30px,5vw,48px);line-height:1.05}
+.games-hero p{max-width:760px;margin:0;color:#c9dbe9;font-size:15px;line-height:1.55}
+.games-page .kids-club-section{margin:0!important;padding:24px!important}
+.games-page .kids-club-header h3{margin:0 0 5px;color:#172033!important;font-size:22px}
 .historical-duel-launch{grid-column:1/-1;display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:15px;padding:18px 20px;border:1px solid #2d6284;border-radius:18px;background:radial-gradient(circle at 85% 15%,rgba(56,189,248,.18),transparent 25%),linear-gradient(135deg,#071e30,#123e5f);color:#fff;text-decoration:none;box-shadow:0 14px 34px rgba(2,8,23,.22);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
 .historical-duel-launch:hover{transform:translateY(-2px);border-color:#43bce8;box-shadow:0 18px 38px rgba(2,8,23,.28)}
 .historical-duel-launch-icon{width:60px;height:60px;display:grid;place-items:center;border-radius:16px;background:#174e73;border:1px solid #347398;font-size:31px}
 .historical-duel-launch-copy strong{display:block;font-size:18px;line-height:1.15}.historical-duel-launch-copy span{display:block;margin-top:5px;color:#bdd4e6;font-size:12px;line-height:1.4}
 .historical-duel-launch-cta{padding:10px 13px;border-radius:11px;background:#2563eb;color:#fff;font-size:11px;font-weight:900;white-space:nowrap}
-@media(max-width:560px){.historical-duel-launch{grid-template-columns:50px minmax(0,1fr);padding:14px;gap:11px}.historical-duel-launch-icon{width:48px;height:48px;border-radius:13px;font-size:25px}.historical-duel-launch-copy strong{font-size:15px}.historical-duel-launch-copy span{font-size:11px}.historical-duel-launch-cta{grid-column:1/-1;text-align:center}}
+@media(max-width:560px){.games-shell{width:calc(100% - 18px);padding:18px 0 46px}.games-hero{padding:22px 18px;border-radius:18px}.games-hero h1{font-size:31px}.games-hero p{font-size:13px}.games-page .kids-club-section{padding:16px!important}.historical-duel-launch{grid-template-columns:50px minmax(0,1fr);padding:14px;gap:11px}.historical-duel-launch-icon{width:48px;height:48px;border-radius:13px;font-size:25px}.historical-duel-launch-copy strong{font-size:15px}.historical-duel-launch-copy span{font-size:11px}.historical-duel-launch-cta{grid-column:1/-1;text-align:center}}
 </style>
-</head><body>
-<header class="portal-unified-header" data-page="games">
-  <div class="portal-top-row">
-    <button class="portal-square-btn portal-back-btn" type="button"
-      aria-label="Назад" title="Назад"
-      onclick="if(history.length&gt;1){history.back()}else{location.href='index.html'}">
-      <i class="fa-solid fa-arrow-left"></i>
-    </button>
-
-    <a class="portal-top-brand" href="index.html" aria-label="На головну">
-      <img src="logo-192.webp" alt="Логотип">
-      <span>Історія і географія<small>БЕЗ МЕЖ</small></span>
-    </a>
-
-    <a class="portal-square-btn portal-home-btn" href="index.html"
-       aria-label="Головна" title="Головна">
-      <i class="fa-solid fa-house"></i>
-    </a>
-  </div>
-  <nav class="portal-top-tabs" aria-label="Основна навігація">
-    <a class="portal-top-tab" href="history.html"><span>ІСТОРІЯ</span><i class="fa-solid fa-landmark"></i></a><a class="portal-top-tab" href="geography.html"><span>ГЕОГРАФІЯ</span><i class="fa-solid fa-earth-europe"></i></a><a class="portal-top-tab" href="nmt.html"><span>НМТ</span><i class="fa-solid fa-graduation-cap"></i></a><a class="portal-top-tab portal-tab-active" href="games.html"><span>ІГРИ</span><i class="fa-solid fa-gamepad"></i></a><a class="portal-top-tab" href="methodology.html"><span>МЕТОДИЧНА</span><i class="fa-solid fa-toolbox"></i></a>
+</head><body class="games-page">
+<header>
+  <a href="index.html" class="logo-group">
+    <img src="logo-192.webp" width="44" height="44" alt="Логотип Освітній Портал" class="logo-img"/>
+    <div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
+  </a>
+  <nav aria-label="Основна навігація">
+    <ul>
+      <li><a href="index.html">Головна</a></li>
+      <li><a href="history.html">Історія</a></li>
+      <li><a href="geography.html">Географія</a></li>
+      <li><a href="nmt.html">НМТ</a></li>
+      <li><a href="games.html" class="active">Ігри</a></li>
+      <li><a href="methodology.html">Методична скарбничка</a></li>
+    </ul>
   </nav>
 </header>
 <main class="games-shell" id="site-main"><section class="games-hero"><h1>🎮 Інтерактивні ігри</h1><p>Усі ігрові активності порталу в одному місці. Виконуй завдання, заробляй бали та піднімайся в рейтингу.</p></section><section class="kids-club-section" id="kids-club">
@@ -135,7 +145,7 @@
 <a href="index.html#leaderboardHost"><i class="fa-solid fa-trophy"></i><span>Рейтинг</span></a>
 <a href="#site-main"><i class="fa-solid fa-bars"></i><span>Меню</span></a>
 </nav><script type="module">
-    import "./portal-score.js";
+    import "./portal-score-v23-6.js";
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getDatabase, ref, get, set, update, onValue, push, runTransaction, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -151,7 +161,7 @@
       measurementId: "G-8XBVKRZRS1"
     };
 
-    // portal-score.js може ініціалізувати Firebase раніше за цей модуль.
+    // Модуль системи балів може ініціалізувати Firebase раніше за цей код.
     // Використовуємо вже існуючий DEFAULT app, щоб не отримати
     // "Firebase App named '[DEFAULT]' already exists".
     const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
