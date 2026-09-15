@@ -9,31 +9,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="portal-ui-v2026.css?v=20260915">
-  <link rel="stylesheet" href="historical-duel.css?v=3">
+  <link rel="stylesheet" href="style.css?v=27">
+  <link rel="stylesheet" href="historical-duel.css?v=4">
 </head>
 <body>
-<header class="portal-unified-header" data-page="games">
-  <div class="portal-top-row">
-    <button class="portal-square-btn portal-back-btn" type="button" aria-label="Назад" title="Назад"
-      onclick="if(history.length>1){history.back()}else{location.href='index.html'}">
-      <i class="fa-solid fa-arrow-left"></i>
-    </button>
-    <a class="portal-top-brand" href="index.html" aria-label="На головну">
-      <img src="logo-192.webp" alt="Логотип">
-      <span>Історична дуель<small>БЕЗ МЕЖ</small></span>
-    </a>
-    <a class="portal-square-btn portal-home-btn" href="index.html" aria-label="Головна" title="Головна">
-      <i class="fa-solid fa-house"></i>
-    </a>
-  </div>
-  <nav class="portal-top-tabs" aria-label="Основна навігація">
-    <a class="portal-top-tab" href="history.html"><span>ІСТОРІЯ</span><i class="fa-solid fa-landmark"></i></a>
-    <a class="portal-top-tab" href="geography.html"><span>ГЕОГРАФІЯ</span><i class="fa-solid fa-earth-europe"></i></a>
-    <a class="portal-top-tab" href="nmt.html"><span>НМТ</span><i class="fa-solid fa-graduation-cap"></i></a>
-    <a class="portal-top-tab portal-tab-active" href="historical-duel.html"><span>ДУЕЛЬ</span><i class="fa-solid fa-khanda"></i></a>
-    <a class="portal-top-tab" href="methodology.html"><span>МЕТОДИЧНА</span><i class="fa-solid fa-toolbox"></i></a>
-  </nav>
+<header>
+  <a href="index.html" class="logo-group">
+    <img src="logo-192.webp" width="44" height="44" alt="Логотип Освітнього порталу" class="logo-img">
+    <div class="logo-text">Історія і географія<span>БЕЗ МЕЖ</span></div>
+  </a>
+  <nav aria-label="Основна навігація"><ul>
+    <li><a href="index.html">Головна</a></li><li><a href="history.html">Історія</a></li>
+    <li><a href="geography.html">Географія</a></li><li><a href="nmt.html">НМТ</a></li>
+    <li><a href="historical-duel.html" class="active">Дуель</a></li>
+    <li><a href="methodology.html">Методична скарбничка</a></li>
+  </ul></nav>
 </header>
 
 <main class="duel-page">
@@ -108,17 +98,7 @@
           </div>
           <div class="hp-track"><div id="leftHp" class="hp-fill"></div></div>
           <div class="fighter-score"><span id="leftCorrect">0</span> правильних • <span id="leftScore">0</span> очок</div>
-          <div class="fighter-body">
-            <div class="fighter-character">
-              <div class="character-head"></div>
-              <div class="character-torso"></div>
-              <div class="character-arm arm-a"></div>
-              <div class="character-arm arm-b"></div>
-              <div class="character-leg leg-a"></div>
-              <div class="character-leg leg-b"></div>
-              <div class="character-shield">⌛</div>
-            </div>
-          </div>
+          <div class="fighter-body"><div class="crossed-swords" aria-label="Перехрещені шаблі"><span class="saber saber-a"></span><span class="saber saber-b"></span><i></i></div></div>
         </article>
 
         <div class="versus">
@@ -137,17 +117,7 @@
           </div>
           <div class="hp-track"><div id="rightHp" class="hp-fill"></div></div>
           <div class="fighter-score"><span id="rightCorrect">0</span> правильних • <span id="rightScore">0</span> очок</div>
-          <div class="fighter-body">
-            <div class="fighter-character enemy">
-              <div class="character-head"></div>
-              <div class="character-torso"></div>
-              <div class="character-arm arm-a"></div>
-              <div class="character-arm arm-b"></div>
-              <div class="character-leg leg-a"></div>
-              <div class="character-leg leg-b"></div>
-              <div class="character-shield">⚔</div>
-            </div>
-          </div>
+          <div class="fighter-body"><div class="crossed-swords enemy-swords" aria-label="Перехрещені шаблі"><span class="saber saber-a"></span><span class="saber saber-b"></span><i></i></div></div>
         </article>
       </div>
 
@@ -213,12 +183,6 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<nav class="mobile-nav duel-mobile-nav">
-  <a href="index.html"><i class="fa-solid fa-house"></i><span>Головна</span></a>
-  <a class="active" href="historical-duel.html"><i class="fa-solid fa-khanda"></i><span>Дуель</span></a>
-  <a href="index.html#leaderboardHost"><i class="fa-solid fa-trophy"></i><span>Рейтинг</span></a>
-</nav>
-
-<script type="module" src="historical-duel.js?v=3"></script>
+<script type="module" src="historical-duel.js?v=4"></script>
 </body>
 </html>
