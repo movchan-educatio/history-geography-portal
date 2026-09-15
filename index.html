@@ -3099,6 +3099,7 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
           updates[`users/${uid}/week_history_activity_points`] = 0;
           updates[`users/${uid}/week_flags_points`] = 0;
           updates[`users/${uid}/week_escape_points`] = 0;
+          updates[`users/${uid}/week_duel_points`] = 0;
           updates[`users/${uid}/week_key`] = currentWeek;
         }
       });
@@ -6221,5 +6222,6 @@ const escapeFixedBanksV15 = {"paleolithic":[["Який тип господарс
     }
   });
 </script>
+<script type="module" src="duel-global.js?v=1"></script>
 </body>
 </html>
