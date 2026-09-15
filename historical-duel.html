@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071e30">
+  <title>Історична дуель — Історія і географія БЕЗ МЕЖ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="portal-ui-v2026.css?v=20260915">
+  <link rel="stylesheet" href="historical-duel.css?v=2">
+</head>
+<body>
+<header class="portal-unified-header" data-page="games">
+  <div class="portal-top-row">
+    <button class="portal-square-btn portal-back-btn" type="button" aria-label="Назад" title="Назад"
+      onclick="if(history.length>1){history.back()}else{location.href='games.html'}">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <a class="portal-top-brand" href="index.html" aria-label="На головну">
+      <img src="logo.png" alt="Логотип">
+      <span>Історія і географія<small>БЕЗ МЕЖ</small></span>
+    </a>
+    <a class="portal-square-btn portal-home-btn" href="index.html" aria-label="Головна" title="Головна">
+      <i class="fa-solid fa-house"></i>
+    </a>
+  </div>
+  <nav class="portal-top-tabs" aria-label="Основна навігація">
+    <a class="portal-top-tab" href="history.html"><span>ІСТОРІЯ</span><i class="fa-solid fa-landmark"></i></a>
+    <a class="portal-top-tab" href="geography.html"><span>ГЕОГРАФІЯ</span><i class="fa-solid fa-earth-europe"></i></a>
+    <a class="portal-top-tab" href="nmt.html"><span>НМТ</span><i class="fa-solid fa-graduation-cap"></i></a>
+    <a class="portal-top-tab portal-tab-active" href="games.html"><span>ІГРИ</span><i class="fa-solid fa-gamepad"></i></a>
+    <a class="portal-top-tab" href="methodology.html"><span>МЕТОДИЧНА</span><i class="fa-solid fa-toolbox"></i></a>
+  </nav>
+</header>
+
+<main class="duel-page">
+  <section class="duel-hero">
+    <div class="hero-copy">
+      <span class="eyebrow">⚔️ НОВА ГРА</span>
+      <h1>Історична дуель</h1>
+      <p>Викликай учня, який зараз на сайті. 10 однакових запитань — перемогу визначають знання та швидкість. Якщо суперників немає, бийся з ботом.</p>
+    </div>
+    <div class="hero-stats">
+      <div><strong id="myRating">1000</strong><span>рейтинг</span></div>
+      <div><strong id="myWins">0</strong><span>перемог</span></div>
+      <div><strong id="myStreak">0</strong><span>серія</span></div>
+    </div>
+  </section>
+
+  <section id="authPanel" class="panel auth-panel">
+    <div>
+      <strong id="authTitle">Перевіряємо вхід…</strong>
+      <span id="authText">Для дуелі потрібен профіль порталу.</span>
+    </div>
+    <button id="loginBtn" class="primary-btn" type="button" hidden><i class="fa-brands fa-google"></i> Увійти через Google</button>
+  </section>
+
+  <section id="lobbyView" class="view">
+    <div class="lobby-grid">
+      <div class="panel opponents-panel">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">ОНЛАЙН</span>
+            <h2>Обери суперника</h2>
+          </div>
+          <span id="onlineCount" class="online-pill">0 онлайн</span>
+        </div>
+        <div id="onlinePlayers" class="players-list">
+          <div class="empty-state">Увійдіть, щоб побачити учнів онлайн.</div>
+        </div>
+      </div>
+
+      <aside class="panel bot-panel">
+        <div class="bot-orb" aria-hidden="true">🏛️</div>
+        <span class="section-kicker">ЗАВЖДИ ГОТОВИЙ</span>
+        <h2>Архіваріус</h2>
+        <p>Бот-суперник середньої складності. Підійде, коли на сайті немає інших учнів.</p>
+        <div class="bot-tags"><span>10 питань</span><span>15 с</span><span>анімований бій</span></div>
+        <button id="botDuelBtn" class="battle-btn" type="button" disabled>⚔️ Дуель з ботом</button>
+      </aside>
+    </div>
+
+    <div class="panel leaderboard-panel">
+      <div class="section-head">
+        <div><span class="section-kicker">АРЕНА</span><h2>Рейтинг дуелянтів</h2></div>
+      </div>
+      <div id="duelLeaderboard" class="duel-leaderboard"></div>
+    </div>
+  </section>
+
+  <section id="arenaView" class="view" hidden>
+    <div class="arena">
+      <div class="arena-sky"></div>
+      <div class="arena-columns" aria-hidden="true"></div>
+      <div id="countdown" class="big-countdown" hidden>3</div>
+
+      <div class="fighters">
+        <article id="fighterLeft" class="fighter fighter-left">
+          <div class="fighter-top">
+            <div class="fighter-avatar" id="leftAvatar">У</div>
+            <div class="fighter-meta">
+              <strong id="leftName">Учень</strong>
+              <span id="leftRating">1000 рейтингу</span>
+            </div>
+          </div>
+          <div class="hp-track"><div id="leftHp" class="hp-fill"></div></div>
+          <div class="fighter-score"><span id="leftCorrect">0</span> правильних • <span id="leftScore">0</span> очок</div>
+          <div class="fighter-body">
+            <div class="fighter-character">
+              <div class="character-head"></div>
+              <div class="character-torso"></div>
+              <div class="character-arm arm-a"></div>
+              <div class="character-arm arm-b"></div>
+              <div class="character-leg leg-a"></div>
+              <div class="character-leg leg-b"></div>
+              <div class="character-shield">⌛</div>
+            </div>
+          </div>
+        </article>
+
+        <div class="versus">
+          <span id="roundLabel">РАУНД 1 / 10</span>
+          <strong>VS</strong>
+          <span id="timerLabel">15.0</span>
+        </div>
+
+        <article id="fighterRight" class="fighter fighter-right">
+          <div class="fighter-top">
+            <div class="fighter-avatar" id="rightAvatar">Б</div>
+            <div class="fighter-meta">
+              <strong id="rightName">Суперник</strong>
+              <span id="rightRating">1000 рейтингу</span>
+            </div>
+          </div>
+          <div class="hp-track"><div id="rightHp" class="hp-fill"></div></div>
+          <div class="fighter-score"><span id="rightCorrect">0</span> правильних • <span id="rightScore">0</span> очок</div>
+          <div class="fighter-body">
+            <div class="fighter-character enemy">
+              <div class="character-head"></div>
+              <div class="character-torso"></div>
+              <div class="character-arm arm-a"></div>
+              <div class="character-arm arm-b"></div>
+              <div class="character-leg leg-a"></div>
+              <div class="character-leg leg-b"></div>
+              <div class="character-shield">⚔</div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div id="battleFx" class="battle-fx" aria-hidden="true"></div>
+    </div>
+
+    <div class="question-panel panel">
+      <div class="question-top">
+        <span id="questionCategory">Історія України</span>
+        <span id="answerState">Обери відповідь</span>
+      </div>
+      <h2 id="questionText">Готуємо запитання…</h2>
+      <div id="answersGrid" class="answers-grid"></div>
+      <div class="question-progress"><div id="questionProgress"></div></div>
+    </div>
+  </section>
+
+  <section id="resultView" class="view" hidden>
+    <div class="panel result-card">
+      <div id="resultIcon" class="result-icon">🏆</div>
+      <span class="section-kicker">ДУЕЛЬ ЗАВЕРШЕНО</span>
+      <h2 id="resultTitle">Перемога!</h2>
+      <p id="resultText"></p>
+      <div class="result-stats">
+        <div><strong id="resultCorrect">0/10</strong><span>правильних</span></div>
+        <div><strong id="resultSpeed">—</strong><span>середня відповідь</span></div>
+        <div><strong id="resultReward">+0 🪙</strong><span>нагорода</span></div>
+        <div><strong id="resultRating">+0</strong><span>рейтинг</span></div>
+      </div>
+      <div class="result-actions">
+        <button id="rematchBtn" class="battle-btn" type="button">⚔️ Ще одна дуель</button>
+        <button id="backLobbyBtn" class="secondary-btn" type="button">До вибору суперника</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="challengeModal" class="modal-backdrop" hidden>
+  <div class="challenge-card">
+    <div class="challenge-swords">⚔️</div>
+    <span class="section-kicker">ВАС ВИКЛИКАЮТЬ</span>
+    <h2 id="challengeTitle">Учень викликає вас на дуель</h2>
+    <p>10 однакових історичних запитань. Готові?</p>
+    <div class="challenge-actions">
+      <button id="acceptChallengeBtn" class="battle-btn" type="button">Прийняти</button>
+      <button id="declineChallengeBtn" class="secondary-btn" type="button">Відхилити</button>
+    </div>
+  </div>
+</div>
+
+<div id="waitingModal" class="modal-backdrop" hidden>
+  <div class="challenge-card waiting-card">
+    <div class="duel-loader"><span></span><span></span><span></span></div>
+    <span class="section-kicker">ВИКЛИК НАДІСЛАНО</span>
+    <h2 id="waitingTitle">Чекаємо на суперника…</h2>
+    <p id="waitingText">Він може прийняти або відхилити виклик.</p>
+    <div class="challenge-actions">
+      <button id="cancelChallengeBtn" class="secondary-btn" type="button">Скасувати</button>
+      <button id="fallbackBotBtn" class="battle-btn" type="button">Грати з ботом</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<nav class="mobile-nav duel-mobile-nav">
+  <a href="index.html"><i class="fa-solid fa-house"></i><span>Головна</span></a>
+  <a class="active" href="games.html"><i class="fa-solid fa-gamepad"></i><span>Ігри</span></a>
+  <a href="historical-duel.html"><i class="fa-solid fa-khanda"></i><span>Дуель</span></a>
+  <a href="index.html#leaderboardHost"><i class="fa-solid fa-trophy"></i><span>Рейтинг</span></a>
+</nav>
+
+<script type="module" src="historical-duel.js?v=2"></script>
+</body>
+</html>

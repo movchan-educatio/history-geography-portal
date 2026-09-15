@@ -1,0 +1,15 @@
+ІСТОРИЧНА ДУЕЛЬ V1
+
+Гра працює на окремій сторінці historical-duel.html.
+На games.html додано лише картку-посилання.
+
+Файли:
+- historical-duel.html
+- historical-duel.css
+- historical-duel.js
+
+Firebase:
+- використовує наявні users/ і presence/;
+- нові гілки: duelChallenges/ та duelMatches/;
+- database.rules.json не змінено, бо наявне верхньорівневе auth != null уже дозволяє авторизованим користувачам читати/писати ці гілки.
+- загальні навчальні бали score дуель не збільшує; нагороди — коїни, XP та окремий duel_rating.

@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html lang="uk"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Ігри — БЕЗ МЕЖ</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
-<link href="v3.css?v=3" rel="stylesheet"/><link href="portal-ui-v2026.css?v=20260915" rel="stylesheet"/></head><body>
+<link href="portal-ui-v2026.css?v=20260915" rel="stylesheet"/>
+<style id="historical-duel-launch-style">
+.historical-duel-launch{grid-column:1/-1;display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:15px;padding:18px 20px;border:1px solid #2d6284;border-radius:18px;background:radial-gradient(circle at 85% 15%,rgba(56,189,248,.18),transparent 25%),linear-gradient(135deg,#071e30,#123e5f);color:#fff;text-decoration:none;box-shadow:0 14px 34px rgba(2,8,23,.22);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.historical-duel-launch:hover{transform:translateY(-2px);border-color:#43bce8;box-shadow:0 18px 38px rgba(2,8,23,.28)}
+.historical-duel-launch-icon{width:60px;height:60px;display:grid;place-items:center;border-radius:16px;background:#174e73;border:1px solid #347398;font-size:31px}
+.historical-duel-launch-copy strong{display:block;font-size:18px;line-height:1.15}.historical-duel-launch-copy span{display:block;margin-top:5px;color:#bdd4e6;font-size:12px;line-height:1.4}
+.historical-duel-launch-cta{padding:10px 13px;border-radius:11px;background:#2563eb;color:#fff;font-size:11px;font-weight:900;white-space:nowrap}
+@media(max-width:560px){.historical-duel-launch{grid-template-columns:50px minmax(0,1fr);padding:14px;gap:11px}.historical-duel-launch-icon{width:48px;height:48px;border-radius:13px;font-size:25px}.historical-duel-launch-copy strong{font-size:15px}.historical-duel-launch-copy span{font-size:11px}.historical-duel-launch-cta{grid-column:1/-1;text-align:center}}
+</style>
+</head><body>
 <header class="portal-unified-header" data-page="games">
   <div class="portal-top-row">
     <button class="portal-square-btn portal-back-btn" type="button"
@@ -33,6 +42,15 @@
 </div>
 </div>
 <div class="kids-club-grid">
+<a href="historical-duel.html" class="historical-duel-launch" aria-label="Відкрити Історичну дуель">
+  <div class="historical-duel-launch-icon">⚔️</div>
+  <div class="historical-duel-launch-copy">
+    <strong>Історична дуель</strong>
+    <span>Викликай учня онлайн на 10 історичних запитань. Якщо суперників немає — грай проти Архіваріуса.</span>
+  </div>
+  <span class="historical-duel-launch-cta">ГРАТИ →</span>
+</a>
+
 <!-- Блок 1: Інтерактивний чат / Стіна коментарів -->
 <div class="chat-box">
 <div style="font-weight: 800; color: #0369a1; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">

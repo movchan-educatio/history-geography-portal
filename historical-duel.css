@@ -1,0 +1,182 @@
+:root{
+  --navy:#071e30;--navy2:#0b2944;--panel:#0d2438;--panel2:#112f48;
+  --cyan:#38bdf8;--blue:#2563eb;--gold:#f4c542;--red:#ef4444;--green:#22c55e;
+  --text:#f8fbff;--muted:#a9bfd2;--line:#285271;--paper:#f4f7fb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,sans-serif;background:#071522;color:var(--text)}
+body{background:
+  radial-gradient(circle at 15% 12%,rgba(37,99,235,.14),transparent 28%),
+  radial-gradient(circle at 85% 25%,rgba(56,189,248,.10),transparent 25%),
+  linear-gradient(180deg,#061522,#091c2d 58%,#061421)}
+button,a{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+
+.duel-site-header{
+  position:sticky;top:0;z-index:1000;display:grid;grid-template-columns:50px minmax(0,1fr) 50px;
+  align-items:center;gap:10px;padding:8px 12px;background:#071e30;border-bottom:3px solid #1da1d8;
+  box-shadow:0 8px 22px rgba(0,0,0,.28)
+}
+.site-icon-btn{width:46px;height:46px;display:grid;place-items:center;border:1px solid #2b5877;border-radius:13px;background:#123b5e;color:#fff;text-decoration:none}
+.site-brand{justify-self:center;display:flex;align-items:center;gap:9px;color:#fff;text-decoration:none}
+.site-brand img{width:43px;height:43px;border-radius:12px;border:2px solid #e3c52d;background:#fff}
+.site-brand>span{font-size:14px;line-height:1.05;font-weight:900}
+.site-brand small{display:block;margin-top:4px;color:#67d8ff;font-size:8px;letter-spacing:1.5px}
+
+.duel-page{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:28px 0 64px}
+.duel-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:32px;border:1px solid #214866;border-radius:26px;background:
+  radial-gradient(circle at 90% 20%,rgba(56,189,248,.20),transparent 28%),
+  linear-gradient(135deg,#0b2944,#071b2c);box-shadow:0 20px 55px rgba(0,0,0,.22)}
+.eyebrow,.section-kicker{display:inline-block;color:#67d8ff;font-size:11px;font-weight:900;letter-spacing:.16em}
+.duel-hero h1{margin:8px 0 10px;font-size:clamp(34px,6vw,64px);line-height:.94;letter-spacing:-.045em}
+.duel-hero p{max-width:690px;margin:0;color:#c9d8e7;font-size:15px;line-height:1.65}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;min-width:310px}
+.hero-stats div{padding:15px 12px;border:1px solid #285271;border-radius:15px;background:#0b2439;text-align:center}
+.hero-stats strong{display:block;font-size:22px}.hero-stats span{font-size:10px;color:#9fb5c7}
+
+.panel{border:1px solid #274b66;border-radius:22px;background:linear-gradient(145deg,rgba(13,36,56,.98),rgba(8,26,42,.98));box-shadow:0 16px 40px rgba(0,0,0,.18)}
+.auth-panel{margin-top:16px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.auth-panel strong{display:block}.auth-panel span{display:block;margin-top:4px;color:#9fb5c7;font-size:12px}
+.primary-btn,.battle-btn,.secondary-btn{border-radius:13px;padding:11px 16px;font-weight:850;border:1px solid transparent;transition:.18s ease}
+.primary-btn,.battle-btn{background:linear-gradient(135deg,#1687df,#2563eb);color:#fff;box-shadow:0 9px 22px rgba(37,99,235,.24)}
+.primary-btn:hover,.battle-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.primary-btn:disabled,.battle-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.secondary-btn{background:#102f49;border-color:#315c7a;color:#dcecff}
+.secondary-btn:hover{background:#174564}
+
+.view{margin-top:18px}
+.lobby-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.7fr);gap:18px}
+.opponents-panel,.bot-panel,.leaderboard-panel{padding:22px}
+.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.section-head h2,.bot-panel h2{margin:5px 0 0;font-size:24px}
+.online-pill{padding:7px 10px;border:1px solid rgba(34,197,94,.35);border-radius:999px;background:rgba(34,197,94,.08);color:#86efac;font-size:11px;font-weight:800}
+.players-list{display:grid;gap:9px;max-height:390px;overflow:auto;padding-right:3px}
+.player-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:12px;padding:11px;border:1px solid #244b68;border-radius:15px;background:#0b2941;transition:.18s ease}
+.player-row:hover{border-color:#3d769a;transform:translateY(-1px)}
+.player-avatar,.fighter-avatar{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#1d4ed8,#0e7490);color:#fff;font-weight:900}
+.player-avatar img,.fighter-avatar img{width:100%;height:100%;object-fit:cover}
+.player-info strong{display:block;font-size:14px}.player-info span{font-size:11px;color:#9fb5c7}
+.challenge-btn{border:1px solid #3b82f6;border-radius:11px;background:#103d63;color:#eaf7ff;padding:8px 10px;font-size:11px;font-weight:850}
+.challenge-btn:hover{background:#15517f}
+.empty-state{padding:30px 14px;text-align:center;border:1px dashed #31546e;border-radius:16px;color:#91a9bd;font-size:13px}
+
+.bot-panel{text-align:center;display:flex;flex-direction:column;align-items:center}
+.bot-orb{width:96px;height:96px;display:grid;place-items:center;margin:3px auto 15px;border-radius:50%;font-size:48px;background:
+  radial-gradient(circle,#194f70 0 44%,#0a2236 45% 100%);border:1px solid #39708f;box-shadow:0 0 0 8px rgba(56,189,248,.05),0 16px 36px rgba(0,0,0,.22);animation:orbFloat 3s ease-in-out infinite}
+@keyframes orbFloat{50%{transform:translateY(-7px)}}
+.bot-panel p{color:#a9bfd2;font-size:13px;line-height:1.55}
+.bot-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:7px 0 18px}
+.bot-tags span{padding:6px 8px;border-radius:999px;background:#102f49;border:1px solid #2c5571;color:#c5d8e8;font-size:10px}
+.bot-panel .battle-btn{width:100%;margin-top:auto}
+
+.leaderboard-panel{margin-top:18px}
+.duel-leaderboard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rank-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid #244b68;border-radius:13px;background:#0b2941}
+.rank-pos{font-weight:900;color:#8fb7d3}.rank-name{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;font-weight:800}
+.rank-rating{font-size:11px;color:#67d8ff;font-weight:850}
+
+.arena{position:relative;min-height:410px;overflow:hidden;border:1px solid #315b75;border-radius:28px;background:linear-gradient(180deg,#13354e,#0c2b43 58%,#081d2d)}
+.arena-sky{position:absolute;inset:0;background:
+  radial-gradient(circle at 50% 0,rgba(244,197,66,.14),transparent 28%),
+  linear-gradient(180deg,rgba(56,189,248,.11),transparent 55%)}
+.arena-columns{position:absolute;inset:auto 0 0;height:44%;opacity:.24;background:
+  repeating-linear-gradient(90deg,transparent 0 7%,#95aabd 7.5% 9%,transparent 9.5% 17%);
+  clip-path:polygon(0 34%,100% 5%,100% 100%,0 100%)}
+.fighters{position:relative;z-index:2;display:grid;grid-template-columns:1fr 120px 1fr;align-items:end;gap:16px;min-height:410px;padding:24px}
+.fighter{min-width:0}
+.fighter-top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.fighter-right .fighter-top{flex-direction:row-reverse}.fighter-right .fighter-meta{text-align:right}
+.fighter-meta strong{display:block;font-size:15px}.fighter-meta span{font-size:10px;color:#a9bfd2}
+.hp-track{height:13px;border-radius:999px;background:#04111c;border:1px solid #24475f;overflow:hidden}
+.hp-fill{width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#16a34a,#4ade80);transition:width .5s ease,background .3s}
+.hp-fill.low{background:linear-gradient(90deg,#b91c1c,#ef4444)}
+.fighter-score{margin-top:7px;color:#b8cada;font-size:10px}
+.fighter-right .fighter-score{text-align:right}
+.fighter-body{height:230px;display:flex;align-items:flex-end;justify-content:center}
+.fighter-character{position:relative;width:120px;height:205px;animation:idleBob 1.8s ease-in-out infinite;transform-origin:bottom center}
+.fighter-right .fighter-character{transform:scaleX(-1);animation-name:idleBobRight}
+@keyframes idleBob{50%{transform:translateY(-5px) rotate(-1deg)}}
+@keyframes idleBobRight{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-5px) rotate(-1deg)}}
+.character-head{position:absolute;left:41px;top:12px;width:42px;height:48px;border-radius:48% 48% 43% 43%;background:#e6b58c;border:3px solid #1b2732;box-shadow:inset 0 8px #38291f}
+.character-torso{position:absolute;left:31px;top:58px;width:60px;height:82px;border-radius:18px 18px 12px 12px;background:linear-gradient(180deg,#2563eb,#163f7a);border:3px solid #152432}
+.character-arm,.character-leg{position:absolute;background:#d6a57e;border:3px solid #152432;border-radius:12px;transform-origin:top center}
+.character-arm{width:18px;height:68px;top:66px}.arm-a{left:19px;transform:rotate(17deg)}.arm-b{right:16px;transform:rotate(-33deg)}
+.character-leg{width:21px;height:73px;top:132px;background:#26384c}.leg-a{left:33px;transform:rotate(5deg)}.leg-b{right:29px;transform:rotate(-5deg)}
+.character-shield{position:absolute;right:-12px;top:85px;width:50px;height:58px;border-radius:50% 50% 46% 46%;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,#d9a321,#755313);border:4px solid #f8d66d;color:#fff;box-shadow:0 8px 18px rgba(0,0,0,.25)}
+.enemy .character-torso{background:linear-gradient(180deg,#7c3aed,#412076)}
+.versus{align-self:center;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.versus strong{font-size:38px;font-style:italic;color:#fff;text-shadow:0 0 22px rgba(56,189,248,.45)}
+.versus span{font-size:10px;font-weight:900;color:#a9bfd2}
+#timerLabel{font-size:18px;color:#f4c542}
+.big-countdown{position:absolute;z-index:20;inset:0;display:grid;place-items:center;font-size:110px;font-weight:950;color:#fff;text-shadow:0 0 40px rgba(56,189,248,.7);background:rgba(3,14,24,.42);animation:countPop .55s ease}
+@keyframes countPop{from{transform:scale(1.4);opacity:0}to{transform:scale(1);opacity:1}}
+.fighter.attack-left .fighter-character{animation:attackLeft .45s ease}
+.fighter.attack-right .fighter-character{animation:attackRight .45s ease}
+@keyframes attackLeft{45%{transform:translateX(42px) rotate(6deg)}}
+@keyframes attackRight{45%{transform:scaleX(-1) translateX(42px) rotate(6deg)}}
+.fighter.hit{animation:hitShake .35s ease}
+@keyframes hitShake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.arena.screen-hit{animation:arenaShake .3s ease}
+@keyframes arenaShake{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+.damage-float{position:absolute;z-index:30;font-size:26px;font-weight:950;color:#ffb4b4;text-shadow:0 3px 8px #000;animation:damageUp .9s ease forwards}
+@keyframes damageUp{to{transform:translateY(-65px) scale(1.25);opacity:0}}
+.projectile{position:absolute;z-index:25;top:58%;font-size:34px;animation:projectileFly .45s ease forwards}
+.projectile.left{left:28%}.projectile.right{right:28%;transform:scaleX(-1)}
+@keyframes projectileFly{to{left:70%;filter:drop-shadow(0 0 12px #facc15)}}
+.projectile.right{animation-name:projectileFlyRight}
+@keyframes projectileFlyRight{to{right:70%;filter:drop-shadow(0 0 12px #facc15)}}
+
+.question-panel{margin-top:15px;padding:22px}
+.question-top{display:flex;justify-content:space-between;gap:10px;color:#8ecbed;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}
+.question-panel h2{margin:12px 0 18px;font-size:clamp(19px,3vw,29px);line-height:1.25}
+.answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.answer-btn{min-height:58px;padding:11px 13px;border:1px solid #315b78;border-radius:13px;background:#0d304b;color:#eaf5ff;text-align:left;font-weight:750;line-height:1.3;transition:.15s ease}
+.answer-btn:hover:not(:disabled){background:#164a70;border-color:#4a86ad;transform:translateY(-1px)}
+.answer-btn:disabled{cursor:default;opacity:.75}
+.answer-btn.correct{border-color:#22c55e;background:#124b37;color:#d5ffe7}.answer-btn.wrong{border-color:#ef4444;background:#54252a;color:#ffe1e1}
+.question-progress{height:5px;margin-top:15px;border-radius:999px;background:#061522;overflow:hidden}.question-progress div{width:100%;height:100%;background:linear-gradient(90deg,#38bdf8,#2563eb);transition:width .1s linear}
+
+.result-card{max-width:760px;margin:0 auto;padding:36px;text-align:center}
+.result-icon{font-size:72px;margin-bottom:9px;animation:resultBounce 1.4s ease-in-out infinite}
+@keyframes resultBounce{50%{transform:translateY(-8px) rotate(4deg)}}
+.result-card h2{margin:7px 0 8px;font-size:38px}.result-card p{color:#b9cbd9}
+.result-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:24px 0}
+.result-stats div{padding:14px 8px;border:1px solid #2b536f;border-radius:14px;background:#0b2941}
+.result-stats strong{display:block;font-size:20px}.result-stats span{font-size:9px;color:#9fb5c7}
+.result-actions{display:flex;justify-content:center;gap:9px}
+
+.modal-backdrop{position:fixed;z-index:3000;inset:0;display:grid;place-items:center;padding:18px;background:rgba(2,10,18,.78);backdrop-filter:blur(8px)}
+.challenge-card{width:min(470px,100%);padding:30px;border:1px solid #315f7e;border-radius:24px;background:linear-gradient(145deg,#0d2d46,#071a2b);box-shadow:0 28px 90px rgba(0,0,0,.45);text-align:center}
+.challenge-swords{font-size:64px;animation:swordsPulse 1s ease-in-out infinite}
+@keyframes swordsPulse{50%{transform:scale(1.12) rotate(-5deg)}}
+.challenge-card h2{margin:8px 0}.challenge-card p{color:#abc0d2;font-size:13px}.challenge-actions{display:flex;gap:8px;justify-content:center;margin-top:18px}
+.duel-loader{height:60px;display:flex;align-items:center;justify-content:center;gap:8px}.duel-loader span{width:10px;height:10px;border-radius:50%;background:#38bdf8;animation:loaderDot .9s ease-in-out infinite}.duel-loader span:nth-child(2){animation-delay:.15s}.duel-loader span:nth-child(3){animation-delay:.3s}
+@keyframes loaderDot{50%{transform:translateY(-13px);opacity:.45}}
+
+.toast{position:fixed;z-index:5000;left:50%;bottom:24px;transform:translateX(-50%);max-width:min(500px,calc(100% - 30px));padding:12px 16px;border:1px solid #3f6b88;border-radius:13px;background:#0c2a42;color:#fff;box-shadow:0 15px 35px rgba(0,0,0,.35);font-size:12px;font-weight:750}
+
+@media(max-width:800px){
+  .duel-page{width:calc(100% - 18px);padding-top:16px}
+  .duel-hero{padding:22px;display:block}.hero-stats{min-width:0;margin-top:18px}
+  .lobby-grid{grid-template-columns:1fr}
+  .duel-leaderboard{grid-template-columns:1fr}
+  .fighters{grid-template-columns:1fr 64px 1fr;gap:6px;padding:14px 8px;min-height:350px}
+  .arena{min-height:350px}.fighter-body{height:190px}.fighter-character{transform:scale(.82);transform-origin:bottom center}
+  .fighter-right .fighter-character{transform:scaleX(-1) scale(.82)}
+  @keyframes idleBob{50%{transform:scale(.82) translateY(-5px)}} @keyframes idleBobRight{0%,100%{transform:scaleX(-1) scale(.82)}50%{transform:scaleX(-1) scale(.82) translateY(-5px)}}
+  .fighter-avatar{width:38px;height:38px;border-radius:11px}.fighter-meta strong{font-size:11px}.fighter-meta span{font-size:8px}
+  .versus strong{font-size:26px}.versus span{font-size:8px}
+  .answers-grid{grid-template-columns:1fr}.question-panel{padding:16px}
+  .result-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:470px){
+  .duel-site-header{grid-template-columns:44px minmax(0,1fr) 44px;padding:7px 8px}.site-icon-btn{width:40px;height:40px}.site-brand img{width:38px;height:38px}.site-brand>span{font-size:11px}.site-brand small{font-size:7px}
+  .duel-hero h1{font-size:38px}.hero-stats strong{font-size:17px}
+  .fighters{grid-template-columns:minmax(0,1fr) 50px minmax(0,1fr)}
+  .fighter-top{gap:5px}.fighter-avatar{width:32px;height:32px}.fighter-body{height:165px}
+  .fighter-character{transform:scale(.68)}.fighter-right .fighter-character{transform:scaleX(-1) scale(.68)}
+  @keyframes idleBob{50%{transform:scale(.68) translateY(-5px)}} @keyframes idleBobRight{0%,100%{transform:scaleX(-1) scale(.68)}50%{transform:scaleX(-1) scale(.68) translateY(-5px)}}
+  .versus strong{font-size:21px}.fighter-score{font-size:8px}.question-panel h2{font-size:19px}
+  .player-row{grid-template-columns:42px minmax(0,1fr) auto}.player-avatar{width:42px;height:42px}.challenge-btn{padding:8px;font-size:10px}
+}
