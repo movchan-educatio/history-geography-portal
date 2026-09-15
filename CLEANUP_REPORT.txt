@@ -1,0 +1,112 @@
+ОЧИЩЕННЯ РЕПОЗИТОРІЮ — CLEAN V1
+=================================
+
+Видалено файлів: 95
+Звільнено: 18.29 MB
+
+Залишено без змін: Firebase rules, portal-score, основні HTML, активні CSS, ігрові assets, Historical Duel.
+
+Додатково:
+- прибрано підключення navigation-v28.js, бо сам файл містив лише текст «Unsupported Media Type»;
+- games.html та historical-duel.html переведені з важкого logo.png на вже наявний logo-192.webp;
+- README.md залишено.
+
+ВИДАЛЕНІ ФАЙЛИ:
+- CONTENT_AUDIT_V8.txt
+- DESIGN_BUILD.txt
+- DINO-2.4-AUDIT.txt
+- DINO-2.6-ULTRA-GRAPHICS-AUDIT.txt
+- DINO-2.7-FIX-AUDIT.txt
+- DINO-2.8-AUDIT.txt
+- DINO-2.9-AUDIT.txt
+- DINO-2.9.1-HOTFIX-AUDIT.txt
+- ESCAPE_FROM_PAST_20Q_FIREBASE.txt
+- ESCAPE_FROM_PAST_60_MISSIONS.txt
+- HISTORICAL_DUEL_V1.txt
+- LYCEUM-CLASH-4.0-AUDIT.txt
+- LYCEUM-CLASH-4.1-HEROES-CHAOS-AUDIT.txt
+- LYCEUM-CLASH-4.3-ARENA-STUDIO-AUDIT.txt
+- LYCEUM-CLASH-5.0-CLASH-CORE-AUDIT.txt
+- LYCEUM-CLASH-6.1-SMART-BOTS-AUDIT.txt
+- LYCEUM-CLASH-6.4-CLEAN-UI-AUDIT.txt
+- LYCEUM-CLASH-6.5-CORE-GAMEPLAY-AUDIT.txt
+- LYCEUM-CLASH-6.7-BOT-GUARANTEE-AUDIT.txt
+- LYCEUM-CLASH-6.9-FIVE-FIGHTER-AUDIT.txt
+- LYCEUM-CLASH-6.9.1-STABLE-MP-AUDIT.txt
+- LYCEUM-CLASH-6.9.2-DIRECT-JOIN-AUDIT.txt
+- LYCEUM-CLASH-6.9.3-AUTO-START-AUDIT.txt
+- LYCEUM-CLASH-6.9.4-START-SIGNAL-AUDIT.txt
+- LYCEUM-CLASH-6.9.5-SAFE-START-AUDIT.txt
+- LYCEUM-CLASH-6.9.6-SERVER-SAFE-AUDIT.txt
+- LYCEUM-CLASH-7.0-JOIN-SYNC-AUDIT.txt
+- LYCEUM-CLASH-7.1-BOT-CORE-AUDIT.txt
+- LYCEUM-CLASH-7.2-ROOM-FIX-AUDIT.txt
+- LYCEUM-CLASH-7.3-ROOM-RECOVERY-AUDIT.txt
+- LYCEUM-CLASH-7.4-VERSION-SYNC-AUDIT.txt
+- LYCEUM-CLASH-7.5-HTTP-TRANSPORT-AUDIT.txt
+- LYCEUM-CLASH-7.6-ROOM-STABLE-AUDIT.txt
+- LYCEUM-CLASH-7.7-ROOM-CORE-AUDIT.txt
+- PORTAL-COLYSEUS-INTEGRATION-AUDIT.txt
+- PORTAL-COLYSEUS-v2.2-AUDIT.txt
+- PORTAL-LYCEUM-CLASH-v2.3-AUDIT.txt
+- PORTAL-LYCEUM-CLASH-v2.6-AUDIT.txt
+- PORTAL_SETUP.md
+- README-v2.6.txt
+- README.txt
+- README_V23.txt
+- README_V4.md
+- SCORE_SYNC_NOTES.txt
+- SURVIVE-TO-BELL-1.0-AUDIT.txt
+- SURVIVE-TO-BELL-2.0-HORDE-AUDIT.txt
+- SURVIVE-TO-BELL-2.1-ULTRA-HORDE-AUDIT.txt
+- SURVIVE-TO-BELL-2.3-FULL-ARENA-AUDIT.txt
+- SURVIVE-TO-BELL-2.5-FINAL-POLISH-AUDIT.txt
+- SURVIVE-TO-BELL-2.6-GAME-APP-AUDIT.txt
+- SURVIVE-TO-BELL-2.7-APP-ULTRA-AUDIT.txt
+- SURVIVE-TO-BELL-2.8-CHARACTERS-AUDIO-AUDIT.txt
+- SYNC_NOTES.txt
+- UPDATE-AUDIT.txt
+- V23_10_FIXES.txt
+- V23_11_FIXES.txt
+- V23_12_FIXES.txt
+- V23_13_CHARACTER_WEARABLES_FIXES.txt
+- V23_14_PREMIUM_WEARABLES.txt
+- V23_6_FIXES.txt
+- V23_7_FIXES.txt
+- V23_8_FIXES.txt
+- V23_9_FIXES.txt
+- V23_UPLOAD_INSTRUCTIONS.txt
+- V24_JETPACK_RUN.txt
+- V29_JETPACK_SCROLL_FIXES.txt
+- V30_HEADER_MOBILE_FIXES.txt
+- VERSION_V7.txt
+- VERSION_V8.txt
+- author-photo.jpeg
+- character-assets/gitkeep
+- chrono.jpg
+- dino.jpg
+- flags.jpg
+- geo.jpg
+- hero-banner.jpeg
+- history-geography-portal-FINAL-CLEAN.zip
+- history-geography-portal-clean.zip
+- history-geography-portal-fixed(2).zip
+- history-geography-portal-fixed(3).zip
+- history-geography-portal-weekly-v2.zip
+- history.jpg
+- jetpack-assets/gitkeep
+- map.jpg
+- method.jpg
+- mobile.css
+- navigation-v28.js
+- nmt.jpg
+- portal.css
+- portal.js
+- redesign-v4.css
+- reference-final.css
+- script.js
+- truth.jpg
+- logo.png
+
+Перевірка залишкових посилань на видалені файли: OK
+Перевірка локальних src/href: [('index.html', '${img.url}'), ('index.html', '${img.page}'), ('index.html', '${CHARACTER_ASSETS[c.skin]}'), ('index.html', '${skin.asset}'), ('index.html', '${item.url}'), ('games.html', '${escapeHtml(user.photoURL)}'), ('games.html', '${item.url}')]
