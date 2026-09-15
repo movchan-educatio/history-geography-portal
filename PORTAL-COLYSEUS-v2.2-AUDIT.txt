@@ -1,8 +1,0 @@
-PORTAL COLYSEUS v2.2
-
-- Portal PLAY still uses Colyseus, not Firebase rooms.
-- Full original portal LYCEUM CLASH menu/hero/shop remains.
-- Full loadout is passed to the server: hero, skin, weapon, weaponSkin, perk.
-- iframe cache/version bumped to v220.
-- Portal-score cache bumped.
-- All inline JS passed node --check.
