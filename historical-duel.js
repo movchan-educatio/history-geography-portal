@@ -93,6 +93,7 @@ let currentChallenge = null, challengeUnsub = null, sentChallengeUnsub = null, s
 let matchId = null, matchUnsub = null, matchData = null, previousHp = {};
 let timerHandle = null, resolutionHandle = null, answerLocked = false, botState = null;
 let lastOpponent = null;
+let finalizingMatch = false;
 
 function shuffledIds() {
   const ids = QUESTIONS.map(q=>q.id);
@@ -266,7 +267,7 @@ async function declineChallenge(){
 }
 
 function enterPvpMatch(id){
-  cleanupMatch();matchId=id;botState=null;answerLocked=false;showView('arenaView');
+  cleanupMatch();matchId=id;botState=null;answerLocked=false;finalizingMatch=false;window.__lastDuelReward=null;showView('arenaView');
   try{matchUnsub?.();}catch{}
   matchUnsub=onValue(ref(db,'duelMatches/'+id),snap=>{
     const d=snap.val();if(!d)return;const old=matchData;matchData=d;renderPvp(d,old);maybeResolvePvp();
@@ -344,7 +345,8 @@ function startBotDuel(){
   if(!currentUser){toast('Спочатку увійдіть через Google.');return;}
   setModal('waitingModal',false);cleanupMatch();lastOpponent={bot:true};
   const ids=shuffledIds();
-  botState={mode:'bot',round:0,questionIds:ids,roundStartedAt:Date.now()+2500,player:{uid:currentUser.uid,name:myProfile.name||currentUser.displayName||'Учень',rating:ratingOf(myProfile),hp:100,score:0,correct:0,totalMs:0},bot:{uid:'bot',name:'Архіваріус',rating:1020,hp:100,score:0,correct:0,totalMs:0},answered:false,botAnswer:null,status:'active'};
+  finalizingMatch=false;window.__lastDuelReward=null;
+  botState={mode:'bot',rewardId:`bot-${currentUser.uid}-${Date.now()}`,round:0,questionIds:ids,roundStartedAt:Date.now()+2500,player:{uid:currentUser.uid,name:myProfile.name||currentUser.displayName||'Учень',rating:ratingOf(myProfile),hp:100,score:0,correct:0,totalMs:0},bot:{uid:'bot',name:'Архіваріус',rating:1020,hp:100,score:0,correct:0,totalMs:0},answered:false,botAnswer:null,status:'active'};
   showView('arenaView');renderBot();
 }
 function renderBot(){
@@ -396,12 +398,17 @@ function animateHit(target,damage,attacker){
   },260);
 }
 async function finishMatch(d){
+  if(finalizingMatch)return;
+  finalizingMatch=true;
   clearInterval(timerHandle);clearInterval(resolutionHandle);resolutionHandle=null;
-  const {me,op}=getSides(d),winner=d.winnerUid;await applyReward(winner,'pvp',matchId,me);
+  const {me,op}=getSides(d),winner=d.winnerUid;
+  await applyReward(winner,'pvp',matchId,me);
   showResult(winner===currentUser.uid?'win':winner==='draw'?'draw':'loss',me,op,'pvp');
 }
 async function finishBot(){
-  clearInterval(timerHandle);const d=botState,w=d.winnerUid;await applyReward(w,'bot','bot-'+Date.now(),d.player);
+  if(finalizingMatch)return;
+  finalizingMatch=true;
+  clearInterval(timerHandle);const d=botState,w=d.winnerUid;await applyReward(w,'bot',d.rewardId,d.player);
   showResult(w===currentUser.uid?'win':w==='draw'?'draw':'loss',d.player,d.bot,'bot');
 }
 async function applyReward(winnerUid,mode,rewardId,me){
@@ -409,26 +416,27 @@ async function applyReward(winnerUid,mode,rewardId,me){
   const outcome=winnerUid==='draw'?'draw':winnerUid===currentUser.uid?'win':'loss';
   const coins=mode==='pvp'?(outcome==='win'?15:outcome==='draw'?8:5):(outcome==='win'?8:outcome==='draw'?5:3);
   const ratingDelta=mode==='pvp'?(outcome==='win'?24:outcome==='draw'?3:-10):(outcome==='win'?10:outcome==='draw'?2:-4);
+  const xp=outcome==='win'?30:outcome==='draw'?18:12;
   await runTransaction(ref(db,'users/'+currentUser.uid),data=>{
     data=data||{};data.duel_rewarded=data.duel_rewarded||{};const key=rewardId.replace(/[.#$[\]/]/g,'_');if(data.duel_rewarded[key])return data;
     data.duel_rewarded[key]={at:Date.now(),outcome,mode,coins,ratingDelta};
-    data.duel_matches=(Number(data.duel_matches)||0)+1;data.duel_rating=Math.max(100,(Number(data.duel_rating)||1000)+ratingDelta);data.duel_xp=(Number(data.duel_xp)||0)+(outcome==='win'?30:outcome==='draw'?18:12);
+    data.duel_matches=(Number(data.duel_matches)||0)+1;data.duel_rating=Math.max(100,(Number(data.duel_rating)||1000)+ratingDelta);data.duel_xp=(Number(data.duel_xp)||0)+xp;
     if(outcome==='win'){data.duel_wins=(Number(data.duel_wins)||0)+1;data.duel_streak=(Number(data.duel_streak)||0)+1;}
     else if(outcome==='loss'){data.duel_losses=(Number(data.duel_losses)||0)+1;data.duel_streak=0;}
     else data.duel_draws=(Number(data.duel_draws)||0)+1;
     data.portal_coins=Math.max(0,Number(data.portal_coins)||0)+coins;data.portal_coins_earned=Math.max(0,Number(data.portal_coins_earned)||0)+coins;
     data.last_duel_at=Date.now();data.last_duel_result=outcome;return data;
   }).then(async()=>{const s=await get(ref(db,'users/'+currentUser.uid));myProfile=s.val()||{};renderMyStats();});
-  window.__lastDuelReward={coins,ratingDelta,outcome};
+  window.__lastDuelReward={coins,xp,ratingDelta,outcome};
 }
 function showResult(outcome,me,op,mode){
-  showView('resultView');const r=window.__lastDuelReward||{coins:0,ratingDelta:0};
+  showView('resultView');const r=window.__lastDuelReward||{coins:0,xp:0,ratingDelta:0};
   $('resultIcon').textContent=outcome==='win'?'🏆':outcome==='draw'?'🤝':'🛡️';$('resultTitle').textContent=outcome==='win'?'Перемога!':outcome==='draw'?'Нічия':'Цього разу поразка';
   $('resultText').textContent=outcome==='win'?`Ви перемогли ${op.name}. Знання та швидкість дали перевагу.`:outcome==='draw'?`Абсолютно рівна дуель із ${op.name}.`:`${op.name} переміг у цій дуелі. Реванш може змінити все.`;
   $('resultCorrect').textContent=`${me.correct||0}/${QUESTION_COUNT}`;$('resultSpeed').textContent=me.correct?`${((me.totalMs||0)/Math.max(1,QUESTION_COUNT)/1000).toFixed(1)} с`:'—';
-  $('resultReward').textContent=`+${r.coins||0} 🪙`;$('resultRating').textContent=`${(r.ratingDelta||0)>=0?'+':''}${r.ratingDelta||0}`;
+  $('resultReward').textContent=`+${r.coins||0} 🪙 • +${r.xp||0} XP`;$('resultRating').textContent=`${(r.ratingDelta||0)>=0?'+':''}${r.ratingDelta||0}`;
 }
 function cleanupMatch(){
-  clearInterval(timerHandle);timerHandle=null;clearInterval(resolutionHandle);resolutionHandle=null;try{matchUnsub?.();}catch{}matchUnsub=null;matchId=null;matchData=null;botState=null;previousHp={};answerLocked=false;$('battleFx').innerHTML='';
+  clearInterval(timerHandle);timerHandle=null;clearInterval(resolutionHandle);resolutionHandle=null;try{matchUnsub?.();}catch{}matchUnsub=null;matchId=null;matchData=null;botState=null;previousHp={};answerLocked=false;finalizingMatch=false;$('battleFx').innerHTML='';
 }
 window.addEventListener('beforeunload',()=>{if(currentUser)update(ref(db,'presence/'+currentUser.uid),{online:false,lastSeen:serverTimestamp()}).catch(()=>{});});

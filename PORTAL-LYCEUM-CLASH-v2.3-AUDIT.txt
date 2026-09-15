@@ -1,9 +1,0 @@
-PORTAL LYCEUM CLASH v2.3
-
-- Replaced the old-looking first screen with a current ONLINE ARENA splash.
-- Uses the portal's original hero preview canvas, so the launch art matches the established game identity.
-- Shows fighter/loadout, 5 fighters, 8 arenas, 75s, Smart Bots, stats and a single large "У БІЙ" button.
-- iframe cache bumped to v230.
-- Existing hero/shop tabs remain available.
-- Old Firebase multiplayer remains non-live compatibility code only.
-- All portal inline JS passed node --check.
