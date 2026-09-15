@@ -232,8 +232,8 @@ function renderLobby(){
   box.querySelectorAll('[data-duel-user]').forEach(btn=>btn.addEventListener('click',()=>sendChallenge(btn.dataset.duelUser)));
 }
 function renderDuelLeaderboard(){
-  const list=Object.entries(users).filter(([uid,p])=>uid!==OWNER_UID&&p&&p.role!=='teacher'&&(p.name||p.email))
-    .map(([uid,p])=>({uid,...p})).sort((a,b)=>ratingOf(b)-ratingOf(a)).slice(0,10);
+  const list=Object.entries(users).filter(([uid,p])=>uid!==OWNER_UID&&p&&p.role!=='teacher'&&(p.name||p.email)&&(Number(p.duel_matches)||0)>0)
+    .map(([uid,p])=>({uid,...p})).sort((a,b)=>(ratingOf(b)-ratingOf(a))||((Number(b.duel_wins)||0)-(Number(a.duel_wins)||0))).slice(0,10);
   $('duelLeaderboard').innerHTML=list.length?list.map((p,i)=>`<div class="rank-row"><span class="rank-pos">#${i+1}</span><span class="rank-name">${escapeHtml(p.name||p.email||'Учень')}</span><span class="rank-rating">${ratingOf(p)} RP</span></div>`).join(''):'<div class="empty-state">Ще немає завершених дуелей.</div>';
 }
 
